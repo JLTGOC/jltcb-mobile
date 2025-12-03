@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Stack } from "expo-router";
 
 import { LinearGradient } from "expo-linear-gradient";
-import styles from "./(styles)/landing-styles";
+import styles from "../styles/landing-styles";
 
 import { useRouter } from "expo-router";
 
@@ -10,7 +10,7 @@ export default function Index() {
   const router = useRouter()
   return (
     <>
-      <View>
+      <View style={styles.container}>
          <LinearGradient
         colors={["#EE9034", "#FFFFFF"]} // BORDER gradient
         start={{ x: 0, y: 0 }}
