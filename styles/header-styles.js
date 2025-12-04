@@ -8,6 +8,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     backgroundColor: "#161F3C", 
+  
   },
   logo: {
     width: 200,
@@ -26,6 +27,6 @@ export default StyleSheet.create({
     height: "100%",
   },
   borderBottom: {
-    
+    borderBottomWidth: 4
   }
 });
