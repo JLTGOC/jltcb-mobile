@@ -48,3 +48,28 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+---
+
+## 📋 Commit Message Guidelines
+
+Use the following emojis to indicate the nature of your commits:
+
+| Emoji | Code                          | Description                       |
+| ----- | ----------------------------- | --------------------------------- |
+| 💯    | `:100:`                       | Full functionality implementation |
+| 🔧    | `:wrench:`                    | Code improvement / refactor       |
+| 🐛    | `:bug:`                       | Bug fix                           |
+| 📑    | `:bookmark_tabs:`             | Documentation and comments        |
+| ☕    | `:coffee:`                    | Minor or initial changes          |
+| 🚧    | `:construction:`              | Work in progress                  |
+| 🗑️    | `:wastebasket:`               | Code or file deletion             |
+| 📓    | `:notebook:`                  | README updates                    |
+| ✏️    | `:pencil2:`                   | Typo or naming corrections        |
+| ♻️    | `:recycle:`                   | Code refactoring                  |
+| 🔀    | `:twisted_rightwards_arrows:` | Branch merge                      |
+| ⏪    | `:rewind:`                    | Reverting changes                 |
+| 📱    | `:iphone:`                    | Responsive design changes         |
+| 📌    | `:pushpin:`                   | Hotfixes                          |
+
+---
