@@ -5,7 +5,12 @@ export default function PortsCatered() {
     <>
       <ImageBackground
         source={require("../../assets/banners/small.png")}
-        style={{ paddingHorizontal: 40, paddingVertical: 20 }}
+        style={{
+          aspectRatio: 3, 
+          paddingVertical: 20,
+          paddingHorizontal: 40,
+        }}
+        imageStyle={{ resizeMode: "cover" }}
       >
         <Text
           style={{

@@ -1,4 +1,4 @@
-import { Text, ImageBackground, View } from "react-native";
+import { Text, ImageBackground, View,  } from "react-native";
 
 export default function GetQoute() {
   return (
@@ -6,10 +6,10 @@ export default function GetQoute() {
       <ImageBackground
         source={require("../../assets/banners/large.png")}
         style={{
-          paddingHorizontal: 15,
-          justifyContent: "center",
-          width: "100vw",
+          padding:20,
+          aspectRatio: 2,
         }}
+        imageStyle={{ resizeMode: "cover" }}
       >
         <Text
           style={{
@@ -23,13 +23,14 @@ export default function GetQoute() {
         </Text>
         <View
           style={{
-            borderLeftWidth: 3, // thickness
+            borderLeftWidth: 4, // thickness
             borderLeftColor: "#EE9034", // color
-            padding: 10,
-            height: 80,
+            margin: 5,
+            paddingHorizontal: 5,
+            height: 70,
           }}
         >
-          <Text style={{ fontSize: 12, marginTop: -10, color: "white" }}>
+          <Text style={{ fontSize: 12,  color: "white" }}>
             Whether you’re importing, exporting, or need help navigating customs
             regulations, JLTCB provides professional support for seamless
             clearance, freight forwarding, and compliance solutions. Fill out

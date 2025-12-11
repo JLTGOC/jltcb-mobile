@@ -5,11 +5,11 @@ export default function GetAppointment() {
     <>
       <ImageBackground
         source={require("../../assets/banners/large.png")}
-        style={{
-          paddingHorizontal: 15,
-          justifyContent: "center",
-          width: "100vw",
+       style={{
+          padding:20,
+          aspectRatio: 2,
         }}
+        imageStyle={{ resizeMode: "cover" }}
       >
         <Text
           style={{
@@ -23,13 +23,14 @@ export default function GetAppointment() {
         </Text>
         <View
           style={{
-            borderLeftWidth: 2, // thickness
+           borderLeftWidth: 4, // thickness
             borderLeftColor: "#EE9034", // color
-            padding: 10,
-            height: 65,
+            margin: 5,
+            paddingHorizontal: 5,
+            height: 55,
           }}
         >
-          <Text style={{ fontSize: 12, marginTop: -10, color: "white" }}>
+          <Text style={{ fontSize: 12,  color: "white" }}>
             At Jill L. Tolentino Customs Brokerage, we simplify imports and
             exports for businesses nationwide. From paperwork to clearance, we
             ensure your goods move smoothly and efficiently through customs.

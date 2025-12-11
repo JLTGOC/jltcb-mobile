@@ -5,11 +5,11 @@ export default function ContactUs() {
     <>
       <ImageBackground
         source={require("../../assets/banners/large.png")}
-        style={{
-          padding: 15,
-          justifyContent: "center",
-          width: "100vw",
+       style={{
+          padding:20,
+          aspectRatio: 2,
         }}
+        imageStyle={{ resizeMode: "cover" }}
       >
         <Text
           style={{
@@ -25,13 +25,14 @@ export default function ContactUs() {
         </Text>
         <View
           style={{
-            borderLeftWidth: 2, // thickness
+            borderLeftWidth: 4, // thickness
             borderLeftColor: "#EE9034", // color
-            padding: 10,
+            margin: 5,
+            paddingHorizontal: 5,
             height: 30,
           }}
         >
-          <Text style={{ fontSize: 12, marginTop: -12, color: "white" }}>
+          <Text style={{ fontSize: 12,  color: "white" }}>
             If you have any inquiries get in touch with us We’ll be happy to
             help.
           </Text>
