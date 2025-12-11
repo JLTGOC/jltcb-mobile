@@ -46,7 +46,7 @@ export default function Governance() {
   ];
 
   return (
-    <View style={{ flex: 1, marginTop: -30}}>
+    <View style={{ flex: 1,}}>
       <ImageBackground
         source={require("../../assets/banners/small.png")}
         style={{
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     flex: 1, // important for numColumns
     alignItems: "center",
     padding: 10,
+    marginTop: -20
   },
   logoImage: {
     width: 50,
