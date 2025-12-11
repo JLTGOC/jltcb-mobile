@@ -12,7 +12,7 @@ export default function NewsUpdates() {
       <ScrollView>
         {data.map((data, i) => (
             <View key={i}>
-              <CardTemplate></CardTemplate>
+              <CardTemplate/>
             </View>
         ))}
       </ScrollView>

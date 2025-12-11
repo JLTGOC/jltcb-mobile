@@ -51,7 +51,7 @@ export default function Governance() {
         source={require("../../assets/banners/small.png")}
         style={{
           aspectRatio: 3,
-          paddingVertical: 20,
+          paddingVertical: 30,
           paddingHorizontal: 40,
         }}
         imageStyle={{ resizeMode: "cover" }}

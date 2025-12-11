@@ -50,7 +50,7 @@ export default StyleSheet.create({
     backgroundColor: "gray",
     fontSize: 9,
     paddingHorizontal: 5,
-  },
+    color:"white"  },
   title_2:{ fontSize: 9, fontWeight: 700 },
   description:{ fontSize: 8 },
   //logos
