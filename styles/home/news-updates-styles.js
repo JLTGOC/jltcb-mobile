@@ -12,8 +12,8 @@ export default StyleSheet.create({
   //SegmentedButton
   buttonContainer: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
+    borderBottomWidth: 3,
+    borderColor: "#9D9D9D",
     marginBottom: 10,
   },
   button: {
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     width: "100%",
     backgroundColor: "#EE9034",
     position: "absolute",
-    bottom: -1,
+    bottom: -3,
   },
   //CardTempate
   cardContainer: {

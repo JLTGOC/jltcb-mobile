@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   container: {
-    marginTop: -10,
+    marginTop: -30,
     marginHorizontal: 25,
   },
   texArea: {

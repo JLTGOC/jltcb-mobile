@@ -1,12 +1,14 @@
-import { Text, ImageBackground, View } from "react-native";
+import { Text, ImageBackground, View, Image } from "react-native";
+import ContactDetails from "@/components/contactUs/ContactDetails";
 
 export default function ContactUs() {
   return (
     <>
+      {/* banner */}
       <ImageBackground
         source={require("../../assets/banners/large.png")}
-       style={{
-          padding:20,
+        style={{
+          padding: 20,
           aspectRatio: 2,
         }}
         imageStyle={{ resizeMode: "cover" }}
@@ -16,10 +18,8 @@ export default function ContactUs() {
             color: "#EE9034",
             fontSize: 20,
             fontWeight: 500,
-            marginBottom: 10,
-           
+            marginBottom: 15,
           }}
-          
         >
           CONTACT US
         </Text>
@@ -29,15 +29,24 @@ export default function ContactUs() {
             borderLeftColor: "#EE9034", // color
             margin: 5,
             paddingHorizontal: 5,
-            height: 30,
+            height: 35,
           }}
         >
-          <Text style={{ fontSize: 12,  color: "white" }}>
-            If you have any inquiries get in touch with us We’ll be happy to
+          <Text style={{ fontSize: 15, color: "white" }}>
+            If you have any inquiries get in touch with us. We’ll be happy to
             help.
           </Text>
         </View>
       </ImageBackground>
+
+      {/* details */}
+      <ContactDetails />
+
+      {/* image */}
+      <Image
+        source={require("../../assets/contact_us/location.png")}
+        style={{ height: 300, width: "100vw" }}
+      />
     </>
   );
 }

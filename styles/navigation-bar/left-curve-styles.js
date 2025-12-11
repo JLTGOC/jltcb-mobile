@@ -17,10 +17,10 @@ export default StyleSheet.create({
     bottom: 30,
     paddingLeft: 20,
     width: "80%",
-    gap: 10,
+    gap: 15,
   },
   modalOption: {
     fontSize: 18,
-    color: "#161F3C",
+    color: "#6D6D6D",
   },
 });
