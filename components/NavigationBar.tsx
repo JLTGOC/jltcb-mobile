@@ -8,17 +8,6 @@ import LeftCurveMenu from "../styles/navigation-bar/left-curve-menu";
 import rightCurveStyles from "../styles/navigation-bar/right-curve-styles";
 import RightCurveMenu from "../styles/navigation-bar/right-curve-menu";
 
-type AppRoutes =
-  | "/home"
-  | "/governance"
-  | "/about_us"
-  | "/contact_us"
-  | "/services"
-  | "/ports_catered"
-  | "/get_qoute"
-  | "/get_appointment"
-  | "/ahtn_checker";
-
 export default function NavigationBar() {
   const router = useRouter();
   const [leftMenuVisible, setLeftMenuVisible] = useState(false);
@@ -34,15 +23,11 @@ export default function NavigationBar() {
     }
   };
 
-  const navigateTo = (route: AppRoutes) => {
-  try {
+  const navigateTo = (route: string) => {
     setLeftMenuVisible(false);
     setRightMenuVisible(false);
     router.push(route);
-  } catch (err) {
-    console.error("Navigation error:", err);
-  }
-};
+  };
   return (
     <>
       {/* Navigation Bar */}
