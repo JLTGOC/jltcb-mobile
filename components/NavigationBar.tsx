@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles/navigation-bar/navigationBar-styles";
 import leftCurveStyles from "../styles/navigation-bar/left-curve-styles";
-import LeftCurveMenu from "../styles/navigation-bar/left-curve-menu";
+import { LinearGradient } from "react-native-svg";
 import rightCurveStyles from "../styles/navigation-bar/right-curve-styles";
 import RightCurveMenu from "../styles/navigation-bar/right-curve-menu";
 
@@ -34,7 +34,13 @@ export default function NavigationBar() {
         >
           <Ionicons name="newspaper" size={25} color="#898989" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigateTo("/home")}>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/home");
+            setLeftMenuVisible(false);
+            setRightMenuVisible(false);
+          }}
+        >
           <Ionicons name="home" size={25} color="#EE9034" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toggleMenu("right")}>
@@ -45,8 +51,14 @@ export default function NavigationBar() {
       {/* Curve Left */}
       {leftMenuVisible && (
         <View style={leftCurveStyles.container}>
-          <LeftCurveMenu style={leftCurveStyles.curve} />
-          <View style={leftCurveStyles.menuOptions}>
+          <View
+            style={{
+              backgroundColor: "red",
+              height: 210,
+              width: "60%",
+              borderTopRightRadius: 200,
+            }}
+          >
             <TouchableOpacity
               onPress={() => {
                 router.push("/governance");

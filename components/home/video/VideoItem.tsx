@@ -3,7 +3,7 @@ import styles from "../../../styles/home/video-styles"
 
 export default function VideoItem({video}:{video: number}){
 const player = useVideoPlayer(video, (player) => {
-    player.pause()
+    player.play()
 })
 
     return(

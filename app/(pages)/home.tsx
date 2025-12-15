@@ -1,7 +1,7 @@
 import GovermentLogos from "@/components/home/GovernmentLogos"
 import NewsUpdates from "@/components/home/NewsUpdates"
 import VideoReels from "@/components/home/video/VideoReels"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 
 export default function Home(){
     return(

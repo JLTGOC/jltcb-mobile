@@ -1,3 +1,4 @@
+import 'react-native-reanimated'
 import { Stack, usePathname } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";

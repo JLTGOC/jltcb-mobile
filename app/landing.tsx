@@ -55,9 +55,9 @@ export default function Index() {
               style={styles.outerGradient}
             >
               <TouchableOpacity
-                onPress={() => {
-                  router.push("/home");
-                }}
+                onPress={() => 
+                  router.push("/home")
+                }
               >
                 <LinearGradient
                   colors={["#161F3C", "#000000"]} // BUTTON gradient fill
