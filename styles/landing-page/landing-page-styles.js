@@ -1,14 +1,17 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  container: {
-    flex: 1, // Take full screen height
-    justifyContent: "center", // Center vertically
+  //LANDING PAGE
+
+  //logo image
+  logoContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
     gap: 5,
   },
   outerGradient: {
-    padding: 3, // thickness of the gradient border
+    padding: 3,
     borderRadius: 50,
   },
   innerGradient: {
@@ -20,11 +23,6 @@ export default StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 5,
-  },
-  buttonText: {
-    color: "#EE9034",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   logoImage: {
     width: 500,
@@ -43,14 +41,28 @@ export default StyleSheet.create({
   },
   whiteOverlay: {
     ...StyleSheet.absoluteFillObject, // fill entire ImageBackground
-    backgroundColor: "rgba(255, 255, 255, 0.64)", // 0.5 is 50% transparent
+    backgroundColor: "rgba(255, 255, 255, 0.64)",
   },
+
+  //button
   buttonContainer: {
     marginVertical: 20,
     gap: 5,
+  }, 
+  buttonText: {
+    color: "#EE9034",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   icons: {
     height: 50,
     width: 50,
   },
+
+  //social icons style
+  socialIconsContainer: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        height: 80,
+    }
 });

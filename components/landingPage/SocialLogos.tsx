@@ -1,5 +1,5 @@
 import { TouchableOpacity, Image, View } from "react-native";
-import styles from "../../styles/landing-page/social-icons-styles";
+import styles from "../../styles/landing-page/landing-page-styles";
 import * as Linking from "expo-linking";
 
 const openLink = (url: string) => {
@@ -9,7 +9,7 @@ const openLink = (url: string) => {
 export default function SocialLogos() {
   return (
     <>
-      <View style={styles.container}>
+      <View style={styles.socialIconsContainer}>
         <TouchableOpacity
           onPress={() => openLink("https://www.facebook.com/jltcb.ph")}
         >

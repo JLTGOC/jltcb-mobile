@@ -18,7 +18,7 @@ export default function Index() {
         resizeMode="cover"
       >
         <View style={styles.whiteOverlay} />
-        <View style={styles.container}>
+        <View style={styles.logoContainer}>
           <Image
             source={require("../assets/black_logos/logo.png")}
             style={styles.logoImage}
