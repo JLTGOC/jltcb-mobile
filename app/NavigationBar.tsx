@@ -1,0 +1,172 @@
+import { useState } from "react";
+import { useRouter } from "expo-router";
+import { View, TouchableOpacity, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import styles from "./navigation-bar-styles";
+import { LinearGradient } from "expo-linear-gradient";
+
+export default function NavigationBar() {
+  const router = useRouter();
+  const [leftMenuVisible, setLeftMenuVisible] = useState(false);
+  const [rightMenuVisible, setRightMenuVisible] = useState(false);
+
+  const toggleMenu = (position: string) => {
+    if (position === "left") {
+      setLeftMenuVisible((prev) => !prev);
+      setRightMenuVisible(false);
+    } else {
+      setRightMenuVisible((prev) => !prev);
+      setLeftMenuVisible(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Navigation Bar */}
+      <View style={styles.navContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            toggleMenu("left");
+          }}
+        >
+          <Ionicons name="newspaper" size={25} color="#898989" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/home");
+            setLeftMenuVisible(false);
+            setRightMenuVisible(false);
+          }}
+        >
+          <Ionicons name="home" size={25} color="#EE9034" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => toggleMenu("right")}>
+          <Ionicons name="clipboard" size={25} color="#898989" />
+        </TouchableOpacity>
+      </View>
+          
+      {/* Curve Left */}
+      {leftMenuVisible && (
+        <View style={styles.borderContainer}>
+          <LinearGradient
+            colors={["#1d2b5b", "#d5893c", "#ffffff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.leftBorder}
+          >
+            <View
+              style={{
+                backgroundColor: "#ffffff",
+                height: 200,
+                borderTopRightRadius: 300,
+                justifyContent: "center",
+                gap: 10,
+                paddingLeft: 20,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/governance");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>Governance</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/about-us");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>About Us</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/contact-us");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>Contact Us</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/services");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>Services</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/ports-catered");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>Ports Catered</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        </View>
+      )}
+      {/* Curve Right */}
+      {rightMenuVisible && (
+        <View style={styles.borderContainer}>
+          <LinearGradient
+            colors={["#1d2b5b", "#d5893c", "#ffffff"]}
+            start={{ x: 1, y: 0 }}
+             end={{ x: 0, y: 1 }}
+             style={styles.rightBorder}
+          >
+            <View style={{
+                backgroundColor: "#ffffff",
+                height: 200,
+                borderTopLeftRadius: 300,
+                justifyContent: "center",
+                gap: 10,
+                paddingRight: 20,
+                alignItems: "flex-end"
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/get-quote");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>Get Qoute</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("./get-appointment");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>
+                  Get Appointment
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/ahtn-checker");
+                  setLeftMenuVisible(false);
+                  setRightMenuVisible(false);
+                }}
+              >
+                <Text style={styles.text}>AHTN Checker</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.text}>Calculator</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        </View>
+      )}
+    </>
+  );
+}

@@ -1,8 +1,8 @@
 import 'react-native-reanimated'
 import { Stack, usePathname } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../components/Header";
-import NavigationBar from "../components/NavigationBar";
+import Header from "./Header";
+import NavigationBar from "./NavigationBar";
 
 export default function RootLayout() {
   const pathname = usePathname();
@@ -23,7 +23,7 @@ export default function RootLayout() {
         <Stack
           screenOptions={{
             headerShown: false,
-            animation: "none"
+            animation: "fade"
           }}
         />
         {!hideNavigationBar && <NavigationBar />}

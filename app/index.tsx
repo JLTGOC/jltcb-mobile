@@ -76,7 +76,7 @@ export default function SplashScreen() {
                 duration: 500,
                 useNativeDriver: false,
               }).start(() => {
-                router.replace("/landing");
+                router.replace("./landing-page")
               });
             });
           }, 1000);
