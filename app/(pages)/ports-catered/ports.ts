@@ -1,7 +1,21 @@
-export const ports = [
+export type Region = "Luzon" | "Visayas" | "Mindanao";
+
+export type PortData = {
+  port: string;
+  subPorts: string[];
+};
+
+export type PortItem = {
+  region: string;
+  Luzon?: PortData[];
+  Visayas?: PortData[];
+  Mindanao?: PortData[];
+};
+
+const ports: PortItem[] = [
   {
     region: "Luzon",
-    ports: [
+    Luzon: [
       {
         port: "Port of San Fernando (La Union)",
         subPorts: [
@@ -59,7 +73,7 @@ export const ports = [
   },
   {
     region: "Visayas",
-    ports: [
+    Visayas: [
       {
         port: "Port of Iloilo",
         subPorts: ["Sub-Port of Pulupandan", "Kalibo International Airport"],
@@ -84,7 +98,7 @@ export const ports = [
   },
   {
     region: "Mindanao",
-    ports: [
+    Mindanao: [
       {
         port: "Port of Cagayan de Oro",
         subPorts: [
