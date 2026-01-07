@@ -1,7 +1,7 @@
 import * as Linking from "expo-linking";
 import { useEffect, useRef } from "react";
 import {
-  Animated,
+  Dimensions,
   FlatList,
   Image,
   TouchableOpacity,
@@ -56,8 +56,10 @@ export default function GovermentLogos() {
       url: "https://online.prc.gov.ph/",
     },
   ];
+
+  const screenWidth = Dimensions.get("window").width
+
   const flatListRef = useRef<FlatList>(null);
-  const scrollX = useRef(new Animated.Value(0)).current;
   const loopedLogos = [...logos, ...logos]; // duplicate for seamless loop
   const itemWidth = 100 + 40; // logo width + spacing
   const totalWidth = logos.length * itemWidth;
@@ -77,7 +79,7 @@ export default function GovermentLogos() {
   }, []);
 
   return (
-    <View>
+    <View style={{paddingVertical:5}}>
       <FlatList
         ref={flatListRef}
         data={loopedLogos}
@@ -87,7 +89,7 @@ export default function GovermentLogos() {
         ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => openLink(item.url)}>
-            <Image source={item.logo} style={styles.logoSize} />
+            <Image source={item.logo} style={{height: screenWidth * .08, width: screenWidth * .08}} />
           </TouchableOpacity>
         )}
       />
@@ -95,7 +97,4 @@ export default function GovermentLogos() {
   );
 }
 
-const styles =  StyleSheet.create({
-  logoSize: { height: 30, width: 30 },
-});
 

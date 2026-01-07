@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions} from "react-native";
 
 export default function NewsTabButtons() {
   const [active, setActive] = useState(0);
   const [tab, setTab] = useState("")
 
   const tabs = ["LATEST", "ARTICES", "CAREERS", ""];
+
+  const screenWidth = Dimensions.get("screen").width
 
   return (
     <View style={styles.buttonContainer}>
@@ -15,7 +17,7 @@ export default function NewsTabButtons() {
           style={styles.button}
           onPress={() => {setActive(i), setTab(t)}}
         >
-          <Text style={[styles.buttonText, active === i && styles.activeText]}>
+          <Text style={[styles.buttonText, {fontSize: screenWidth * .019} , active === i && styles.activeText]}>
             {t}
           </Text>
           {active === i && <View style={styles.underline} />}
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   buttonText: {
-    fontSize: 10,
+    // fontSize: 10,
     color: "#555",
   },
   activeText: {

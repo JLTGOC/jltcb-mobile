@@ -1,15 +1,15 @@
 import { useVideoPlayer, VideoView } from "expo-video"
-import { StyleSheet } from "react-native"
+import { StyleSheet, Dimensions } from "react-native"
 
 export default function VideoPlayer({video}:{video: number}){
 const player = useVideoPlayer(video, (player) => {
     player.play()
 })
-
+ const screenWidth = Dimensions.get("window").width
     return(
         <VideoView
             player={player}
-            style={styles.videoSize}
+            style={[styles.videoSize, {width: screenWidth * .20, height: screenWidth * .30}]}
             contentFit="cover"
             nativeControls={false}
         />
@@ -19,9 +19,7 @@ const player = useVideoPlayer(video, (player) => {
 const styles = StyleSheet.create({
  
   videoSize:{
-    width: 70,
     marginRight: 5,
-    height: 130,
     borderRadius: 5,
     overflow: "hidden",
   }

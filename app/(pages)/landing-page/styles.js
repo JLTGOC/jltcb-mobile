@@ -38,9 +38,7 @@ export default StyleSheet.create({
     flex: 1,
     width: "100%",
     justifyContent:"space-between",
-    paddingTop: 20,
-    paddingBottom: 100
-
+    height: "100%",
   },
   whiteOverlay: {
     ...StyleSheet.absoluteFillObject, // fill entire ImageBackground
@@ -68,5 +66,6 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
         height: 80,
+        marginTop: 20
     }
 });

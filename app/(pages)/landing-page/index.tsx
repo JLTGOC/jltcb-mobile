@@ -16,7 +16,6 @@ export default function Index() {
       <ImageBackground
         source={require("../../../src/assets/landingPage.png")}
         style={styles.image}
-        resizeMode="cover"
       >
         <SocialLogos />
 
@@ -35,7 +34,7 @@ export default function Index() {
           />
         </View>
         <View
-          style={{ justifyContent: "flex-end", alignItems: "center", gap: 10 }}
+          style={{ justifyContent: "flex-end", alignItems: "center", gap: 10, marginBottom: 20}}
         >
           <TouchableOpacity onPress={() => router.push("/home")}>
             <LinearGradient

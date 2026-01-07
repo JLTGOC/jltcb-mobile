@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import { Card } from "react-native-paper";
 
 export default function NewsCardTemplate() {
@@ -10,21 +10,29 @@ export default function NewsCardTemplate() {
   const year = today.getFullYear();
 
   const formatted = `${day}/${month}/${year}`;
+
+  // Get screen width
+  const screenWidth = Dimensions.get("window").width;
+
+  // Helper to scale font size
+  const scaleFont = (size: number) => (screenWidth < 768 ? size : size * 1.5);
+
   return (
     <Card style={styles.cardContainer} mode="contained">
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        {/* LEFT IMAGE */}
+        {/* LEFT: IMAGE */}
         <Image
           source={require("../../../../src/assets/images/testImage.png")}
           style={{
-            width: 90,
-            height: 90,
+            width: screenWidth * 0.25,
+            height: screenWidth * 0.25,
             borderRadius: 8,
             marginRight: 10,
           }}
+          resizeMode="cover"
         />
 
-        {/* RIGHT TEXT CONTENT */}
+        {/* RIGHT: TEXT CONTENT */}
         <View style={{ flex: 1, gap: 5 }}>
           <View
             style={{
@@ -32,16 +40,20 @@ export default function NewsCardTemplate() {
               gap: 1,
             }}
           >
-            <Text style={styles.title_1}>{formatted}</Text>
+            <Text style={[styles.title_1, { fontSize: scaleFont(9) }]}>
+              {formatted}
+            </Text>
 
-            <Text style={styles.title_1}>JANELLE</Text>
+            <Text style={[styles.title_1, { fontSize: scaleFont(9) }]}>
+              JANELLE
+            </Text>
           </View>
 
-          <Text style={styles.title_2}>
+          <Text style={[styles.title_2, { fontSize: scaleFont(9) }]}>
             What Is the Prior Disclosure Program and How It Can Save Your
             Business from Customs Penalties
           </Text>
-          <Text numberOfLines={3} style={styles.description}>
+          <Text numberOfLines={3} style={{ fontSize: scaleFont(8) }}>
             What Is the Prior Disclosure Program and How It Can Save Your
             Business from Customs Penalties Previously on...
           </Text>
@@ -51,21 +63,18 @@ export default function NewsCardTemplate() {
   );
 }
 const styles = StyleSheet.create({
-
   cardContainer: {
     marginTop: 5,
-    height: 90,
     justifyContent: "center",
     elevation: 0,
     borderWidth: 0,
     backgroundColor: "#ffffff",
+    width:"100%"
   },
   title_1: {
     backgroundColor: "gray",
-    fontSize: 9,
     paddingHorizontal: 5,
     color: "white",
   },
-  title_2: { fontSize: 9, fontWeight: 700 },
-  description: { fontSize: 8 },
+  title_2: { fontWeight: 700 },
 });
