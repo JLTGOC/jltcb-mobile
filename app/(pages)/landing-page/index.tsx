@@ -50,7 +50,7 @@ export default function Index() {
           <Text variant="titleMedium">
             Already have an account?{" "}
             <Text
-              onPress={() => router.push("/sign-in")}
+              onPress={() => router.push("/(pages)/sign-in")}
               style={{ fontWeight: "bold" }}
             >
               Sign In

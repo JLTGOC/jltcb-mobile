@@ -33,7 +33,7 @@ export default function NavigationBar() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            router.push("/home");
+            router.push("/(pages)/home");
             setLeftMenuVisible(false);
             setRightMenuVisible(false);
           }}
@@ -66,7 +66,7 @@ export default function NavigationBar() {
             >
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/governance");
+                  router.push("/(pages)/governance");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -75,7 +75,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/about-us");
+                  router.push("/(pages)/about-us");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -84,7 +84,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/contact-us");
+                  router.push("/(pages)/contact-us");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -93,7 +93,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/services");
+                  router.push("/(pages)/services");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -102,7 +102,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/ports-catered");
+                  router.push("/(pages)/ports-catered");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -133,7 +133,7 @@ export default function NavigationBar() {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/get-quote");
+                  router.push("/(pages)/get-quote");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -142,7 +142,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("./get-appointment");
+                  router.push("/(pages)/get-appointment");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}
@@ -153,7 +153,7 @@ export default function NavigationBar() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/ahtn-checker");
+                  router.push("/(pages)/ahtn-checker");
                   setLeftMenuVisible(false);
                   setRightMenuVisible(false);
                 }}

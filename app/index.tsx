@@ -63,7 +63,7 @@ export default function SplashScreen() {
     finalFade.value = withDelay(
       3600,
       withTiming(1, { duration: 500 }, () => {
-        runOnJS(router.replace)("./landing-page");
+        runOnJS(router.replace)("/(pages)/landing-page");
       })
     );
   }, [imagesLoaded]);

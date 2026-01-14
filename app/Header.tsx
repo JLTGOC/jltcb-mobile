@@ -1,8 +1,11 @@
 import { Image, View, TouchableOpacity } from "react-native";
 import styles from "./header-styles";
 import { LinearGradient } from "expo-linear-gradient";
+import {useRouter} from "expo-router"
 
 export default function Header() {
+  const router = useRouter()
+
   return (
     <>
       <View style={styles.container}>
@@ -11,7 +14,7 @@ export default function Header() {
           style={styles.logo}
           resizeMode="contain"
         />
-        <TouchableOpacity style={styles.profileContainer}>
+        <TouchableOpacity style={styles.profileContainer} onPress={() => router.push("/(pages)/sign-in")}>
           <Image
             source={require("../src/assets/images/profile.png")}
             style={styles.profileImage}

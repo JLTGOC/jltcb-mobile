@@ -1,14 +1,12 @@
 import { useVideoPlayer, VideoView } from "expo-video";
 import { StyleSheet, Dimensions, Pressable } from "react-native";
 import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
 
 type Props = {
   video: number;
 };
 
 export default function ReelsPlayer({ video }: Props) {
-  const router = useRouter();
 
   const player = useVideoPlayer(video);
   useEffect(() => {
