@@ -7,11 +7,14 @@ import SubForm_CheckBox from "./SubForm_CheckBox";
 
 export default function Form() {
   const fields: Field[] = [
-    { label: "Full Name", key: "fullName" },
+    { label: "Full Name", key: "full_name" },
     { label: "Email", key: "email" },
-    { label: "Contact Number", key: "contactNumber" },
+    { label: "Contact Number", key: "contact_number" },
   ];
-  const [formData, setFormData] = useState<ContactFormData>({});
+  const [formData, setFormData] = useState<ContactFormData>({
+    message: "",
+    imageUri: "",
+  });
 
   return (
     <View style={styles.container}>
@@ -49,7 +52,7 @@ export default function Form() {
       </Text>
 
       {/* Image Input Area */}
-      <SubForm_ImageInput setFormData={setFormData} />
+      <SubForm_ImageInput setFormData={setFormData} formData={formData} />
 
       {/* Message area */}
       <Text variant="titleSmall">Message</Text>
@@ -75,7 +78,7 @@ export default function Form() {
       </Surface>
 
       {/* Check Box and Submit Button */}
-      <SubForm_CheckBox/>
+      <SubForm_CheckBox setFormData={setFormData} />
     </View>
   );
 }

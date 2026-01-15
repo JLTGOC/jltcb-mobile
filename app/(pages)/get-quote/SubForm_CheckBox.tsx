@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, Dispatch,SetStateAction } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, Button, Checkbox } from "react-native-paper";
+import { ContactFormData } from "@/src/types/get-quote";
 import * as Linking from "expo-linking";
 
 const openLink = (url: string) => {
   Linking.openURL(url);
 };
 
-export default function SubForm_CheckBox() {
+type Props = {
+  setFormData:  Dispatch<SetStateAction<ContactFormData>>
+}
+
+export default function SubForm_CheckBox({setFormData} : Props) {
   const [checked, setChecked] = useState(false);
   return (
     <View style={styles.container}>
@@ -36,6 +41,15 @@ export default function SubForm_CheckBox() {
           }}
           disabled={!checked}
           buttonColor={!checked ? "#161F3C" : "#323f68ff"}
+          onPress={() => setFormData(
+            {
+              full_name: "",
+              email: "",
+              contact_number: "",
+              message: "",
+              imageUri: ""
+            }
+          )}
         >
           SUBMIT
         </Button>

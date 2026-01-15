@@ -1,4 +1,4 @@
-export type FieldKey = "fullName" | "email" | "contactNumber";
+export type FieldKey = "full_name" | "email" | "contact_number";
 
 export type Field = {
   label: string;

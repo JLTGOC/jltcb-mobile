@@ -1,13 +1,21 @@
-import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Dimensions} from "react-native";
+import { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
+import { useRouter } from "expo-router";
 
 export default function NewsTabButtons() {
+  const router = useRouter();
+
   const [active, setActive] = useState(0);
-  const [tab, setTab] = useState("")
 
   const tabs = ["LATEST", "ARTICES", "CAREERS", ""];
 
-  const screenWidth = Dimensions.get("screen").width
+  const screenWidth = Dimensions.get("screen").width;
 
   return (
     <View style={styles.buttonContainer}>
@@ -15,9 +23,19 @@ export default function NewsTabButtons() {
         <TouchableOpacity
           key={i}
           style={styles.button}
-          onPress={() => {setActive(i), setTab(t)}}
+          onPress={() => {
+            setActive(i); if (t === "CAREERS") {
+              router.push("/(pages)/careers");
+            }
+          }}
         >
-          <Text style={[styles.buttonText, {fontSize: screenWidth * .019} , active === i && styles.activeText]}>
+          <Text
+            style={[
+              styles.buttonText,
+              { fontSize: screenWidth * 0.019 },
+              active === i && styles.activeText,
+            ]}
+          >
             {t}
           </Text>
           {active === i && <View style={styles.underline} />}
@@ -54,5 +72,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#EE9034",
     position: "absolute",
     bottom: -3,
-  }
+  },
 });

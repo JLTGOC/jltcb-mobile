@@ -1,9 +1,8 @@
 import { useCallback, useState, useEffect } from "react";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams, useFocusEffect } from "expo-router";
+import { useLocalSearchParams, useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import {useRouter} from "expo-router"
 
 const videoMap: Record<string, number> = {
   v1: require("../../../../src/assets/reels/vid_1.mp4"),
@@ -11,33 +10,31 @@ const videoMap: Record<string, number> = {
 };
 
 export default function ReelsFullScreen() {
- 
- const router = useRouter()
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
 
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
 
-  const { id } = useLocalSearchParams();
-  if (typeof id !== "string") return null;
+  const source = typeof id === "string" ? videoMap[id] : undefined;
 
-  const source = videoMap[id];
-  if (!source) return null;
-
-  const player = useVideoPlayer(source, (player) => {
-    player.play();
+  const player = useVideoPlayer(source ?? null, (player) => {
+    if (source) {
+      player.play();
+    }
   });
 
   useFocusEffect(
-    //useCallback is a function that won't need to rerun the
-    // function unless the dependencies is changed
     useCallback(() => {
+      if (!source) return;
+
       player.play();
       return () => {
         player.pause();
       };
-    }, [player])
+    }, [player, source])
   );
 
   useEffect(() => {
@@ -64,9 +61,7 @@ export default function ReelsFullScreen() {
           nativeControls={false}
         />
         <View style={styles.headerOverlay}>
-          <TouchableOpacity
-            onPress={() => router.push("/(pages)/home")}
-          >
+          <TouchableOpacity onPress={() => router.push("/(pages)/home")}>
             <Ionicons name="close" size={28} color="white" />
           </TouchableOpacity>
         </View>

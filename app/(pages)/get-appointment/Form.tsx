@@ -37,8 +37,6 @@ export default function Form() {
     service: "",
   });
 
-  const handleAccordionPress = () => setExpanded(!expanded);
-
   return (
     <>
       <FlatList
@@ -49,11 +47,11 @@ export default function Form() {
           <View style={styles.container}>
             {/* Meeting Location */}
             <Text style={styles.label}>Meeting Location</Text>
-            <List.Section style={{ padding: 0, margin: 0 }}>
+            <List.Section style={{ padding: 0,  }}>
               <List.Accordion
                 title={formData.meeting_location ?? ""}
                 expanded={expanded}
-                onPress={handleAccordionPress}
+                onPress={() => setExpanded(!expanded)}
                 style={styles.accordion}
                 titleStyle={styles.accordionTitle}
                 left={() => null} // remove default icon
@@ -81,6 +79,7 @@ export default function Form() {
             <TextInput
               underlineColor="transparent"
               activeUnderlineColor="transparent"
+              selectionColor="blue"
               mode="flat"
               style={{
                 borderRadius: 10,
@@ -245,8 +244,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ccc",
-    paddingHorizontal: 10,
     justifyContent: "center",
+    padding: 0, margin: 0,
   },
   accordionTitle: {
     fontSize: 16,
