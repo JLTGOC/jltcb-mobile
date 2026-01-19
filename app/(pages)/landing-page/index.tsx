@@ -1,4 +1,4 @@
-import LandingPage from "@/components/landing-page";
+import LandingPage from "@/src/components/landing-page";
 
 export default function Index() {
   return <LandingPage />;

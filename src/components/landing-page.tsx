@@ -1,33 +1,9 @@
-import {
-  MartelSans_800ExtraBold,
-  MartelSans_900Black,
-  useFonts,
-} from "@expo-google-fonts/martel-sans";
 import { Image, ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-SplashScreen.preventAutoHideAsync();
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function LandingPage() {
   const { navigate } = useRouter();
-
-  const [loaded, error] = useFonts({
-    MartelSans_900Black,
-    MartelSans_800ExtraBold,
-  });
-
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
-
-  if (!loaded && !error) {
-    return null;
-  }
 
   return (
     <View style={styles.container}>
@@ -35,7 +11,7 @@ export default function LandingPage() {
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
-            source={require("@/src/assets/black_logos/logo.png")}
+            source={require("../assets/black_logos/logo.png")}
             contentFit="contain"
           />
           <Text style={styles.title}>Jill L. Tolentino Group</Text>
@@ -43,12 +19,12 @@ export default function LandingPage() {
 
         <View style={styles.solutions}>
           <Pressable
-            onPress={() => navigate("/customs-brokerage")}
+            onPress={() => navigate("/landing-page/customs-brokerage")}
             style={styles.solution}
           >
             <Image
               style={styles.image}
-              source={require("@/src/assets/landing-page/customs-brokerage.png")}
+              source={require("../assets/landing-page/customs-brokerage.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText}>CUSTOMS BROKERAGE</Text>
@@ -56,7 +32,7 @@ export default function LandingPage() {
           <View style={styles.solution}>
             <Image
               style={styles.image}
-              source={require("@/src/assets/landing-page/global-trade.png")}
+              source={require("../assets/landing-page/global-trade.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText}>
@@ -66,7 +42,7 @@ export default function LandingPage() {
           <View style={styles.solution}>
             <Image
               style={styles.image}
-              source={require("@/src/assets/landing-page/world-wide-logistics.png")}
+              source={require("../assets/landing-page/world-wide-logistics.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText}>
@@ -78,13 +54,12 @@ export default function LandingPage() {
 
       <ImageBackground
         style={styles.bottomBanner}
-        source={require("@/src/assets/banners/small.png")}
-        contentFit="cover"
-        contentPosition="right"
+        source={require("../assets/banners/small.png")}
+        contentFit="fill"
       >
         <Image
           style={styles.skyline}
-          source={require("@/src/assets/landing-page/skyline_vector_white 1.png")}
+          source={require("../assets/landing-page/skyline_vector_white 1.png")}
           contentFit="cover"
         />
       </ImageBackground>
@@ -117,7 +92,10 @@ const styles = StyleSheet.create({
   },
   title: {
     textTransform: "uppercase",
-    fontFamily: "MartelSans_900Black",
+    fontFamily: Platform.select({
+      android: "MartelSans_900Black",
+      ios: "MartelSans-Black",
+    }),
     textAlign: "center",
     fontSize: 40,
     lineHeight: 56,
@@ -131,14 +109,17 @@ const styles = StyleSheet.create({
   },
   solutionText: {
     color: "#16324A",
-    fontFamily: "MartelSans_800ExtraBold",
+    fontFamily: Platform.select({
+      android: "MartelSans_800ExtraBold",
+      ios: "MartelSans-ExtraBold",
+    }),
     textTransform: "uppercase",
     textAlign: "center",
     lineHeight: 20,
     fontSize: 12,
   },
   bottomBanner: {
-    aspectRatio: 3.5,
+    height: 145,
     transform: [{ rotate: "180deg" }],
   },
   skyline: {

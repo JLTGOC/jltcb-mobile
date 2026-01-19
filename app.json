@@ -29,7 +29,16 @@
     "plugins": [
       "expo-router",
       "expo-video",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/martel-sans/900Black/MartelSans_900Black.ttf",
+            "node_modules/@expo-google-fonts/martel-sans/800ExtraBold/MartelSans_800ExtraBold.ttf"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

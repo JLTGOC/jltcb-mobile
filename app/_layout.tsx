@@ -5,8 +5,8 @@ import GuestNavBar from "./GuestNavBar";
 import Header from "./Header";
 
 const hidePaths = {
-  header: ["/landing-page", "/customs-brokerage"],
-  navigationBar: ["/landing-page", "/customs-brokerage"],
+  header: ["/landing-page", "/landing-page/customs-brokerage"],
+  navigationBar: ["/landing-page", "/landing-page/customs-brokerage"],
 };
 
 export default function RootLayout() {
