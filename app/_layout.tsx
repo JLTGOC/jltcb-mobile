@@ -1,8 +1,9 @@
 import { Stack, usePathname } from "expo-router";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GuestNavBar from "./GuestNavBar";
+import NavBar from "./(pages)/bottom-navigation-bar/index";
 import Header from "./Header";
+
 
 const hidePaths = {
   header: ["/landing-page", "/landing-page/customs-brokerage"],
@@ -16,6 +17,7 @@ export default function RootLayout() {
   const hideNavigationBar =
     pathname === "/" || hidePaths.navigationBar.includes(pathname);
 
+  const user = "LeadAS";
   return (
     <>
       <SafeAreaView
@@ -32,7 +34,7 @@ export default function RootLayout() {
             animation: "fade",
           }}
         />
-        {!hideNavigationBar && <GuestNavBar />}
+        {!hideNavigationBar && <NavBar user={user} />}
       </SafeAreaView>
     </>
   );

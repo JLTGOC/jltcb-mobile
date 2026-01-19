@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
 } from "react-native";
-import { useRouter } from "expo-router";
 
 export default function NewsTabButtons() {
   const router = useRouter();
@@ -24,7 +24,8 @@ export default function NewsTabButtons() {
           key={i}
           style={styles.button}
           onPress={() => {
-            setActive(i); if (t === "CAREERS") {
+            setActive(i);
+            if (t === "CAREERS") {
               router.push("/(pages)/careers");
             }
           }}
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   buttonText: {
-    // fontSize: 10,
+    fontSize: 10,
     color: "#555",
   },
   activeText: {
