@@ -17,8 +17,8 @@ export default function Login() {
         style={styles.imageBackground}
         contentFit="cover"
       >
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.title} allowFontScaling={false}>Login</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           Welcome back you&apos;ve been missed!
         </Text>
       </ImageBackground>
@@ -32,7 +32,7 @@ export default function Login() {
           }}
           placeholder="Email"
           inputMode="email"
-          placeholderTextColor="black"
+          placeholderTextColor="black" allowFontScaling={false}
         />
 
         <TextInput
@@ -43,7 +43,7 @@ export default function Login() {
           }}
           placeholder="Password"
           secureTextEntry
-          placeholderTextColor="black"
+          placeholderTextColor="black" allowFontScaling={false}
         />
 
         <Button

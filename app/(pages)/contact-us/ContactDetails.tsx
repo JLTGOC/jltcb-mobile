@@ -39,7 +39,7 @@ export default function ContactDetails() {
             }}
           >
             <Text
-              style={[styles.buttonText, active === i && styles.activeText]}
+              style={[styles.buttonText, active === i && styles.activeText]} allowFontScaling={false}
             >
               {t}
             </Text>
@@ -53,9 +53,9 @@ export default function ContactDetails() {
         {contactDetails.map((detail, i) => (
           <View key={i} style={styles.contactContainer}>
             <View style={styles.iconsCotainer}>
-              <Ionicons name={detail.icon} size={25} color="#ffffffff" />
+              <Ionicons name={detail.icon as any} size={25} color="#ffffffff" />
             </View>
-            <Text style={{fontSize:12}} >{detail.description}</Text>
+            <Text style={{fontSize:12}} allowFontScaling={false} >{detail.description}</Text>
           </View>
         ))}
       </View>

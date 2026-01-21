@@ -25,10 +25,10 @@ export default function SubForm_CheckBox({setFormData} : Props) {
           uncheckedColor="#000000ff"
           color="#161F3C"
         />
-        <Text>
+        <Text allowFontScaling={false}>
           Yes, I agree with the{" "}
-          <Text onPress={() => openLink("https://jltcb.com/privacy-policy/")} style={styles.styledText}>privacy policy</Text> and{" "}
-          <Text onPress={() => openLink("https://jltcb.com/terms-and-conditions/")} style={styles.styledText}>terms and conditions.</Text>
+          <Text allowFontScaling={false} onPress={() => openLink("https://jltcb.com/privacy-policy/")} style={styles.styledText}>privacy policy</Text> and{" "}
+          <Text allowFontScaling={false} onPress={() => openLink("https://jltcb.com/terms-and-conditions/")} style={styles.styledText}>terms and conditions.</Text>
         </Text>
       </View>
       <View style={{ alignItems: "center" }}>

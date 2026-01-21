@@ -11,7 +11,7 @@ export default function Index() {
           padding: 20,
           aspectRatio: 2,
         }}
-         resizeMode= "cover" 
+        resizeMode="cover"
       >
         <Text
           style={{
@@ -20,6 +20,7 @@ export default function Index() {
             fontWeight: 500,
             marginBottom: 15,
           }}
+          allowFontScaling={false}
         >
           CONTACT US
         </Text>
@@ -32,7 +33,10 @@ export default function Index() {
             height: 35,
           }}
         >
-          <Text style={{ fontSize: 15, color: "white" }}>
+          <Text
+            style={{ fontSize: 15, color: "white" }}
+            allowFontScaling={false}
+          >
             If you have any inquiries get in touch with us. We’ll be happy to
             help.
           </Text>

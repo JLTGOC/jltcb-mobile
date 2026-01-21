@@ -40,7 +40,9 @@ export default function Form() {
     <View style={{ marginTop: -35 }}>
       {/* Position */}
       {/* ITS IS POSSIBLE TO MAKE IT INTO FLATLIST */}
-      <Text variant="titleSmall">Position</Text>
+      <Text variant="titleSmall" allowFontScaling={false}>
+        Position
+      </Text>
       <List.Section>
         <List.Accordion
           title={formData.position ?? ""}
@@ -71,9 +73,16 @@ export default function Form() {
       {/* OJT Data */}
       {textFields.map((field, i) => (
         <View key={i} style={{ marginVertical: 2 }}>
-          <Text variant="titleSmall" style={{ textTransform: "uppercase" }}>
+          <Text
+            variant="titleSmall"
+            style={{ textTransform: "uppercase" }}
+            allowFontScaling={false}
+          >
             {field.label}
-            <Text style={{ fontSize: 10, marginLeft: 10 }}>
+            <Text
+              style={{ fontSize: 10, marginLeft: 10 }}
+              allowFontScaling={false}
+            >
               {field.subLabel}
             </Text>
           </Text>
@@ -98,6 +107,7 @@ export default function Form() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, [field.key]: text }))
               }
+              allowFontScaling={false}
             />
           </Surface>
         </View>
@@ -115,11 +125,12 @@ export default function Form() {
           uncheckedColor="#000000ff"
           color="#161F3C"
         />
-        <Text>
+        <Text allowFontScaling={false}>
           Yes, I agree with the{" "}
           <Text
             onPress={() => openLink("https://jltcb.com/privacy-policy/")}
             style={styles.styledText}
+            allowFontScaling={false}
           >
             privacy policy
           </Text>{" "}
@@ -127,6 +138,7 @@ export default function Form() {
           <Text
             onPress={() => openLink("https://jltcb.com/terms-and-conditions/")}
             style={styles.styledText}
+            allowFontScaling={false}
           >
             terms and conditions.
           </Text>
@@ -148,9 +160,10 @@ export default function Form() {
               full_name: "",
               email: "",
               contact_number: "",
-              cv_cover: []
-            }), setChecked(false))
-          }
+              cv_cover: [],
+            }),
+            setChecked(false)
+          )}
         >
           SUBMIT
         </Button>

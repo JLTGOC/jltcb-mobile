@@ -14,7 +14,9 @@ export default function LandingPage() {
             source={require("../assets/black_logos/logo.png")}
             contentFit="contain"
           />
-          <Text style={styles.title}>Jill L. Tolentino Group</Text>
+          <Text style={styles.title} allowFontScaling={false}>
+            Jill L. Tolentino Group
+          </Text>
         </View>
 
         <View style={styles.solutions}>
@@ -27,7 +29,9 @@ export default function LandingPage() {
               source={require("../assets/landing-page/customs-brokerage.png")}
               contentFit="contain"
             />
-            <Text style={styles.solutionText}>CUSTOMS BROKERAGE</Text>
+            <Text style={styles.solutionText} allowFontScaling={false}>
+              CUSTOMS BROKERAGE
+            </Text>
           </Pressable>
           <View style={styles.solution}>
             <Image
@@ -35,7 +39,7 @@ export default function LandingPage() {
               source={require("../assets/landing-page/global-trade.png")}
               contentFit="contain"
             />
-            <Text style={styles.solutionText}>
+            <Text style={styles.solutionText} allowFontScaling={false}>
               GLOBAL TRADE AND BUSINESS SOLUTIONS CORPORATIONS
             </Text>
           </View>
@@ -45,7 +49,7 @@ export default function LandingPage() {
               source={require("../assets/landing-page/world-wide-logistics.png")}
               contentFit="contain"
             />
-            <Text style={styles.solutionText}>
+            <Text style={styles.solutionText} allowFontScaling={false}>
               WORLD WIDE LOGISTICS CORPORATION
             </Text>
           </View>

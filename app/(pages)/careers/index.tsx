@@ -20,6 +20,7 @@ export default function Index() {
             marginBottom: 0,
             padding: 0,
           }}
+          allowFontScaling={false}
         >
           INTERNSHIP OPPORTUNITIES
         </Text>
@@ -29,10 +30,9 @@ export default function Index() {
             borderLeftColor: "#EE9034", // color
             margin: 5,
             paddingHorizontal: 5,
-            height: "58%",
           }}
         >
-          <Text style={{ fontSize: 13, color: "white" }}>
+          <Text style={{ fontSize: 10, color: "white" }} allowFontScaling={false}>
             At Jill L. Tolentino Customs Brokerage, we believe in nurturing the
             next generation of customs and logistics professionals. Our
             Internship Program is designed to give students real-world

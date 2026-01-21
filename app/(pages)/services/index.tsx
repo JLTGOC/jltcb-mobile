@@ -15,23 +15,23 @@ export default function Index() {
         }}
         resizeMode="cover"
       >
-        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }}>
+        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }} allowFontScaling={false}>
           SERVICES
         </Text>
       </ImageBackground>
       <View style={{ paddingHorizontal: 25, marginTop: -30 }}>
-        <Text style={styles.textTop}>SERVICES</Text>
+        <Text style={styles.textTop} allowFontScaling={false}>SERVICES</Text>
         <ProgressBar
           progress={0.2}
           color="#EE9034" // progress fill
           style={styles.progressBar}
         />
-        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }}>
+        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }} allowFontScaling={false}>
           SERVICES
         </Text>
         <ColumnServices />
 
-        <Text style={styles.textTop}>ADDITIONAL SERVICES</Text>
+        <Text style={styles.textTop} allowFontScaling={false}>ADDITIONAL SERVICES</Text>
         <ProgressBar
           progress={0.4}
           color="#EE9034" // progress fill

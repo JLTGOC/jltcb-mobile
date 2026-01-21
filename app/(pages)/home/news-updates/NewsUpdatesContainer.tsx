@@ -8,8 +8,10 @@ export default function NewsUpdatesContainer() {
   ];
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>News and Updates</Text>
-      <NewsTabButtons/>
+      <Text style={styles.title} allowFontScaling={false}>
+        News and Updates
+      </Text>
+      <NewsTabButtons />
 
       <FlatList
         data={data}

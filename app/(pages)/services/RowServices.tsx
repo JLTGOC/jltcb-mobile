@@ -30,7 +30,7 @@ export default function RowServices() {
           <Card style={styles.card}>
             <View style={styles.cardContent}>
               <Image source={item.image} style={styles.image} />
-              <Text style={{ textAlign: "center" }}>{item.title}</Text>
+              <Text style={{ textAlign: "center" }} allowFontScaling={false}>{item.title}</Text>
             </View>
           </Card>
         )}

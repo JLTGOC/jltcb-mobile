@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import {Divider} from "react-native-paper"
+import { View } from "react-native";
+import {Divider, Text} from "react-native-paper"
 
 export default function PrincipleList() {
   const datas = [
@@ -24,8 +24,8 @@ export default function PrincipleList() {
     <>
       {datas.map((data, i) => (
         <View key={i}>
-          <Text style={{fontWeight:"bold", fontSize: 20, color: "#161F3C" }}>{data.title}</Text>
-          <Text style={{fontSize: 15, color: "#161F3C" }}>{data.description}</Text>
+          <Text style={{fontWeight:"bold", fontSize: 20, color: "#161F3C" }} allowFontScaling={false}>{data.title}</Text>
+          <Text style={{fontSize: 15, color: "#161F3C" }}>{data.description} allowFontScaling={false}</Text>
           <Divider style={{marginVertical:10}}/>
         </View>
       ))}

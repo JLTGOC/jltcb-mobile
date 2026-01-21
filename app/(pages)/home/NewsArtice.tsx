@@ -34,15 +34,19 @@ export default function NewsArticle() {
               fontSize: 25,
               fontWeight: 500,
             }}
+            allowFontScaling={false}
           >
             {imageData.title}
           </Text>
         </ImageBackground>
         <View style={{ paddingHorizontal: 10, gap: 50 }}>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>
+          <Text
+            style={{ fontWeight: 600, fontSize: 20 }}
+            allowFontScaling={false}
+          >
             Previously on Our PCA Series
           </Text>
-          <Text variant="titleSmall">
+          <Text variant="titleSmall" allowFontScaling={false}>
             In our previous article, “How Does the Bureau of Customs Conduct a
             Post-Clearance Audit? Here’s What Importers Should Expect,” we
             explained how the Bureau of Customs (BOC) conducts a Post-Clearance
@@ -59,10 +63,13 @@ export default function NewsArticle() {
             Program (PDP) becomes crucial. It offers importers an opportunity to
             voluntarily correct mistakes and avoid heavy penalties.
           </Text>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>
+          <Text
+            style={{ fontWeight: 600, fontSize: 20 }}
+            allowFontScaling={false}
+          >
             Previously on Our PCA Series
           </Text>
-          <Text variant="titleSmall">
+          <Text variant="titleSmall" allowFontScaling={false}>
             In our previous article, “How Does the Bureau of Customs Conduct a
             Post-Clearance Audit? Here’s What Importers Should Expect,” we
             explained how the Bureau of Customs (BOC) conducts a Post-Clearance
@@ -79,10 +86,13 @@ export default function NewsArticle() {
             Program (PDP) becomes crucial. It offers importers an opportunity to
             voluntarily correct mistakes and avoid heavy penalties.
           </Text>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>
+          <Text
+            style={{ fontWeight: 600, fontSize: 20 }}
+            allowFontScaling={false}
+          >
             Previously on Our PCA Series
           </Text>
-          <Text variant="titleSmall">
+          <Text variant="titleSmall" allowFontScaling={false}>
             In our previous article, “How Does the Bureau of Customs Conduct a
             Post-Clearance Audit? Here’s What Importers Should Expect,” we
             explained how the Bureau of Customs (BOC) conducts a Post-Clearance
@@ -99,10 +109,13 @@ export default function NewsArticle() {
             Program (PDP) becomes crucial. It offers importers an opportunity to
             voluntarily correct mistakes and avoid heavy penalties.
           </Text>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>
+          <Text
+            style={{ fontWeight: 600, fontSize: 20 }}
+            allowFontScaling={false}
+          >
             Previously on Our PCA Series
           </Text>
-          <Text variant="titleSmall">
+          <Text variant="titleSmall" allowFontScaling={false}>
             In our previous article, “How Does the Bureau of Customs Conduct a
             Post-Clearance Audit? Here’s What Importers Should Expect,” we
             explained how the Bureau of Customs (BOC) conducts a Post-Clearance

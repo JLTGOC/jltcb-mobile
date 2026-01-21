@@ -52,7 +52,9 @@ export default function NewsCardTemplate() {
               }
             }}
           >
-            <Text style={styles.textStyle}>READ MORE</Text>
+            <Text style={styles.textStyle} allowFontScaling={false}>
+              READ MORE
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -64,19 +66,32 @@ export default function NewsCardTemplate() {
               gap: 1,
             }}
           >
-            <Text style={[styles.title_1, { fontSize: scaleFont(9) }]}>
+            <Text
+              style={[styles.title_1, { fontSize: scaleFont(9) }]}
+              allowFontScaling={false}
+            >
               {formatted}
             </Text>
 
-            <Text style={[styles.title_1, { fontSize: scaleFont(9) }]}>
+            <Text
+              style={[styles.title_1, { fontSize: scaleFont(9) }]}
+              allowFontScaling={false}
+            >
               JANELLE
             </Text>
           </View>
 
-          <Text style={[styles.title_2, { fontSize: scaleFont(9) }]}>
+          <Text
+            style={[styles.title_2, { fontSize: scaleFont(9) }]}
+            allowFontScaling={false}
+          >
             {imageData.title}
           </Text>
-          <Text numberOfLines={3} style={{ fontSize: scaleFont(8) }}>
+          <Text
+            numberOfLines={3}
+            style={{ fontSize: scaleFont(8) }}
+            allowFontScaling={false}
+          >
             What Is the Prior Disclosure Program and How It Can Save Your
             Business from Customs Penalties Previously on...
           </Text>

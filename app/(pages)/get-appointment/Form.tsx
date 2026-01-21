@@ -46,8 +46,10 @@ export default function Form() {
         ListHeaderComponent={() => (
           <View style={styles.container}>
             {/* Meeting Location */}
-            <Text style={styles.label}>Meeting Location</Text>
-            <List.Section style={{ padding: 0,  }}>
+            <Text style={styles.label} allowFontScaling={false}>
+              Meeting Location
+            </Text>
+            <List.Section style={{ padding: 0 }}>
               <List.Accordion
                 title={formData.meeting_location ?? ""}
                 expanded={expanded}
@@ -75,7 +77,9 @@ export default function Form() {
             </List.Section>
 
             {/* Full Name */}
-            <Text style={styles.label}>Full Name</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Full Name
+            </Text>
             <TextInput
               underlineColor="transparent"
               activeUnderlineColor="transparent"
@@ -93,12 +97,15 @@ export default function Form() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, full_name: text }))
               }
+              allowFontScaling={false}
             />
 
             <View style={{ flexDirection: "row", width: "100%", gap: 10 }}>
               <View style={{ flex: 1 }}>
                 {/* Email */}
-                <Text style={styles.label}>Email</Text>
+                <Text style={styles.label} allowFontScaling={false}>
+                  Email
+                </Text>
                 <TextInput
                   underlineColor="transparent"
                   activeUnderlineColor="transparent"
@@ -116,11 +123,14 @@ export default function Form() {
                   onChangeText={(text) =>
                     setFormData((prev) => ({ ...prev, email: text }))
                   }
+                  allowFontScaling={false}
                 />
               </View>
               <View style={{ flex: 1 }}>
                 {/* Phone */}
-                <Text style={styles.label}>Phone No.</Text>
+                <Text style={styles.label} allowFontScaling={false}>
+                  Phone No.
+                </Text>
                 <TextInput
                   underlineColor="transparent"
                   activeUnderlineColor="transparent"
@@ -138,12 +148,15 @@ export default function Form() {
                   onChangeText={(text) =>
                     setFormData((prev) => ({ ...prev, phone_number: text }))
                   }
+                  allowFontScaling={false}
                 />
               </View>
             </View>
 
             {/* Company */}
-            <Text style={styles.label}>Company Name</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Company Name
+            </Text>
             <TextInput
               underlineColor="transparent"
               activeUnderlineColor="transparent"
@@ -160,10 +173,13 @@ export default function Form() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, company_name: text }))
               }
+              allowFontScaling={false}
             />
 
             {/* Message */}
-            <Text style={styles.label}>Message</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Message
+            </Text>
             <TextInput
               underlineColor="transparent"
               activeUnderlineColor="transparent"
@@ -181,6 +197,7 @@ export default function Form() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, message: text }))
               }
+              allowFontScaling={false}
             />
           </View>
         )}
@@ -245,7 +262,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     justifyContent: "center",
-    padding: 0, margin: 0,
+    padding: 0,
+    margin: 0,
   },
   accordionTitle: {
     fontSize: 16,

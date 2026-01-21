@@ -47,7 +47,7 @@ export default function CoreValuesTemplate() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
+        scrollEventThrottle={0}
         contentContainerStyle={{ columnGap: 30, paddingHorizontal: 18 }}
       >
         {data.map((item, i) => (
@@ -63,6 +63,7 @@ export default function CoreValuesTemplate() {
               <View style={{ flex: 1 }}>
                 <Text
                   style={{ fontSize: 22, fontWeight: "bold", color: "#161F3C" }}
+                  allowFontScaling={false}
                 >
                   {item.title}
                 </Text>
@@ -73,6 +74,7 @@ export default function CoreValuesTemplate() {
                     color: "#161F3C",
                     lineHeight: 14,
                   }}
+                  allowFontScaling={false}
                 >
                   {item.description}
                 </Text>

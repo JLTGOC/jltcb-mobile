@@ -21,7 +21,9 @@ export default function Form() {
       {/* Personal Data */}
       {fields.map((field, i) => (
         <View key={i} style={{ marginVertical: 5 }}>
-          <Text variant="titleSmall">{field.label}</Text>
+          <Text variant="titleSmall" allowFontScaling={false}>
+            {field.label}
+          </Text>
           <Surface style={{ elevation: 10, borderRadius: 10 }}>
             <TextInput
               value={formData[field.key] ?? ""}
@@ -39,14 +41,15 @@ export default function Form() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, [field.key]: text }))
               }
+              allowFontScaling={false}
             />
           </Surface>
         </View>
       ))}
       {/* Image */}
-      <Text variant="titleSmall">
+      <Text variant="titleSmall" allowFontScaling={false}>
         Upload File
-        <Text variant="labelSmall">
+        <Text variant="labelSmall" allowFontScaling={false}>
           (Commercial Invoice, Packing List, Airway Bill / Bill of Lading)
         </Text>
       </Text>
@@ -55,7 +58,9 @@ export default function Form() {
       <SubForm_ImageInput setFormData={setFormData} formData={formData} />
 
       {/* Message area */}
-      <Text variant="titleSmall">Message</Text>
+      <Text variant="titleSmall" allowFontScaling={false}>
+        Message
+      </Text>
       <Surface style={{ elevation: 10, borderRadius: 10 }}>
         <TextInput
           value={formData.message ?? ""}
@@ -74,6 +79,7 @@ export default function Form() {
           theme={{
             roundness: 10,
           }}
+          allowFontScaling={false}
         />
       </Surface>
 

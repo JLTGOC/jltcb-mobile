@@ -25,7 +25,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
 
   return (
     <>
-      <Text variant="titleSmall">CV AND COVER LETTER</Text>
+      <Text variant="titleSmall" allowFontScaling={false}>CV AND COVER LETTER</Text>
       <TouchableOpacity>
         <Surface style={{ elevation: 10, borderRadius: 10, marginVertical: 2 }}>
           <View

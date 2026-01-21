@@ -97,7 +97,7 @@ export default function Ports() {
                       }}
                     >
                       <Ionicons name="boat" size={18} />
-                      <Text>{portItem.port}</Text>
+                      <Text allowFontScaling={false}>{portItem.port}</Text>
                     </View>
                     <Button
                       compact
@@ -131,11 +131,13 @@ export default function Ports() {
                         <FlatList
                           data={portItem.subPorts}
                           renderItem={({ item }) => (
-                            <Text key={item}>• {item}</Text>
+                            <Text key={item} allowFontScaling={false}>
+                              • {item}
+                            </Text>
                           )}
                         />
                       ) : (
-                        <Text>No Sub-Ports!</Text>
+                        <Text allowFontScaling={false}>No Sub-Ports!</Text>
                       )}
                     </View>
                   )}

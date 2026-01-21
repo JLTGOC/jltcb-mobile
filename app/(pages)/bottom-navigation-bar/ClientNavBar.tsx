@@ -1,4 +1,3 @@
-import { Text } from "react-native-paper";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";

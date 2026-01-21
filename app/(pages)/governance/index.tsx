@@ -66,7 +66,7 @@ export default function Index() {
           paddingVertical: 30,
           paddingHorizontal: 40,
         }}
-        resizeMode= "cover" 
+        resizeMode="cover"
       >
         <Text
           style={{
@@ -74,6 +74,7 @@ export default function Index() {
             fontSize: 20,
             fontWeight: "500",
           }}
+          allowFontScaling={false}
         >
           GOVERNANCE
         </Text>
@@ -94,7 +95,10 @@ export default function Index() {
             style={styles.itemContainer}
           >
             <Image source={item.logo} style={styles.logoImage} />
-            <Text style={{ textAlign: "center", fontWeight: 700 }}>
+            <Text
+              style={{ textAlign: "center", fontWeight: 700 }}
+              allowFontScaling={false}
+            >
               {item.name}
             </Text>
           </TouchableOpacity>

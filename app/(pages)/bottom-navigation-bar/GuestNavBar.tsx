@@ -70,7 +70,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>Governance</Text>
+                <Text style={styles.text} allowFontScaling={false}>Governance</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -79,7 +79,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>About Us</Text>
+                <Text style={styles.text} allowFontScaling={false}>About Us</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -88,7 +88,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>Contact Us</Text>
+                <Text style={styles.text} allowFontScaling={false}>Contact Us</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -97,7 +97,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>Services</Text>
+                <Text style={styles.text} allowFontScaling={false}>Services</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -106,7 +106,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>Ports Catered</Text>
+                <Text style={styles.text} allowFontScaling={false}>Ports Catered</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -137,7 +137,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>Get Qoute</Text>
+                <Text style={styles.text} allowFontScaling={false}>Get Qoute</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -146,7 +146,7 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>
+                <Text style={styles.text} allowFontScaling={false}>
                   Get Appointment
                 </Text>
               </TouchableOpacity>
@@ -157,10 +157,10 @@ export default function NavigationBar() {
                   setRightMenuVisible(false);
                 }}
               >
-                <Text style={styles.text}>AHTN Checker</Text>
+                <Text style={styles.text} allowFontScaling={false}>AHTN Checker</Text>
               </TouchableOpacity>
               <TouchableOpacity>
-                <Text style={styles.text}>Calculator</Text>
+                <Text style={styles.text} allowFontScaling={false}>Calculator</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>

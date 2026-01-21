@@ -1,10 +1,10 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, ScrollView } from "react-native";
 import CardTemplate2 from "@/app/(pages)/about-us/CoreValuesTemplate";
 import Pillars from "@/app/(pages)/about-us/PrincipleList";
 import styles from "./indexStyles";
 export default function Index() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Image
         source={require("../../../src/assets/about_us/header.png")}
         style={styles.imageHeader}
@@ -18,6 +18,7 @@ export default function Index() {
           color: "#404040",
           lineHeight: 14
         }}
+        allowFontScaling={false}
       >
         Proudly recognized as the first customs brokerage in the Philippines
         certified compliant by the Professional Regulation Commission (PRC) and
@@ -30,11 +31,12 @@ export default function Index() {
       <Text
         numberOfLines={2}
         style={{ fontSize: 25, fontWeight: "bold", color: "#EE9034", marginVertical:10 }}
+        allowFontScaling={false}
       >
         OUR SERVICES ARE BUILT ON THREE PILLARS:
       </Text>
       <Pillars/>
       </View>
-    </View>
+    </ScrollView>
   );
 }

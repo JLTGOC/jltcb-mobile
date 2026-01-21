@@ -5,7 +5,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import Ports from "./Ports"
+import Ports from "./Ports";
 import ports from "./portsPlace";
 
 export default function Index() {
@@ -35,6 +35,7 @@ export default function Index() {
                 fontSize: 20,
                 fontWeight: "500",
               }}
+              allowFontScaling={false}
             >
               PORTS CATERED
             </Text>

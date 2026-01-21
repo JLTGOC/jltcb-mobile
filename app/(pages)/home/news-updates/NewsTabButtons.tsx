@@ -33,9 +33,10 @@ export default function NewsTabButtons() {
           <Text
             style={[
               styles.buttonText,
-              { fontSize: screenWidth * 0.019 },
+              { fontSize: screenWidth * 0.025 },
               active === i && styles.activeText,
             ]}
+            allowFontScaling={false}
           >
             {t}
           </Text>

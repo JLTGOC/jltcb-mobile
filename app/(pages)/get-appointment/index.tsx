@@ -1,6 +1,6 @@
 import { Text, ImageBackground, View, FlatList } from "react-native";
 import TimeDate from "./TimeDate";
-import Form from "./Form"
+import Form from "./Form";
 
 export default function GetAppointment() {
   return (
@@ -25,6 +25,7 @@ export default function GetAppointment() {
                 fontWeight: "500",
                 marginBottom: 5,
               }}
+              allowFontScaling={false}
             >
               BOOK YOUR APPOINTMENT NOW
             </Text>
@@ -39,7 +40,10 @@ export default function GetAppointment() {
                 justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 12, color: "white" }}>
+              <Text
+                style={{ fontSize: 12, color: "white" }}
+                allowFontScaling={false}
+              >
                 At Jill L. Tolentino Customs Brokerage, we simplify imports and
                 exports for businesses nationwide...
               </Text>

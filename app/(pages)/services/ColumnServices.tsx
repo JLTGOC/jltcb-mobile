@@ -52,8 +52,8 @@ export default function ColumnServices() {
                 <Image source={item.image} style={styles.image} />
               </View>
               <View style={{ justifyContent: "center" }}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
+                <Text style={styles.title} allowFontScaling={false}>{item.title}</Text>
+                <Text style={styles.description} allowFontScaling={false}>{item.description}</Text>
               </View>
             </View>
           </Card>

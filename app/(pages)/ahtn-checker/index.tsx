@@ -34,7 +34,7 @@ export default function AHTNChecker() {
           placeholder="ENTER AHTN 2022 CODE or KEYWORD(S):"
         />
 
-        <Text style={styles.title}>SELECT TARIFF SCHEDULE(S):</Text>
+        <Text style={styles.title} allowFontScaling={false}>SELECT TARIFF SCHEDULE(S):</Text>
 
         <View>
           <Checkbox.Item

@@ -23,7 +23,9 @@ export default function CustomsBrokerageLanding() {
             style={styles.logoImage}
             contentFit="contain"
           />
-          <Text style={styles.title}>Customs Brokerage</Text>
+          <Text style={styles.title} allowFontScaling={false}>
+            Customs Brokerage
+          </Text>
         </View>
 
         <View
@@ -41,10 +43,12 @@ export default function CustomsBrokerageLanding() {
               style={styles.innerGradient}
             >
               <MaterialIcons name="person-outline" size={22} color="#EE9034" />
-              <Text style={styles.buttonText}>Guest</Text>
+              <Text style={styles.buttonText} allowFontScaling={false}>
+                Guest
+              </Text>
             </LinearGradient>
           </Pressable>
-          <Text variant="titleMedium">
+          <Text variant="titleMedium" allowFontScaling={false}>
             Already have an account?{" "}
             <Link href="/sign-in" style={{ fontWeight: "bold" }}>
               Sign In
