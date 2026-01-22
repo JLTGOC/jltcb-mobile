@@ -55,7 +55,7 @@ export default function NavigationBar() {
 
       {/* Curve Left */}
       {leftMenuVisible && (
-        <View style={[styles.borderContainer, {bottom: 40 + insets.bottom}]}>
+        <View style={styles.borderContainer}>
           <LinearGradient
             colors={["#1d2b5b", "#d5893c", "#ffffff"]}
             start={{ x: 0, y: 0 }}
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   borderContainer: {
     position: "absolute",
     alignContent: "flex-end",
+    bottom: 70,
     width: "100%",
     justifyContent: "space-between",
   },
