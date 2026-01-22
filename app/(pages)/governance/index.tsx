@@ -1,13 +1,12 @@
+import { Image, ImageBackground } from "expo-image";
+import * as Linking from "expo-linking";
 import {
-  Text,
-  ImageBackground,
-  View,
-  Image,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import * as Linking from "expo-linking";
 
 const openLink = (url: string) => {
   Linking.openURL(url);
@@ -66,7 +65,7 @@ export default function Index() {
           paddingVertical: 30,
           paddingHorizontal: 40,
         }}
-        resizeMode="cover"
+        contentFit="cover"
       >
         <Text
           style={{
@@ -94,7 +93,7 @@ export default function Index() {
             onPress={() => openLink(item.url)}
             style={styles.itemContainer}
           >
-            <Image source={item.logo} style={styles.logoImage} />
+            <Image source={item.logo} style={styles.logoImage} contentFit="contain" />
             <Text
               style={{ textAlign: "center", fontWeight: 700 }}
               allowFontScaling={false}
@@ -118,7 +117,6 @@ const styles = StyleSheet.create({
   logoImage: {
     width: 50,
     height: 50,
-    resizeMode: "contain",
     marginBottom: 8,
   },
   logoText: {

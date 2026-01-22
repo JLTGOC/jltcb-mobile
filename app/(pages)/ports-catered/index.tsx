@@ -1,9 +1,9 @@
+import { ImageBackground } from "expo-image";
 import {
-  Text,
-  ImageBackground,
-  Image,
-  FlatList,
   Dimensions,
+  FlatList,
+  Image,
+  Text,
 } from "react-native";
 import Ports from "./Ports";
 import ports from "./portsPlace";
@@ -27,7 +27,7 @@ export default function Index() {
               paddingVertical: 30,
               paddingHorizontal: 40,
             }}
-            resizeMode="cover"
+            contentFit="cover"
           >
             <Text
               style={{

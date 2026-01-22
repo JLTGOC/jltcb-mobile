@@ -1,7 +1,8 @@
-import { TouchableOpacity, View, Image, StyleSheet } from "react-native";
-import { Text, Surface, Checkbox } from "react-native-paper";
-import { Dispatch, SetStateAction, useState } from "react";
 import { OJTFormData } from "@/src/types/careers";
+import { Image } from "expo-image";
+import { Dispatch, SetStateAction, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Surface, Text } from "react-native-paper";
 // import DocumentPicker from "react-native-document-picker";
 
 type Props = {
@@ -39,6 +40,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
           >
             <Image
               source={require("../../../src/assets/careers/upload_icon.png")}
+              style={styles.uploadImg}
             />
           </View>
         </Surface>
@@ -58,6 +60,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
           >
             <Image
               source={require("../../../src/assets/careers/upload_icon.png")}
+              style={styles.uploadImg}
             />
           </View>
         </Surface>
@@ -66,5 +69,12 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  uploadImg: {
+    aspectRatio: 19/25,
+    height: 25
+  }
+})
 
 

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Dimensions, Image } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withDelay,
-  runOnJS,
-} from "react-native-reanimated";
-import { useRouter } from "expo-router";
 import { Asset } from "expo-asset";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Dimensions, StyleSheet } from "react-native";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,23 +24,23 @@ export default function SplashScreen() {
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const imagesToLoad = [
-    require("../src/assets/black_logos/full_logo.png"),
-    require("../src/assets/landingPage.png"),
-    require("../src/assets/black_logos/logo.png"),
-    require("../src/assets/black_logos/word.png"),
-    require("../src/assets/social_logos/facebook.png"),
-    require("../src/assets/social_logos/instagram.png"),
-    require("../src/assets/social_logos/youtube.png"),
-    require("../src/assets/social_logos/tiktok.png"),
-    require("../src/assets/social_logos/twitter.png"),
-    require("../src/assets/social_logos/linkedIn.png"),
-  ];
-
   useEffect(() => {
+    const imagesToLoad = [
+      require("../src/assets/black_logos/full_logo.png"),
+      require("../src/assets/landingPage.png"),
+      require("../src/assets/black_logos/logo.png"),
+      require("../src/assets/black_logos/word.png"),
+      require("../src/assets/social_logos/facebook.png"),
+      require("../src/assets/social_logos/instagram.png"),
+      require("../src/assets/social_logos/youtube.png"),
+      require("../src/assets/social_logos/tiktok.png"),
+      require("../src/assets/social_logos/twitter.png"),
+      require("../src/assets/social_logos/linkedIn.png"),
+    ];
+
     async function loadAssets() {
       const cacheImages = imagesToLoad.map((img) =>
-        Asset.fromModule(img).downloadAsync()
+        Asset.fromModule(img).downloadAsync(),
       );
       await Promise.all(cacheImages);
       setImagesLoaded(true); // mark images as loaded
@@ -64,53 +65,49 @@ export default function SplashScreen() {
       3600,
       withTiming(1, { duration: 500 }, () => {
         runOnJS(router.replace)("/(pages)/landing-page");
-      })
+      }),
     );
   }, [imagesLoaded]);
 
-const rotateStyle = useAnimatedStyle(() => ({
-  transform: [{ rotate: `${rotateAnim.value}deg` }],
-}));
+  const rotateStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotateAnim.value}deg` }],
+  }));
 
-const leftStyle = useAnimatedStyle(() => ({
-  transform: [{ translateX: leftAnim.value }],
-}));
+  const leftStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: leftAnim.value }],
+  }));
 
-const rightStyle = useAnimatedStyle(() => ({
-  transform: [{ translateX: rightAnim.value }],
-}));
+  const rightStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: rightAnim.value }],
+  }));
 
-const fadeStyle = useAnimatedStyle(() => ({
-  opacity: fadeAnim.value,
-}));
+  const fadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
-const backgroundStyle = useAnimatedStyle(() => ({
-  backgroundColor:
-    finalFade.value === 1 ? "#161F3C" : "transparent",
-}));
+  const backgroundStyle = useAnimatedStyle(() => ({
+    backgroundColor: finalFade.value === 1 ? "#161F3C" : "transparent",
+  }));
 
   return (
-    <Animated.View
-      style={[styles.container, backgroundStyle ]}
-    >
-      <Animated.View
-        style={[styles.halfContainer, rotateStyle]}
-      >
+    <Animated.View style={[styles.container, backgroundStyle]}>
+      <Animated.View style={[styles.halfContainer, rotateStyle]}>
         <Animated.View
           style={[
             styles.half,
             {
-              backgroundColor: "#EE9034"
-            }, leftStyle
+              backgroundColor: "#EE9034",
+            },
+            leftStyle,
           ]}
         />
         <Animated.View
           style={[
             styles.half,
             {
-              backgroundColor: "#161F3C"
+              backgroundColor: "#161F3C",
             },
-            rightStyle
+            rightStyle,
           ]}
         />
       </Animated.View>
@@ -119,7 +116,7 @@ const backgroundStyle = useAnimatedStyle(() => ({
         <Image
           source={require("../src/assets/black_logos/full_logo.png")}
           style={{ width: 300, height: 220 }}
-          resizeMode="contain"
+          contentFit="contain"
         />
       </Animated.View>
     </Animated.View>

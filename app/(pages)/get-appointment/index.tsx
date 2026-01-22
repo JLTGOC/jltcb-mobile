@@ -1,6 +1,7 @@
-import { Text, ImageBackground, View, FlatList } from "react-native";
-import TimeDate from "./TimeDate";
+import { ImageBackground } from "expo-image";
+import { FlatList, Text, View } from "react-native";
 import Form from "./Form";
+import TimeDate from "./TimeDate";
 
 export default function GetAppointment() {
   return (
@@ -16,7 +17,7 @@ export default function GetAppointment() {
               padding: 20,
               aspectRatio: 2,
             }}
-            resizeMode="cover"
+            contentFit="cover"
           >
             <Text
               style={{

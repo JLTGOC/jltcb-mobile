@@ -1,8 +1,7 @@
-import { Text } from "react-native-paper";
-import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const NavIcons = [
   {

@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import {
   Dimensions,
   FlatList,
-  Image,
   StyleSheet,
-  View,
   TouchableOpacity,
+  View,
 } from "react-native";
 import ReelsPlayer from "./ReelsPlayer";
-import { useRouter } from "expo-router";
 
 const data = [
   {

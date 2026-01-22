@@ -1,12 +1,11 @@
+import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import { useEffect, useRef } from "react";
 import {
   Dimensions,
   FlatList,
-  Image,
   TouchableOpacity,
-  View,
-  StyleSheet
+  View
 } from "react-native";
 
 const openLink = (url: string) => {
@@ -76,7 +75,7 @@ export default function GovermentLogos() {
     };
 
     animate();
-  }, []);
+  }, [totalWidth]);
 
   return (
     <View style={{paddingVertical:5}}>

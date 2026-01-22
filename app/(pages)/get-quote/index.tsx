@@ -1,5 +1,6 @@
+import { ImageBackground } from "expo-image";
+import { ScrollView, Text, View } from "react-native";
 import Form from "./Form";
-import { Text, ImageBackground, View, ScrollView } from "react-native";
 
 export default function Index() {
   return (
@@ -11,7 +12,7 @@ export default function Index() {
           padding: 20,
           aspectRatio: 2,
         }}
-        resizeMode="cover"
+        contentFit="cover"
       >
         <Text
           style={{

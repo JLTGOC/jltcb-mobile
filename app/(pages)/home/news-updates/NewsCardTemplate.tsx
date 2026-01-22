@@ -1,13 +1,12 @@
-import React from "react";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import {
-  Image,
+  Dimensions,
   StyleSheet,
   Text,
-  View,
-  Dimensions,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { Card } from "react-native-paper";
 import { imageData } from "../../../../src/constants/home_NewsArticle";
 
@@ -42,13 +41,13 @@ export default function NewsCardTemplate() {
                 height: screenWidth * 0.25,
               },
             ]}
-            resizeMode="cover"
+            contentFit="cover"
           />
           <TouchableOpacity
             style={styles.overLay}
             onPress={() => {
               {
-                pathname: router.push("/(pages)/home/NewsArtice");
+                router.push("/(pages)/home/NewsArtice");
               }
             }}
           >

@@ -1,4 +1,5 @@
-import { Text, ImageBackground, View, StyleSheet } from "react-native";
+import { ImageBackground } from "expo-image";
+import { StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import ColumnServices from "./ColumnServices";
 import RowServices from "./RowServices";
@@ -13,7 +14,7 @@ export default function Index() {
           paddingVertical: 30,
           paddingHorizontal: 40,
         }}
-        resizeMode="cover"
+        contentFit="cover"
       >
         <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }} allowFontScaling={false}>
           SERVICES

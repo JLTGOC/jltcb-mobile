@@ -1,5 +1,6 @@
-import { Text, ImageBackground, View, Image } from "react-native";
 import ContactDetails from "@/app/(pages)/contact-us/ContactDetails";
+import { Image, ImageBackground } from "expo-image";
+import { Text, View } from "react-native";
 
 export default function Index() {
   return (
@@ -11,7 +12,7 @@ export default function Index() {
           padding: 20,
           aspectRatio: 2,
         }}
-        resizeMode="cover"
+        contentFit="cover"
       >
         <Text
           style={{

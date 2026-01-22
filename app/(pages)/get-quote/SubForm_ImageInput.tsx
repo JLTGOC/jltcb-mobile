@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Dispatch, SetStateAction } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ContactFormData } from "../../../src/types/get-quote";
 
 type ImageInputBoxProps = {
@@ -24,7 +25,7 @@ export default function SubForm_ImageInput({ setFormData, formData }: ImageInput
   return (
     <View style={styles.container}>
       {formData.imageUri ? (
-        <Image source={{ uri: formData.imageUri }} style={styles.image} />
+        <Image source={{ uri: formData.imageUri }} style={styles.image} contentFit="cover" />
       ) : (
         <TouchableOpacity onPress={pickImage}>
           <Ionicons name="image-outline" size={40} color="#888" />
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
   },
   iconButton: {
     position: "absolute",

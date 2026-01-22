@@ -1,38 +1,34 @@
-import {
-  Image,
-  View,
-  Dimensions,
-  ImageBackground,
-  ScrollView,
-} from "react-native";
+import { Image, ImageBackground } from "expo-image";
+import { Dimensions, ScrollView, View } from "react-native";
 import { Text } from "react-native-paper";
 import { imageData } from "../../../src/constants/home_NewsArticle";
 
 export default function NewsArticle() {
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
+
   return (
     <ScrollView>
       <View style={{ width: screenWidth }}>
         <Image
           source={imageData.testImage2}
           style={{ width: "100%", height: screenHeight * 0.25 }}
-          resizeMode="cover" // covers the container without distortion
+          contentFit="cover" // covers the container without distortion
         />
         <ImageBackground
           source={require("../../../src/assets/banners/large.png")}
           style={{
             paddingVertical: 20,
             paddingHorizontal: 30,
-            aspectRatio: 2.5,
+            paddingBottom: 96,
           }}
-          resizeMode="cover"
         >
           <Text
             style={{
               color: "#ffffff",
-              fontSize: 25,
-              fontWeight: 500,
+              fontSize: 20,
+              fontWeight: "bold",
+              textTransform: "uppercase",
             }}
             allowFontScaling={false}
           >
