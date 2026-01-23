@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { routes } from "../../../src/constants/routes";
@@ -9,6 +9,7 @@ import { useNavigate } from "../../../src/hooks/useNavigate";
 import MenuItem from "@/src/components/nav-bar-section/MenuItem";
 import ButtonIcon from "@/src/components/nav-bar-section/ButtonIcon";
 import { leftMenu, rightMenu } from "@/src/constants/bottom-navigation-bar";
+
 export default function NavigationBar() {
 	const insets = useSafeAreaInsets();
 
