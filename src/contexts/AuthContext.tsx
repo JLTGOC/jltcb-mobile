@@ -32,11 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadAuth();
   }, []);
 
-  useEffect(() => {
-    SecureStore.deleteItemAsync("token");
-    SecureStore.deleteItemAsync("role");
-  }, []);
-
   const loginContext = async (token: string, role: string) => {
     await SecureStore.setItemAsync("token", token);
     await SecureStore.setItemAsync("role", role);
