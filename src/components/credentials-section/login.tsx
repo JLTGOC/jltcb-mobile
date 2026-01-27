@@ -8,11 +8,12 @@ import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
 
 import { login } from "@/src/services/auth";
+import { useAuth } from "@/src/hooks/useAuth";
 // import Client_Home from "../../../app/(client)/dashboard"
 
 export default function Login() {
   const { navigate } = useNavigate();
-
+  const {loginContext} = useAuth()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,15 +26,19 @@ export default function Login() {
     setLoading(true);
     try {
       const data = await login(formData);
-      
-      await SecureStore.setItemAsync("token", data.data.token);
-      await SecureStore.setItemAsync("role", data.data.user.role);
+      console.log("login.tsx",data)
+
+      await loginContext(data.data.token,data.data.user.role) 
 
       if(data.data.user.role === "Client"){
         navigate(routes.CLIENT_DB)
-      } else {
-        navigate(routes.APPOINTMENT)
-      }
+      } else if (data.data.user.role === "Account Specialist") {
+        navigate(routes.AS_DB)
+      } else if (data.data.user.role === "Marketing"){
+        navigate(routes.MARKETING_DB)
+      } else (
+        console.log("login component:  need a page that says unathorized access and ligin button to navigate in the login component")
+      )
   
     } catch (err) {
       setError(true);

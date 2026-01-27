@@ -1,7 +1,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, } from "react-native";
 import { useNavigate } from "@/src/hooks/useNavigate";
+import { useAuth } from "@/src/hooks/useAuth";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const NavIcons = [
@@ -13,6 +14,7 @@ const NavIcons = [
 
 export default function ClientNavBar() {
   const insets = useSafeAreaInsets();
+  const {logout} = useAuth()
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
 

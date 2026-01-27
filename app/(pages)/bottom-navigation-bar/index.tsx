@@ -2,10 +2,16 @@ import LeadASNavBar from "./Employee/LeadASNavBar";
 import MarketingNavBar from "./Employee/MarketingNavBar";
 import GuestNavBar from "./GuestNavBar";
 import ClientNavBar from "./ClientNavBar";
-type Props = { user: string };
-export default function index({ user }: Props) {
-  if (user === "Client") return <ClientNavBar />;
-  if (user === "LeadAS") return <LeadASNavBar />;
-  if (user === "Marketing") return <MarketingNavBar/>
+
+import {useAuth} from "@/src/hooks/useAuth"
+import { useState } from "react";
+
+export default function Index() {
+
+  const {role} = useAuth()
+
+  if (role === "Client") return <ClientNavBar />;
+  if (role === "Account Specialist") return <LeadASNavBar />;
+  if (role === "Marketing") return <MarketingNavBar/>
   return <GuestNavBar />;
 }
