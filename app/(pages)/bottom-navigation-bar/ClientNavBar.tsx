@@ -1,22 +1,28 @@
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigate } from "@/src/hooks/useNavigate";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const NavIcons = [
-  { iconName: "grid-outline", route: "(client)/dashboard" },
-  { iconName: "newspaper-outline", route: "../home" },
-  { iconName: "ticket-outline", route: "(client)/get-quote-request-form" },
-  { iconName: "chatbox-ellipses-outline", route: "(client)/chatbox" },
+  { iconName: "view-dashboard", route: "(client)/dashboard" },
+  { iconName: "book-open-outline", route: "../home" },
+  { iconName: "book-plus-outline", route: "(client)/get-quote-request-form" },
+  { iconName: "message", route: "(client)/chatbox" },
 ];
 
 export default function ClientNavBar() {
+  const insets = useSafeAreaInsets();
+
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const {navigate} = useNavigate();
 
   return (
-    <View style={styles.navContainer}>
+    <View style={[
+          styles.navContainer,
+          { height: 40 + insets.bottom, paddingBottom: insets.bottom },
+        ]}>
       {NavIcons.map((icon, index) => (
         <View key={index}>
           <TouchableOpacity
@@ -25,7 +31,7 @@ export default function ClientNavBar() {
               navigate(icon.route as any)
             )}
           >
-            <Ionicons
+            <MaterialCommunityIcons
               name={icon.iconName as any}
               size={28}
               color={index === activeIndex ? "#EE9034" : "#000000"}
@@ -40,9 +46,8 @@ export default function ClientNavBar() {
 const styles = StyleSheet.create({
   navContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "space-evenly",
     backgroundColor: "#ffffffff",
-    height: 60,
   },
 });

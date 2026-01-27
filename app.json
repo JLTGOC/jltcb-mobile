@@ -38,7 +38,8 @@
             "node_modules/@expo-google-fonts/martel-sans/800ExtraBold/MartelSans_800ExtraBold.ttf"
           ]
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

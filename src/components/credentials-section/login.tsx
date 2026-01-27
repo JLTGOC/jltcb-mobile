@@ -1,14 +1,47 @@
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import * as SecureStore from "expo-secure-store";
 
 import { Button } from "react-native-paper";
+import { routes } from "@/src/constants/routes";
+import { useNavigate } from "@/src/hooks/useNavigate";
+
+import { login } from "@/src/services/auth";
+// import Client_Home from "../../../app/(client)/dashboard"
 
 export default function Login() {
+  const { navigate } = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const data = await login(formData);
+      
+      await SecureStore.setItemAsync("token", data.data.token);
+      await SecureStore.setItemAsync("role", data.data.user.role);
+
+      if(data.data.user.role === "Client"){
+        navigate(routes.CLIENT_DB)
+      } else {
+        navigate(routes.APPOINTMENT)
+      }
+  
+    } catch (err) {
+      setError(true);
+      console.log(err)
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.view}>
@@ -17,7 +50,9 @@ export default function Login() {
         style={styles.imageBackground}
         contentFit="cover"
       >
-        <Text style={styles.title} allowFontScaling={false}>Login</Text>
+        <Text style={styles.title} allowFontScaling={false}>
+          Login
+        </Text>
         <Text style={styles.subtitle} allowFontScaling={false}>
           Welcome back you&apos;ve been missed!
         </Text>
@@ -32,7 +67,8 @@ export default function Login() {
           }}
           placeholder="Email"
           inputMode="email"
-          placeholderTextColor="black" allowFontScaling={false}
+          placeholderTextColor="black"
+          allowFontScaling={false}
         />
 
         <TextInput
@@ -43,15 +79,18 @@ export default function Login() {
           }}
           placeholder="Password"
           secureTextEntry
-          placeholderTextColor="black" allowFontScaling={false}
+          placeholderTextColor="black"
+          allowFontScaling={false}
         />
 
         <Button
           mode="contained"
           style={[styles.button, styles.boxShadow]}
           labelStyle={styles.buttonLabel}
-        >
-          Sign In
+          onPress={handleLogin}
+          loading={loading}
+           >
+          {loading ? "Signing in..." : "Sign In"}
         </Button>
       </View>
     </ScrollView>
