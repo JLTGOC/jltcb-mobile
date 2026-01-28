@@ -19,4 +19,5 @@ export const routes = {
   MARKETING_DB: "/(employee-marketing)/dashboard",
   QUEOTE_REQUEST: "/(client)/get-quote-request-form",
   CHATBOX: "/(client)/chatbox",
+  UNAUTHORIZED: "/(pages)/Unauthorized"
 } as const satisfies Record<string, Href>;

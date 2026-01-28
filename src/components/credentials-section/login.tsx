@@ -1,45 +1,40 @@
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button } from "react-native-paper";
+import { useMutation } from "@tanstack/react-query";
 
 import { routes } from "@/src/constants/routes";
-import { Button } from "react-native-paper";
-
 import { useAuth } from "@/src/hooks/useAuth";
 import { useNavigate } from "@/src/hooks/useNavigate";
 
 export default function Login() {
-  const { navigate } = useNavigate();
+  const { replace } = useNavigate();
   const { loginContext } = useAuth();
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const { data } = await loginContext(formData);
-
-      if (data.user.role === "Client") {
-        navigate(routes.CLIENT_DB);
-      } else if (data.user.role === "Account Specialist") {
-        navigate(routes.AS_DB);
-      } else if (data.user.role === "Marketing") {
-        navigate(routes.MARKETING_DB);
-      } else
-        console.log(
-          "login component:  need a page that says unathorized access and ligin button to navigate in the login component",
-        );
-    } catch (err) {
-      setError(true);
-      console.log(err);
-    } finally {
-      setLoading(false);
+  const loginMutation = useMutation({
+    mutationFn: loginContext,
+    onSuccess: ({data}) => {
+      const role = data.user.role;
+      if (role === "Client") replace(routes.CLIENT_DB);
+      else if (role === "Account Specialist") replace(routes.AS_DB);
+      else if (role === "Marketing") replace(routes.MARKETING_DB);
+      else replace(routes.HOME);
+    },
+    onError: (err) => {
+      console.log("Login Failed", err)
+      replace(routes.UNAUTHORIZED)
     }
+  })
+
+  const handleLogin = () => {
+    loginMutation.mutate(formData)
   };
 
   return (
