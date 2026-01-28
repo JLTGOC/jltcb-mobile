@@ -1,3 +1,5 @@
+import type { Href } from "expo-router";
+
 export const routes = {
   HOME: "/(pages)/home",
   GOVERNANCE: "/(pages)/governance",
@@ -14,5 +16,7 @@ export const routes = {
   SIGN_IN: "/(pages)/sign-in",
   CLIENT_DB: "/(client)/dashboard",
   AS_DB: "/(employee-account-specialist)/dashboard",
-  MARKETING_DB: "/(employee-marketing)/dashboard"
-};
+  MARKETING_DB: "/(employee-marketing)/dashboard",
+  QUEOTE_REQUEST: "/(client)/get-quote-request-form",
+  CHATBOX: "/(client)/chatbox",
+} as const satisfies Record<string, Href>;

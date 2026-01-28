@@ -1,19 +1,16 @@
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import * as SecureStore from "expo-secure-store";
 
-import { Button } from "react-native-paper";
 import { routes } from "@/src/constants/routes";
-import { useNavigate } from "@/src/hooks/useNavigate";
+import { Button } from "react-native-paper";
 
-import { login } from "@/src/services/auth";
 import { useAuth } from "@/src/hooks/useAuth";
-// import Client_Home from "../../../app/(client)/dashboard"
+import { useNavigate } from "@/src/hooks/useNavigate";
 
 export default function Login() {
   const { navigate } = useNavigate();
-  const {loginContext} = useAuth()
+  const { loginContext } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,24 +22,21 @@ export default function Login() {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const data = await login(formData);
-      console.log("login.tsx",data)
+      const { data } = await loginContext(formData);
 
-      await loginContext(data.data.token,data.data.user.role) 
-
-      if(data.data.user.role === "Client"){
-        navigate(routes.CLIENT_DB)
-      } else if (data.data.user.role === "Account Specialist") {
-        navigate(routes.AS_DB)
-      } else if (data.data.user.role === "Marketing"){
-        navigate(routes.MARKETING_DB)
-      } else (
-        console.log("login component:  need a page that says unathorized access and ligin button to navigate in the login component")
-      )
-  
+      if (data.user.role === "Client") {
+        navigate(routes.CLIENT_DB);
+      } else if (data.user.role === "Account Specialist") {
+        navigate(routes.AS_DB);
+      } else if (data.user.role === "Marketing") {
+        navigate(routes.MARKETING_DB);
+      } else
+        console.log(
+          "login component:  need a page that says unathorized access and ligin button to navigate in the login component",
+        );
     } catch (err) {
       setError(true);
-      console.log(err)
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -94,7 +88,7 @@ export default function Login() {
           labelStyle={styles.buttonLabel}
           onPress={handleLogin}
           loading={loading}
-           >
+        >
           {loading ? "Signing in..." : "Sign In"}
         </Button>
       </View>

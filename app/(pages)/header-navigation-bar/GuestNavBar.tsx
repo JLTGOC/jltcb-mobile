@@ -1,11 +1,11 @@
+import { routes } from "@/src/constants/routes";
+import { useNavigate } from "@/src/hooks/useNavigate";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { TouchableOpacity, View, StyleSheet } from "react-native";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { routes } from "@/src/constants/routes";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function Header() {
-  const {navigate} = useNavigate()
+  const { navigate } = useNavigate();
 
   return (
     <>
@@ -15,7 +15,10 @@ export default function Header() {
           style={styles.logo}
           contentFit="contain"
         />
-        <TouchableOpacity style={styles.profileContainer} onPress={() => navigate(routes.SIGN_IN)}>
+        <TouchableOpacity
+          style={styles.profileContainer}
+          onPress={() => navigate(routes.SIGN_IN)}
+        >
           <Image
             source={require("../../../src/assets/images/profile.png")}
             style={styles.profileImage}
@@ -40,8 +43,7 @@ const styles = StyleSheet.create({
     alignItems: "center", // centers the logo horizontally
     justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: "#161F3C", 
-  
+    backgroundColor: "#161F3C",
   },
   logo: {
     width: 200,
@@ -61,6 +63,6 @@ const styles = StyleSheet.create({
   },
   borderBottom: {
     height: 4,
-     width: "100%",
-  }
+    width: "100%",
+  },
 });

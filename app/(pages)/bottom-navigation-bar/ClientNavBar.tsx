@@ -1,42 +1,42 @@
+import { routes } from "@/src/constants/routes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, } from "react-native";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { useAuth } from "@/src/hooks/useAuth";
+import { useRouter, useSegments } from "expo-router";
+import { ComponentProps } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const NavIcons = [
-  { iconName: "view-dashboard", route: "(client)/dashboard" },
-  { iconName: "book-open-outline", route: "../home" },
-  { iconName: "book-plus-outline", route: "(client)/get-quote-request-form" },
-  { iconName: "message", route: "(client)/chatbox" },
+type IconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
+
+const NavIcons: {
+  iconName: IconName;
+  route: (typeof routes)[keyof typeof routes];
+}[] = [
+  { iconName: "view-dashboard", route: routes.CLIENT_DB },
+  { iconName: "book-open-outline", route: routes.HOME },
+  { iconName: "book-plus-outline", route: routes.QUEOTE_REQUEST },
+  { iconName: "message", route: routes.CHATBOX },
 ];
 
 export default function ClientNavBar() {
   const insets = useSafeAreaInsets();
-  const {logout} = useAuth()
-
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  const {navigate} = useNavigate();
+  const segments = useSegments();
+  const path = `/${segments.join("/")}`;
+  const router = useRouter();
 
   return (
-    <View style={[
-          styles.navContainer,
-          { height: 40 + insets.bottom, paddingBottom: insets.bottom },
-        ]}>
+    <View
+      style={[
+        styles.navContainer,
+        { height: 40 + insets.bottom, paddingBottom: insets.bottom },
+      ]}
+    >
       {NavIcons.map((icon, index) => (
         <View key={index}>
-          <TouchableOpacity
-            onPress={() => (
-              setActiveIndex(index),
-              navigate(icon.route as any)
-            )}
-          >
+          <TouchableOpacity onPress={() => router.push(icon.route)}>
             <MaterialCommunityIcons
-              name={icon.iconName as any}
+              name={icon.iconName}
               size={28}
-              color={index === activeIndex ? "#EE9034" : "#000000"}
+              color={path === NavIcons[index].route ? "#EE9034" : "#000000"}
             />
           </TouchableOpacity>
         </View>

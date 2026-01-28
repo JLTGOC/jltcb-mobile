@@ -1,12 +1,16 @@
-import { createContext, useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import { createContext, useEffect, useState } from "react";
+import { routes } from "../constants/routes";
+import { useNavigate } from "../hooks/useNavigate";
+import { login, logout } from "../services/auth";
 
 type AuthContextType = {
   role: string | null;
   token: string | null;
   loading: boolean;
-  loginContext: (token: string, role: string) => Promise<void>;
-  logoutContext: () => Promise<void>;
+  loginContext: typeof login;
+  logoutContext: () => ReturnType<typeof logout>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -15,6 +19,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { replace } = useNavigate();
 
   useEffect(() => {
     const loadAuth = async () => {
@@ -32,24 +38,60 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadAuth();
   }, []);
 
-  const loginContext = async (token: string, role: string) => {
-    await SecureStore.setItemAsync("token", token);
-    await SecureStore.setItemAsync("role", role);
+  const loginContext = async (loginData: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const data = await login(loginData);
 
-    setToken(token);
-    setRole(role);
+      const token = data.data.token;
+      const userRole = data.data.user.role;
+
+      await SecureStore.setItemAsync("token", token);
+      await SecureStore.setItemAsync("role", userRole);
+
+      setToken(token);
+      setRole(userRole);
+
+      router.dismissAll();
+      replace(routes.HOME);
+
+      return data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   const logoutContext = async () => {
-    await SecureStore.deleteItemAsync("token");
-    await SecureStore.deleteItemAsync("role");
+    try {
+      const token = await SecureStore.getItemAsync("token");
 
-    setToken(null);
-    setRole(null);
+      if (!token) throw new Error("No token found for logout.");
+
+      const data = await logout(token);
+
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("role");
+
+      setToken(null);
+      setRole(null);
+
+      router.dismissAll();
+      replace(routes.HOME);
+
+      return data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ role, token, loading, loginContext, logoutContext }}>
+    <AuthContext.Provider
+      value={{ role, token, loading, loginContext, logoutContext }}
+    >
       {children}
     </AuthContext.Provider>
   );
