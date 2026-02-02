@@ -1,4 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -6,9 +7,9 @@ import ButtonIcon from "@/src/components/nav-bar-section/ButtonIcon";
 import MenuItem from "@/src/components/nav-bar-section/MenuItem";
 import { leftMenu, rightMenu } from "@/src/constants/bottom-navigation-bar";
 import { routes } from "../../constants/routes";
-import { useNavigate } from "../../hooks/useNavigate";
 
 export default function NavigationBar() {
+	const pathname = usePathname();
 	const insets = useSafeAreaInsets();
 
 	const [leftMenuVisible, setLeftMenuVisible] = useState(false);
@@ -19,9 +20,16 @@ export default function NavigationBar() {
 		setRightMenuVisible(false);
 	};
 
-	const { navigate } = useNavigate({
-		beforeNavigate: closeBeforeNavigate,
-	});
+	const router = useRouter();
+
+	const navigate = (href: Href) => {
+		closeBeforeNavigate();
+		if (href.toString().includes(pathname)) {
+			router.replace(href);
+			return;
+		}
+		router.navigate(href);
+	};
 
 	const toggleMenu = (position: string) => {
 		if (position === "left") {
