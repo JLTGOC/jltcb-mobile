@@ -4,26 +4,25 @@ import { Surface, Text, TextInput } from "react-native-paper";
 import { QuoteForm, Field } from "../../../types/client";
 
 type Props = {
-  error: boolean,
-  setError: Dispatch<SetStateAction<boolean>>
-}
+  error: boolean;
+  formData: QuoteForm;
+  setFormData: Dispatch<SetStateAction<QuoteForm>>;
+  fields: Field[];
+};
 
-export default function Form({error, setError}: Props) {
-  const fields: Field[] = [
-    { label: "CONSIGNEE", key: "consignee" },
-    { label: "COMPANY ADDRESS", key: "company_address" },
-    { label: "CONTACT PERSON", key: "contact_person" },
-    { label: "CONTACT NUMBER", key: "contact_number" },
-    { label: "EMAIL", key: "email" },
-  ];
-  const [formData, setFormData] = useState<QuoteForm>({});
-
+export default function Step_1({
+  error,
+  setFormData,
+  formData,
+  fields,
+}: Props) {
   return (
     <View style={styles.container}>
       {fields.map((field, i) => (
         <View key={i} style={{ marginVertical: 5, gap: 10 }}>
           <Text allowFontScaling={false} style={{ fontSize: 11 }}>
-            {field.label}*
+            {field.label}
+            <Text style={{ color: "red" }}>*</Text>
           </Text>
           <Surface style={{ elevation: 10, borderRadius: 10 }}>
             <TextInput
@@ -42,25 +41,22 @@ export default function Form({error, setError}: Props) {
               }}
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, [field.key]: text }));
-                if (text.trim() === "") {
-                  setError(true);
-                } else {
-                  setError(false);
-                }
               }}
             />
-            {error && (
-              <Text style={styles.errorText}>This field cannot be empty</Text>
-            )}
           </Surface>
         </View>
       ))}
+      {error && (
+        <>
+          <Text style={styles.errorText}>Any fields cannot be left empty.</Text>
+          <Text style={styles.errorText}>Fill the fields</Text>
+        </>
+      )}
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 25,
     gap: 5,
   },
   texArea: {
@@ -78,5 +74,5 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: "red",
   },
-  errorText: { color: "red", fontSize: 8, marginTop: 2 },
+  errorText: { color: "red", fontSize: 10, marginTop: 2, textAlign: "center" },
 });

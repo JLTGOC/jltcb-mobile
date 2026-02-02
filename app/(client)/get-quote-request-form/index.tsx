@@ -1,54 +1,38 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Text } from "react-native-paper";
-import { Check, MoveLeft } from "lucide-react-native";
-import { ImageBackground } from "expo-image";
+import { Check } from "lucide-react-native";
 import StepIndicator from "react-native-step-indicator";
 
 import Step_1 from "../../../src/components/client-section/get-quote/Step_1";
 import Step_2 from "../../../src/components/client-section/get-quote/Step_2";
 import Step_3 from "../../../src/components/client-section/get-quote/Step_3";
 import Buttons from "../../../src/components/client-section/get-quote/Buttons";
+import Header from "../../../src/components/client-section/Header";
+import { QuoteForm, Field } from "../../../src/types/client";
 
-export default function StepperExample() {
+import { routes } from "@/src/constants/routes";
+
+export default function Index() {
   const [currentPosition, setCurrentPosition] = useState(0);
-  const [error, setError] = useState<boolean>(false);
+  const [formData, setFormData] = useState<QuoteForm>({});
+  const [error, setError] = useState(false);
+
+  const stepFields: Record<number, Field[]> = {
+    0: [
+      { label: "CONSIGNEE", key: "consignee" },
+      { label: "COMPANY ADDRESS", key: "company_address" },
+      { label: "CONTACT PERSON", key: "contact_person" },
+      { label: "CONTACT NUMBER", key: "contact_number" },
+      { label: "EMAIL", key: "email" },
+    ],
+    1: [],
+    2: [],
+  };
 
   return (
     <>
-      <ImageBackground
-        source={require("../../../src/assets/banners/small.png")}
-        contentFit="cover"
-        style={{
-          padding: 10,
-          aspectRatio: 3,
-          width: "100%",
-          marginBottom: -35,
-        }}
-      >
-        <View
-          style={{
-            alignItems: "center",
-            flexDirection: "row",
-            gap: 20,
-          }}
-        >
-          <MoveLeft color={"#EE9034"} />
-          <Text
-            style={{
-              color: "#EE9034",
-              fontSize: 20,
-              fontWeight: 500,
-              marginBottom: 4,
-            }}
-            allowFontScaling={false}
-          >
-            Get Qoute
-          </Text>
-        </View>
-      </ImageBackground>
-
-      <View style={{ padding: 10 }}>
+      <Header title={"Get Quote"} route={routes.CLIENT_DB} />
+      <View style={{ padding: 20 }}>
         <StepIndicator
           customStyles={stepIndicatorStyles}
           currentPosition={currentPosition}
@@ -61,13 +45,18 @@ export default function StepperExample() {
             }
           }}
         />
-        {currentPosition === 0 && <Step_1 error={error} ssetError={setError}/>}
+        {currentPosition === 0 && (
+          <Step_1 error={error} formData={formData} setFormData={setFormData}  fields={stepFields[0]}/>
+        )}
         {currentPosition === 1 && <Step_2 />}
         {currentPosition === 2 && <Step_3 />}
         <Buttons
           currentPosition={currentPosition}
           setCurrentPosition={setCurrentPosition}
           error={error}
+          setError={setError}
+          formData={formData}
+          stepFields={stepFields}
         />
       </View>
     </>
