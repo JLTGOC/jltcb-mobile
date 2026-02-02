@@ -1,7 +1,3 @@
-import PortAccordion from "@/src/components/ports-section/PortAccordion";
-import PortRegionButtons from "@/src/components/ports-section/PortRegionButtons";
-import ports, { REGIONS } from "@/src/constants/ports-catered";
-import type { Region } from "@/src/types/ports";
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import {
@@ -12,6 +8,10 @@ import {
 	Text,
 	View,
 } from "react-native";
+import PortAccordion from "@/src/components/ports-section/PortAccordion";
+import PortRegionButtons from "@/src/components/ports-section/PortRegionButtons";
+import ports, { REGIONS } from "@/src/constants/ports-catered";
+import type { Region } from "@/src/types/ports";
 
 type ExpandedPorts = Record<Region, string | null>;
 
@@ -92,8 +92,9 @@ export default function Ports() {
 				<View style={styles.contentSpacer}>
 					<PortAccordion
 						port={item}
-						toggleExpand={togglePort}
-						expanded={expandedPorts[selectedRegion] === item.port}
+						toggleExpand={() => togglePort(item.port)}
+						isExpanded={expandedPorts[selectedRegion] === item.port}
+						title={item.port}
 					/>
 				</View>
 			)}
