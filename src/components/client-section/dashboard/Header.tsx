@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <>
       <ImageBackground
-        source={require("../../../src/assets/banners/small.png")}
+        source={require("../../../assets/banners/small.png")}
         contentFit="cover"
         style={{
           padding: 10,
@@ -20,7 +20,7 @@ export default function Header() {
       >
         <View style={{ flexDirection: "row", padding: 5, gap: 20}}>
           <Image
-            source={require("../../../src/assets/images/profile.png")}
+            source={require("../../../assets/images/profile.png")}
             style={{ borderRadius: 50, width: 90, height: 90 }}
           />
           <Text style={{ color: "white", fontWeight: 700, paddingTop: 20 }} variant="titleLarge">
