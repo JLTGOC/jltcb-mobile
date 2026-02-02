@@ -72,10 +72,22 @@ export default function ReelsConatainer() {
 
 	const onViewableItemsChanged = useRef(
 		({ viewableItems }: { viewableItems: ViewToken[] }) => {
-			if (viewableItems.length > 0) {
-				// Set the first visible item as the active one
-				setActiveItemId(viewableItems[0].item.id);
-			}
+			if (viewableItems.length === 0) return;
+			setActiveItemId((currentActiveId) => {
+				const isCurrentStillVisible = viewableItems.some(
+					(v) => v.item.id === currentActiveId && v.isViewable,
+				);
+
+				if (isCurrentStillVisible) {
+					return currentActiveId;
+				}
+
+				const firstAvailableVideo = viewableItems.find(
+					(v) => v.item.type === "video",
+				);
+
+				return firstAvailableVideo ? firstAvailableVideo.item.id : null;
+			});
 		},
 	).current;
 
