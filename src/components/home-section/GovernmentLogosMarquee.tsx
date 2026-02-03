@@ -1,9 +1,10 @@
 import { useIsFocused } from "@react-navigation/native";
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
-import React, { useEffect, useState } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
+  type SharedValue,
   useAnimatedStyle,
   useFrameCallback,
   useSharedValue,
@@ -51,7 +52,10 @@ const GAP = 30;
 
 // --- Helper Components ---
 
-const MeasureElement = ({ onLayout, children }: any) => (
+const MeasureElement = ({
+  onLayout,
+  children,
+}: { onLayout: (width: number) => void } & PropsWithChildren) => (
   <Animated.ScrollView
     horizontal
     style={marqueeStyles.hidden}
@@ -66,7 +70,16 @@ const MeasureElement = ({ onLayout, children }: any) => (
   </Animated.ScrollView>
 );
 
-const TranslatedElement = ({ index, children, offset, childrenWidth }: any) => {
+const TranslatedElement = ({
+  index,
+  children,
+  offset,
+  childrenWidth,
+}: {
+  index: number;
+  offset: SharedValue<number>;
+  childrenWidth: number;
+} & PropsWithChildren) => {
   const animatedStyle = useAnimatedStyle(() => ({
     left: (index - 1) * childrenWidth,
     transform: [{ translateX: -offset.value }],
@@ -78,7 +91,11 @@ const TranslatedElement = ({ index, children, offset, childrenWidth }: any) => {
   );
 };
 
-const Marquee = ({ duration = 10000, reverse = true, children }: any) => {
+const Marquee = ({
+  duration = 10000,
+  reverse = true,
+  children,
+}: { duration?: number; reverse?: boolean } & PropsWithChildren) => {
   const isFocused = useIsFocused();
   console.log(isFocused);
   const [parentWidth, setParentWidth] = useState(0);
