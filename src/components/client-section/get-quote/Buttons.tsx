@@ -1,16 +1,15 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { View } from "react-native";
 import { Button } from "react-native-paper";
-
-import { QuoteForm,Field } from "../../../types/client";
+import { QuoteForm, FieldConfig } from "../../../types/client";
 
 type Props = {
   currentPosition: number;
   setCurrentPosition: Dispatch<SetStateAction<number>>;
   formData: QuoteForm;
-  error: boolean;
   setError: Dispatch<SetStateAction<boolean>>;
-  stepFields: Record<number, Field[]>;
+  
+  stepConfigs: Record<number, { fields: FieldConfig[]; section: keyof QuoteForm }>;
 };
 
 export default function Buttons({
@@ -18,17 +17,30 @@ export default function Buttons({
   setCurrentPosition,
   setError,
   formData,
-  stepFields,
+  stepConfigs,
 }: Props) {
 
   const isStepInvalid = useMemo(() => {
-    const currentStepFields = stepFields[currentPosition] || [];
+    const config = stepConfigs[currentPosition];
+    if (!config) return false;
 
-   return currentStepFields.some((field) => {
-    const value = formData[field.key as keyof QuoteForm] ?? "";
-    return typeof value === 'string' && value.trim() === "";
-  });
-  }, [formData, currentPosition, stepFields]);
+    // STEP 1
+    const sectionData = formData[config.section];
+    const hasEmptyRequiredFields = config.fields.some((field) => {
+      const value = (sectionData as any)?.[field.key];
+      return field.required && (!value || value.trim() === "");
+    });
+
+    if (hasEmptyRequiredFields) return true;
+
+    // STEP 2
+    if (currentPosition === 1) {
+      const service = formData.service;
+      return !service?.type || (service.options?.length ?? 0) === 0;
+    }
+
+    return false;
+  }, [formData, currentPosition, stepConfigs]);
 
   const handleNext = () => {
     if (isStepInvalid) {
@@ -37,43 +49,49 @@ export default function Buttons({
     }
 
     setError(false);
-
     if (currentPosition < 2) {
       setCurrentPosition((prev) => prev + 1);
     } else {
-      console.log("SUBMIT", formData);
+      // Step 3 is usually a summary, so we submit here
+      console.log("FINAL SUBMIT:", formData);
     }
   };
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginTop: 20,
-      }}
-    >
+    <View style={styles.buttonRow}>
       {currentPosition > 0 ? (
-        <Button
-          mode="outlined"
-          onPress={() =>
-            setCurrentPosition((prev) => (prev > 0 ? prev - 1 : prev))
-          }
+        <Button 
+          mode="outlined" 
+          onPress={() => setCurrentPosition((prev) => prev - 1)}
+          style={styles.backBtn}
         >
           Back
         </Button>
       ) : (
-        <View style={{ width: 100 }} />
+        <View style={{ width: 100 }} /> 
       )}
 
       <Button
-        style={{ backgroundColor: isStepInvalid ? "#999" : "#161F3C" }}
+        // Visual feedback: button looks "disabled" if invalid
+        style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
         mode="contained"
         onPress={handleNext}
       >
-        {currentPosition === 3 ? "Submit" : "Next"}
+        {currentPosition === 2 ? "Submit" : "Next"}
       </Button>
     </View>
   );
 }
+
+const styles = {
+  buttonRow: {
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
+    alignItems: "center" as const,
+    marginTop: 20,
+    paddingBottom: 10,
+  },
+  backBtn: {
+    borderColor: "#161F3C",
+  }
+};
