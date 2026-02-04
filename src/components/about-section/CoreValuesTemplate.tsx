@@ -46,7 +46,7 @@ export default function CoreValuesTemplate() {
         onScroll={handleScroll}
         scrollEventThrottle={0}
         contentContainerStyle={{
-          columnGap: 30,
+          columnGap: 50,
           paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
         }}
       >
@@ -105,13 +105,13 @@ export default function CoreValuesTemplate() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
     justifyContent: "space-between",
+	backgroundColor:"red"
   },
   card: {
     width: 300,
     padding: 10,
-	elevation: 2,
+	elevation: 200,
   },
   indicatorContainer: {
     flexDirection: "row",
