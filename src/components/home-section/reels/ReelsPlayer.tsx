@@ -1,8 +1,15 @@
 import { Reel } from "@/src/types/reels";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useEvent } from "expo";
 import { Image } from "expo-image";
 import { useVideoPlayer, VideoView } from "expo-video";
+import { useEffect } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type ReelsPlayerProps = {
   reel: Reel;
@@ -15,16 +22,12 @@ export default function ReelsPlayer({ reel, shouldPlay }: ReelsPlayerProps) {
 
   return (
     <View pointerEvents="none" style={[styles.videoSize, videoSize]}>
-      {shouldPlay ? (
-        // Hook is only active when this component is mounted
-        <ActiveVideo key={reel.id} reel={reel} />
-      ) : (
-        // Show a lightweight image when not active
-        <Image
-          source="https://placehold.co/400x600"
-          style={styles.fullscreenVideo}
-        />
-      )}
+      <Image
+        alt={String(reel.id)}
+        source={encodeURI(reel.thumbnail_path)}
+        style={styles.fullscreenVideo}
+      />
+      {shouldPlay && <ActiveVideo reel={reel} />}
       <View style={styles.viewsContainer}>
         <Ionicons name="eye" color="white" />
         <Text style={styles.viewCountText}>{reel.view_count}</Text>
@@ -34,8 +37,10 @@ export default function ReelsPlayer({ reel, shouldPlay }: ReelsPlayerProps) {
 }
 
 function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
+  const opacity = useSharedValue(1);
+
   const player = useVideoPlayer(
-    { uri: encodeURI(reel.video_path), useCaching: true },
+    { uri: encodeURI(reel.video_path), useCaching: false },
     (p) => {
       p.muted = true;
       p.loop = true;
@@ -43,13 +48,42 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
     },
   );
 
+  const { status } = useEvent(player, "statusChange", {
+    status: player.status,
+  });
+
+  useEffect(() => {
+    if (status === "readyToPlay") {
+      opacity.value = withTiming(0, { duration: 300 });
+    } else {
+      opacity.value = 1;
+    }
+  }, [status]);
+
+  const animatedOverlayStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
   return (
-    <VideoView
-      player={player}
-      style={styles.fullscreenVideo}
-      contentFit="cover"
-      nativeControls={false}
-    />
+    <View style={StyleSheet.absoluteFill}>
+      <VideoView
+        player={player}
+        style={styles.fullscreenVideo}
+        contentFit="cover"
+        nativeControls={false}
+      />
+
+      <Animated.View
+        pointerEvents="none"
+        style={[StyleSheet.absoluteFill, animatedOverlayStyle]}
+      >
+        <Image
+          source={encodeURI(reel.thumbnail_path)}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+        />
+      </Animated.View>
+    </View>
   );
 }
 

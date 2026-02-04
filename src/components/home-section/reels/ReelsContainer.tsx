@@ -73,7 +73,7 @@ export default function ReelsContainer() {
             onPress={() => {
               router.push({
                 pathname: "/home/reels/[id]",
-                params: { id: "v1" },
+                params: { id: item.id, placeholder: item.thumbnail_path },
               });
             }}
             style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
