@@ -1,147 +1,99 @@
-import { Image } from "expo-image";
-
+import { reelsQueryOptions } from "@/src/query-options/reels/reelsQueryOptions";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-	Dimensions,
-	FlatList,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-	type ViewabilityConfig,
-	type ViewToken,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+  type ViewabilityConfig,
+  type ViewToken,
 } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import ReelsPlayer from "./ReelsPlayer";
 
-const data = [
-	{
-		id: "v1",
-		type: "video",
-		source: require("../../../../src/assets/reels/vid_1.mp4"),
-	},
-	{
-		id: "v2",
-		type: "video",
-		source: require("../../../../src/assets/reels/vid_2.mp4"),
-	},
-	{
-		id: "i1",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_1.png"),
-	},
-	{
-		id: "i2",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_2.png"),
-	},
-	{
-		id: "i3",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_3.png"),
-	},
-	{
-		id: "i4",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_4.png"),
-	},
-	{
-		id: "i5",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_5.png"),
-	},
-	{
-		id: "i6",
-		type: "image",
-		source: require("../../../../src/assets/reels/image_6.png"),
-	},
-];
+export default function ReelsContainer() {
+  const router = useRouter();
+  const { data, isPending } = useQuery(reelsQueryOptions);
+  const [activeItemId, setActiveItemId] = useState<number | null>(null);
 
-export default function ReelsConatainer() {
-	const screenWidth = Dimensions.get("window").width;
+  useEffect(() => {
+    if (data?.data && data.data.length > 0 && activeItemId === null) {
+      setActiveItemId(data.data[0].id);
+    }
+  }, [data, activeItemId]);
 
-	const router = useRouter();
+  const visibleItemsRef = useRef<number[]>([]);
 
-	const [activeItemId, setActiveItemId] = useState(null);
+  const viewabilityConfig = useRef<ViewabilityConfig>({
+    itemVisiblePercentThreshold: 85,
+    minimumViewTime: 100,
+  }).current;
 
-	// viewabilityConfig defines the rules for what counts as "visible"
-	// itemVisiblePercentThreshold: 50 means at least 50% of the item must be visible
-	const viewabilityConfig = useRef<ViewabilityConfig>({
-		itemVisiblePercentThreshold: 100,
-		minimumViewTime: 100,
-	}).current;
+  const onViewableItemsChanged = useRef(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      visibleItemsRef.current = viewableItems.map((v) => v.item.id);
+    },
+  ).current;
 
-	const onViewableItemsChanged = useRef(
-		({ viewableItems }: { viewableItems: ViewToken[] }) => {
-			if (viewableItems.length === 0) return;
-			setActiveItemId((currentActiveId) => {
-				const isCurrentStillVisible = viewableItems.some(
-					(v) => v.item.id === currentActiveId && v.isViewable,
-				);
+  const handleMomentumScrollEnd = () => {
+    setActiveItemId((currentActiveId) => {
+      if (visibleItemsRef.current.length === 0) return currentActiveId;
+      const isCurrentStillVisible = visibleItemsRef.current.includes(
+        currentActiveId as number,
+      );
+      if (isCurrentStillVisible) return currentActiveId;
+      return visibleItemsRef.current[0];
+    });
+  };
 
-				if (isCurrentStillVisible) {
-					return currentActiveId;
-				}
+  const screenWidth = Dimensions.get("window").width;
 
-				const firstAvailableVideo = viewableItems.find(
-					(v) => v.item.type === "video",
-				);
+  if (isPending) {
+    return (
+      <ActivityIndicator color="gray" style={{ height: screenWidth * 0.3 }} />
+    );
+  }
 
-				return firstAvailableVideo ? firstAvailableVideo.item.id : null;
-			});
-		},
-	).current;
-
-	return (
-		<View style={styles.videoContainer}>
-			<FlatList
-				data={data}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				keyExtractor={(item) => item.id}
-				onViewableItemsChanged={onViewableItemsChanged}
-				viewabilityConfig={viewabilityConfig}
-				renderItem={({ item }) => {
-					if (item.type === "video") {
-						return (
-							<TouchableOpacity
-								onPress={() => {
-									router.push({
-										pathname: "/home/reels/[id]",
-										params: { id: item.id },
-									});
-								}}
-							>
-								<ReelsPlayer
-									video={item.source}
-									shouldPlay={activeItemId === item.id}
-								/>
-							</TouchableOpacity>
-						);
-					}
-					return (
-						<Image
-							source={item.source}
-							style={[
-								styles.videoSize,
-								{ width: screenWidth * 0.2, height: screenWidth * 0.3 },
-							]}
-						/>
-					);
-				}}
-			/>
-		</View>
-	);
+  return (
+    <View style={styles.videoContainer}>
+      <FlatList
+        data={data?.data}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => String(item.id)}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
+        renderItem={({ item }) => (
+          <Pressable
+            onLongPress={() => setActiveItemId(item.id)}
+            onPress={() => {
+              router.push({
+                pathname: "/home/reels/[id]",
+                params: { id: "v1" },
+              });
+            }}
+            style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
+          >
+            <ReelsPlayer reel={item} shouldPlay={activeItemId === item.id} />
+          </Pressable>
+        )}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	videoContainer: {
-		flexDirection: "row",
-		paddingHorizontal: 5,
-	},
-	videoSize: {
-		marginRight: 5,
-
-		borderRadius: 5,
-		overflow: "hidden",
-	},
+  videoContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 5,
+  },
+  videoSize: {
+    marginRight: 5,
+    borderRadius: 5,
+    overflow: "hidden",
+  },
 });
