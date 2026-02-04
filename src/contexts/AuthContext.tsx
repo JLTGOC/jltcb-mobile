@@ -13,7 +13,7 @@ type AuthContextType = {
 
   isLoading: boolean;
   loginContext: typeof login;
-  logoutContext: () => ReturnType<typeof logout>;
+  logoutContext: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -77,25 +77,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logoutContext = async () => {
     try {
-      const token = await SecureStore.getItemAsync("token");
+      const storedToken = await SecureStore.getItemAsync("token");
 
-      if (!token) throw new Error("No token found for logout.");
-
-      const data = await logout(token);
-
-      await SecureStore.deleteItemAsync("token");
-      await SecureStore.deleteItemAsync("role");
+      if (storedToken) {
+        await logout(storedToken);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        console.log("Logout: Server session was already cleared.");
+      } else {
+        console.error("Logout: Unexpected server error", err);
+      }
+    } finally {
+      await Promise.all([
+        SecureStore.deleteItemAsync("token"),
+        SecureStore.deleteItemAsync("role"),
+        SecureStore.deleteItemAsync("userData"),
+      ]);
 
       setToken(null);
       setRole(null);
+      setUserData(null);
 
       if (router.canGoBack()) router.dismissAll();
       replace(routes.HOME);
-
-      return data;
-    } catch (err) {
-      console.error(err);
-      throw err;
     }
   };
 
