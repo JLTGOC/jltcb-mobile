@@ -2,7 +2,6 @@ import { routes } from "./routes";
 
 
 export const leftMenu = [
-  { label: "Governance", route: routes.GOVERNANCE },
   { label: "About Us", route: routes.ABOUT },
   { label: "Contact Us", route: routes.CONTACT },
   { label: "Services", route: routes.SERVICES },

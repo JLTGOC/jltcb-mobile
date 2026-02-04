@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     backgroundColor: "#ffffffff",
-	paddingTop: 5
+    paddingVertical: 5,
   },
   borderContainer: {
     position: "absolute",
@@ -180,6 +180,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     justifyContent: "center",
-	borderRadius: 10
+    borderRadius: 10,
   },
 });
