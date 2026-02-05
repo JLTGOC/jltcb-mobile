@@ -25,6 +25,7 @@ export default function Shipment({ formData, setFormData }: Props) {
           theme={{
             roundness: 10,
           }}
+          value={formData.shipment?.origin || ""}
           onChangeText={(text) => {
             setFormData((prev) => ({
               ...prev,
@@ -45,6 +46,7 @@ export default function Shipment({ formData, setFormData }: Props) {
           theme={{
             roundness: 10,
           }}
+          value={formData.shipment?.destination || ""}
           onChangeText={(text) => {
             setFormData((prev) => ({
               ...prev,

@@ -20,7 +20,6 @@ export default function Service({ formData, setFormData }: Props) {
 
   return (
     <View>
-
       {/* DropDown */}
 
       <Text allowFontScaling={false} style={{ fontSize: 11 }}>
@@ -32,38 +31,24 @@ export default function Service({ formData, setFormData }: Props) {
         closeOnBlur={true}
         closeOnSubmit={false}
         direction="down"
+        initialValue={{ id: formData.service?.type || "" }}
         onSelectItem={(item) => {
           setFormData((prev) => ({
             ...prev,
             service: {
               ...prev.service,
               type: item?.title ?? "",
-              transport_mode: "",
             },
           }));
         }}
         dataSet={serviceType.map((type) => ({ id: type, title: type }))}
         inputContainerStyle={styles.inputContainer}
         textInputProps={{
+          style: styles.textInput,
           placeholderTextColor: "#888",
-          style: {
-            color: "#000000",
-            paddingLeft: 18,
-            fontWeight: "400",
-          },
         }}
-        suggestionsListContainerStyle={{
-          backgroundColor: "#ffffff",
-          elevation: 5,
-          shadowColor: "#ffffff",
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
-        }}
-        suggestionsListTextStyle={{
-          color: "#000000",
-          fontSize: 16,
-          fontWeight: "300",
-        }}
+        suggestionsListContainerStyle={styles.suggestionContainer}
+        suggestionsListTextStyle={styles.suggestionText}
       />
 
       {/* Checkbox */}
@@ -82,7 +67,7 @@ export default function Service({ formData, setFormData }: Props) {
               <View style={{ alignItems: "center", flexDirection: "row" }}>
                 <Checkbox.Android
                   key={item}
-                  status={selectedMode === item ? "checked" : "unchecked"}
+                  status={formData.service?.transport_mode === item ? "checked" : "unchecked"}
                   onPress={() => {
                     setSelectedMode(item);
 
@@ -97,7 +82,7 @@ export default function Service({ formData, setFormData }: Props) {
             )}
           />
         )}
-        
+
         {formData.service?.type === "EXPORT" && <Text>UNDER CONSTRUCTION</Text>}
         {formData.service?.type === "BUSINESS SOLUTION" && (
           <Text>UNDER CONSTRUCTION</Text>
@@ -199,5 +184,17 @@ const styles = StyleSheet.create({
     color: "#000000",
     paddingLeft: 18,
     fontWeight: "400",
+  },
+  suggestionContainer: {
+    backgroundColor: "#ffffff",
+    elevation: 5,
+    shadowColor: "#ffffff",
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  suggestionText: {
+    color: "#000000",
+    fontSize: 16,
+    fontWeight: "300",
   },
 });

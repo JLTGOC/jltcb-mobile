@@ -25,10 +25,11 @@ export default function Commodity({ formData, setFormData }: Props) {
         closeOnBlur={true}
         closeOnSubmit={false}
         direction="down"
+        initialValue={formData.commodity?.commodity}
         onSelectItem={(item) => {
           setFormData((prev) => ({
             ...prev,
-            commodity: { ...prev.commodity, commmodity: item?.title ?? "" },
+            commodity: { ...prev.commodity, commodity: item?.title ?? "" },
           }));
         }}
         dataSet={commodities.map((type) => ({ id: type, title: type }))}
@@ -40,7 +41,7 @@ export default function Commodity({ formData, setFormData }: Props) {
         suggestionsListContainerStyle={styles.suggestedContainer}
         suggestionsListTextStyle={styles.suggestedText}
       />
-      {formData.commodity?.commmodity === commodities[0] && (
+      {formData.commodity?.commodity === commodities[0] && (
         <>
           {/* CheckBox */}
           <FlatList
@@ -60,7 +61,7 @@ export default function Commodity({ formData, setFormData }: Props) {
                 }}
               >
                 <Checkbox.Android
-                  status={selectCargoType === item ? "checked" : "unchecked"}
+                  status={formData.commodity?.cargo_type === item ? "checked" : "unchecked"}
                   onPress={() => {
                     setSelectCargoType(item);
                     setFormData((prev) => ({
@@ -76,58 +77,63 @@ export default function Commodity({ formData, setFormData }: Props) {
         </>
       )}
 
-      {formData.commodity?.cargo_type === "CONTAINERIZED" && (
-        <FlatList
-          data={container_size}
-          horizontal
-          scrollEnabled={false}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "space-evenly",
-          }}
-          renderItem={({ item }) => {
-            const isSelected = formData.commodity?.container_size === item.size;
+      {formData.commodity?.commodity !== "" &&
+        formData.commodity?.cargo_type === "CONTAINERIZED" && (
+          <FlatList
+            data={container_size}
+            horizontal
+            scrollEnabled={false}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "space-evenly",
+            }}
+            renderItem={({ item }) => {
+              const isSelected =
+                formData.commodity?.container_size === item.size;
 
-            return (
-              <Card
-                style={[
-                  styles.cardContainer,
-                  {
-                    borderColor: isSelected ? "#2196F3" : "transparent",
-                    elevation: isSelected ? 8 : 2,
-                  },
-                ]}
-                onPress={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    commodity: { ...prev.commodity, container_size: item.size },
-                  }))
-                }
-              >
-                <Card.Cover
-                  source={item.image}
+              return (
+                <Card
                   style={[
-                    styles.cardCover,
+                    styles.cardContainer,
                     {
-                      tintColor: isSelected ? "#161F3C" : undefined,
+                      borderColor: isSelected ? "#2196F3" : "transparent",
+                      elevation: isSelected ? 8 : 2,
                     },
                   ]}
-                />
-                <Card.Content style={{ alignItems: "center" }}>
-                  <Text
-                    style={{
-                      color: isSelected ? "#161F3C" : "black",
-                      fontWeight: isSelected ? "bold" : "normal",
-                    }}
-                  >
-                    {item.size}
-                  </Text>
-                </Card.Content>
-              </Card>
-            );
-          }}
-        />
-      )}
+                  onPress={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      commodity: {
+                        ...prev.commodity,
+                        container_size: item.size,
+                      },
+                    }))
+                  }
+                >
+                  <Card.Cover
+                    source={item.image}
+                    style={[
+                      styles.cardCover,
+                      {
+                        tintColor: isSelected ? "#161F3C" : undefined,
+                      },
+                    ]}
+                  />
+                  <Card.Content style={{ alignItems: "center" }}>
+                    <Text
+                      style={{
+                        color: isSelected ? "#161F3C" : "black",
+                        fontWeight: isSelected ? "bold" : "normal",
+                      }}
+                    >
+                      {item.size}
+                    </Text>
+                  </Card.Content>
+                </Card>
+              );
+            }}
+          />
+        )}
     </View>
   );
 }
