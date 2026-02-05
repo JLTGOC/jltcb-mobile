@@ -1,3 +1,6 @@
+import Container20 from "../assets/get_quote/container20.png";
+import Container40 from "../assets/get_quote/container40.png";
+
 export type StringKeys =
   | "consignee"
   | "company_address"
@@ -27,7 +30,6 @@ export type ServiceData = {
 export type Commodity = {
   commmodity?: string;
   cargo_type?: string;
-  cargo_volume?: string;
   container_size?: string;
 };
 
@@ -59,13 +61,18 @@ export const initialQuoteForm: QuoteForm = {
   commodity: {
     commmodity: "",
     cargo_type: "",
-    cargo_volume: "",
     container_size: "",
   },
   shipment: {
     origin: "",
     destination: "",
   },
+};
+
+export type FieldConfig = {
+  label: string;
+  key: keyof CompanyData;
+  required: true;
 };
 
 export const transpoMode = ["SEA", "AIR"];
@@ -82,9 +89,9 @@ export const options = [
   "TRUCKINGS SERVICES",
   "PROJECT CARGO",
 ];
-
-export type FieldConfig = {
-  label: string;
-  key: keyof CompanyData;
-  required: true;
-};
+export const commodities = ["CASTABLE 16 REFRACTOR"];
+export const cargo_type = ["CONTAINERIZED", "LCL"];
+export const container_size = [
+  { image: Container20, size: "1x20" },
+  { image: Container40, size: "1x40" },
+];

@@ -1,6 +1,7 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import { FlatList, View } from "react-native";
-import { Text, List, Checkbox } from "react-native-paper";
+import { FlatList, View, StyleSheet } from "react-native";
+import { Text, Checkbox } from "react-native-paper";
+import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 
 import {
   QuoteForm,
@@ -15,55 +16,58 @@ type Props = {
 };
 
 export default function Service({ formData, setFormData }: Props) {
-  const [expanded, setExpanded] = useState<boolean>(false);
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
-
-  const handlePress = () => setExpanded(!expanded);
 
   return (
     <View>
+
+      {/* DropDown */}
+
       <Text allowFontScaling={false} style={{ fontSize: 11 }}>
         Service Type
         <Text style={{ color: "red" }}>*</Text>
       </Text>
-      <List.Section style={{ backgroundColor: "#dadada" }}>
-        <List.Accordion
-          title={formData?.service?.type ?? ""}
-          expanded={expanded}
-          onPress={handlePress}
-          style={{
-            height: 40,
-            justifyContent: "center",
-            paddingVertical: 0,
-            borderRadius: 10,
-          }}
-          titleStyle={{ fontSize: 15 }}
-          theme={{ colors: { primary: "#161F3C" } }}
-        >
-          {serviceType.map((type) => (
-            <List.Item
-              key={type}
-              title={type}
-              onPress={() => {
-                setExpanded(false);
-                setFormData((prev) => ({
-                  ...prev,
-                  service: { ...prev.service, type: type, transport_mode: "" },
-                }));
-                setSelectedMode(null);
-              }}
-              contentStyle={{ height: 50 }}
-              titleStyle={{ fontSize: 12 }}
-              style={{
-                paddingVertical: 0,
-                height: 30,
-                margin: 0,
-                justifyContent: "center",
-              }}
-            />
-          ))}
-        </List.Accordion>
-      </List.Section>
+      <AutocompleteDropdown
+        clearOnFocus={false}
+        closeOnBlur={true}
+        closeOnSubmit={false}
+        direction="down"
+        onSelectItem={(item) => {
+          setFormData((prev) => ({
+            ...prev,
+            service: {
+              ...prev.service,
+              type: item?.title ?? "",
+              transport_mode: "",
+            },
+          }));
+        }}
+        dataSet={serviceType.map((type) => ({ id: type, title: type }))}
+        inputContainerStyle={styles.inputContainer}
+        textInputProps={{
+          placeholderTextColor: "#888",
+          style: {
+            color: "#000000",
+            paddingLeft: 18,
+            fontWeight: "400",
+          },
+        }}
+        suggestionsListContainerStyle={{
+          backgroundColor: "#ffffff",
+          elevation: 5,
+          shadowColor: "#ffffff",
+          shadowOpacity: 0.3,
+          shadowRadius: 5,
+        }}
+        suggestionsListTextStyle={{
+          color: "#000000",
+          fontSize: 16,
+          fontWeight: "300",
+        }}
+      />
+
+      {/* Checkbox */}
+
       <View style={{ paddingHorizontal: 20 }}>
         {formData.service?.type === "IMPORT" && (
           <FlatList
@@ -93,6 +97,7 @@ export default function Service({ formData, setFormData }: Props) {
             )}
           />
         )}
+        
         {formData.service?.type === "EXPORT" && <Text>UNDER CONSTRUCTION</Text>}
         {formData.service?.type === "BUSINESS SOLUTION" && (
           <Text>UNDER CONSTRUCTION</Text>
@@ -114,18 +119,19 @@ export default function Service({ formData, setFormData }: Props) {
                 status={
                   (formData?.service?.options?.length ?? 0) === options.length
                     ? "checked"
-                    : (formData?.service?.options?.length ?? 0)> 0
+                    : (formData?.service?.options?.length ?? 0) > 0
                       ? "indeterminate"
                       : "unchecked"
                 }
                 onPress={() => {
                   const allSelected =
-                    (formData?.service?.options?.length ?? 0) === options.length;
+                    (formData?.service?.options?.length ?? 0) ===
+                    options.length;
                   setFormData((prev) => ({
                     ...prev,
                     service: {
                       ...prev.service,
-                      
+
                       options: allSelected ? [] : [...options],
                     },
                   }));
@@ -141,7 +147,6 @@ export default function Service({ formData, setFormData }: Props) {
                 justifyContent: "space-between",
               }}
               renderItem={({ item }) => {
-                
                 const isChecked = formData.service?.options?.includes(item);
 
                 return (
@@ -183,3 +188,16 @@ export default function Service({ formData, setFormData }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    borderColor: "#ffffff",
+  },
+  textInput: {
+    color: "#000000",
+    paddingLeft: 18,
+    fontWeight: "400",
+  },
+});
