@@ -8,8 +8,11 @@ type Props = {
   setCurrentPosition: Dispatch<SetStateAction<number>>;
   formData: QuoteForm;
   setError: Dispatch<SetStateAction<boolean>>;
-  
-  stepConfigs: Record<number, { fields: FieldConfig[]; section: keyof QuoteForm }>;
+
+  stepConfigs: Record<
+    number,
+    { fields: FieldConfig[]; section: keyof QuoteForm }
+  >;
 };
 
 export default function Buttons({
@@ -19,12 +22,10 @@ export default function Buttons({
   formData,
   stepConfigs,
 }: Props) {
-
   const isStepInvalid = useMemo(() => {
     const config = stepConfigs[currentPosition];
     if (!config) return false;
 
-    // STEP 1
     const sectionData = formData[config.section];
     const hasEmptyRequiredFields = config.fields.some((field) => {
       const value = (sectionData as any)?.[field.key];
@@ -33,10 +34,15 @@ export default function Buttons({
 
     if (hasEmptyRequiredFields) return true;
 
-    // STEP 2
     if (currentPosition === 1) {
       const service = formData.service;
-      return !service?.type || (service.options?.length ?? 0) === 0;
+      const commodity = formData.commodity;
+      return (
+        !service?.type ||
+        !commodity?.commmodity ||
+        (commodity?.commmodity === 'containerized' && !commodity?.container_size)||
+        (service.options?.length ?? 0) === 0
+      );
     }
 
     return false;
@@ -52,7 +58,6 @@ export default function Buttons({
     if (currentPosition < 2) {
       setCurrentPosition((prev) => prev + 1);
     } else {
-      // Step 3 is usually a summary, so we submit here
       console.log("FINAL SUBMIT:", formData);
     }
   };
@@ -60,19 +65,18 @@ export default function Buttons({
   return (
     <View style={styles.buttonRow}>
       {currentPosition > 0 ? (
-        <Button 
-          mode="outlined" 
+        <Button
+          mode="outlined"
           onPress={() => setCurrentPosition((prev) => prev - 1)}
           style={styles.backBtn}
         >
           Back
         </Button>
       ) : (
-        <View style={{ width: 100 }} /> 
+        <View style={{ width: 100 }} />
       )}
 
       <Button
-        // Visual feedback: button looks "disabled" if invalid
         style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
         mode="contained"
         onPress={handleNext}
@@ -93,5 +97,5 @@ const styles = {
   },
   backBtn: {
     borderColor: "#161F3C",
-  }
+  },
 };
