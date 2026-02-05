@@ -39,8 +39,8 @@ export default function Buttons({
       const commodity = formData.commodity;
       return (
         !service?.type ||
-        !commodity?.commmodity ||
-        (commodity?.commmodity === 'containerized' && !commodity?.container_size)||
+        !commodity?.commodity ||
+        (commodity?.commodity === 'containerized' && !commodity?.container_size)||
         (service.options?.length ?? 0) === 0
       );
     }

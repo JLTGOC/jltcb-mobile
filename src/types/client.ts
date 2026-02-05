@@ -28,7 +28,7 @@ export type ServiceData = {
 };
 
 export type Commodity = {
-  commmodity?: string;
+  commodity?: string;
   cargo_type?: string;
   container_size?: string;
 };
@@ -59,7 +59,7 @@ export const initialQuoteForm: QuoteForm = {
     options: [],
   },
   commodity: {
-    commmodity: "",
+    commodity: "",
     cargo_type: "",
     container_size: "",
   },

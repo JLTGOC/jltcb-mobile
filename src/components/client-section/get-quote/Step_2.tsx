@@ -12,7 +12,6 @@ type Props = {
 };
 
 export default function Step_2({ formData, setFormData }: Props) {
-  console.log("step_2.tsx", formData);
   return (
     <View style={{gap:10}}>
       <Service formData={formData} setFormData={setFormData} />
