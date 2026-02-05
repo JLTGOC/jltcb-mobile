@@ -1,10 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect } from "react";
 import { Stack, usePathname } from "expo-router";
+import { useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { routes } from "@/src/constants/routes";
 
 import BottomNavBar from "../src/components/bottom-nav-bar-section/index";
 import HeaderNavBar from "../src/components/header-nav-bar-section/index";
@@ -16,6 +16,7 @@ const hidePaths = {
 export default function RootNaviagtion() {
   const { replace } = useNavigate();
   const { token, role, userData, isLoading } = useAuth();
+  console.log(token);
 
   const pathname = usePathname();
 

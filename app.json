@@ -39,7 +39,13 @@
           ]
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-asset",
+        {
+          "assets": ["./src/assets/dashboard-folder-icons"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

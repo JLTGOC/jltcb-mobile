@@ -1,13 +1,16 @@
+import { ImageStyle } from "expo-image";
 import type { Href } from "expo-router";
-import type { LucideIcon } from "lucide-react-native";
+import { StyleProp } from "react-native";
+// import type { LucideIcon } from "lucide-react-native";
 
 export type DashbordFolderItem = {
-	title: string;
-	icon: LucideIcon;
-	href: Href;
+  title: string;
+  icon: string;
+  iconStyles?: StyleProp<ImageStyle>;
+  href: Href;
 };
 
 export type DashboardFolderSection = {
-	title: string;
-	data: DashbordFolderItem[];
+  title: string;
+  data: DashbordFolderItem[];
 };
