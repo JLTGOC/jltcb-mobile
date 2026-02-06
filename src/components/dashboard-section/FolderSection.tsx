@@ -1,11 +1,11 @@
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import type { DashboardFolderSection } from "@/src/types/dashboard";
+import type { BaseFolderSection } from "@/src/types/dashboard";
 import FolderButton from "./FolderButton";
 
 type FolderSectionProps = {
-	section: DashboardFolderSection;
+	section: BaseFolderSection;
 	variant: "light" | "dark";
 };
 

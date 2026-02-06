@@ -1,14 +1,29 @@
+import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import FolderSection from "@/src/components/dashboard-section/FolderSection";
 import UserHeader from "@/src/components/dashboard-section/UserHeader";
 import { AS_DB_FOLDER_SECTIONS } from "@/src/constants/user-dashboards";
+import { useAuth } from "@/src/hooks/useAuth";
+import { dashboardQueryOptions } from "@/src/query-options/dashboard/dashboardQueryOptions";
+import type { AccountSpecialistDashboard } from "@/src/types/dashboard";
+import { mapDashboardData } from "@/src/utils/mapDashboardData";
 
 export default function Index() {
+	const { userData } = useAuth();
+	const { data, isPending, error } = useQuery({
+		...dashboardQueryOptions<AccountSpecialistDashboard>(userData?.id),
+		select: ({ data }) => mapDashboardData(data, AS_DB_FOLDER_SECTIONS),
+	});
+
 	return (
 		<FlatList
-			contentContainerStyle={{ paddingBottom: 12 }}
+			contentContainerStyle={[
+				styles.container,
+				{ flex: isPending ? 1 : undefined },
+			]}
 			keyExtractor={(item) => item.title}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
 			ListHeaderComponent={
@@ -29,17 +44,23 @@ export default function Index() {
 					</Link>
 				</View>
 			}
-			data={AS_DB_FOLDER_SECTIONS}
+			data={data?.sections}
 			renderItem={({ item }) => (
 				<View style={styles.itemContainer}>
 					<FolderSection section={item} variant="light" />
 				</View>
 			)}
+			ListEmptyComponent={
+				<ActivityIndicator style={styles.loader} size="large" />
+			}
 		/>
 	);
 }
 
 const styles = StyleSheet.create({
+	container: {
+		paddingBottom: 12,
+	},
 	separator: {
 		height: 20,
 	},
@@ -54,5 +75,8 @@ const styles = StyleSheet.create({
 	},
 	itemContainer: {
 		paddingHorizontal: 20,
+	},
+	loader: {
+		flex: 1,
 	},
 });
