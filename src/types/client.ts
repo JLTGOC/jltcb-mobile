@@ -2,8 +2,8 @@ import Container20 from "../assets/get_quote/container20.png";
 import Container40 from "../assets/get_quote/container40.png";
 
 export type StringKeys =
-  | "consignee"
-  | "company_address"
+  | "name"
+  | "address"
   | "contact_person"
   | "contact_number"
   | "email";
@@ -14,8 +14,8 @@ export type Field = {
 };
 
 export type CompanyData = {
-  consignee?: string;
-  company_address?: string;
+  name?: string;
+  address?: string;
   contact_person?: string;
   contact_number?: string;
   email?: string;
@@ -47,8 +47,8 @@ export type QuoteForm = {
 
 export const initialQuoteForm: QuoteForm = {
   company: {
-    consignee: "",
-    company_address: "",
+    name: "",
+    address: "",
     contact_person: "",
     contact_number: "",
     email: "",

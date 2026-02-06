@@ -15,7 +15,7 @@ export async function logout(token: string) {
     {},
     {
       headers: {
-        Authorization: `Bearer ${token}`, // attach token
+        Authorization: `Bearer ${token}`, 
       },
     },
   );

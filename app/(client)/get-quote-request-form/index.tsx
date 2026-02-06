@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, FlatList } from "react-native";
 import { Check } from "lucide-react-native";
+import { useMutation } from "@tanstack/react-query";
 import StepIndicator from "react-native-step-indicator";
 
 import Step_1 from "../../../src/components/client-section/get-quote/Step_1";
@@ -8,6 +9,7 @@ import Step_2 from "../../../src/components/client-section/get-quote/Step_2";
 import Step_3 from "../../../src/components/client-section/get-quote/Step_3";
 import Buttons from "../../../src/components/client-section/get-quote/Buttons";
 import Header from "../../../src/components/client-section/Header";
+import { postClientQuote } from "@/src/services/ClientQuote";
 import {
   QuoteForm,
   initialQuoteForm,
@@ -28,8 +30,8 @@ export default function Index() {
     0: {
       section: "company",
       fields: [
-        { label: "CONSIGNEE", key: "consignee", required: true },
-        { label: "COMPANY ADDRESS", key: "company_address", required: true },
+        { label: "CONSIGNEE", key: "name", required: true },
+        { label: "COMPANY ADDRESS", key: "address", required: true },
         { label: "CONTACT PERSON", key: "contact_person", required: true },
         { label: "CONTACT NUMBER", key: "contact_number", required: true },
         { label: "EMAIL", key: "email", required: true },
@@ -44,6 +46,22 @@ export default function Index() {
       fields: [],
     },
   };
+
+  const postQuoteFormMutation = useMutation({
+    mutationFn: postClientQuote,
+    onSuccess: ({data}) => {
+      console.log("Success", data)
+    },
+    onError: (err) => {
+      setError(true)
+      console.log("error",err)
+      console.log("console log ", error)
+    }
+  })
+
+  const handleSumbit = () => {
+    postQuoteFormMutation.mutate(formData)
+  }
 
   return (
     <>
@@ -85,6 +103,7 @@ export default function Index() {
                 setError={setError}
                 formData={formData}
                 stepConfigs={stepConfigs}
+                handleSumbit={handleSumbit}
               />
             </View>
           </>

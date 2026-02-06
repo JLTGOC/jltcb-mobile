@@ -8,6 +8,7 @@ type Props = {
   setCurrentPosition: Dispatch<SetStateAction<number>>;
   formData: QuoteForm;
   setError: Dispatch<SetStateAction<boolean>>;
+  handleSumbit: () => void
 
   stepConfigs: Record<
     number,
@@ -21,6 +22,7 @@ export default function Buttons({
   setError,
   formData,
   stepConfigs,
+  handleSumbit,
 }: Props) {
   const isStepInvalid = useMemo(() => {
     const config = stepConfigs[currentPosition];
@@ -40,7 +42,8 @@ export default function Buttons({
       return (
         !service?.type ||
         !commodity?.commodity ||
-        (commodity?.commodity === 'containerized' && !commodity?.container_size)||
+        (commodity?.commodity === "containerized" &&
+          !commodity?.container_size) ||
         (service.options?.length ?? 0) === 0
       );
     }
@@ -79,7 +82,14 @@ export default function Buttons({
       <Button
         style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
         mode="contained"
-        onPress={handleNext}
+        onPress={() => {
+          if (currentPosition < 2) {
+            handleNext();
+          } else {
+            console.log(formData)
+            handleSumbit()
+          }
+        }}
       >
         {currentPosition === 2 ? "Submit" : "Next"}
       </Button>
