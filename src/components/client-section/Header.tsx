@@ -21,7 +21,7 @@ export default function Header({title, route} : Props){
           padding: 25,
           aspectRatio: 3,
           width: "100%",
-          marginBottom: -35,
+          marginBottom: -25,
         }}
       >
         <View

@@ -1,6 +1,21 @@
 import Container20 from "../assets/get_quote/container20.png";
 import Container40 from "../assets/get_quote/container40.png";
 
+// Quotation
+
+export type QuoteForm = {
+  company?: CompanyData;
+  service?: ServiceData;
+  commodity?: Commodity;
+  shipment?: Shipment;
+};
+
+
+export type QuoteParams = {
+  status?: "REQUESTED" | "RESPONDED";
+  search?: string;
+}
+
 export type StringKeys =
   | "name"
   | "address"
@@ -38,12 +53,6 @@ export type Shipment = {
   destination?: string;
 };
 
-export type QuoteForm = {
-  company?: CompanyData;
-  service?: ServiceData;
-  commodity?: Commodity;
-  shipment?: Shipment;
-};
 
 export const initialQuoteForm: QuoteForm = {
   company: {

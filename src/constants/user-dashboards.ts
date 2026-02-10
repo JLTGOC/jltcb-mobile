@@ -32,7 +32,7 @@ export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[
 					title: "Requested",
 					countKey: "requested_count",
 					icon: "request-quotation",
-					href: "/(client)/dashboard",
+					href: "/(client)/requested-quote",
 				},
 				{
 					title: "Responded",
