@@ -1,13 +1,13 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, {
   type AxiosRequestConfig,
   InternalAxiosRequestConfig,
 } from "axios";
+import * as SecureStore from "expo-secure-store";
 import type { ApiResponse } from "../types/api";
 
-// School - CCIS_DEANS
-const baseURL = `http://192.168.31.249:8000/api`;
+const baseURL = process.env.EXPO_PUBLIC_API_URL
 
+console.log("Requesting URL:", baseURL);
 const api = axios.create({
   baseURL: baseURL,
   headers: {
@@ -17,7 +17,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = await AsyncStorage.getItem("token");
+    const token = await SecureStore.getItem("token");
 
     if (token) {
       config.headers = config.headers || {};

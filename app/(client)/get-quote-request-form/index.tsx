@@ -103,7 +103,7 @@ export default function Index() {
                   {currentPosition === 3 && <Success />}
                 </View>
               </View>
-              {currentPosition === 2 && (
+              {currentPosition < 3 && (
                 <Buttons
                   currentPosition={currentPosition}
                   setCurrentPosition={setCurrentPosition}

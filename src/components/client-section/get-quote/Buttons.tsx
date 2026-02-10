@@ -41,9 +41,12 @@ export default function Buttons({
     if (currentPosition === 1) {
       const service = formData.service;
       const commodity = formData.commodity;
+      const shipment = formData.shipment
       return (
         !service?.type ||
         !commodity?.commodity ||
+        !shipment?.origin ||
+        !shipment?.destination ||
         (commodity?.commodity === "containerized" &&
           !commodity?.container_size) ||
         (service.options?.length ?? 0) === 0
