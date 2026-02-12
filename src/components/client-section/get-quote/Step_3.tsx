@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
+  ScrollView,
   View,
   TouchableOpacity,
   Platform,
@@ -44,17 +45,14 @@ export default function Step_3() {
 
     try {
       if (Platform.OS === "android") {
-        // 1. Generate a "Content URI" that other apps are allowed to read
         const contentUri = await FileSystem.getContentUriAsync(fileData.uri);
 
-        // 2. Launch the Intent
         await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
           data: contentUri,
-          flags: 1, // This flag grants 'Read' permission to the receiving app
+          flags: 1,
           type: fileData.mimeType || "application/pdf",
         });
       } else {
-        // On iOS, sharing actually opens a full-screen preview (Quick Look)
         await Sharing.shareAsync(fileData.uri);
       }
     } catch (err) {
@@ -64,7 +62,10 @@ export default function Step_3() {
   };
 
   return (
-    <View style={{ gap: 10 }}>
+    <ScrollView
+      style={{ gap: 10, padding: 10 }}
+      automaticallyAdjustKeyboardInsets={true}
+    >
       {/* Upload File */}
       <View style={{ gap: 10 }}>
         {fileData === null ? (
@@ -140,7 +141,7 @@ export default function Step_3() {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

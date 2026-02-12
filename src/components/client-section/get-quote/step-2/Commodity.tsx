@@ -19,12 +19,13 @@ export default function Commodity({ formData, setFormData }: Props) {
 
   return (
     <View>
+      {/* Dropdown */}
       <Text>Commodity</Text>
       <AutocompleteDropdown
         clearOnFocus={false}
         closeOnBlur={true}
         closeOnSubmit={false}
-        direction="down"
+        direction="up"
         initialValue={formData.commodity?.commodity}
         onSelectItem={(item) => {
           setFormData((prev) => ({
@@ -41,9 +42,10 @@ export default function Commodity({ formData, setFormData }: Props) {
         suggestionsListContainerStyle={styles.suggestedContainer}
         suggestionsListTextStyle={styles.suggestedText}
       />
+
+      {/* CheckBox */}
       {formData.commodity?.commodity === commodities[0] && (
         <>
-          {/* CheckBox */}
           <FlatList
             data={cargo_type}
             horizontal
@@ -61,7 +63,11 @@ export default function Commodity({ formData, setFormData }: Props) {
                 }}
               >
                 <Checkbox.Android
-                  status={formData.commodity?.cargo_type === item ? "checked" : "unchecked"}
+                  status={
+                    formData.commodity?.cargo_type === item
+                      ? "checked"
+                      : "unchecked"
+                  }
                   onPress={() => {
                     setSelectCargoType(item);
                     setFormData((prev) => ({
@@ -77,6 +83,7 @@ export default function Commodity({ formData, setFormData }: Props) {
         </>
       )}
 
+      {/* Container Size */}
       {formData.commodity?.commodity !== "" &&
         formData.commodity?.cargo_type === "CONTAINERIZED" && (
           <FlatList

@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction,  } from "react";
-import {View} from "react-native"
+import { Dispatch, SetStateAction } from "react";
+import { ScrollView } from "react-native";
 
 import { QuoteForm } from "../../../types/client";
 import Service from "@/src/components/client-section/get-quote/step-2/Service";
@@ -13,7 +13,10 @@ type Props = {
 
 export default function Step_2({ formData, setFormData }: Props) {
   return (
-    <View style={{gap:10}}>
+    <ScrollView
+      style={{ gap: 10, padding: 10 }}
+      automaticallyAdjustKeyboardInsets={true}
+    >
       <Service formData={formData} setFormData={setFormData} />
       {formData.service?.type === "IMPORT" ? (
         <>
@@ -23,6 +26,6 @@ export default function Step_2({ formData, setFormData }: Props) {
       ) : (
         ""
       )}
-    </View>
+    </ScrollView>
   );
 }
