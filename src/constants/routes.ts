@@ -16,8 +16,13 @@ export const routes = {
 	CLIENT_DB: "/(client)/dashboard",
 	CLIENT_REQ_QUOTE_RECORDS: "/(client)/requested-quote",
 	CLIENT_QUOTE_RECORD: "/(client)/QuoteDetails",
-	CLIENT_RES_QUOTE_RECORDS: "/(client)/responded-quote" as Href,
+	CLIENT_RES_QUOTE_RECORDS: "/(client)/responded-quote",
 	AS_DB: "/(employee-account-specialist)/dashboard",
+	AS_QUOTE_REQUESTS: "/(employee-account-specialist)/quotations/new-request",
+	AS_QUOTE_REQUEST_LIST:
+		"/(employee-account-specialist)/quotations/new-request/request-list",
+	AS_QUOTE_REQUEST:
+		"/(employee-account-specialist)/quotations/new-request/[id]",
 	MARKETING_DB: "/(employee-marketing)/dashboard",
 	QUEOTE_REQUEST: "/(client)/get-quote-request-form",
 	CHATBOX: "/(client)/chatbox",

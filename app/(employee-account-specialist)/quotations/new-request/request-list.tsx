@@ -1,9 +1,10 @@
 import { Picker } from "@react-native-picker/picker";
 import { format, parse } from "date-fns";
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet } from "react-native";
-import { DataTable } from "react-native-paper";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { DataTable, Text } from "react-native-paper";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import { routes } from "@/src/constants/routes";
 import type { Quotation } from "@/src/types/quotations";
 
 const TABLE_HEADERS = [
@@ -24,8 +25,10 @@ const TABLE_HEADERS = [
 const AS_USERS = ["Zoie Conroy", "Carrie Ryan", "Henry Bruen", "Ona Wilderman"];
 
 export default function RequestList() {
-	const { quotations: quotationsString } = useLocalSearchParams<{
+	const router = useRouter();
+	const { quotations: quotationsString, clientName } = useLocalSearchParams<{
 		quotations: string;
+		clientName: string;
 	}>();
 	const quotations: Quotation[] = quotationsString
 		? JSON.parse(quotationsString)
@@ -53,32 +56,44 @@ export default function RequestList() {
 						"MM/dd/yyyy",
 					);
 					return (
-						<DataTable.Row key={quotation.id}>
-							<DataTable.Cell style={{ flex: 2 }}>
-								{formattedDate}
-							</DataTable.Cell>
-							<DataTable.Cell
-								textStyle={[styles.uppercase, { flex: 1 }]}
-								style={{ flex: 5 }}
-							>
-								{quotation.commodity}
-							</DataTable.Cell>
-							<DataTable.Cell style={{ flex: 4 }}>
-								<Picker
-									style={{ flex: 1 }}
-									selectedValue={quotation.contact_person}
-									mode="dropdown"
+						<TouchableOpacity
+							key={quotation.id}
+							onPress={() => {
+								router.push({
+									pathname: routes.AS_QUOTE_REQUEST,
+									params: { id: quotation.id, clientName },
+								});
+							}}
+						>
+							<DataTable.Row>
+								<DataTable.Cell style={{ flex: 2 }}>
+									<TouchableOpacity>
+										<Text>{formattedDate}</Text>
+									</TouchableOpacity>
+								</DataTable.Cell>
+								<DataTable.Cell
+									textStyle={[styles.uppercase, { flex: 1 }]}
+									style={{ flex: 5 }}
 								>
-									{AS_USERS.map((option) => (
-										<Picker.Item
-											key={option}
-											label={option.toLocaleUpperCase()}
-											value={option}
-										/>
-									))}
-								</Picker>
-							</DataTable.Cell>
-						</DataTable.Row>
+									{quotation.commodity}
+								</DataTable.Cell>
+								<DataTable.Cell onPress={() => {}} style={{ flex: 4 }}>
+									<Picker
+										style={{ flex: 1 }}
+										selectedValue={quotation.contact_person}
+										mode="dropdown"
+									>
+										{AS_USERS.map((option) => (
+											<Picker.Item
+												key={option}
+												label={option.toLocaleUpperCase()}
+												value={option}
+											/>
+										))}
+									</Picker>
+								</DataTable.Cell>
+							</DataTable.Row>
+						</TouchableOpacity>
 					);
 				})}
 			</DataTable>

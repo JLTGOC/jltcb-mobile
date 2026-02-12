@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { ActivityIndicator, DataTable } from "react-native-paper";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import { routes } from "@/src/constants/routes";
 import { asQuotationsQueryOptions } from "@/src/query-options/quotations/asQuotationsQueryOptions";
 import type { QuotationFilter } from "@/src/types/quotations";
 
@@ -85,35 +86,37 @@ export default function NewRequest() {
 							"MM/dd/yyyy",
 						);
 						return (
-							<DataTable.Row
+							<TouchableOpacity
 								key={userRow.name}
 								onPress={() => {
 									router.push({
-										pathname:
-											"/(employee-account-specialist)/quotations/new-request/request-list",
+										pathname: routes.AS_QUOTE_REQUEST_LIST,
 										params: {
 											quotations: JSON.stringify(userRow.quotations),
+											clientName: userRow.name,
 										},
 									});
 								}}
 							>
-								<DataTable.Cell style={styles.flexLow}>
-									{formattedDate}
-								</DataTable.Cell>
-								<DataTable.Cell
-									textStyle={[styles.uppercase, { flex: 1 }]}
-									style={styles.flexHigh}
-								>
-									{userRow.name}
-								</DataTable.Cell>
-								<DataTable.Cell
-									textStyle={styles.requestCountText}
-									style={styles.flexLow}
-									numeric
-								>
-									{userRow.request_count}
-								</DataTable.Cell>
-							</DataTable.Row>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.flexLow}>
+										{formattedDate}
+									</DataTable.Cell>
+									<DataTable.Cell
+										textStyle={[styles.uppercase, { flex: 1 }]}
+										style={styles.flexHigh}
+									>
+										{userRow.name}
+									</DataTable.Cell>
+									<DataTable.Cell
+										textStyle={styles.requestCountText}
+										style={styles.flexLow}
+										numeric
+									>
+										{userRow.request_count}
+									</DataTable.Cell>
+								</DataTable.Row>
+							</TouchableOpacity>
 						);
 					})}
 				</DataTable>
