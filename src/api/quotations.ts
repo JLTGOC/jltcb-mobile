@@ -2,12 +2,18 @@ import type { DocumentPickerAsset } from "expo-document-picker";
 import { apiGet, apiPost } from "../services/axiosInstance";
 import type {
 	ASRequestedQuotation,
+	ASRespondedQuotation,
 	QuotationDetails,
 	QuotationFilter,
 } from "../types/quotations";
 
-export const fetchQuotations = ({ filter, search }: QuotationFilter) =>
-	apiGet<ASRequestedQuotation[]>("quotations", {
+export const fetchQuotations = <T extends "REQUESTED" | "RESPONDED">({
+	filter,
+	search,
+}: QuotationFilter<T>) =>
+	apiGet<
+		T extends "REQUESTED" ? ASRequestedQuotation[] : ASRespondedQuotation[]
+	>("quotations", {
 		params: { "filter[status]": filter, search },
 	});
 

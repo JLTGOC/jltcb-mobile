@@ -1,4 +1,4 @@
-import { Href } from "expo-router";
+import type { Href } from "expo-router";
 import type {
 	AccountSpecialistDashboard,
 	ClientDashboard,
@@ -103,7 +103,7 @@ export const AS_DB_FOLDER_SECTIONS: DashboardFolderSection<AccountSpecialistDash
 					title: "Responded",
 					countKey: "responded_count",
 					icon: "delivered",
-					href: "/(employee-account-specialist)/dashboard",
+					href: "/(employee-account-specialist)/quotations/responded",
 				},
 				{
 					title: "Accepted",

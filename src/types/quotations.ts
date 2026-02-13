@@ -6,6 +6,14 @@ export interface ASRequestedQuotation {
 	quotations: Quotation[];
 }
 
+export interface ASRespondedQuotation {
+	id: number;
+	reference_number: string;
+	commodity: string;
+	date: string;
+	status: "RESPONDED";
+}
+
 export interface Quotation {
 	id: number;
 	date: string;
@@ -56,8 +64,8 @@ export interface Document {
 
 export type QuotationStatus = "REQUESTED" | "RESPONDED";
 
-export interface QuotationFilter {
-	filter: QuotationStatus;
+export interface QuotationFilter<T extends QuotationStatus = QuotationStatus> {
+	filter: T;
 	search?: string;
 }
 
