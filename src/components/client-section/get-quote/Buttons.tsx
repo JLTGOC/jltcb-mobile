@@ -7,7 +7,6 @@ type Props = {
   currentPosition: number;
   setCurrentPosition: Dispatch<SetStateAction<number>>;
   formData: QuoteForm;
-  setError: Dispatch<SetStateAction<boolean>>;
   handleSumbit: () => void
   loading: boolean;
 
@@ -20,7 +19,6 @@ type Props = {
 export default function Buttons({
   currentPosition,
   setCurrentPosition,
-  setError,
   formData,
   stepConfigs,
   handleSumbit,
@@ -57,12 +55,6 @@ export default function Buttons({
   }, [formData, currentPosition, stepConfigs]);
 
   const handleNext = () => {
-    if (isStepInvalid) {
-      setError(true);
-      return;
-    }
-
-    setError(false);
     if (currentPosition < 2) {
       setCurrentPosition((prev) => prev + 1);
     } 

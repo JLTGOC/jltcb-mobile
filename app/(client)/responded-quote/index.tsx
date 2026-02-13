@@ -73,7 +73,7 @@ export default function Index() {
                 key={item.id}
                 onPress={() => {
                   navigate({
-                    pathname: routes.CLIENT_QUOTE_RECORD,
+                    pathname: routes.CLIENT_QUOTE_DETAILS,
                     params: { id: item.id, title: item.commodity },
                   });
                 }}

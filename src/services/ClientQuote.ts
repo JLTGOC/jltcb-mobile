@@ -1,5 +1,5 @@
 import { QuoteForm, QuotesParams, ClientQuoteResponse} from "./../types/client";
-import { apiPost, apiGet } from "./axiosInstance";
+import { apiPost, apiGet,apiPut } from "./axiosInstance";
 import * as SecureStore from "expo-secure-store";
 
 //Post Quote
@@ -55,4 +55,16 @@ export async function fetchClientQuote(id: number): Promise<ClientQuoteResponse>
   return response.data;
 }
 
+//Update Quotation of the Client
+export async function updateClientQuote(id: number): Promise<ClientQuoteResponse> {
+  const token = await SecureStore.getItemAsync("token");
 
+  if (!token) throw new Error("No authentication token found");
+
+  const response = await apiPut<ClientQuoteResponse>(`quotations/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}

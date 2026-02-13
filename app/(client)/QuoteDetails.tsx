@@ -14,7 +14,11 @@ import { useLocalSearchParams } from "expo-router";
 import { routes } from "@/src/constants/routes";
 
 export default function QuoteDetails() {
-  const { id, title } = useLocalSearchParams<{ id: string; title: string }>();
+  const { id, title, mode } = useLocalSearchParams<{
+    id: string;
+    title: string;
+    mode: string;
+  }>();
 
   const [active, setActive] = useState(0);
 
@@ -25,9 +29,8 @@ export default function QuoteDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details id={id} />;
+        return <Details id={id} mode={mode} />;
       case 1:
-        
         return (
           <View style={styles.placeholder}>
             <Text>Documents Content</Text>

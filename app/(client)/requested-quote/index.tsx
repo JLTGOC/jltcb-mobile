@@ -1,20 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
-  TextInput,
   ActivityIndicator,
   DataTable,
-  Menu,
-  IconButton,
   Icon,
+  IconButton,
+  Menu,
+  TextInput,
 } from "react-native-paper";
-import { useQuery } from "@tanstack/react-query";
 
 import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import useDebounce from "@/src/hooks/useDebounce";
-import { fetchClientQuotes } from "@/src/services/ClientQuote";
 import { useNavigate } from "@/src/hooks/useNavigate";
+import { fetchClientQuotes } from "@/src/services/ClientQuote";
 
 type TableItem = {
   id: number;
@@ -101,8 +101,12 @@ export default function Index() {
                 key={item.id}
                 onPress={() => {
                   navigate({
-                    pathname: routes.CLIENT_QUOTE_RECORD,
-                    params: { id: item.id, title: item.commodity },
+                    pathname: routes.CLIENT_QUOTE_DETAILS,
+                    params: {
+                      id: item.id,
+                      title: item.commodity,
+                      mode: "edit",
+                    },
                   });
                 }}
               >
@@ -134,7 +138,12 @@ export default function Index() {
                         <Menu.Item
                           key={index}
                           onPress={() => {
-                            console.log(`${menu.title} clicked for ${item.id}`);
+                            if(menu.title === "edit") {
+                              navigate({
+                                pathname:routes.CLIENT_CREATE_QUOTE,
+                                params: {id:item.id}
+                              })
+                            }
                             setVisibleMenuId(null);
                           }}
                           leadingIcon={({ size }) => (

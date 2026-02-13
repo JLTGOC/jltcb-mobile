@@ -1,16 +1,20 @@
 import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { View, StyleSheet, } from "react-native";
-import { Text, Card, Divider, ActivityIndicator } from "react-native-paper";
+import { Text, Card, Divider, ActivityIndicator, Button } from "react-native-paper";
 import { Building2 } from "lucide-react-native";
 
 import { fetchClientQuote } from "@/src/services/ClientQuote";
 import { ClientQuoteResponse } from "@/src/types/client";
+import { useNavigate } from "@/src/hooks/useNavigate";
+import { routes } from "@/src/constants/routes";
 
 type Props = {
   id?: string
+  mode?: string
 }
-export default function Details({id} : Props) {
+export default function Details({id, mode} : Props) {
+  const {navigate} = useNavigate()
 
   const { data, isLoading, error } = useQuery<ClientQuoteResponse>({
     queryKey: [id],
@@ -98,6 +102,24 @@ export default function Details({id} : Props) {
           </Card>
         </View>
       ))}
+        {mode === "edit" ? (
+        <Button
+          mode="contained"
+          buttonColor="#161F3C"
+          textColor="white"
+          style={{ borderRadius: 4 }}
+          onPress={() => {
+            navigate({
+              pathname: routes.CLIENT_QUOTE_EDIT,
+              params: { id: id },
+            });
+          }}
+        >
+          EDIT
+        </Button>
+      ) : (
+        <Button>VIEW QUOTATION</Button>
+      )}
     </>
   );
 }

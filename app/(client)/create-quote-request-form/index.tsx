@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, FlatList } from "react-native";
 import { Check } from "lucide-react-native";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation,useQuery} from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import StepIndicator from "react-native-step-indicator";
 
 import Step_1 from "../../../src/components/client-section/get-quote/Step_1";
@@ -10,11 +11,13 @@ import Step_3 from "../../../src/components/client-section/get-quote/Step_3";
 import Buttons from "../../../src/components/client-section/get-quote/Buttons";
 import Header from "../../../src/components/client-section/Header";
 import Success from "@/src/components/client-section/get-quote/Success";
-import { postClientQuote } from "@/src/services/ClientQuote";
+import { postClientQuote, fetchClientQuote } from "@/src/services/ClientQuote";
+
 import {
   QuoteForm,
   initialQuoteForm,
   FieldConfig,
+  ClientQuoteResponse
 } from "../../../src/types/client";
 
 import { routes } from "@/src/constants/routes";
@@ -22,8 +25,23 @@ import { routes } from "@/src/constants/routes";
 export default function Index() {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [formData, setFormData] = useState<QuoteForm>(initialQuoteForm);
-  const [error, setError] = useState(false);
 
+  const {id} = useLocalSearchParams()
+
+   // Data Fetching
+  const { data, isLoading, error } = useQuery<ClientQuoteResponse>({
+    queryKey: [id],
+    queryFn: () => fetchClientQuote(id as any),
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+  if (data) {
+    setFormData(data as any);
+  }
+}, [data]);
+
+  console.log("data", data, "and", formData)
   const stepConfigs: Record<
     number,
     { fields: FieldConfig[]; section: keyof QuoteForm }
@@ -51,13 +69,10 @@ export default function Index() {
   const postQuoteFormMutation = useMutation({
     mutationFn: postClientQuote,
     onSuccess: ({ data }) => {
-      console.log("Success", data);
       setCurrentPosition(3);
     },
     onError: (err) => {
-      setError(true);
       console.log("error", err);
-      console.log("console log ", error);
     },
   });
 
@@ -83,11 +98,10 @@ export default function Index() {
                   ) : null
                 }
               />
-
+              
               <View style={{ flex: 1, marginTop: 20 }}>
                 {currentPosition === 0 && (
                   <Step_1
-                    error={error}
                     formData={formData}
                     setFormData={setFormData}
                     fields={stepConfigs[0].fields}
@@ -107,7 +121,6 @@ export default function Index() {
                 <Buttons
                   currentPosition={currentPosition}
                   setCurrentPosition={setCurrentPosition}
-                  setError={setError}
                   formData={formData}
                   stepConfigs={stepConfigs}
                   handleSumbit={handleSumbit}

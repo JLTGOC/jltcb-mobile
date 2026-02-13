@@ -1,137 +1,103 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { Surface, Text, TextInput, HelperText } from "react-native-paper";
 import { QuoteForm, Field } from "../../../types/client";
+import { z } from "zod";
 
 type Props = {
-  error: boolean;
   formData: QuoteForm;
   setFormData: Dispatch<SetStateAction<QuoteForm>>;
   fields: Field[];
 };
 
-export default function Step_1({
-  error,
-  setFormData,
-  formData,
-  fields,
-}: Props) {
-  const getError = (key: string, value: string) => {
-    if (value.length === 0) return false;
+const companySchema = z.object({
+  name: z.string().min(1, "Company name is required").max(100, "Name is too long"),
+  address: z.string().min(1, "Address is required"),
+  contact_person: z.string().min(1, "Contact person name is required"),
+  contact_number: z
+    .string()
+    .length(11, "Number must be exactly 11 digits")
+    .regex(/^\d+$/, "Must contain only numbers"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+});
 
-    if (key === "email") {
-      return value.length > 0 && !value.includes("@");
-    }
-    if (key === "contact_number") {
-      const isWrongLength = value.length !== 11;
+export default function Step_1({ setFormData, formData, fields }: Props) {
 
-      const hasInvalidChars = /[^0-9]/.test(value);
+  const validationResult = useMemo(() => {
+    return companySchema.safeParse(formData.company);
+  }, [formData.company]);
 
-      return isWrongLength || hasInvalidChars;
-    }
-    return false;
+  const getFieldError = (key: string) => {
+    if (validationResult.success) return null;
+    const issue = validationResult.error.issues.find((i) => i.path[0] === key);
+    return issue ? issue.message : null;
   };
 
+  console.log("step_1",formData)
+  const handleInputChange = useCallback((key: string, text: string) => {
+    let cleanedText = text;
+    if (key === "contact_number") {
+      cleanedText = text.replace(/[^0-9]/g, "");
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      company: { ...prev.company, [key]: cleanedText },
+    }));
+  }, [setFormData]);
+
   return (
-      <ScrollView style={styles.container}
-        automaticallyAdjustKeyboardInsets={true}
-      >
-        {fields.map((field, i) => {
-          const value = formData.company?.[field.key] ?? "";
-          const isEmailError = getError(field.key, value);
+    <ScrollView 
+      style={styles.container} 
+      automaticallyAdjustKeyboardInsets={true}
+      contentContainerStyle={styles.contentContainer}
+    >
+      {fields.map((field) => {
+        const value = formData.company?.[field.key as keyof typeof formData.company] ?? "";
+        
 
-          return (
-            <View key={i} style={{ marginVertical: 5, gap: 5 }}>
-              <Text allowFontScaling={false} style={{ fontSize: 11 }}>
-                {field.label}
-                <Text style={{ color: "red" }}>*</Text>
-              </Text>
+        const errorMsg = getFieldError(field.key);
+        
+        const hasError = !!errorMsg && value.length > 0;
 
-              <Surface style={{ elevation: 10, borderRadius: 10 }}>
-                <TextInput
-                  value={value}
-                  error={isEmailError}
-                  underlineColor="transparent"
-                  activeUnderlineColor="transparent"
-                  selectionColor="blue"
-                  mode="flat"
-                  maxLength={field.key === "contact_number" ? 11 : undefined}
-                  style={{
-                    borderRadius: 10,
-                    height: 40,
-                    backgroundColor: "#fff",
-                  }}
-                  keyboardType={
-                    field.key === "contact_number"
-                      ? "numeric"
-                      : field.key === "email"
-                        ? "email-address"
-                        : "default"
-                  }
-                  onChangeText={(text) => {
-                    let cleanedText = text;
+        return (
+          <View key={field.key} style={styles.fieldWrapper}>
+            <Text allowFontScaling={false} style={styles.customLabel}>
+              {field.label} <Text style={{ color: "red" }}>*</Text>
+            </Text>
 
-                    if (field.key === "contact_number") {
-                      cleanedText = text.replace(/[^0-9]/g, "");
-                    }
+            <Surface style={styles.inputSurface}>
+              <TextInput
+                value={formData.company?.[field.key as keyof typeof formData.company] ?? ""}
+                error={hasError}
+                underlineColor="transparent"
+                activeUnderlineColor="transparent"
+                mode="flat"
+                maxLength={field.key === "contact_number" ? 11 : undefined}
+                style={styles.input}
+                keyboardType={
+                  field.key === "contact_number" ? "numeric" : 
+                  field.key === "email" ? "email-address" : "default"
+                }
+                onChangeText={(text) => handleInputChange(field.key, text)}
+              />
+            </Surface>
 
-                    setFormData((prev) => ({
-                      ...prev,
-                      company: { ...prev.company, [field.key]: cleanedText },
-                    }));
-                  }}
-                />
-              </Surface>
-
-              {/* HelperText specific to the email field */}
-              {field.key === "email" && (
-                <HelperText type="error" visible={isEmailError}>
-                  Email address is invalid (missing @)
-                </HelperText>
-              )}
-              {field.key === "contact_number" &&
-                value.length > 0 &&
-                value.length < 11 && (
-                  <HelperText type="error" visible={true}>
-                    Contact number must be at least 11 digits
-                  </HelperText>
-                )}
-            </View>
-          );
-        })}
-
-        {error && (
-          <View style={{ marginTop: 10 }}>
-            <Text style={styles.errorText}>Fields cannot be left empty.</Text>
+            <HelperText type="error" visible={hasError}>
+              {errorMsg}
+            </HelperText>
           </View>
-        )}
-      </ScrollView>
-
+        );
+      })}
+    </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {
-    gap: 5,
-    padding:10
-  },
-  texArea: {
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    textAlignVertical: "top",
-    height: 120,
-  },
-  label: {
-    marginTop: 5,
-    fontWeight: "400",
-    fontSize: 14,
-  },
-  inputError: {
-    borderColor: "red",
-  },
-  content: {
-    padding: 20,
-    paddingTop: 60,
-  },
-  errorText: { color: "red", fontSize: 10, marginTop: 2, textAlign: "center" },
+  container: { flex: 1,  },
+  contentContainer: { padding: 16 },
+  fieldWrapper: { marginBottom: 8 },
+  customLabel: { fontSize: 12, marginBottom: 4, color: '#666' },
+  inputSurface: { elevation: 2, borderRadius: 10, backgroundColor: "#fff" },
+  input: { borderRadius: 10, height: 45, backgroundColor: "transparent" },
 });

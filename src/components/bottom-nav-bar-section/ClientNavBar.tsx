@@ -13,7 +13,7 @@ const NavIcons: {
 }[] = [
   { iconName: "view-dashboard", route: routes.CLIENT_DB },
   { iconName: "book-open-outline", route: routes.HOME },
-  { iconName: "book-plus-outline", route: routes.QUEOTE_REQUEST },
+  { iconName: "book-plus-outline", route: routes.CLIENT_CREATE_QUOTE },
   { iconName: "message", route: routes.CHATBOX },
 ];
 
