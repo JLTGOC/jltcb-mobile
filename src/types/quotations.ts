@@ -22,44 +22,49 @@ export interface Quotation {
 }
 
 export interface QuotationDetails {
-	general_info: GeneralInfo;
-	consignee_details: ConsigneeDetails;
-	shipment_details: ShipmentDetails;
-	documents: Document[];
+  reference_number: string
+  client: string
+  account_specialist: string
+  status: string
+  created_at: string
+  updated_at: string
+  company: Company
+  service: Service
+  commodity: Commodity
+  shipment: Shipment
+  documents: Document[]
 }
 
-export interface GeneralInfo {
-	reference_number: string;
-	client_id: number;
-	account_specialist: string;
-	status: string;
+export interface Company {
+  name: string
+  address: string
+  contact_person: string
+  contact_number: string
+  email: string
 }
 
-export interface ConsigneeDetails {
-	company_name: string;
-	company_address: string;
-	contact_person: string;
-	contact_number: string;
-	email: string;
+export interface Service {
+  type: string
+  transport_mode: string
+  options: string
 }
 
-export interface ShipmentDetails {
-	service_type: string;
-	transport_mode: string;
-	service: string;
-	commodity: string;
-	volume: string;
-	origin: string;
-	destination: string;
-	details: string;
-	created_at: string;
-	updated_at: string;
+export interface Commodity {
+  commodity: string
+  cargo_type: string
+  cargo_volume: string
+  container_size: string
+}
+
+export interface Shipment {
+  origin: string
+  destination: string
 }
 
 export interface Document {
-	id: number;
-	file_name: string;
-	file_url: string;
+  id: number
+  file_name: string
+  file_url: string
 }
 
 export type QuotationStatus = "REQUESTED" | "RESPONDED";
