@@ -1,5 +1,5 @@
-import { fetchQuotation } from "@/src/api/quotations";
 import { quotationKeys } from "@/src/query-key-factories/quotations";
+import { fetchQuotation } from "@/src/services/quotations";
 import { queryOptions } from "@tanstack/react-query";
 import { Building, Package } from "lucide-react-native";
 

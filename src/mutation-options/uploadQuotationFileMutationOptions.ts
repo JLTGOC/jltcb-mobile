@@ -1,8 +1,8 @@
 import { mutationOptions } from "@tanstack/react-query";
 import type { DocumentPickerAsset } from "expo-document-picker";
-import { uploadQuotationFile } from "../api/quotations";
 import { dashboardKeys } from "../query-key-factories/dashboard";
 import { quotationKeys } from "../query-key-factories/quotations";
+import { uploadQuotationFile } from "../services/quotations";
 import type { QuotationStatus } from "../types/quotations";
 
 export const uploadQuotationFileMutationOptions = ({

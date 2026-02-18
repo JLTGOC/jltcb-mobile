@@ -1,3 +1,3 @@
-import { apiGet } from "../services/axiosInstance";
+import { apiGet } from "./axiosInstance";
 
 export const fetchDashboardData = <T>() => apiGet<T>("dashboard");
