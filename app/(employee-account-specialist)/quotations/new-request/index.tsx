@@ -1,3 +1,7 @@
+import BannerHeader from "@/src/components/ui/BannerHeader";
+import { routes } from "@/src/constants/routes";
+import { asQuotationsQueryOptions } from "@/src/query-options/quotations/asQuotationsQueryOptions";
+import type { QuotationFilter } from "@/src/types/quotations";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
@@ -11,10 +15,6 @@ import {
 	View,
 } from "react-native";
 import { ActivityIndicator, DataTable } from "react-native-paper";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import { routes } from "@/src/constants/routes";
-import { asQuotationsQueryOptions } from "@/src/query-options/quotations/asQuotationsQueryOptions";
-import type { QuotationFilter } from "@/src/types/quotations";
 
 const TABLE_HEADERS = [
 	{ title: "Date", style: { flex: 2 } },
@@ -26,7 +26,7 @@ export default function NewRequest() {
 	const router = useRouter();
 	const [search, setSearch] = useState("");
 	const [submittedSearch, setSubmittedSearch] = useState("");
-	const filter: QuotationFilter = {
+	const filter: QuotationFilter<"REQUESTED"> = {
 		filter: "REQUESTED",
 		...(submittedSearch.length && { search: submittedSearch }),
 	};

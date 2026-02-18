@@ -8,6 +8,7 @@ export interface ASRequestedQuotation {
 
 export interface ASRespondedQuotation {
 	id: number;
+  name: string;
 	reference_number: string;
 	commodity: string;
 	date: string;
