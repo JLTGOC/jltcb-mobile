@@ -6,10 +6,10 @@ import { Href, useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import {
-	ActivityIndicator,
-	DataTable,
-	IconButton,
-	Menu,
+  ActivityIndicator,
+  DataTable,
+  IconButton,
+  Menu,
 } from "react-native-paper";
 
 const TABLE_HEADERS = [
@@ -102,7 +102,7 @@ export default function RespondedQuotation() {
                             onPress={() => {
                               setVisibleMenuId(null);
                               router.navigate(
-                                getUploadRoute(quotation.id, quotation.name),
+                                getUploadRoute(quotation.id, quotation.client_name),
                               );
                             }}
                           />
