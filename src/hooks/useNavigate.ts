@@ -23,7 +23,7 @@ export function useNavigate(options?: Options) {
         options?.beforeNavigate?.();
         router.push({
             pathname: path.pathname,
-            params: path.params
+            params: {...path.params}
         } as any);
     }
   };

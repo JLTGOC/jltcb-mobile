@@ -7,11 +7,10 @@ import type { ApiResponse } from "../types/api";
 
 const baseURL = process.env.EXPO_PUBLIC_API_URL
 
-console.log("Requesting URL:", baseURL);
 const api = axios.create({
   baseURL: baseURL,
   headers: {
-    "Content-Type": "application/json",
+    "Accept": "application/json",
   },
 });
 

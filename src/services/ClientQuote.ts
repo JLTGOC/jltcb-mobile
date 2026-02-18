@@ -8,7 +8,7 @@ export async function postClientQuote(formData: QuoteForm) {
 
   if (!token) throw new Error("No authentication token found");
 
-  const response = await apiPost<{ data: any }, QuoteForm>(
+  const response = await apiPost< QuoteForm>(
     `quotations`,
     formData,
     {
@@ -42,29 +42,33 @@ export async function fetchClientQuotes({ status, search }: QuotesParams) {
 }
 
 //Get PER Quotation of the Client
-export async function fetchClientQuote(id: number): Promise<ClientQuoteResponse> {
+export async function fetchClientQuote(id: number): Promise<QuoteForm> {
   const token = await SecureStore.getItemAsync("token");
 
   if (!token) throw new Error("No authentication token found");
 
-  const response = await apiGet<ClientQuoteResponse>(`quotations/${id}`, {
+  const response = await apiGet<QuoteForm>(`quotations/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  console.log("CleintQuote.tsx - fetchClientQuote",response)
   return response.data;
 }
 
 //Update Quotation of the Client
-export async function updateClientQuote(id: number): Promise<ClientQuoteResponse> {
+export async function updateClientQuote(id: number, formData: QuoteForm): Promise<ClientQuoteResponse> {
   const token = await SecureStore.getItemAsync("token");
 
   if (!token) throw new Error("No authentication token found");
 
-  const response = await apiPut<ClientQuoteResponse>(`quotations/${id}`, {
+  const response = await apiPost<ClientQuoteResponse>(`quotations/${id}`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  console.log("ClientQuote.tsx - updateClientQuote",response)
   return response.data;
 }

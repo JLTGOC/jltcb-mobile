@@ -4,10 +4,12 @@ import Container40 from "../assets/get_quote/container40.png";
 // Quotation
 
 export type QuoteForm = {
+  account_specialist: string,
   company?: CompanyData;
   service?: ServiceData;
   commodity?: Commodity;
   shipment?: Shipment;
+  files?: any[];
 };
 
 
@@ -49,6 +51,7 @@ export type ServiceData = {
 export type Commodity = {
   commodity?: string;
   cargo_type?: string;
+  cargo_volume?: number;
   container_size?: string;
 };
 
@@ -59,6 +62,7 @@ export type Shipment = {
 
 
 export const initialQuoteForm: QuoteForm = {
+  account_specialist: "",
   company: {
     name: "",
     address: "",
@@ -74,6 +78,7 @@ export const initialQuoteForm: QuoteForm = {
   commodity: {
     commodity: "",
     cargo_type: "",
+    cargo_volume: 1,
     container_size: "",
   },
   shipment: {
