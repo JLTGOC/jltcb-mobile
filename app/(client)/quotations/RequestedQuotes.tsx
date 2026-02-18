@@ -31,7 +31,7 @@ const menuItems = [
   { iconName: "delete", title: "delete", color: "red" },
 ];
 
-export default function Index() {
+export default function RequestedQuotes() {
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const { navigate } = useNavigate();
@@ -104,7 +104,6 @@ export default function Index() {
                     pathname: routes.CLIENT_QUOTE_DETAILS,
                     params: {
                       id: item.id,
-                      title: item.commodity,
                       mode: "edit",
                     },
                   });
@@ -138,11 +137,15 @@ export default function Index() {
                         <Menu.Item
                           key={index}
                           onPress={() => {
-                            if(menu.title === "edit") {
+                            if (menu.title === "edit") {
                               navigate({
-                                pathname:routes.CLIENT_CREATE_QUOTE,
-                                params: {id:item.id}
-                              })
+                                pathname: "/(client)/quotations",
+                                params: {
+                                  id: item.id,
+                                  title: item.commodity,
+                                  mode: "edit",
+                                },
+                              });
                             }
                             setVisibleMenuId(null);
                           }}

@@ -30,7 +30,7 @@ const menuItems = [
   { iconName: "delete", title: "delete", color: "red" },
 ];
 
-export default function Index() {
+export default function RespondedQuotes() {
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const { navigate } = useNavigate();
 

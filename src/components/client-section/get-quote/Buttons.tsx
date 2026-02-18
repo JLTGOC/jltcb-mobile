@@ -55,6 +55,10 @@ export default function Buttons({
   }, [formData, currentPosition, stepConfigs]);
 
   const handleNext = () => {
+    if (isStepInvalid) {
+      return;
+    }
+
     if (currentPosition < 2) {
       setCurrentPosition((prev) => prev + 1);
     } 
