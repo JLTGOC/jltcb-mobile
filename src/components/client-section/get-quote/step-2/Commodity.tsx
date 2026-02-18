@@ -17,6 +17,8 @@ type Props = {
 export default function Commodity({ formData, setFormData }: Props) {
   const [selectCargoType, setSelectCargoType] = useState<string | null>("");
 
+  console.log("step_2", formData)
+
   return (
     <View>
       {/* Dropdown */}

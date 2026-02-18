@@ -1,22 +1,28 @@
 import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { View, StyleSheet, } from "react-native";
-import { Text, Card, Divider, ActivityIndicator, Button } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import {
+  Text,
+  Card,
+  Divider,
+  ActivityIndicator,
+  Button,
+} from "react-native-paper";
 import { Building2 } from "lucide-react-native";
 
 import { fetchClientQuote } from "@/src/services/ClientQuote";
-import { ClientQuoteResponse } from "@/src/types/client";
+import { ClientQuoteResponse, QuoteForm } from "@/src/types/client";
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { routes } from "@/src/constants/routes";
 
 type Props = {
-  id?: string
-  mode?: string
-}
-export default function Details({id, mode} : Props) {
-  const {navigate} = useNavigate()
+  id?: string;
+  mode?: string;
+};
+export default function Details({ id, mode }: Props) {
+  const { navigate } = useNavigate();
 
-  const { data, isLoading, error } = useQuery<ClientQuoteResponse>({
+  const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [id],
     queryFn: () => fetchClientQuote(id as any),
     enabled: !!id,
@@ -26,83 +32,90 @@ export default function Details({id, mode} : Props) {
     {
       title: "CONSIGNEE DETAILS",
       details: [
-        { label: "COMPANY NAME", info: data?.consignee_details?.company_name },
+        { label: "COMPANY NAME", info: data?.company?.name },
         {
           label: "COMPANY ADDRESS",
-          info: data?.consignee_details?.company_address,
+          info: data?.company?.address,
         },
         {
           label: "CONTACT PERSON",
-          info: data?.consignee_details?.contact_person,
+          info: data?.company?.contact_person,
         },
         {
           label: "CONTACT NUMBER",
-          info: data?.consignee_details?.contact_number,
+          info: data?.company?.contact_person,
         },
-        { label: "EMAIL", info: data?.consignee_details?.contact_person },
+        { label: "EMAIL", info: data?.company?.email },
       ],
     },
     {
       title: "SHIPMENT DETAILS",
       details: [
-        { label: "SERVICE TYPE", info: data?.shipment_details?.service_type },
+        { label: "SERVICE TYPE", info: data?.service?.type },
         {
           label: "FREIGHT TRANSPORT MODE",
-          info: data?.shipment_details?.transport_mode,
+          info: data?.service?.transport_mode,
         },
-        { label: "SERVICE", info: data?.shipment_details?.commodity },
-        { label: "COMMODITY", info: data?.shipment_details?.commodity },
-        { label: "VOLUME (DIMENSION)", info: data?.shipment_details?.volume },
-        { label: "ORIGIN", info: data?.shipment_details?.origin },
+        { label: "SERVICE", info: data?.service?.options },
+        { label: "COMMODITY", info: data?.commodity?.container_size },
+        { label: "VOLUME (DIMENSION)", info: data?.commodity?.cargo_volume },
+        { label: "ORIGIN", info: data?.shipment?.origin },
       ],
     },
     {
       title: "PERSON IN CHARGE",
       details: [
-        { label: "ACCOUNT SPECIALIST", info: data?.shipment_details?.volume },
+        { label: "ACCOUNT SPECIALIST", info: data?.account_specialist },
       ],
     },
   ];
 
   if (isLoading) {
     return (
-      <View style={{flex: 1,}}>
+      <View style={{ flex: 1 }}>
         <ActivityIndicator animating={true} />
-        <Text style={{ marginTop: 10, textAlign:"center" }}>Fetching quote details...</Text>
+        <Text style={{ marginTop: 10, textAlign: "center" }}>
+          Fetching quote details...
+        </Text>
       </View>
     );
   }
 
   return (
-    <>
+    <View style={styles.container}>
       {copyData.map((datas, index) => (
-        <View style={styles.container} key={index}>
-          <Card style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
-            <View style={{ gap: 10 }}>
-              <View style={styles.titleContainer}>
-                <Building2 size={20} />
-                <Text style={styles.textTitle}>{datas.title}</Text>
-              </View>
-              <Divider />
-              {datas.details.map((detail, index) => (
-                <View key={index} style={styles.row}>
-                  <View style={styles.labelColumn}>
-                    <Text style={[styles.content, { color: "#d1d1d1" }]}>
-                      {detail.label}
-                    </Text>
-                  </View>
-                  <View style={styles.infoColumn}>
-                    <Text style={[styles.content, { color: "#000000" }]}>
-                      {detail.info}
-                    </Text>
-                  </View>
-                </View>
-              ))}
+        <Card
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            marginBottom: 10,
+          }}
+          key={index}
+        >
+          <View style={{ gap: 10 }}>
+            <View style={styles.titleContainer}>
+              <Building2 size={20} />
+              <Text style={styles.textTitle}>{datas.title}</Text>
             </View>
-          </Card>
-        </View>
+            <Divider />
+            {datas.details.map((detail, index) => (
+              <View key={index} style={styles.row}>
+                <View style={styles.labelColumn}>
+                  <Text style={[styles.content, { color: "#d1d1d1" }]}>
+                    {detail.label}
+                  </Text>
+                </View>
+                <View style={styles.infoColumn}>
+                  <Text style={[styles.content, { color: "#000000" }]}>
+                    {detail.info}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </Card>
       ))}
-        {mode === "edit" ? (
+      {mode === "edit" ? (
         <Button
           mode="contained"
           buttonColor="#161F3C"
@@ -110,8 +123,11 @@ export default function Details({id, mode} : Props) {
           style={{ borderRadius: 4 }}
           onPress={() => {
             navigate({
-              pathname: routes.CLIENT_QUOTE_EDIT,
-              params: { id: id },
+              pathname: "/(client)/quotations",
+              params: {
+                id: id,
+                mode: mode,
+              },
             });
           }}
         >
@@ -120,7 +136,7 @@ export default function Details({id, mode} : Props) {
       ) : (
         <Button>VIEW QUOTATION</Button>
       )}
-    </>
+    </View>
   );
 }
 

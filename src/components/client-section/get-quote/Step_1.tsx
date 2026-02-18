@@ -33,7 +33,6 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
     return issue ? issue.message : null;
   };
 
-  console.log("step_1",formData)
   const handleInputChange = useCallback((key: string, text: string) => {
     let cleanedText = text;
     if (key === "contact_number") {
@@ -45,6 +44,8 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
       company: { ...prev.company, [key]: cleanedText },
     }));
   }, [setFormData]);
+
+  console.log("step_1",formData)
 
   return (
     <ScrollView 
@@ -72,6 +73,7 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
                 error={hasError}
                 underlineColor="transparent"
                 activeUnderlineColor="transparent"
+                numberOfLines={3}
                 mode="flat"
                 maxLength={field.key === "contact_number" ? 11 : undefined}
                 style={styles.input}

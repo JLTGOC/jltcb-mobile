@@ -19,6 +19,7 @@ export default function Shipment({ formData, setFormData }: Props) {
         <TextInput
           underlineColor="transparent"
           activeUnderlineColor="transparent"
+          numberOfLines={3}
           selectionColor="blue"
           mode="flat"
           style={styles.textInputContainer}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,8 +15,14 @@ import * as Sharing from "expo-sharing";
 import { DocumentPickerAsset } from "expo-document-picker";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as FileSystem from "expo-file-system";
+import { QuoteForm } from "../../../types/client";
 
-export default function Step_3() {
+type Props = {
+  formData: QuoteForm;
+  setFormData: Dispatch<SetStateAction<QuoteForm>>;
+};
+
+export default function Step_3({ formData, setFormData }: Props) {
   const [fileData, setFileData] = useState<DocumentPickerAsset | null>(null);
   const [error, setError] = useState<string | null>("");
 
@@ -30,6 +36,12 @@ export default function Step_3() {
       if (!result.canceled) {
         const pickedFile = result.assets[0];
         setFileData(pickedFile);
+        
+        setFormData((prev) => ({
+          ...prev,
+          files: [pickedFile], // The backend expects the 'files' key
+        }));
+
         setError(null);
       } else {
         setError("User cancelled the selection");
