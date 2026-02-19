@@ -23,7 +23,7 @@ export const routes = {
   AS_QUOTE_REQUEST_LIST:
     "/(employee-account-specialist)/quotations/new-request/request-list",
   AS_QUOTE_REQUEST:
-    "/(employee-account-specialist)/quotations/new-request/[id]" as Href,
+    "/(employee-account-specialist)/quotations/new-request/[id]",
   AS_QUOTE_REQUEST_UPLOAD:
     "/(employee-account-specialist)/quotations/new-request/[id]/upload",
   AS_QUOTE_RESPONDED:
