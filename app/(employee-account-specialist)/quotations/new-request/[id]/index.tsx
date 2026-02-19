@@ -6,14 +6,15 @@ import { quotationQueryOptions } from "@/src/query-options/quotations/quotationQ
 import type { Document, QuotationDetailsSection } from "@/src/types/quotations";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
+import { Building, Package } from "lucide-react-native";
 import { useState } from "react";
 import {
-	FlatList,
-	RefreshControl,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 
@@ -28,9 +29,63 @@ export default function Quotation() {
   }>();
   const [activeTab, setActiveTab] = useState<TabType>(TABS[0]);
 
-  const { data, isPending, error, isRefetching, refetch } = useQuery(
-    quotationQueryOptions(id),
-  );
+  const { data, isPending, error, isRefetching, refetch } = useQuery({
+    ...quotationQueryOptions(id),
+    select: ({ data }) => {
+      const {
+        company,
+        service,
+        commodity,
+        shipment,
+        account_specialist,
+        documents,
+      } = data;
+
+      const consigneeDetails = {
+        icon: Building,
+        title: "Consignee Details",
+        details: Object.entries(company).map(([key, value]) => {
+          const spacedKey = key.replace(/_/g, " ");
+          const keyName =
+            key === "name" || key === "address"
+              ? `company ${spacedKey}`
+              : spacedKey;
+          return [keyName, value];
+        }),
+      };
+
+      const shipmentDetails = {
+        icon: Package,
+        title: "Shipment Details",
+        details: [
+          ["Service Type", service.type],
+          ["Freight Transport Mode", service.transport_mode],
+          ["Service", service.options.join(", ")],
+
+          ["Commodity", commodity.commodity],
+          [
+            "Volume (Dimension)",
+            `${commodity.cargo_type} ${commodity.container_size ?? ""}`,
+          ],
+          ...Object.entries(shipment).map(([key, value]) => [
+            key.replace(/_/g, " "),
+            value,
+          ]),
+        ],
+      };
+
+      const personInCharge = {
+        icon: Package,
+        title: "Person in Charge",
+        details: [["Account Specialist", account_specialist]],
+      };
+
+      return {
+        sections: [consigneeDetails, shipmentDetails, personInCharge],
+        documents: Array.isArray(documents) ? documents : [],
+      };
+    },
+  });
 
   const isTabActive = (tab: TabType) => activeTab === tab;
 
