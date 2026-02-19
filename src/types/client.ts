@@ -4,23 +4,23 @@ import Container40 from "../assets/get_quote/container40.png";
 // Quotation
 
 export type QuoteForm = {
-  account_specialist: string,
+  account_specialist: string;
   company?: CompanyData;
   service?: ServiceData;
   commodity?: Commodity;
   shipment?: Shipment;
-  files?: any[];
+  documents?: ClientFile[];
+  remove_documents?: (string | number)[];
 };
-
 
 export type QuotesParams = {
   status?: "REQUESTED" | "RESPONDED";
   search?: string;
-}
+};
 
 export type QuoteParam = {
-  id?: number
-}
+  id?: number;
+};
 
 export type StringKeys =
   | "name"
@@ -32,6 +32,13 @@ export type StringKeys =
 export type Field = {
   label: string;
   key: StringKeys;
+};
+
+export type ClientFile = {
+  id: number;
+  file_name: string;
+  file_url: string;
+  mimeType: string;
 };
 
 export type CompanyData = {
@@ -60,7 +67,6 @@ export type Shipment = {
   destination?: string;
 };
 
-
 export const initialQuoteForm: QuoteForm = {
   account_specialist: "",
   company: {
@@ -85,6 +91,7 @@ export const initialQuoteForm: QuoteForm = {
     origin: "",
     destination: "",
   },
+  documents: [],
 };
 
 export type FieldConfig = {
@@ -120,14 +127,14 @@ export type ConsigneeDetails = {
   contact_number: string;
   contact_person: string;
   email: string;
-}
+};
 
 export type GeneralInfo = {
   account_specialist_id: number;
   client_id: number;
   reference_number: string;
   status: "REQUESTED" | "PENDING" | "COMPLETED"; // Add other status strings as needed
-}
+};
 
 export type ShipmentDetails = {
   commodity: string;
@@ -138,10 +145,10 @@ export type ShipmentDetails = {
   transport_mode: string;
   updated_at: string;
   volume: string;
-}
+};
 
 export type ClientQuoteResponse = {
   consignee_details: ConsigneeDetails;
   general_info: GeneralInfo;
   shipment_details: ShipmentDetails;
-}
+};

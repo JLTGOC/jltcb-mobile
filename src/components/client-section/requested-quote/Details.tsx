@@ -1,19 +1,17 @@
-import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { View, StyleSheet } from "react-native";
+import { Building2 } from "lucide-react-native";
+import { StyleSheet, View } from "react-native";
 import {
-  Text,
-  Card,
-  Divider,
   ActivityIndicator,
   Button,
+  Card,
+  Divider,
+  Text,
 } from "react-native-paper";
-import { Building2 } from "lucide-react-native";
 
-import { fetchClientQuote } from "@/src/services/ClientQuote";
-import { ClientQuoteResponse, QuoteForm } from "@/src/types/client";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { routes } from "@/src/constants/routes";
+import { fetchClientQuote } from "@/src/services/clientQuote";
+import { QuoteForm } from "@/src/types/client";
 
 type Props = {
   id?: string;

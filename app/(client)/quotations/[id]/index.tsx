@@ -26,7 +26,7 @@ export default function QuoteDetails() {
 
   const screenWidth = Dimensions.get("screen").width;
 
-  console.log("QuoteDetails", id,mode)
+  console.log("QuoteDetails", id,mode, title)
 
   const renderTabContent = () => {
     switch (active) {

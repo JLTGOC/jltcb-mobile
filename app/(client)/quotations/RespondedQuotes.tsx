@@ -1,19 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
-  Menu,
-  IconButton,
   Icon,
+  IconButton,
+  Menu,
 } from "react-native-paper";
-import { useQuery } from "@tanstack/react-query";
 
 import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
-import { fetchClientQuotes } from "@/src/services/ClientQuote";
 import { useNavigate } from "@/src/hooks/useNavigate";
-
+import { fetchClientQuotes } from "@/src/services/clientQuote";
 
 type TableItem = {
   id: number;
@@ -37,8 +36,7 @@ export default function RespondedQuotes() {
   // Data Fetching
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["RESPONDED"],
-    queryFn: () =>
-      fetchClientQuotes({ status: "RESPONDED", }),
+    queryFn: () => fetchClientQuotes({ status: "RESPONDED" }),
     placeholderData: (previousData) => previousData,
   });
 

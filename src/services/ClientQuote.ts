@@ -1,10 +1,6 @@
-import {
-  QuoteForm,
-  QuotesParams,
-  ClientQuoteResponse,
-} from "./../types/client";
-import { apiPost, apiGet, apiPut } from "./axiosInstance";
 import * as SecureStore from "expo-secure-store";
+import { ClientQuoteResponse, QuoteForm, QuotesParams } from "../types/client";
+import { apiGet, apiPost } from "./axiosInstance";
 
 //Post Quote
 export async function postClientQuote(formData: QuoteForm) {
@@ -13,15 +9,14 @@ export async function postClientQuote(formData: QuoteForm) {
 
   const data = new FormData();
 
-  // 1. Append the File
-  if (formData.files && formData.files.length > 0) {
-    const file = formData.files[0];
-
-    data.append("files[]", {
-      uri: file.uri,
-      name: file.name,
-      type: file.mimeType || "application/octet-stream",
-    } as any);
+  if (formData.documents && formData.documents.length > 0) {
+    formData.documents.forEach((document, index) => {
+      data.append("documents[]", {
+        uri: document.file_url,
+        name: document.file_name || `file_${index}.pdf`,
+        type: document.mimeType,
+      } as any);
+    });
   }
 
   if (formData.company) {
@@ -54,12 +49,7 @@ export async function postClientQuote(formData: QuoteForm) {
     });
   }
 
-  const response = await apiPost(`quotations`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await apiPost(`quotations`, data);
 
   return response.data;
 }
@@ -74,12 +64,7 @@ export async function fetchClientQuotes({ status, search }: QuotesParams) {
     search: search || undefined,
   };
 
-  const response = await apiGet(`quotations`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    params,
-  });
+  const response = await apiGet(`quotations`);
   return response.data;
 }
 
@@ -89,13 +74,8 @@ export async function fetchClientQuote(id: number): Promise<QuoteForm> {
 
   if (!token) throw new Error("No authentication token found");
 
-  const response = await apiGet<QuoteForm>(`quotations/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await apiGet<QuoteForm>(`quotations/${id}`);
 
-  console.log("CleintQuote.tsx - fetchClientQuote", response);
   return response.data;
 }
 
@@ -105,19 +85,67 @@ export async function updateClientQuote(
   formData: QuoteForm,
 ): Promise<ClientQuoteResponse> {
   const token = await SecureStore.getItemAsync("token");
-
   if (!token) throw new Error("No authentication token found");
 
-  const response = await apiPost<ClientQuoteResponse>(
-    `quotations/${id}`,
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  const data = new FormData();
 
-  console.log("ClientQuote.tsx - updateClientQuote", response);
+  const newFiles =
+    formData.documents?.filter(
+      (document) =>
+        document.file_url &&
+        (document.file_url.startsWith("file://") ||
+          document.file_url.startsWith("content://")),
+    ) || [];
+
+  if (newFiles.length > 0) {
+    newFiles.forEach((file, index) => {
+      data.append("files[]", {
+        uri: file.file_url,
+        name: file.file_name || `new_file_${index}`,
+        type: file.mimeType || "image/jpeg",
+      } as any);
+    });
+  }
+
+  if (formData.account_specialist) {
+    data.append("account_specialist", formData.account_specialist);
+  }
+
+  if (formData.company) {
+    Object.entries(formData.company).forEach(([key, value]) => {
+      data.append(`company[${key}]`, value || "");
+    });
+  }
+
+  if (formData.service) {
+    Object.entries(formData.service).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => data.append(`service[${key}][]`, item));
+      } else {
+        data.append(`service[${key}]`, value || "");
+      }
+    });
+  }
+
+  if (formData.commodity) {
+    Object.entries(formData.commodity).forEach(([key, value]) => {
+      data.append(`commodity[${key}]`, value?.toString() || "");
+    });
+  }
+
+  if (formData.shipment) {
+    Object.entries(formData.shipment).forEach(([key, value]) => {
+      data.append(`shipment[${key}]`, value || "");
+    });
+  }
+
+  if (formData.remove_documents && formData.remove_documents.length > 0) {
+    formData.remove_documents.forEach((id: string | number) => {
+      data.append("remove_documents[]", id.toString());
+    });
+  }
+
+  const response = await apiPost<ClientQuoteResponse>(`quotations/${id}`, data);
+
   return response.data;
 }

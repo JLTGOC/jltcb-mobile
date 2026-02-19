@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
-import { Check } from "lucide-react-native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
+import { Check } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 
+import Success from "@/src/components/client-section/get-quote/Success";
+import Buttons from "../../../src/components/client-section/get-quote/Buttons";
 import Step_1 from "../../../src/components/client-section/get-quote/Step_1";
 import Step_2 from "../../../src/components/client-section/get-quote/Step_2";
 import Step_3 from "../../../src/components/client-section/get-quote/Step_3";
-import Buttons from "../../../src/components/client-section/get-quote/Buttons";
 import Header from "../../../src/components/client-section/Header";
-import Success from "@/src/components/client-section/get-quote/Success";
 
 import {
-  postClientQuote,
   fetchClientQuote,
+  postClientQuote,
   updateClientQuote,
-} from "@/src/services/ClientQuote";
+} from "@/src/services/clientQuote";
 
 import {
-  QuoteForm,
-  initialQuoteForm,
   FieldConfig,
-  ClientQuoteResponse,
+  QuoteForm,
+  initialQuoteForm
 } from "../../../src/types/client";
 
 import { routes } from "@/src/constants/routes";
@@ -47,10 +46,9 @@ export default function CreateQuote() {
   useEffect(() => {
     if (data && mode === "edit") {
       setFormData(data as any);
+      console.log("index.tsx", formData);
     }
   }, [data, mode]);
-
-  console.log("index.tsx", formData)
 
   const stepConfigs: Record<
     number,
@@ -79,20 +77,18 @@ export default function CreateQuote() {
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
       if (!!id) {
+        console.log("updateClientQuote", formData);
         return await updateClientQuote(Number(id), formData);
       } else {
-        console.log("postClientQuote", formData);
         return await postClientQuote(formData);
       }
     },
     onSuccess: (data) => {
-      console.log("Success!", data);
       setCurrentPosition(3);
     },
     onError: (error: any) => {
       console.error("--- VALIDATION ERROR DETAILS ---");
       if (error.response) {
-        // This is the data the server sent back with the 422
         console.error("Status:", error.response.status);
         console.error(
           "Server Message:",

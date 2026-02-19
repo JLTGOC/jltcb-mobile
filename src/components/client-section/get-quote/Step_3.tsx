@@ -5,17 +5,11 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
-  Platform,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import { FileUp, X } from "lucide-react-native";
-
 import * as DocumentPicker from "expo-document-picker";
-import * as Sharing from "expo-sharing";
-import { DocumentPickerAsset } from "expo-document-picker";
-import * as IntentLauncher from "expo-intent-launcher";
-import * as FileSystem from "expo-file-system";
-import { QuoteForm } from "../../../types/client";
+import { QuoteForm, ClientFile } from "../../../types/client";
 
 type Props = {
   formData: QuoteForm;
@@ -23,7 +17,6 @@ type Props = {
 };
 
 export default function Step_3({ formData, setFormData }: Props) {
-  const [fileData, setFileData] = useState<DocumentPickerAsset | null>(null);
   const [error, setError] = useState<string | null>("");
 
   const handlePickDocument = async () => {
@@ -31,46 +24,39 @@ export default function Step_3({ formData, setFormData }: Props) {
       const result = await DocumentPicker.getDocumentAsync({
         type: "*/*",
         copyToCacheDirectory: true,
+        multiple: true,
       });
 
       if (!result.canceled) {
-        const pickedFile = result.assets[0];
-        setFileData(pickedFile);
-        
+
+        const mappedFiles: ClientFile[] = result.assets.map((asset) => ({
+        id: Date.now() + Math.random(), // Generate the missing 'id' required by your type
+        file_name: asset.name,
+        file_url: asset.uri,
+        mimeType: asset.mimeType || "application/octet-stream",
+
+      }));
+
         setFormData((prev) => ({
           ...prev,
-          files: [pickedFile], // The backend expects the 'files' key
+          documents: [...(prev.documents || []), ...mappedFiles],
         }));
 
         setError(null);
-      } else {
-        setError("User cancelled the selection");
       }
     } catch (err) {
       setError("Error: " + err);
-      console.error(err);
     }
   };
 
-  const openFile = async () => {
-    if (!fileData) return;
-
-    try {
-      if (Platform.OS === "android") {
-        const contentUri = await FileSystem.getContentUriAsync(fileData.uri);
-
-        await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
-          data: contentUri,
-          flags: 1,
-          type: fileData.mimeType || "application/pdf",
-        });
-      } else {
-        await Sharing.shareAsync(fileData.uri);
-      }
-    } catch (err) {
-      console.error("Failed to open file:", err);
-      alert("Could not open file. Make sure you have a PDF viewer installed.");
-    }
+  const handleRemoveFile = (id: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      documents: prev.documents?.filter((document) => document.id !== id),
+      remove_documents: prev.remove_documents 
+      ? [...prev.remove_documents, id] 
+      : [id],
+    }));
   };
 
   return (
@@ -78,28 +64,27 @@ export default function Step_3({ formData, setFormData }: Props) {
       style={{ gap: 10, padding: 10 }}
       automaticallyAdjustKeyboardInsets={true}
     >
-      {/* Upload File */}
       <View style={{ gap: 10 }}>
-        {fileData === null ? (
-          <>
-            {/* Upload */}
-            <Text>UPLOAD DOCUMENTS (bill of ladding/airway bill)</Text>
-            <View style={styles.container}>
-              {error && <Text style={styles.errorText}>{error}</Text>}
-              <TouchableOpacity
-                style={styles.fileInput}
-                onPress={handlePickDocument}
-              >
-                <FileUp size={40} fill={"#b2b2b2"} color={"white"} />
-              </TouchableOpacity>
-            </View>
-          </>
-        ) : (
-          <>
-            {/* Uploaded */}
-            <View style={{ gap: 10 }}>
-              <Text>FILE UPLOADED</Text>
+        <Text>UPLOAD DOCUMENTS (bill of lading/airway bill)</Text>
+
+        {/* Upload Button */}
+        <View style={styles.container}>
+          {error && <Text style={styles.errorText}>{error}</Text>}
+          <TouchableOpacity
+            style={styles.fileInput}
+            onPress={handlePickDocument}
+          >
+            <FileUp size={40} fill={"#b2b2b2"} color={"white"} />
+          </TouchableOpacity>
+        </View>
+
+        {/* List of Uploaded Files */}
+        {formData.documents && formData.documents.length > 0 && (
+          <View style={{ gap: 10, marginTop: 10 }}>
+            <Text>UPLOADED FILES:</Text>
+            {formData.documents.map((document) => (
               <View
+                key={document.id}
                 style={{
                   width: "100%",
                   flexDirection: "row",
@@ -112,45 +97,45 @@ export default function Step_3({ formData, setFormData }: Props) {
                     backgroundColor: "#ffffff",
                     width: "85%",
                     borderRadius: 10,
-                    padding: 5,
+                    padding: 10,
                   }}
-                  onPress={() => openFile()}
+                  onPress={() => {}}
                 >
-                  <Text>File Name: {fileData?.name} </Text>
+                  <Text numberOfLines={1}>File Name: {document.file_name} </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     width: "10%",
                     borderRadius: 10,
-                    padding: 5,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#ffeaea",
                   }}
-                  onPress={() => setFileData(null)}
+                  onPress={() => handleRemoveFile(document.id)}
                 >
-                  <X size={15} style={{ alignSelf: "center" }} />
+                  <X size={20} color="red" />
                 </TouchableOpacity>
               </View>
-            </View>
-          </>
+            ))}
+          </View>
         )}
       </View>
 
-      <View>
+      <View style={{ marginTop: 20 }}>
         <Text>REMARKS</Text>
         <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="transparent"
-          selectionColor="blue"
           mode="flat"
           multiline={true}
           numberOfLines={4}
+          underlineColor="transparent"
+          activeUnderlineColor="transparent"
+          selectionColor="blue"
           style={{
             borderRadius: 10,
             height: 80,
             backgroundColor: "#fff",
           }}
-          theme={{
-            roundness: 10,
-          }}
+          theme={{ roundness: 10 }}
         />
       </View>
     </ScrollView>

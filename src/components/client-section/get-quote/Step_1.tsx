@@ -73,6 +73,7 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
                 error={hasError}
                 underlineColor="transparent"
                 activeUnderlineColor="transparent"
+                selectionColor="blue"
                 numberOfLines={3}
                 mode="flat"
                 maxLength={field.key === "contact_number" ? 11 : undefined}
