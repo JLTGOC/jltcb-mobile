@@ -41,7 +41,7 @@ export default function ReelsContainer({
 
 	useEffect(() => {
 		if (reels?.length && !activeItemId) {
-			setActiveItemId(reels[0].id);
+			setActiveItemId(reels?.[0]?.id ?? null);
 		}
 	}, [reels, activeItemId]);
 
@@ -94,8 +94,12 @@ export default function ReelsContainer({
 	return (
 		<View style={styles.videoContainer}>
 			<FlatList
-				data={reels}
+				data={reels ?? []}
 				horizontal
+				initialNumToRender={3} 
+                maxToRenderPerBatch={3}
+                windowSize={5}
+                removeClippedSubviews={true}
 				showsHorizontalScrollIndicator={false}
 				keyExtractor={(item) => String(item.id)}
 				onViewableItemsChanged={onViewableItemsChanged}

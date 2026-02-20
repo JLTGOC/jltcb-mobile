@@ -29,18 +29,18 @@ export const userNavigation: UserNavigation[] = [
 		headerComponent: DarkHeader,
 		tabsComponent: ClientTabs,
 		headerMenus: [
-			{
-				text: "Calculator",
-				link: routes.CLIENT_DB,
-			},
+			// {
+			// 	text: "Calculator",
+			// 	link: routes.CLIENT_DB,
+			// },
 			{
 				text: "AHTN Checker",
 				link: routes.AHTN,
 			},
-			{
-				text: "Account Settings",
-				link: routes.CLIENT_DB,
-			},
+			// {
+			// 	text: "Account Settings",
+			// 	link: routes.CLIENT_DB,
+			// },
 		],
 	},
 	{

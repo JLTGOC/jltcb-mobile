@@ -2,22 +2,26 @@
   "expo": {
     "name": "JLTCB",
     "slug": "JLTCB",
-    "version": "2.1.0",
+    "owner": "marjorie1219",
+    "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "jltcb",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jltcb.jltcbapp",
+      "bundleIdentifier": "com.jltcb.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.jltcb.jltcbapp",
-      "versionCode": 3,
-      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "package": "com.jltcb.app",
+      "versionCode": 1,
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/appImage.png",
         "backgroundColor": "#E6F4FE"
@@ -45,7 +49,9 @@
       [
         "expo-asset",
         {
-          "assets": ["./src/assets/dashboard-folder-icons"]
+          "assets": [
+            "./src/assets/dashboard-folder-icons"
+          ]
         }
       ],
       [
@@ -64,7 +70,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0bc8ca02-845f-4252-a676-51c678e10146"
+        "projectId": "9c9ac88c-eed4-4835-87ce-4c13875bf4f6"
       }
     }
   }

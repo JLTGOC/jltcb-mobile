@@ -9,11 +9,13 @@ import {
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { routes } from "@/src/constants/routes";
 export default function NewsTabButtons() {
-  const {navigate} = useNavigate();
+  const { navigate } = useNavigate();
 
   const [active, setActive] = useState(0);
 
-  const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
+  const tabs = ["LATEST", "CAREERS", ""];
+  
+  // const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
 
   const screenWidth = Dimensions.get("screen").width;
 
@@ -27,8 +29,6 @@ export default function NewsTabButtons() {
             setActive(i);
             if (t === "CAREERS") {
               navigate(routes.CAREERS);
-            } else if (t === "ARTICLES"){
-              <Text style={{textAlign:"center"}}>Coming Soon......</Text>
             }
           }}
         >
