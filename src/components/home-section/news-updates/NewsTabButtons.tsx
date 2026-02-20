@@ -13,7 +13,7 @@ export default function NewsTabButtons() {
 
   const [active, setActive] = useState(0);
 
-  const tabs = ["LATEST", "ARTICES", "CAREERS", ""];
+  const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
 
   const screenWidth = Dimensions.get("screen").width;
 
@@ -27,6 +27,8 @@ export default function NewsTabButtons() {
             setActive(i);
             if (t === "CAREERS") {
               navigate(routes.CAREERS);
+            } else if (t === "ARTICLES"){
+              <Text style={{textAlign:"center"}}>Coming Soon......</Text>
             }
           }}
         >

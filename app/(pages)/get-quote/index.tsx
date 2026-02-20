@@ -31,7 +31,6 @@ export default function Index() {
             borderLeftColor: "#EE9034", // color
             margin: 5,
             paddingHorizontal: 5,
-            height: 70,
             justifyContent: "center",
           }}
         >

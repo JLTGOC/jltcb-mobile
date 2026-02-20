@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { Text, TextInput, List, Button } from "react-native-paper";
 
 const LOCATIONS = [
@@ -38,170 +38,141 @@ export default function Form() {
   });
 
   return (
-    <>
-      <FlatList
-        data={[]} // 👈 no repeated items
-        keyExtractor={() => "form"}
-        renderItem={null}
-        ListHeaderComponent={() => (
-          <View style={styles.container}>
-            {/* Meeting Location */}
-            <Text style={styles.label} allowFontScaling={false}>
-              Meeting Location
-            </Text>
-            <List.Section style={{ padding: 0 }}>
-              <List.Accordion
-                title={formData.meeting_location ?? ""}
-                expanded={expanded}
-                onPress={() => setExpanded(!expanded)}
-                style={styles.accordion}
-                titleStyle={styles.accordionTitle}
-                left={() => null} // remove default icon
-              >
-                {LOCATIONS.map((loc) => (
-                  <List.Item
-                    key={loc}
-                    title={loc}
-                    onPress={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        meeting_location: loc,
-                      }));
-                      setExpanded(false); // close after selection
-                    }}
-                    style={styles.accordionItem}
-                    titleStyle={styles.accordionItemTitle}
-                  />
-                ))}
-              </List.Accordion>
-            </List.Section>
+    <ScrollView 
+      contentContainerStyle={{ paddingBottom: 40 }} 
+      keyboardShouldPersistTaps="handled" // Prevents the keyboard from closing when tapping the accordion
+    >
+      <View style={styles.container}>
+        {/* Meeting Location */}
+        <Text style={styles.label} allowFontScaling={false}>
+          Meeting Location
+        </Text>
+        <List.Section style={{ padding: 0 }}>
+          <List.Accordion
+            title={formData.meeting_location ?? "Select Location"}
+            expanded={expanded}
+            onPress={() => setExpanded(!expanded)}
+            style={styles.accordion}
+            titleStyle={styles.accordionTitle}
+            left={() => null} 
+          >
+            {LOCATIONS.map((loc) => (
+              <List.Item
+                key={loc}
+                title={loc}
+                onPress={() => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    meeting_location: loc,
+                  }));
+                  setExpanded(false); 
+                }}
+                style={styles.accordionItem}
+                titleStyle={styles.accordionItemTitle}
+              />
+            ))}
+          </List.Accordion>
+        </List.Section>
 
-            {/* Full Name */}
+        {/* Full Name */}
+        <Text style={styles.label} allowFontScaling={false}>
+          Full Name
+        </Text>
+        <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="transparent"
+          selectionColor="blue"
+          mode="flat"
+          style={styles.input}
+          theme={{ roundness: 10 }}
+          value={formData.full_name}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, full_name: text }))
+          }
+          allowFontScaling={false}
+        />
+
+        <View style={{ flexDirection: "row", width: "100%", gap: 10 }}>
+          <View style={{ flex: 1 }}>
+            {/* Email */}
             <Text style={styles.label} allowFontScaling={false}>
-              Full Name
+              Email
             </Text>
             <TextInput
               underlineColor="transparent"
               activeUnderlineColor="transparent"
               selectionColor="blue"
               mode="flat"
-              style={{
-                borderRadius: 10,
-                height: 40,
-                backgroundColor: "#fff",
-              }}
-              theme={{
-                roundness: 10,
-              }}
-              value={formData.full_name}
+              style={styles.input}
+              theme={{ roundness: 10 }}
+              keyboardType="email-address"
+              value={formData.email}
               onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, full_name: text }))
-              }
-              allowFontScaling={false}
-            />
-
-            <View style={{ flexDirection: "row", width: "100%", gap: 10 }}>
-              <View style={{ flex: 1 }}>
-                {/* Email */}
-                <Text style={styles.label} allowFontScaling={false}>
-                  Email
-                </Text>
-                <TextInput
-                  underlineColor="transparent"
-                  activeUnderlineColor="transparent"
-                  mode="flat"
-                  style={{
-                    borderRadius: 10,
-                    height: 40,
-                    backgroundColor: "#fff",
-                  }}
-                  theme={{
-                    roundness: 10,
-                  }}
-                  keyboardType="email-address"
-                  value={formData.email}
-                  onChangeText={(text) =>
-                    setFormData((prev) => ({ ...prev, email: text }))
-                  }
-                  allowFontScaling={false}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                {/* Phone */}
-                <Text style={styles.label} allowFontScaling={false}>
-                  Phone No.
-                </Text>
-                <TextInput
-                  underlineColor="transparent"
-                  activeUnderlineColor="transparent"
-                  mode="flat"
-                  style={{
-                    borderRadius: 10,
-                    height: 40,
-                    backgroundColor: "#fff",
-                  }}
-                  theme={{
-                    roundness: 10,
-                  }}
-                  keyboardType="phone-pad"
-                  value={formData.phone_number}
-                  onChangeText={(text) =>
-                    setFormData((prev) => ({ ...prev, phone_number: text }))
-                  }
-                  allowFontScaling={false}
-                />
-              </View>
-            </View>
-
-            {/* Company */}
-            <Text style={styles.label} allowFontScaling={false}>
-              Company Name
-            </Text>
-            <TextInput
-              underlineColor="transparent"
-              activeUnderlineColor="transparent"
-              mode="flat"
-              style={{
-                borderRadius: 10,
-                height: 40,
-                backgroundColor: "#fff",
-              }}
-              theme={{
-                roundness: 10,
-              }}
-              value={formData.company_name}
-              onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, company_name: text }))
-              }
-              allowFontScaling={false}
-            />
-
-            {/* Message */}
-            <Text style={styles.label} allowFontScaling={false}>
-              Message
-            </Text>
-            <TextInput
-              underlineColor="transparent"
-              activeUnderlineColor="transparent"
-              mode="flat"
-              style={{
-                borderRadius: 10,
-                height: 40,
-                backgroundColor: "#fff",
-              }}
-              theme={{
-                roundness: 10,
-              }}
-              multiline
-              value={formData.message}
-              onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, message: text }))
+                setFormData((prev) => ({ ...prev, email: text }))
               }
               allowFontScaling={false}
             />
           </View>
-        )}
-      />
+          <View style={{ flex: 1 }}>
+            {/* Phone */}
+            <Text style={styles.label} allowFontScaling={false}>
+              Phone No.
+            </Text>
+            <TextInput
+              underlineColor="transparent"
+              activeUnderlineColor="transparent"
+              selectionColor="blue"
+              mode="flat"
+              style={styles.input}
+              theme={{ roundness: 10 }}
+              keyboardType="numeric"
+              value={formData.phone_number}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, phone_number: text }))
+              }
+              allowFontScaling={false}
+            />
+          </View>
+        </View>
+
+        {/* Company */}
+        <Text style={styles.label} allowFontScaling={false}>
+          Company Name
+        </Text>
+        <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="transparent"
+          selectionColor="blue"
+          mode="flat"
+          style={styles.input}
+          theme={{ roundness: 10 }}
+          value={formData.company_name}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, company_name: text }))
+          }
+          allowFontScaling={false}
+        />
+
+        {/* Message */}
+        <Text style={styles.label} allowFontScaling={false}>
+          Message
+        </Text>
+        <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="transparent"
+          selectionColor="blue"
+          mode="flat"
+          style={[styles.input, { height: 100 }]} // Taller height for multiline
+          theme={{ roundness: 10 }}
+          multiline
+          value={formData.message}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, message: text }))
+          }
+          allowFontScaling={false}
+        />
+      </View>
+
       <View style={{ alignItems: "center", marginTop: 15 }}>
         <Button
           mode="contained"
@@ -226,35 +197,25 @@ export default function Form() {
           SUBMIT
         </Button>
       </View>
-    </>
+    </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 10,
     justifyContent: "center",
     gap: 1,
   },
-  texArea: {
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    textAlignVertical: "top",
-    height: 120,
+  input: {
+    borderRadius: 10,
+    height: 40,
+    backgroundColor: "#fff",
   },
   label: {
     marginTop: 5,
     fontWeight: "400",
     fontSize: 14,
-  },
-  locationItem: {
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    marginVertical: 4,
-  },
-  selectedItem: {
-    backgroundColor: "#EE9034",
   },
   accordion: {
     backgroundColor: "#fff",
@@ -267,8 +228,8 @@ const styles = StyleSheet.create({
   },
   accordionTitle: {
     fontSize: 16,
-    lineHeight: 24, // smaller than height to allow wrapping
-    color: "#000", // make sure text is visible
+    lineHeight: 24,
+    color: "#000",
   },
   accordionItem: {
     backgroundColor: "#f9f9f9",

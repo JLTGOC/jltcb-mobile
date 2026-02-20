@@ -31,11 +31,10 @@ export default function Index() {
             borderLeftColor: "#EE9034", // color
             margin: 5,
             paddingHorizontal: 5,
-            height: 35,
           }}
         >
           <Text
-            style={{ fontSize: 15, color: "white" }}
+            style={{ fontSize: 15, color: "white",}}
             allowFontScaling={false}
           >
             If you have any inquiries get in touch with us. We’ll be happy to
@@ -46,12 +45,6 @@ export default function Index() {
 
       {/* details */}
       <ContactDetails />
-
-      {/* image */}
-      <Image
-        source={require("../../../src/assets/contact_us/location.png")}
-        style={{ height: 300, width: "100%" }}
-      />
     </>
   );
 }

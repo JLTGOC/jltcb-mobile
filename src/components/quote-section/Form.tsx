@@ -27,11 +27,12 @@ export default function Form() {
           <Surface style={{ elevation: 10, borderRadius: 10 }}>
             <TextInput
               value={formData[field.key] ?? ""}
-              underlineColor="transparent" // removes underline
-              activeUnderlineColor="transparent" // removes underline when focused
+              underlineColor="transparent"
+              activeUnderlineColor="transparent"
+              selectionColor="blue"
               mode="flat"
               style={{
-                borderRadius: 10, // optional extra rounding
+                borderRadius: 10,
                 height: 40,
                 backgroundColor: "#fff",
               }}

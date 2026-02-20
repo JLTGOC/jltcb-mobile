@@ -40,9 +40,9 @@ export default function DarkHeader({ menus: menuOptions }: DarkHeaderProps) {
 					contentFit="contain"
 				/>
 				<View style={styles.icons}>
-					<TouchableOpacity>
+					{/* <TouchableOpacity>
 						<Ionicons name="notifications" size={30} color="white" />
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 					<TouchableOpacity onPress={() => setIsMenuToggled((prev) => !prev)}>
 						<Ionicons name="menu" size={30} color="white" />
 					</TouchableOpacity>

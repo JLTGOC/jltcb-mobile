@@ -126,10 +126,11 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 50,
-		backgroundColor: "#fff", // must have background for shadow
+		backgroundColor: "#fff",
 		borderRadius: 10,
 		paddingHorizontal: 15,
 		fontSize: 15,
+		color: '#000',
 
 		// Shadow for iOS
 		shadowColor: "#000",

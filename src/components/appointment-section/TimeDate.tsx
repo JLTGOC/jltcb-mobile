@@ -28,7 +28,7 @@ export default function TImeDate() {
         marginTop: -25,
         flexDirection: "row",
         width: screenWidth,
-        gap: 5
+        gap: 5,
       }}
     >
       <Calendar
@@ -37,8 +37,8 @@ export default function TImeDate() {
         }}
         markedDates={{
           [date]: {
-            selected: true, 
-            selectedColor: "#6200ee", 
+            selected: true,
+            selectedColor: "#6200ee",
             disableTouchEvent: false,
             selectedTextColor: "#fff",
           },
@@ -51,7 +51,6 @@ export default function TImeDate() {
         }}
         onDayPress={(day) => setDate(day.dateString)}
       />
-
 
       <FlatList
         data={availableTimes}
@@ -67,16 +66,15 @@ export default function TImeDate() {
               backgroundColor:
                 selectedTime === item ? "#6200ee" : "transparent",
               borderWidth: 1,
-              borderColor:
-                selectedTime === item ? "" : "#808080ff",
-                width: "30%"
+              borderColor: selectedTime === item ? "" : "#808080ff",
+              width: "30%",
             }}
             textStyle={{
               fontSize: 11,
-              color: selectedTime === item ? "#fff" : "#808080ff"
+              color: selectedTime === item ? "#fff" : "#808080ff",
             }}
           >
-            {item}
+            <Text allowFontScaling={false}>{item}</Text>
           </Chip>
         )}
       />

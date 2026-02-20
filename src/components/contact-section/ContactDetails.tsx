@@ -1,10 +1,11 @@
-import { Text, StyleSheet, View, TouchableOpacity,  } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
 export default function ContactDetails() {
   const [active, setActive] = useState(0);
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useState("MAIN");
 
   const tabs = ["MAIN", "BATAAN", "CLARK", ""];
   const contactDetails = [
@@ -35,11 +36,12 @@ export default function ContactDetails() {
             key={i}
             style={styles.button}
             onPress={() => {
-              setActive(i), setTab(t);
+              (setActive(i), setTab(t));
             }}
           >
             <Text
-              style={[styles.buttonText, active === i && styles.activeText]} allowFontScaling={false}
+              style={[styles.buttonText, active === i && styles.activeText]}
+              allowFontScaling={false}
             >
               {t}
             </Text>
@@ -50,15 +52,30 @@ export default function ContactDetails() {
 
       {/* details */}
       <View>
-        {contactDetails.map((detail, i) => (
-          <View key={i} style={styles.contactContainer}>
-            <View style={styles.iconsCotainer}>
-              <Ionicons name={detail.icon as any} size={25} color="#ffffffff" />
+        {tab !== "MAIN" ? (
+          <Text style={{ textAlign: "center" }}>Coming Soon....</Text>
+        ) : (
+          contactDetails.map((detail, i) => (
+            <View key={i} style={styles.contactContainer}>
+              <View style={styles.iconsCotainer}>
+                <Ionicons
+                  name={detail.icon as any}
+                  size={25}
+                  color="#ffffffff"
+                />
+              </View>
+              <Text style={{ fontSize: 12 }} allowFontScaling={false}>
+                {detail.description}
+              </Text>
             </View>
-            <Text style={{fontSize:12}} allowFontScaling={false} >{detail.description}</Text>
-          </View>
-        ))}
+          ))
+        )}
       </View>
+      {tab === "MAIN" && <Image
+        source={require("../../../src/assets/contact_us/location.png")}
+        style={{ height: 300, width: "100%" }}
+      />}
+     
     </View>
   );
 }
@@ -103,7 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    marginRight:10
+    marginRight: 10,
   },
   contactContainer: {
     flexDirection: "row",

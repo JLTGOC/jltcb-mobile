@@ -27,7 +27,7 @@ export default function ClientNavBar() {
     <View
       style={[
         styles.navContainer,
-        { height: 40 + insets.bottom, paddingBottom: insets.bottom },
+        { height: 40 + insets.bottom, paddingBottom: 10 + insets.bottom },
       ]}
     >
       {NavIcons.map((icon, index) => (
