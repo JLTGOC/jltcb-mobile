@@ -14,7 +14,7 @@ import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes } from "@/src/services/clientQuote";
+import { fetchClientQuotes } from "@/src/services/clientQuotation";
 
 type TableItem = {
   id: number;
@@ -144,7 +144,6 @@ export default function RequestedQuotes() {
                                 params: {
                                   id: item.id,
                                   title: item.commodity,
-                                  mode: "edit",
                                 },
                               });
                             }

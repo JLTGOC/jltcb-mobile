@@ -1,7 +1,4 @@
-import Container20 from "../assets/get_quote/container20.png";
-import Container40 from "../assets/get_quote/container40.png";
-
-// Quotation
+// Quotation Types
 
 export type QuoteForm = {
   account_specialist: string;
@@ -10,7 +7,7 @@ export type QuoteForm = {
   commodity?: Commodity;
   shipment?: Shipment;
   documents?: ClientFile[];
-  remove_documents?: (string | number)[];
+  removed_documents?: (string | number)[];
 };
 
 export type QuotesParams = {
@@ -67,59 +64,11 @@ export type Shipment = {
   destination?: string;
 };
 
-export const initialQuoteForm: QuoteForm = {
-  account_specialist: "",
-  company: {
-    name: "",
-    address: "",
-    contact_person: "",
-    contact_number: "",
-    email: "",
-  },
-  service: {
-    type: "",
-    transport_mode: "",
-    options: [],
-  },
-  commodity: {
-    commodity: "",
-    cargo_type: "",
-    cargo_volume: 1,
-    container_size: "",
-  },
-  shipment: {
-    origin: "",
-    destination: "",
-  },
-  documents: [],
-};
-
 export type FieldConfig = {
   label: string;
   key: keyof CompanyData;
   required: true;
 };
-
-export const transpoMode = ["SEA", "AIR"];
-export const serviceType = ["IMPORT", "EXPORT", "BUSINESS SOLUTION"];
-export const options = [
-  "CUSTOMS CLEARANCE",
-  "PEZA PROCESSING & COMPLIANCE",
-  "CUSTOMS DISPUTE RESOLUTIONS",
-  "POST CLEARANCE SERVICE",
-  "SPECIALIZED ENTRY TYPES",
-  "CUSTOMS AND TRADE CONSULTANCY",
-  "INTERNATIONAL FREIGHT FORWARDING",
-  "DOMESTIC FREIGHT FORWARDING",
-  "TRUCKINGS SERVICES",
-  "PROJECT CARGO",
-];
-export const commodities = ["CASTABLE 16 REFRACTOR"];
-export const cargo_type = ["CONTAINERIZED", "LCL"];
-export const container_size = [
-  { image: Container20, size: "1x20" },
-  { image: Container40, size: "1x40" },
-];
 
 export type ConsigneeDetails = {
   company_address: string;
@@ -133,7 +82,7 @@ export type GeneralInfo = {
   account_specialist_id: number;
   client_id: number;
   reference_number: string;
-  status: "REQUESTED" | "PENDING" | "COMPLETED"; // Add other status strings as needed
+  status: "REQUESTED" | "PENDING" | "COMPLETED";
 };
 
 export type ShipmentDetails = {

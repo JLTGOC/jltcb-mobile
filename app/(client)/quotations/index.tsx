@@ -16,17 +16,15 @@ import {
   fetchClientQuote,
   postClientQuote,
   updateClientQuote,
-} from "@/src/services/clientQuote";
+} from "@/src/services/clientQuotation";
 
-import {
-  FieldConfig,
-  QuoteForm,
-  initialQuoteForm
-} from "../../../src/types/client";
+import { FieldConfig, QuoteForm } from "../../../src/types/client-type";
+
+import { initialQuoteForm } from "../../../src/constants/client-const";
 
 import { routes } from "@/src/constants/routes";
 
-export default function CreateQuote() {
+export default function CreateUpdateQuote() {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [formData, setFormData] = useState<QuoteForm>(initialQuoteForm);
 
@@ -37,7 +35,7 @@ export default function CreateQuote() {
   }>();
 
   // Data Fetching for updating
-  const { data, isLoading, error } = useQuery<QuoteForm>({
+  const { data, refetch, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [id],
     queryFn: () => fetchClientQuote(id as any),
     enabled: !!id,
@@ -46,7 +44,6 @@ export default function CreateQuote() {
   useEffect(() => {
     if (data && mode === "edit") {
       setFormData(data as any);
-      console.log("index.tsx", formData);
     }
   }, [data, mode]);
 
@@ -77,13 +74,21 @@ export default function CreateQuote() {
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
       if (!!id) {
-        console.log("updateClientQuote", formData);
         return await updateClientQuote(Number(id), formData);
       } else {
         return await postClientQuote(formData);
       }
     },
-    onSuccess: (data) => {
+    onSuccess: async () => {
+      // 1. Manually trigger the refetch (just like your RefreshControl does)
+      const { data: updatedData } = await refetch();
+
+      // 2. Manually push that fresh data into your form state
+      if (updatedData) {
+        setFormData(updatedData);
+      }
+
+      // 3. Move to success screen
       setCurrentPosition(3);
     },
     onError: (error: any) => {

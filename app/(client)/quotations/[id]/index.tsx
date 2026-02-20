@@ -1,5 +1,6 @@
 import Header from "@/src/components/client-section/Header";
 import Details from "@/src/components/client-section/requested-quote/Details";
+import Documents from "@/src/components/client-section/requested-quote/Documents"
 
 import { useState } from "react";
 import {
@@ -14,10 +15,9 @@ import { useLocalSearchParams } from "expo-router";
 import { routes } from "@/src/constants/routes";
 
 export default function QuoteDetails() {
-  const { id, title, mode } = useLocalSearchParams<{
+  const { id, title } = useLocalSearchParams<{
     id: string;
     title: string;
-    mode: string;
   }>();
 
   const [active, setActive] = useState(0);
@@ -26,16 +26,14 @@ export default function QuoteDetails() {
 
   const screenWidth = Dimensions.get("screen").width;
 
-  console.log("QuoteDetails", id,mode, title)
-
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details id={id} mode={mode} />;
+        return <Details id={id} />;
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Text>Documents Content</Text>
+            <Documents id={id}/>
           </View>
         );
       default:

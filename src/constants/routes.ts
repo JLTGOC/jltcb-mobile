@@ -31,4 +31,5 @@ export const routes = {
   MARKETING_DB: "/(employee-marketing)/dashboard",
   CHATBOX: "/(client)/chatbox",
   UNAUTHORIZED: "/(pages)/Unauthorized",
+  UNDERCONSTRUCTION: "/UnderConstruction"
 } as const satisfies Record<string, Href>;

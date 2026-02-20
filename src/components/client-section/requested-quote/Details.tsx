@@ -10,8 +10,8 @@ import {
 } from "react-native-paper";
 
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuote } from "@/src/services/clientQuote";
-import { QuoteForm } from "@/src/types/client";
+import { fetchClientQuote } from "@/src/services/clientQuotation";
+import { QuoteForm } from "@/src/types/client-type";
 
 type Props = {
   id?: string;
@@ -25,6 +25,8 @@ export default function Details({ id, mode }: Props) {
     queryFn: () => fetchClientQuote(id as any),
     enabled: !!id,
   });
+
+  console.log("details", data);
 
   const copyData = [
     {
@@ -41,7 +43,7 @@ export default function Details({ id, mode }: Props) {
         },
         {
           label: "CONTACT NUMBER",
-          info: data?.company?.contact_person,
+          info: data?.company?.contact_number,
         },
         { label: "EMAIL", info: data?.company?.email },
       ],
@@ -55,8 +57,11 @@ export default function Details({ id, mode }: Props) {
           info: data?.service?.transport_mode,
         },
         { label: "SERVICE", info: data?.service?.options },
-        { label: "COMMODITY", info: data?.commodity?.container_size },
-        { label: "VOLUME (DIMENSION)", info: data?.commodity?.cargo_volume },
+        { label: "COMMODITY", info: data?.commodity?.commodity },
+        {
+          label: "VOLUME (DIMENSION)",
+          info: `${data?.commodity?.cargo_type} - ${data?.commodity?.cargo_type}`,
+        },
         { label: "ORIGIN", info: data?.shipment?.origin },
       ],
     },
@@ -132,7 +137,14 @@ export default function Details({ id, mode }: Props) {
           EDIT
         </Button>
       ) : (
-        <Button>VIEW QUOTATION</Button>
+        <Button
+          mode="contained"
+          buttonColor="#161F3C"
+          textColor="white"
+          style={{ borderRadius: 4 }}
+        >
+          VIEW QUOTATION
+        </Button>
       )}
     </View>
   );

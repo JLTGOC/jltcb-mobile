@@ -12,7 +12,7 @@ import {
 import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes } from "@/src/services/clientQuote";
+import { fetchClientQuotes } from "@/src/services/clientQuotation";
 
 type TableItem = {
   id: number;
@@ -121,8 +121,6 @@ export default function RespondedQuotes() {
                         <Menu.Item
                           key={index}
                           onPress={() => {
-                            console.log(`${menu.title} clicked for ${item.id}`);
-
                             setVisibleMenuId(null);
                           }}
                           leadingIcon={({ size }) => (

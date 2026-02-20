@@ -1,23 +1,23 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-import { Text, Card, Checkbox } from "react-native-paper";
+import { FlatList, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
+import { Card, Checkbox, Text } from "react-native-paper";
 
 import {
   QuoteForm,
-  commodities,
+} from "../../../../types/client-type";
+
+import {
   cargo_type,
+  commodities,
   container_size,
-} from "../../../../types/client";
+} from "../../../../constants/client-const";
 
 type Props = {
   formData: QuoteForm;
   setFormData: Dispatch<SetStateAction<QuoteForm>>;
 };
 export default function Commodity({ formData, setFormData }: Props) {
-  const [selectCargoType, setSelectCargoType] = useState<string | null>("");
-
-  console.log("step_2", formData)
 
   return (
     <View>
@@ -71,7 +71,6 @@ export default function Commodity({ formData, setFormData }: Props) {
                       : "unchecked"
                   }
                   onPress={() => {
-                    setSelectCargoType(item);
                     setFormData((prev) => ({
                       ...prev,
                       commodity: { ...prev.commodity, cargo_type: item },
