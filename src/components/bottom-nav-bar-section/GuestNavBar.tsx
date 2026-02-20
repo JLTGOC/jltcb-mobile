@@ -47,7 +47,7 @@ export default function NavigationBar() {
       <View
         style={[
           styles.navContainer,
-          { height: 50 + insets.bottom, paddingBottom: insets.bottom },
+          { height: 50 + insets.bottom, paddingBottom: 10 + insets.bottom },
         ]}
       >
         <TouchableOpacity onPress={() => toggleMenu("left")}>
@@ -97,6 +97,7 @@ export default function NavigationBar() {
                 <MenuItem
                   key={item.route}
                   label={item.label}
+                   textAlign="left"
                   onPress={() => navigate(item.route)}
                 />
               ))}
@@ -128,6 +129,7 @@ export default function NavigationBar() {
                 <MenuItem
                   key={item.route}
                   label={item.label}
+                  textAlign="right"
                   onPress={() => navigate(item.route)}
                 />
               ))}

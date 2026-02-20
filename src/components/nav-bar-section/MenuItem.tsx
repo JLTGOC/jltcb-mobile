@@ -4,13 +4,15 @@ import { Text } from "react-native-paper";
 export default function MenuItem({
   onPress,
   label,
+  textAlign,
 }: {
   label: string;
   onPress: () => void;
+  textAlign: "left" | "center" | "right" | "justify";
 }) {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <Text style={{ fontSize: 20, color: "#6D6D6D" }}> {label} </Text>
+    <TouchableOpacity onPress={onPress} style={{width: "100%"}}>
+      <Text style={{ fontSize: 22, color: "#6D6D6D", textAlign:textAlign}}> {label} </Text>
     </TouchableOpacity>
   );
 }

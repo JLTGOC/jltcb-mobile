@@ -22,6 +22,8 @@ export default function Details({ id }: Props) {
     enabled: !!id,
   });
 
+  console.log("documents.tsx", data)
+
   if (isLoading) {
     return (
       <View style={{ flex: 1 }}>
@@ -37,22 +39,32 @@ export default function Details({ id }: Props) {
     <View style={styles.container}>
       {/* Top section for cards */}
       <View style={styles.cardsContainer}>
-        {data?.documents?.map((files, index) => (
-          <Card
-            key={index}
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginBottom: 10,
-            }}
-          >
-            <View style={styles.titleContainer}>
-              <Text style={styles.content}>
-                File name: {decodeURIComponent(files.file_name)}
-              </Text>
-            </View>
-          </Card>
-        ))}
+        {Array.isArray(data?.documents) ? (
+    // If it's an array, map through the files
+    data.documents.map((files, index) => (
+      <Card
+        key={index}
+        style={{
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          marginBottom: 10,
+        }}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.content}>
+            File name: {decodeURIComponent(files.file_name)}
+          </Text>
+        </View>
+      </Card>
+    ))
+  ) : (
+    // If it's NOT an array (e.g., a string or null), show the message
+    <View style={{ padding: 20, alignItems: 'center' }}>
+      <Text style={[styles.content, { color: '#666', fontStyle: 'italic' }]}>
+        {data?.documents || "No documents available."}
+      </Text>
+    </View>
+  )}
       </View>
 
       {/* Bottom section for button */}

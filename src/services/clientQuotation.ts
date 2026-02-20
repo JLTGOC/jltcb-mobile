@@ -5,7 +5,10 @@ import {
   QuotesParams,
 } from "../types/client-type";
 import { apiGet, apiPost } from "./axiosInstance";
-import { appendFilesToFormData, appendObjectToFormData } from "../helper/client-form-helper";
+import {
+  appendFilesToFormData,
+  appendObjectToFormData,
+} from "../helper/client-form-helper";
 
 // Post Quote
 export async function postClientQuote(formData: QuoteForm) {
@@ -25,15 +28,18 @@ export async function postClientQuote(formData: QuoteForm) {
 
 // Fetch Quotes
 export async function fetchClientQuotes({ status, search }: QuotesParams) {
-  const response = await apiGet(`quotations`);
+const params = {
+    "filter[status]": status,
+    search: search || undefined,
+  }; 
+    const response = await apiGet(`quotations`, {
+    params,
+  });
   return response.data;
 }
 
 // Get Single Quote
 export async function fetchClientQuote(id: number): Promise<QuoteForm> {
-  const token = await SecureStore.getItemAsync("token");
-  if (!token) throw new Error("No authentication token found");
-
   return (await apiGet<QuoteForm>(`quotations/${id}`)).data;
 }
 

@@ -27,12 +27,12 @@ export default function ClientNavBar() {
     <View
       style={[
         styles.navContainer,
-        { height: 40 + insets.bottom, paddingBottom: 10 + insets.bottom },
+        { height: 50 + insets.bottom, paddingBottom: 10 + insets.bottom, paddingTop: 5},
       ]}
     >
       {NavIcons.map((icon, index) => (
         <TouchableOpacity key={index} onPress={() => router.push(icon.route as Href)}>
-          <View style={{width:100, alignItems:"center"}}>
+          <View style={styles.navBarButton}>
             <MaterialCommunityIcons
               name={icon.iconName}
               size={28}
@@ -51,5 +51,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "space-evenly",
     backgroundColor: "#ffffffff",
+  },
+  navBarButton: {
+    backgroundColor: "#f8f8f8",
+    height: "100%",
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
 });
