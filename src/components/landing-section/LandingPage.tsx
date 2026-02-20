@@ -1,5 +1,11 @@
 import { Image, ImageBackground } from "expo-image";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { routes } from "../../constants/routes";
 import { useNavigate } from "../../hooks/useNavigate";
@@ -22,7 +28,7 @@ export default function LandingPage() {
         </View>
 
         <View style={styles.solutions}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => navigate(routes.LANDING_PAGE2)}
             style={styles.solution}
           >
@@ -34,8 +40,11 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               CUSTOMS BROKERAGE
             </Text>
-          </Pressable>
-          <View style={styles.solution}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.solution}
+            onPress={() => navigate(routes.UNDERCONSTRUCTION)}
+          >
             <Image
               style={styles.image}
               source={require("../../assets/landing-page/global-trade.png")}
@@ -44,8 +53,11 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               GLOBAL TRADE AND BUSINESS SOLUTIONS CORPORATIONS
             </Text>
-          </View>
-          <View style={styles.solution}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.solution}
+            onPress={() => navigate(routes.UNDERCONSTRUCTION)}
+          >
             <Image
               style={styles.image}
               source={require("../../assets/landing-page/world-wide-logistics.png")}
@@ -54,7 +66,7 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               WORLD WIDE LOGISTICS CORPORATION
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 

@@ -41,7 +41,6 @@ export default function SharedHome() {
 		<FlatList
 			ListHeaderComponent={
 				<>
-					<Logos />
 					<Reels
 						reels={reels?.data}
 						isPending={isReelsPending}
