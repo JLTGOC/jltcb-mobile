@@ -15,8 +15,7 @@ const hidePaths = {
 };
 export default function RootNaviagtion() {
   const { replace } = useNavigate();
-  const { token, role, userData, isLoading } = useAuth();
-  console.log(token);
+  const { token, role, isLoading } = useAuth();
 
   const pathname = usePathname();
 

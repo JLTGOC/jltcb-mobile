@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { ScrollView } from "react-native";
 
-import { QuoteForm } from "../../../types/client";
 import Service from "@/src/components/client-section/get-quote/step-2/Service";
+import { QuoteForm } from "../../../types/client-type";
 import Commodity from "./step-2/Commodity";
 import Shipment from "./step-2/Shipment";
 

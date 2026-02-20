@@ -12,5 +12,5 @@ export const rightMenu = [
   { label: "Get Quote", route:routes.QUOTE },
   { label: "Get Appointment", route: routes.APPOINTMENT },
   { label: "AHTN Checker", route: routes.AHTN },
-  { label: "Calculator", route: routes.HOME },
+  { label: "Calculator", route: routes.UNDERCONSTRUCTION },
 ];

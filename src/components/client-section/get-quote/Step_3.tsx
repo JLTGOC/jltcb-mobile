@@ -1,15 +1,15 @@
-import React, { useState, Dispatch, SetStateAction } from "react";
+import * as DocumentPicker from "expo-document-picker";
+import { FileUp, X } from "lucide-react-native";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
-  ScrollView,
-  View,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import { FileUp, X } from "lucide-react-native";
-import * as DocumentPicker from "expo-document-picker";
-import { QuoteForm, ClientFile } from "../../../types/client";
+import { ClientFile, QuoteForm } from "../../../types/client-type";
 
 type Props = {
   formData: QuoteForm;
@@ -28,14 +28,12 @@ export default function Step_3({ formData, setFormData }: Props) {
       });
 
       if (!result.canceled) {
-
         const mappedFiles: ClientFile[] = result.assets.map((asset) => ({
-        id: Date.now() + Math.random(), // Generate the missing 'id' required by your type
-        file_name: asset.name,
-        file_url: asset.uri,
-        mimeType: asset.mimeType || "application/octet-stream",
-
-      }));
+          id: Date.now() + Math.random(), // Generate the missing 'id' required by your type
+          file_name: asset.name,
+          file_url: asset.uri,
+          mimeType: asset.mimeType || "application/octet-stream",
+        }));
 
         setFormData((prev) => ({
           ...prev,
@@ -53,9 +51,9 @@ export default function Step_3({ formData, setFormData }: Props) {
     setFormData((prev) => ({
       ...prev,
       documents: prev.documents?.filter((document) => document.id !== id),
-      remove_documents: prev.remove_documents 
-      ? [...prev.remove_documents, id] 
-      : [id],
+      removed_documents: prev.removed_documents
+        ? [...prev.removed_documents, id]
+        : [id],
     }));
   };
 
@@ -101,7 +99,9 @@ export default function Step_3({ formData, setFormData }: Props) {
                   }}
                   onPress={() => {}}
                 >
-                  <Text numberOfLines={1}>File Name: {document.file_name} </Text>
+                  <Text numberOfLines={1}>
+                    File Name: {document.file_name}{" "}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{

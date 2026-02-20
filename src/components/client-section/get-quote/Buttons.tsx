@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { View } from "react-native";
 import { Button } from "react-native-paper";
-import { QuoteForm, FieldConfig } from "../../../types/client";
+import { FieldConfig, QuoteForm } from "../../../types/client-type";
 
 type Props = {
   currentPosition: number;
   setCurrentPosition: Dispatch<SetStateAction<number>>;
   formData: QuoteForm;
-  handleSumbit: () => void
+  handleSumbit: () => void;
   loading: boolean;
 
   stepConfigs: Record<
@@ -39,7 +39,7 @@ export default function Buttons({
     if (currentPosition === 1) {
       const service = formData.service;
       const commodity = formData.commodity;
-      const shipment = formData.shipment
+      const shipment = formData.shipment;
       return (
         !service?.type ||
         !commodity?.commodity ||
@@ -61,7 +61,7 @@ export default function Buttons({
 
     if (currentPosition < 2) {
       setCurrentPosition((prev) => prev + 1);
-    } 
+    }
   };
 
   return (
@@ -87,8 +87,7 @@ export default function Buttons({
           if (currentPosition < 2) {
             handleNext();
           } else {
-            console.log(formData)
-            handleSumbit()
+            handleSumbit();
           }
         }}
       >

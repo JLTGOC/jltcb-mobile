@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-import { Surface, Text, TextInput, HelperText } from "react-native-paper";
-import { QuoteForm, Field } from "../../../types/client";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { HelperText, Surface, Text, TextInput } from "react-native-paper";
 import { z } from "zod";
+import { Field, QuoteForm } from "../../../types/client-type";
 
 type Props = {
   formData: QuoteForm;
@@ -11,7 +11,10 @@ type Props = {
 };
 
 const companySchema = z.object({
-  name: z.string().min(1, "Company name is required").max(100, "Name is too long"),
+  name: z
+    .string()
+    .min(1, "Company name is required")
+    .max(100, "Name is too long"),
   address: z.string().min(1, "Address is required"),
   contact_person: z.string().min(1, "Contact person name is required"),
   contact_number: z
@@ -22,7 +25,6 @@ const companySchema = z.object({
 });
 
 export default function Step_1({ setFormData, formData, fields }: Props) {
-
   const validationResult = useMemo(() => {
     return companySchema.safeParse(formData.company);
   }, [formData.company]);
@@ -33,32 +35,33 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
     return issue ? issue.message : null;
   };
 
-  const handleInputChange = useCallback((key: string, text: string) => {
-    let cleanedText = text;
-    if (key === "contact_number") {
-      cleanedText = text.replace(/[^0-9]/g, "");
-    }
+  const handleInputChange = useCallback(
+    (key: string, text: string) => {
+      let cleanedText = text;
+      if (key === "contact_number") {
+        cleanedText = text.replace(/[^0-9]/g, "");
+      }
 
-    setFormData((prev) => ({
-      ...prev,
-      company: { ...prev.company, [key]: cleanedText },
-    }));
-  }, [setFormData]);
-
-  console.log("step_1",formData)
+      setFormData((prev) => ({
+        ...prev,
+        company: { ...prev.company, [key]: cleanedText },
+      }));
+    },
+    [setFormData],
+  );
 
   return (
-    <ScrollView 
-      style={styles.container} 
+    <ScrollView
+      style={styles.container}
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={styles.contentContainer}
     >
       {fields.map((field) => {
-        const value = formData.company?.[field.key as keyof typeof formData.company] ?? "";
-        
+        const value =
+          formData.company?.[field.key as keyof typeof formData.company] ?? "";
 
         const errorMsg = getFieldError(field.key);
-        
+
         const hasError = !!errorMsg && value.length > 0;
 
         return (
@@ -69,7 +72,11 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
 
             <Surface style={styles.inputSurface}>
               <TextInput
-                value={formData.company?.[field.key as keyof typeof formData.company] ?? ""}
+                value={
+                  formData.company?.[
+                    field.key as keyof typeof formData.company
+                  ] ?? ""
+                }
                 error={hasError}
                 underlineColor="transparent"
                 activeUnderlineColor="transparent"
@@ -79,8 +86,11 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
                 maxLength={field.key === "contact_number" ? 11 : undefined}
                 style={styles.input}
                 keyboardType={
-                  field.key === "contact_number" ? "numeric" : 
-                  field.key === "email" ? "email-address" : "default"
+                  field.key === "contact_number"
+                    ? "numeric"
+                    : field.key === "email"
+                      ? "email-address"
+                      : "default"
                 }
                 onChangeText={(text) => handleInputChange(field.key, text)}
               />
@@ -97,10 +107,10 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1,  },
+  container: { flex: 1 },
   contentContainer: { padding: 16 },
   fieldWrapper: { marginBottom: 8 },
-  customLabel: { fontSize: 12, marginBottom: 4, color: '#666' },
+  customLabel: { fontSize: 12, marginBottom: 4, color: "#666" },
   inputSurface: { elevation: 2, borderRadius: 10, backgroundColor: "#fff" },
   input: { borderRadius: 10, height: 45, backgroundColor: "transparent" },
 });
