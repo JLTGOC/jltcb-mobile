@@ -1,3 +1,4 @@
+import { routes } from "@/src/constants/routes";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -5,14 +6,11 @@ import * as Linking from "expo-linking";
 import { Link } from "expo-router";
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
-import { routes } from "../../constants/routes";
-import { useNavigate } from "../../hooks/useNavigate";
-export default function CustomsBrokerageLanding() {
-  const { navigate } = useNavigate();
 
+export default function CustomsBrokerageLanding() {
   return (
     <ImageBackground
-      source={require("../../assets/landingPage.png")}
+      source={require("@/src/assets/landingPage.png")}
       style={styles.image}
     >
       <View style={styles.whiteOverlay} />
@@ -20,7 +18,7 @@ export default function CustomsBrokerageLanding() {
       <View style={styles.main}>
         <View>
           <Image
-            source={require("../../assets/customs-brokerage/customs-brokerage.png")}
+            source={require("@/src/assets/customs-brokerage/customs-brokerage.png")}
             style={styles.logoImage}
             contentFit="contain"
           />
@@ -36,22 +34,28 @@ export default function CustomsBrokerageLanding() {
             gap: 16,
           }}
         >
-          <TouchableOpacity onPress={() => navigate(routes.HOME)}>
-            <LinearGradient
-              colors={["#161F3C", "#000000"]} // BUTTON gradient fill
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.innerGradient}
-            >
-              <MaterialIcons name="person-outline" size={22} color="#EE9034" />
-              <Text style={styles.buttonText} allowFontScaling={false}>
-                Guest
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          <Link href={routes.HOME} asChild>
+            <TouchableOpacity>
+              <LinearGradient
+                colors={["#161F3C", "#000000"]} // BUTTON gradient fill
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.innerGradient}
+              >
+                <MaterialIcons
+                  name="person-outline"
+                  size={22}
+                  color="#EE9034"
+                />
+                <Text style={styles.buttonText} allowFontScaling={false}>
+                  Guest
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </Link>
           <Text variant="titleMedium" allowFontScaling={false}>
             Already have an account?{" "}
-            <Link href="/sign-in" style={{ fontWeight: "bold" }}>
+            <Link href={routes.SIGN_IN} style={{ fontWeight: "bold" }}>
               Sign In
             </Link>
           </Text>
@@ -60,7 +64,7 @@ export default function CustomsBrokerageLanding() {
 
       <ImageBackground
         style={styles.bottomBanner}
-        source={require("../../assets/banners/large.png")}
+        source={require("@/src/assets/banners/large.png")}
         contentFit="fill"
       >
         <SocialLogos />
@@ -82,18 +86,18 @@ function SocialLogos() {
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/facebook.png")}
+          source={require("@/src/assets/social_logos/facebook.png")}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.socialLink}
         onPress={() =>
-          openLink("https://www.instagram.com/jltcustomsbrokerage/</View>")
+          openLink("https://www.instagram.com/jltcustomsbrokerage")
         }
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/instagram.png")}
+          source={require("@/src/assets/social_logos/instagram.png")}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -104,7 +108,7 @@ function SocialLogos() {
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/youtube.png")}
+          source={require("@/src/assets/social_logos/youtube.png")}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -113,7 +117,7 @@ function SocialLogos() {
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/tiktok.png")}
+          source={require("@/src/assets/social_logos/tiktok.png")}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -122,7 +126,7 @@ function SocialLogos() {
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/linkedIn.png")}
+          source={require("@/src/assets/social_logos/linkedIn.png")}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -131,7 +135,7 @@ function SocialLogos() {
       >
         <Image
           style={styles.socialIcon}
-          source={require("../../assets/social_logos/twitter.png")}
+          source={require("@/src/assets/social_logos/twitter.png")}
         />
       </TouchableOpacity>
     </View>

@@ -9,8 +9,8 @@ export const routes = {
   QUOTE: "/(pages)/get-quote",
   APPOINTMENT: "/(pages)/get-appointment",
   AHTN: "/(pages)/ahtn-checker",
-  LANDING_PAGE: "/(pages)/landing-page",
-  LANDING_PAGE2: "/(pages)/landing-page/customs-brokerage",
+  LANDING_PAGE: "/landing-page",
+  CUSTOMS_BROKERAGE_LANDING: "/landing-page/customs-brokerage",
   CAREERS: "/(pages)/careers",
   SIGN_IN: "/(pages)/sign-in",
   CLIENT_DB: "/(client)/dashboard",
@@ -31,5 +31,5 @@ export const routes = {
   MARKETING_DB: "/(employee-marketing)/dashboard",
   CHATBOX: "/(client)/chatbox",
   UNAUTHORIZED: "/(pages)/Unauthorized",
-  UNDERCONSTRUCTION: "/UnderConstruction"
+  UNDERCONSTRUCTION: "/UnderConstruction",
 } as const satisfies Record<string, Href>;

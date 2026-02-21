@@ -1,13 +1,10 @@
-import { useRouter } from "expo-router";
+import { User, UserRole } from "@/src/types/auth";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
-import { routes } from "../constants/routes";
-import { useNavigate } from "../hooks/useNavigate";
 import { login, logout } from "../services/auth";
-import { User } from "@/src/types/auth";
 
 type AuthContextType = {
-  role: string | null;
+  role: UserRole | null;
   token: string | null;
   userData: User | null;
 
@@ -19,12 +16,10 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<UserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const { replace } = useNavigate();
 
   useEffect(() => {
     const loadAuth = async () => {
@@ -34,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (storedToken && storedRole) {
         setToken(storedToken);
-        setRole(storedRole);
+        setRole(storedRole as UserRole);
         if (storedUser) {
           setUserData(JSON.parse(storedUser));
         }
@@ -64,9 +59,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(token);
       setRole(userRole);
       setUserData(userData);
-
-      if (router.canGoBack()) router.dismissAll();
-      replace(routes.HOME);
 
       return data;
     } catch (err) {
@@ -98,9 +90,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(null);
       setRole(null);
       setUserData(null);
-
-      if (router.canGoBack()) router.dismissAll();
-      replace(routes.HOME);
     }
   };
 

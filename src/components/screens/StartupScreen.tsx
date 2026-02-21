@@ -3,16 +3,20 @@ import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 const { width, height } = Dimensions.get("window");
 
-export default function SplashScreen() {
+type Props = {
+  onFinish: () => void;
+};
+
+export default function StartupScreen({ onFinish }: Props) {
   const rotateAnim = useSharedValue(0);
   const fadeAnim = useSharedValue(0);
   const leftAnim = useSharedValue(0);
@@ -24,21 +28,21 @@ export default function SplashScreen() {
   // Preload all images
   useEffect(() => {
     const imagesToLoad = [
-      require("../src/assets/black_logos/full_logo.png"),
-      require("../src/assets/landingPage.png"),
-      require("../src/assets/black_logos/logo.png"),
-      require("../src/assets/black_logos/word.png"),
-      require("../src/assets/social_logos/facebook.png"),
-      require("../src/assets/social_logos/instagram.png"),
-      require("../src/assets/social_logos/youtube.png"),
-      require("../src/assets/social_logos/tiktok.png"),
-      require("../src/assets/social_logos/twitter.png"),
-      require("../src/assets/social_logos/linkedIn.png"),
+      require("@/src/assets/black_logos/full_logo.png"),
+      require("@/src/assets/landingPage.png"),
+      require("@/src/assets/black_logos/logo.png"),
+      require("@/src/assets/black_logos/word.png"),
+      require("@/src/assets/social_logos/facebook.png"),
+      require("@/src/assets/social_logos/instagram.png"),
+      require("@/src/assets/social_logos/youtube.png"),
+      require("@/src/assets/social_logos/tiktok.png"),
+      require("@/src/assets/social_logos/twitter.png"),
+      require("@/src/assets/social_logos/linkedIn.png"),
     ];
 
     async function loadAssets() {
       const cacheImages = imagesToLoad.map((img) =>
-        Asset.fromModule(img).downloadAsync()
+        Asset.fromModule(img).downloadAsync(),
       );
       await Promise.all(cacheImages);
       setImagesLoaded(true); // mark images as loaded
@@ -58,9 +62,13 @@ export default function SplashScreen() {
     // Final fade-out
     finalFade.value = withDelay(
       2500,
-      withTiming(0, { duration: 500 }) // fade to 0 opacity
+      withTiming(0, { duration: 500 }, () => {
+        scheduleOnRN(onFinish);
+      }), // fade to 0 opacity
     );
-  }, [imagesLoaded]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imagesLoaded, onFinish]);
 
   // Animated styles
   const rotateStyle = useAnimatedStyle(() => ({
@@ -81,31 +89,22 @@ export default function SplashScreen() {
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: finalFade.value,
-    zIndex: finalFade.value === 0 ? -1 : 999, // hide behind app when done
   }));
 
   return (
     <Animated.View style={[styles.container, containerStyle]}>
       <Animated.View style={[styles.halfContainer, rotateStyle]}>
         <Animated.View
-          style={[
-            styles.half,
-            { backgroundColor: "#EE9034" },
-            leftStyle,
-          ]}
+          style={[styles.half, { backgroundColor: "#EE9034" }, leftStyle]}
         />
         <Animated.View
-          style={[
-            styles.half,
-            { backgroundColor: "#161F3C" },
-            rightStyle,
-          ]}
+          style={[styles.half, { backgroundColor: "#161F3C" }, rightStyle]}
         />
       </Animated.View>
 
       <Animated.View style={[styles.logoContainer, fadeStyle]}>
         <Image
-          source={require("../src/assets/black_logos/full_logo.png")}
+          source={require("@/src/assets/black_logos/full_logo.png")}
           style={{ width: 300, height: 220 }}
           contentFit="contain"
         />
