@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { routes } from "@/src/constants/routes";
+import { Href, usePathname, useRouter } from "expo-router";
 import {
   Dimensions,
   StyleSheet,
@@ -6,43 +7,46 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { routes } from "@/src/constants/routes";
+
+type Tab = { title: string; route: Href };
+
+const TABS: Tab[] = [
+  { title: "Latest", route: routes.HOME },
+  { title: "Careers", route: routes.CAREERS },
+] as const;
+
 export default function NewsTabButtons() {
-  const { navigate } = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const [active, setActive] = useState(0);
+  const isTabActive = (route: Href) =>
+    pathname.includes("articles") && route === routes.HOME
+      ? true
+      : pathname === route;
 
-  const tabs = ["LATEST", "CAREERS", ""];
-  
   // const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
 
   const screenWidth = Dimensions.get("screen").width;
 
   return (
     <View style={styles.buttonContainer}>
-      {tabs.map((t, i) => (
+      {TABS.map((t) => (
         <TouchableOpacity
-          key={i}
+          key={t.title}
           style={styles.button}
-          onPress={() => {
-            setActive(i);
-            if (t === "CAREERS") {
-              navigate(routes.CAREERS);
-            }
-          }}
+          onPress={() => router.navigate(t.route)}
         >
           <Text
             style={[
               styles.buttonText,
               { fontSize: screenWidth * 0.025 },
-              active === i && styles.activeText,
+              isTabActive(t.route) && styles.activeText,
             ]}
             allowFontScaling={false}
           >
-            {t}
+            {t.title}
           </Text>
-          {active === i && <View style={styles.underline} />}
+          {isTabActive(t.route) && <View style={styles.underline} />}
         </TouchableOpacity>
       ))}
     </View>
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    flex: 1,
+    minWidth: 120,
     alignItems: "center",
     paddingVertical: 5,
     paddingTop: 10,
@@ -65,6 +69,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 10,
     color: "#555",
+    textTransform: "uppercase",
   },
   activeText: {
     color: "#000",
