@@ -55,27 +55,23 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
 
   // Handle app state changes safely
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      try {
-        if (nextAppState !== "active") {
-          player?.pause?.();
-        } else {
-          player?.play?.();
-        }
-      } catch (e) {
-        console.warn("AppState player control failed:", e);
-      }
-    });
+  const subscription = AppState.addEventListener("change", (nextAppState) => {
+    if (!player) return; 
 
-    return () => {
-      subscription?.remove?.();
-      try {
-        player?.pause?.();
-      } catch (e) {
-        console.warn("Cleanup pause failed:", e);
+    try {
+      if (nextAppState !== "active") {
+        player.pause();
+      } else {
+        player.play();
       }
-    };
-  }, [player]);
+    } catch (e) {
+    }
+  });
+
+  return () => {
+    subscription?.remove?.();
+  };
+}, [player]);
 
   // Listen for status changes
   const { status } = useEvent(player, "statusChange", {

@@ -58,7 +58,6 @@ export default function PortAccordion({
 	});
 
 	return (
-		<Card style={{ overflow: "hidden" }}>
 			<Card.Content style={{ paddingVertical: 8, paddingHorizontal: 12 }}>
 				<Pressable
 					onPress={toggleExpand}
@@ -115,7 +114,6 @@ export default function PortAccordion({
 					</View>
 				</Animated.View>
 			</Card.Content>
-		</Card>
 	);
 }
 
