@@ -1,14 +1,14 @@
+import ColumnServices from "@/src/components/services-section/ColumnServices";
+import RowServices from "@/src/components/services-section/RowServices";
 import { ImageBackground } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
-import ColumnServices from "../../../src/components/services-section/ColumnServices";
-import RowServices from "../../../src/components/services-section/RowServices";
 
 export default function Index() {
   return (
     <>
       <ImageBackground
-        source={require("../../../src/assets/banners/small.png")}
+        source={require("@/src/assets/banners/small.png")}
         style={{
           aspectRatio: 3,
           paddingVertical: 30,
@@ -16,23 +16,33 @@ export default function Index() {
         }}
         contentFit="cover"
       >
-        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }} allowFontScaling={false}>
+        <Text
+          style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }}
+          allowFontScaling={false}
+        >
           SERVICES
         </Text>
       </ImageBackground>
       <View style={{ paddingHorizontal: 25, marginTop: -30 }}>
-        <Text style={styles.textTop} allowFontScaling={false}>SERVICES</Text>
+        <Text style={styles.textTop} allowFontScaling={false}>
+          SERVICES
+        </Text>
         <ProgressBar
           progress={0.2}
           color="#EE9034" // progress fill
           style={styles.progressBar}
         />
-        <Text style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }} allowFontScaling={false}>
+        <Text
+          style={{ color: "#EE9034", fontSize: 20, fontWeight: 500 }}
+          allowFontScaling={false}
+        >
           SERVICES
         </Text>
         <ColumnServices />
 
-        <Text style={styles.textTop} allowFontScaling={false}>ADDITIONAL SERVICES</Text>
+        <Text style={styles.textTop} allowFontScaling={false}>
+          ADDITIONAL SERVICES
+        </Text>
         <ProgressBar
           progress={0.4}
           color="#EE9034" // progress fill

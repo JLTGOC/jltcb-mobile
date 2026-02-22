@@ -1,12 +1,12 @@
+import Form from "@/src/components/career-section/Form";
 import { ImageBackground } from "expo-image";
 import { ScrollView, Text, View } from "react-native";
-import Form from "../../../src/components/career-section/Form";
 
-export default function Index() {
+export default function Carrers() {
   return (
     <ScrollView>
       <ImageBackground
-        source={require("../../../src/assets/banners/large.png")}
+        source={require("@/src/assets/banners/large.png")}
         style={{
           padding: 10,
           aspectRatio: 2,
@@ -33,7 +33,10 @@ export default function Index() {
             paddingHorizontal: 5,
           }}
         >
-          <Text style={{ fontSize: 10, color: "white" }} allowFontScaling={false}>
+          <Text
+            style={{ fontSize: 10, color: "white" }}
+            allowFontScaling={false}
+          >
             At Jill L. Tolentino Customs Brokerage, we believe in nurturing the
             next generation of customs and logistics professionals. Our
             Internship Program is designed to give students real-world

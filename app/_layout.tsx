@@ -42,7 +42,7 @@ function RootNavigator() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={!userData}>
         <Stack.Screen name="landing-page" />
-        <Stack.Screen name="(pages)" />
+        <Stack.Screen name="(guest)" />
       </Stack.Protected>
 
       <Stack.Protected guard={!!userData}>

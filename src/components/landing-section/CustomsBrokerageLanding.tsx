@@ -34,7 +34,7 @@ export default function CustomsBrokerageLanding() {
             gap: 16,
           }}
         >
-          <Link href={routes.HOME} asChild>
+          <Link href={routes.GUEST_HOME} asChild>
             <TouchableOpacity>
               <LinearGradient
                 colors={["#161F3C", "#000000"]} // BUTTON gradient fill
@@ -55,7 +55,7 @@ export default function CustomsBrokerageLanding() {
           </Link>
           <Text variant="titleMedium" allowFontScaling={false}>
             Already have an account?{" "}
-            <Link href={routes.SIGN_IN} style={{ fontWeight: "bold" }}>
+            <Link href={routes.LOG_IN} style={{ fontWeight: "bold" }}>
               Sign In
             </Link>
           </Text>
