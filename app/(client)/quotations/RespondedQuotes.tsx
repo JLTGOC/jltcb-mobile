@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -12,7 +12,7 @@ import {
 import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes } from "@/src/services/clientQuotation";
+import { fetchClientQuotes, deleteClientSingleQuote } from "@/src/services/clientQuotation";
 
 type TableItem = {
   id: number;
@@ -25,11 +25,13 @@ type TableItem = {
 const tableHeaders = ["reference", "date", "shipment details", " status", ""];
 
 const menuItems = [
-  { iconName: "pencil", title: "edit", color: "black" },
-  { iconName: "delete", title: "delete", color: "red" },
+  { iconName: "accept", title: "edit", color: "green" },
+  { iconName: "discard", title: "delete", color: "red" },
 ];
 
 export default function RespondedQuotes() {
+  const queryClient = useQueryClient();
+
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const { navigate } = useNavigate();
 
@@ -39,6 +41,12 @@ export default function RespondedQuotes() {
     queryFn: () => fetchClientQuotes({ status: "RESPONDED" }),
     placeholderData: (previousData) => previousData,
   });
+
+  // Delete single quotation
+  const {mutate:deletedSingleQuotation} = useMutation({
+    mutationFn:  (id:number) => deleteClientSingleQuote(id),
+    
+  })
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -106,7 +114,7 @@ export default function RespondedQuotes() {
                   </DataTable.Cell>
 
                   <DataTable.Cell numeric style={{ flex: 0.5 }}>
-                    <Menu
+                    {/* <Menu
                       visible={visibleMenuId === item.id}
                       onDismiss={() => setVisibleMenuId(null)}
                       anchor={
@@ -135,7 +143,7 @@ export default function RespondedQuotes() {
                           titleStyle={{ color: menu.color }}
                         />
                       ))}
-                    </Menu>
+                    </Menu> */}
                   </DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -14,7 +14,7 @@ import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes } from "@/src/services/clientQuotation";
+import { fetchClientQuotes, deleteClientSingleQuote } from "@/src/services/clientQuotation";
 
 type TableItem = {
   id: number;
@@ -32,6 +32,8 @@ const menuItems = [
 ];
 
 export default function RequestedQuotes() {
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const { navigate } = useNavigate();
@@ -40,11 +42,21 @@ export default function RequestedQuotes() {
 
   // Data Fetching
   const { data, isLoading } = useQuery({
-    queryKey: ["quotes", "REQUESTED", debouncedSearch],
+    queryKey: ['quotes', "REQUESTED", debouncedSearch],
     queryFn: () =>
       fetchClientQuotes({ status: "REQUESTED", search: debouncedSearch }),
     placeholderData: (previousData) => previousData,
   });
+
+
+  // Delete single quotation
+  const {mutate: deletedSingleQuotation} = useMutation({
+  mutationFn: (id:number) => deleteClientSingleQuote(id),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['quotes'] });
+    console.log("Deleted successfully!");
+  },
+})
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -144,8 +156,11 @@ export default function RequestedQuotes() {
                                 params: {
                                   id: item.id,
                                   title: item.commodity,
+                                  mode: menu.title
                                 },
                               });
+                            } else {
+                              deletedSingleQuotation(item.id)
                             }
                             setVisibleMenuId(null);
                           }}

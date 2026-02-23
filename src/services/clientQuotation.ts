@@ -4,7 +4,7 @@ import {
   QuoteForm,
   QuotesParams,
 } from "../types/client-type";
-import { apiGet, apiPost } from "./axiosInstance";
+import { apiGet, apiPost, apiDelete } from "./axiosInstance";
 import {
   appendFilesToFormData,
   appendObjectToFormData,
@@ -24,23 +24,6 @@ export async function postClientQuote(formData: QuoteForm) {
   appendObjectToFormData(data, formData.shipment, "shipment");
 
   return (await apiPost(`quotations`, data)).data;
-}
-
-// Fetch Quotes
-export async function fetchClientQuotes({ status, search }: QuotesParams) {
-const params = {
-    "filter[status]": status,
-    search: search || undefined,
-  }; 
-    const response = await apiGet(`quotations`, {
-    params,
-  });
-  return response.data;
-}
-
-// Get Single Quote
-export async function fetchClientQuote(id: number): Promise<QuoteForm> {
-  return (await apiGet<QuoteForm>(`quotations/${id}`)).data;
 }
 
 // Update Quote
@@ -78,4 +61,26 @@ export async function updateClientQuote(
   }
 
   return (await apiPost<ClientQuoteResponse>(`quotations/${id}`, data)).data;
+}
+
+// Fetch Quotes
+export async function fetchClientQuotes({ status, search }: QuotesParams) {
+const params = {
+    "filter[status]": status,
+    search: search || undefined,
+  }; 
+    const response = await apiGet(`quotations`, {
+    params,
+  });
+  return response.data;
+}
+
+// Get Single Quote
+export async function fetchClientQuote(id: number): Promise<QuoteForm> {
+  return (await apiGet<QuoteForm>(`quotations/${id}`)).data;
+}
+
+// Delete Single Quotation
+export async function deleteClientSingleQuote(id: number) {
+  return (await apiDelete(`quotations/${id}`)).data;
 }

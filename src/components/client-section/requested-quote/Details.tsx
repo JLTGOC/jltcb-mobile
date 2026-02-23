@@ -118,7 +118,7 @@ export default function Details({ id, mode }: Props) {
           </View>
         </Card>
       ))}
-      {mode === "edit" ? (
+ 
         <Button
           mode="contained"
           buttonColor="#161F3C"
@@ -136,16 +136,6 @@ export default function Details({ id, mode }: Props) {
         >
           EDIT
         </Button>
-      ) : (
-        <Button
-          mode="contained"
-          buttonColor="#161F3C"
-          textColor="white"
-          style={{ borderRadius: 4 }}
-        >
-          VIEW QUOTATION
-        </Button>
-      )}
     </View>
   );
 }

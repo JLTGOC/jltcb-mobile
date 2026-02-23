@@ -29,7 +29,7 @@ export default function QuoteDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details id={id} />;
+        return <Details id={id} mode="edit"/>;
       case 1:
         return (
           <View style={styles.placeholder}>
