@@ -6,6 +6,7 @@ import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useNavigate } from "@/src/hooks/useNavigate";
 
+import { Pusher } from "@pusher/pusher-websocket-react-native";
 import BottomNavBar from "../src/components/bottom-nav-bar-section/index";
 import HeaderNavBar from "../src/components/header-nav-bar-section/index";
 
@@ -13,9 +14,13 @@ const hidePaths = {
   header: ["/landing-page", "/landing-page/customs-brokerage"],
   navigationBar: ["/landing-page", "/landing-page/customs-brokerage"],
 };
+
+const pusher = Pusher.getInstance();
+
 export default function RootNaviagtion() {
   const { replace } = useNavigate();
-  const { token, role, isLoading } = useAuth();
+  const { token, role, userData, isLoading } = useAuth();
+  console.log(token);
 
   const pathname = usePathname();
 
@@ -37,6 +42,42 @@ export default function RootNaviagtion() {
       replace(routes.AS_DB);
     }
   }, [token, role, isLoading]);
+
+  useEffect(() => {
+    const connect = async () => {
+      if (pusher.connectionState === "CONNECTED") {
+        console.log("Pusher already connected");
+        return;
+      }
+
+      try {
+        await pusher.init({
+          apiKey: process.env.EXPO_PUBLIC_PUSHER_API_KEY!,
+          cluster: process.env.EXPO_PUBLIC_PUSHER_API_CLUSTER!,
+          onConnectionStateChange: (
+            currentState: string,
+            previousState: string,
+          ) => {
+            console.log(
+              `onConnectionStateChange. previousState=${previousState} newState=${currentState}`,
+            );
+          },
+        });
+
+        await pusher.connect();
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    connect();
+
+    return () => {
+      if (pusher.connectionState === "CONNECTED") {
+        pusher.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <SafeAreaView
