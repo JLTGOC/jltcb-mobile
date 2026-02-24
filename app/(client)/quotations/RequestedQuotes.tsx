@@ -27,8 +27,8 @@ type TableItem = {
 const tableHeaders = ["commodity", "date requested"];
 
 const menuItems = [
-  { iconName: "pencil", title: "edit", color: "black" },
-  { iconName: "delete", title: "delete", color: "red" },
+  { iconName: "pencil", title: "EDIT", color: "black" },
+  { iconName: "delete-outline", title: "DELETE", color: "red" },
 ];
 
 export default function RequestedQuotes() {
@@ -115,9 +115,8 @@ export default function RequestedQuotes() {
                   navigate({
                     pathname: routes.CLIENT_QUOTE_DETAILS,
                     params: {
-                      id: item.id,
+                      quotationId: item.id,
                       title: item.commodity,
-                      mode: "edit",
                     },
                   });
                 }}
@@ -150,7 +149,7 @@ export default function RequestedQuotes() {
                         <Menu.Item
                           key={index}
                           onPress={() => {
-                            if (menu.title === "edit") {
+                            if (menu.title === "EDIT") {
                               navigate({
                                 pathname: "/(client)/quotations",
                                 params: {

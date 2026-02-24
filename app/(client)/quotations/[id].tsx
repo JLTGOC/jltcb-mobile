@@ -15,8 +15,8 @@ import { useLocalSearchParams } from "expo-router";
 import { routes } from "@/src/constants/routes";
 
 export default function QuoteDetails() {
-  const { id, title } = useLocalSearchParams<{
-    id: string;
+  const { quotationId, title } = useLocalSearchParams<{
+    quotationId: string;
     title: string;
   }>();
 
@@ -29,11 +29,11 @@ export default function QuoteDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details id={id} mode="edit"/>;
+        return <Details quotationId={quotationId}/>;
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Documents id={id}/>
+            <Documents quotationId={quotationId}/>
           </View>
         );
       default:
