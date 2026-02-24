@@ -8,25 +8,37 @@ import {
   Divider,
   Text,
 } from "react-native-paper";
+import * as WebBrowser from "expo-web-browser";
 
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 
 type Props = {
-  id?: string;
-  mode?: string;
+  quotationId?: string;
 };
-export default function Details({ id, mode }: Props) {
+export default function Details({ quotationId }: Props) {
   const { navigate } = useNavigate();
 
+  //fetch the quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
-    queryKey: [id],
-    queryFn: () => fetchClientQuote(id as any),
-    enabled: !!id,
+    queryKey: [quotationId],
+    queryFn: () => fetchClientQuote(quotationId as any),
+    enabled: !!quotationId,
   });
 
-  console.log("details", data);
+  console.log("Details.tsx", data);
+
+  const handleOnPress = async (status: string, url?: string) => {
+    if (status === "REQUESTED") {
+      navigate({
+        pathname: "/(client)/quotations",
+        params: { id: quotationId, mode: "edit" },
+      });
+    } else if (status === "RESPONDED" && url) {
+      await WebBrowser.openBrowserAsync(url);
+    }
+  };
 
   const copyData = [
     {
@@ -118,24 +130,35 @@ export default function Details({ id, mode }: Props) {
           </View>
         </Card>
       ))}
- 
+      {data?.status === "REQUESTED" && (
         <Button
           mode="contained"
           buttonColor="#161F3C"
           textColor="white"
           style={{ borderRadius: 4 }}
           onPress={() => {
-            navigate({
-              pathname: "/(client)/quotations",
-              params: {
-                id: id,
-                mode: mode,
-              },
-            });
+            handleOnPress(data?.status);
           }}
         >
           EDIT
         </Button>
+      )}
+      {data?.status === "RESPONDED" && (
+        <Button
+          mode="contained"
+          buttonColor="#161F3C"
+          textColor="white"
+          style={{ borderRadius: 4 }}
+          onPress={() => {
+            handleOnPress(
+              data?.status,
+              data?.quotation_file?.[0]?.file_url as any,
+            );
+          }}
+        >
+          VIEW QUOTATION
+        </Button>
+      )}
     </View>
   );
 }

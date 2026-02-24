@@ -13,13 +13,13 @@ import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 
 type Props = {
-  id?: string;
+  quotationId?: string;
 };
-export default function Details({ id }: Props) {
+export default function Details({ quotationId }: Props) {
   const { data, isLoading, error } = useQuery<QuoteForm>({
-    queryKey: [id],
-    queryFn: () => fetchClientQuote(id as any),
-    enabled: !!id,
+    queryKey: [quotationId],
+    queryFn: () => fetchClientQuote(quotationId as any),
+    enabled: !!quotationId,
   });
 
   console.log("documents.tsx", data)
