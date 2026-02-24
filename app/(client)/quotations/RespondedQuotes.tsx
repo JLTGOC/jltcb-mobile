@@ -12,7 +12,10 @@ import {
 import Header from "@/src/components/client-section/Header";
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes, deleteClientSingleQuote } from "@/src/services/clientQuotation";
+import {
+  fetchClientQuotes,
+  deleteClientSingleQuote,
+} from "@/src/services/clientQuotation";
 
 type TableItem = {
   id: number;
@@ -25,8 +28,8 @@ type TableItem = {
 const tableHeaders = ["reference", "date", "shipment details", " status", ""];
 
 const menuItems = [
-  { iconName: "accept", title: "edit", color: "green" },
-  { iconName: "discard", title: "delete", color: "red" },
+  { iconName: "check", title: "ACCEPT", color: "green" },
+  { iconName: "delete-outline", title: "DISCARD", color: "red" },
 ];
 
 export default function RespondedQuotes() {
@@ -42,11 +45,21 @@ export default function RespondedQuotes() {
     placeholderData: (previousData) => previousData,
   });
 
+  console.log("RespondedQoutes.tsx", data);
+
   // Delete single quotation
-  const {mutate:deletedSingleQuotation} = useMutation({
-    mutationFn:  (id:number) => deleteClientSingleQuote(id),
-    
-  })
+  const { mutate: deletedSingleQuotation } = useMutation({
+    mutationFn: (id: number) => deleteClientSingleQuote(id),
+  });
+
+  const handleOnPress = async (title: string, id: number) => {
+    if (title === "ACCEPT") {
+      console.log(title)
+      
+    } else {
+      deletedSingleQuotation(id)
+    }
+  };
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -80,7 +93,7 @@ export default function RespondedQuotes() {
                 onPress={() => {
                   navigate({
                     pathname: routes.CLIENT_QUOTE_DETAILS,
-                    params: { id: item.id, title: item.commodity },
+                    params: { quotationId: item.id, title: item.commodity },
                   });
                 }}
               >
@@ -114,7 +127,7 @@ export default function RespondedQuotes() {
                   </DataTable.Cell>
 
                   <DataTable.Cell numeric style={{ flex: 0.5 }}>
-                    {/* <Menu
+                    <Menu
                       visible={visibleMenuId === item.id}
                       onDismiss={() => setVisibleMenuId(null)}
                       anchor={
@@ -129,7 +142,7 @@ export default function RespondedQuotes() {
                         <Menu.Item
                           key={index}
                           onPress={() => {
-                            setVisibleMenuId(null);
+                            handleOnPress(menu.title, item.id);
                           }}
                           leadingIcon={({ size }) => (
                             <Icon
@@ -143,7 +156,7 @@ export default function RespondedQuotes() {
                           titleStyle={{ color: menu.color }}
                         />
                       ))}
-                    </Menu> */}
+                    </Menu>
                   </DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>

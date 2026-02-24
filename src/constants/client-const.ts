@@ -3,7 +3,7 @@ import Container40 from "../assets/get_quote/container40.png";
 
 import { QuoteForm } from "../types/client-type";
 
-// Initial Form
+// Initial Form - used for populating the form
 export const initialQuoteForm: QuoteForm = {
   account_specialist: "",
   company: {

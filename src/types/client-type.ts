@@ -7,7 +7,9 @@ export type QuoteForm = {
   commodity?: Commodity;
   shipment?: Shipment;
   documents?: ClientFile[];
+  quotation_file?: Quotationfile[];
   removed_documents?: (string | number)[];
+  status: string
 };
 
 export type QuotesParams = {
@@ -30,6 +32,12 @@ export type Field = {
   label: string;
   key: StringKeys;
 };
+
+export type Quotationfile = {
+  id: number,
+  file_name: string,
+  file_url: string,
+}
 
 export type ClientFile = {
   id: number;
