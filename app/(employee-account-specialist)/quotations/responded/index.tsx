@@ -22,7 +22,7 @@ const TABLE_HEADERS = [
 const MENUS: { icon: string; title: string; href: Href }[] = [
   {
     icon: "table-edit",
-    title: "Update Quotation",
+    title: "Edit Quotation",
     href: "/quotations/responded/[id]/upload",
   },
 ];

@@ -29,7 +29,7 @@ export default function Step_3({ formData, setFormData }: Props) {
 
       if (!result.canceled) {
         const mappedFiles: ClientFile[] = result.assets.map((asset) => ({
-          id: Date.now() + Math.random(), // Generate the missing 'id' required by your type
+          id: Date.now() + Math.random(),
           file_name: asset.name,
           file_url: asset.uri,
           mimeType: asset.mimeType || "application/octet-stream",
@@ -77,7 +77,7 @@ export default function Step_3({ formData, setFormData }: Props) {
         </View>
 
         {/* List of Uploaded Files */}
-        {formData.documents && formData.documents.length > 0 && (
+        {Array.isArray(formData.documents) && formData.documents.length > 0 ? (
           <View style={{ gap: 10, marginTop: 10 }}>
             <Text>UPLOADED FILES:</Text>
             {formData.documents.map((document) => (
@@ -100,7 +100,7 @@ export default function Step_3({ formData, setFormData }: Props) {
                   onPress={() => {}}
                 >
                   <Text numberOfLines={1}>
-                    File Name: {document.file_name}{" "}
+                    File Name: {document.file_name}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -118,7 +118,11 @@ export default function Step_3({ formData, setFormData }: Props) {
               </View>
             ))}
           </View>
-        )}
+        ): (  <View style={{ padding: 20, alignItems: 'center' }}>
+      <Text style={[styles.content, { color: '#666', fontStyle: 'italic' }]}>
+        "No documents available."
+      </Text>
+    </View>)}
       </View>
 
       <View style={{ marginTop: 20 }}>
@@ -166,4 +170,8 @@ const styles = StyleSheet.create({
   },
   resultTitle: { fontWeight: "bold", marginBottom: 5, color: "green" },
   info: { fontSize: 12, marginBottom: 5, fontFamily: "monospace" },
+    content: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
 });

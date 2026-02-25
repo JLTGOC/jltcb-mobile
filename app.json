@@ -61,6 +61,14 @@
             "usesCleartextTraffic": true
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "jltcb-mobile",
+          "organization": "marjorie-aguarin"
+        }
       ]
     ],
     "experiments": {

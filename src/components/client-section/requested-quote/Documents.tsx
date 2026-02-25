@@ -13,13 +13,13 @@ import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 
 type Props = {
-  id?: string;
+  quotationId?: string;
 };
-export default function Details({ id }: Props) {
+export default function Details({ quotationId }: Props) {
   const { data, isLoading, error } = useQuery<QuoteForm>({
-    queryKey: [id],
-    queryFn: () => fetchClientQuote(id as any),
-    enabled: !!id,
+    queryKey: [quotationId],
+    queryFn: () => fetchClientQuote(quotationId as any),
+    enabled: !!quotationId,
   });
 
   console.log("documents.tsx", data)
@@ -37,10 +37,10 @@ export default function Details({ id }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Top section for cards */}
+
       <View style={styles.cardsContainer}>
         {Array.isArray(data?.documents) ? (
-    // If it's an array, map through the files
+
     data.documents.map((files, index) => (
       <Card
         key={index}
@@ -58,7 +58,7 @@ export default function Details({ id }: Props) {
       </Card>
     ))
   ) : (
-    // If it's NOT an array (e.g., a string or null), show the message
+
     <View style={{ padding: 20, alignItems: 'center' }}>
       <Text style={[styles.content, { color: '#666', fontStyle: 'italic' }]}>
         {data?.documents || "No documents available."}
@@ -67,7 +67,6 @@ export default function Details({ id }: Props) {
   )}
       </View>
 
-      {/* Bottom section for button */}
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
