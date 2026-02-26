@@ -111,10 +111,10 @@ export default function SplashScreen() {
           contentFit="contain"
         />
         <View style={{ marginTop: 20 }}>
-          <Button 
+          {/* <Button 
             title='Test Sentry Error' 
             onPress={() => { Sentry.captureException(new Error('Sentry Setup Test!')) }} 
-          />
+          /> */}
         </View>
       </Animated.View>
     </Animated.View>
