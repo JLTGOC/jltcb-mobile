@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Check } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 
 import Success from "@/src/components/client-section/get-quote/Success";
@@ -28,22 +28,60 @@ export default function CreateUpdateQuote() {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [formData, setFormData] = useState<QuoteForm>(initialQuoteForm);
 
+  const normalizeQuoteForm = (quote: QuoteForm): QuoteForm => {
+    const documentsSource = Array.isArray(quote.documents)
+      ? quote.documents
+      : Array.isArray(quote.quotation_file)
+        ? quote.quotation_file
+        : [];
+
+    const normalizedDocuments = documentsSource
+      .filter(
+        (document): document is NonNullable<typeof document> =>
+          !!document &&
+          typeof document.file_name === "string" &&
+          document.file_name.trim().length > 0 &&
+          typeof document.file_url === "string" &&
+          document.file_url.trim().length > 0,
+      )
+      .map((document, index) => ({
+        ...document,
+        id: typeof document.id === "number" ? document.id : Date.now() + index,
+        mimeType:
+          "mimeType" in document && typeof document.mimeType === "string"
+            ? document.mimeType
+            : "application/octet-stream",
+      }));
+
+    return {
+      ...initialQuoteForm,
+      ...quote,
+      documents: normalizedDocuments,
+      removed_documents: Array.isArray(quote.removed_documents)
+        ? quote.removed_documents
+        : [],
+    };
+  };
+
   const { id, mode } = useLocalSearchParams<{
     id: string;
     title: string;
     mode: string;
   }>();
 
+  const quotationId = Number(id);
+  const hasValidQuotationId = Number.isFinite(quotationId) && quotationId > 0;
+
   // Data Fetching for updating
-  const { data, refetch, isLoading, error } = useQuery<QuoteForm>({
-    queryKey: [id],
-    queryFn: () => fetchClientQuote(id as any),
-    enabled: !!id,
+  const { data, refetch } = useQuery<QuoteForm>({
+    queryKey: ["client-quote", quotationId],
+    queryFn: () => fetchClientQuote(quotationId),
+    enabled: hasValidQuotationId,
   });
 
   useEffect(() => {
-    if (data && mode === "edit") {
-      setFormData(data as any);
+    if (data && mode === "EDIT") {
+      setFormData(normalizeQuoteForm(data));
     }
   }, [data, mode]);
 
@@ -73,22 +111,21 @@ export default function CreateUpdateQuote() {
 
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
-      if (!!id) {
-        return await updateClientQuote(Number(id), formData);
+      if (hasValidQuotationId) {
+        return await updateClientQuote(quotationId, formData);
       } else {
         return await postClientQuote(formData);
       }
     },
     onSuccess: async () => {
-      // 1. Manually trigger the refetch (just like your RefreshControl does)
-      const { data: updatedData } = await refetch();
+      if (hasValidQuotationId) {
+        const { data: updatedData } = await refetch();
 
-      // 2. Manually push that fresh data into your form state
-      if (updatedData) {
-        setFormData(updatedData);
+        if (updatedData) {
+          setFormData(normalizeQuoteForm(updatedData));
+        }
       }
 
-      // 3. Move to success screen
       setCurrentPosition(3);
     },
     onError: (error: any) => {
@@ -110,15 +147,21 @@ export default function CreateUpdateQuote() {
   };
 
   return (
-    <>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 12 : 0}
+    >
       <FlatList
         data={[1]}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => (
           <>
             <Header
-              title={mode === "edit" ? "Update Quote" : "Get Quote"}
+              title={mode === "EDIT" ? "Update Quote" : "Get Quote"}
               route={
-                mode === "edit"
+                mode === "EDIT"
                   ? routes.CLIENT_REQ_QUOTE_RECORDS
                   : routes.CLIENT_DB
               }
@@ -169,7 +212,7 @@ export default function CreateUpdateQuote() {
           </>
         )}
       />
-    </>
+    </KeyboardAvoidingView>
   );
 }
 

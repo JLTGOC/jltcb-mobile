@@ -1,3 +1,4 @@
+import { useNavigate } from "@/src/hooks/useNavigate";
 import * as DocumentPicker from "expo-document-picker";
 import { FileUp, X } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -17,7 +18,19 @@ type Props = {
 };
 
 export default function Step_3({ formData, setFormData }: Props) {
+  const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
+
+  const uploadedDocuments = Array.isArray(formData.documents)
+    ? formData.documents.filter(
+        (document): document is ClientFile =>
+          !!document &&
+          typeof document.file_name === "string" &&
+          document.file_name.trim().length > 0 &&
+          typeof document.file_url === "string" &&
+          document.file_url.trim().length > 0,
+      )
+    : [];
 
   const handlePickDocument = async () => {
     try {
@@ -47,13 +60,24 @@ export default function Step_3({ formData, setFormData }: Props) {
     }
   };
 
-  const handleRemoveFile = (id: number) => {
+  const handleRemoveFile = (id: number, fileUrl: string) => {
+    const isLocalFile =
+      fileUrl.startsWith("file://") || fileUrl.startsWith("content://");
+    const shouldTrackRemovedDocument =
+      Number.isInteger(id) && id > 0 && !isLocalFile;
+
     setFormData((prev) => ({
       ...prev,
-      documents: prev.documents?.filter((document) => document.id !== id),
-      removed_documents: prev.removed_documents
-        ? [...prev.removed_documents, id]
-        : [id],
+      documents: Array.isArray(prev.documents)
+        ? prev.documents.filter(
+            (document) => document.id !== id && document.file_url !== fileUrl,
+          )
+        : [],
+      removed_documents: shouldTrackRemovedDocument
+        ? prev.removed_documents
+          ? [...prev.removed_documents, id]
+          : [id]
+        : prev.removed_documents,
     }));
   };
 
@@ -77,12 +101,12 @@ export default function Step_3({ formData, setFormData }: Props) {
         </View>
 
         {/* List of Uploaded Files */}
-        {Array.isArray(formData.documents) && formData.documents.length > 0 ? (
+        {uploadedDocuments.length > 0 ? (
           <View style={{ gap: 10, marginTop: 10 }}>
             <Text>UPLOADED FILES:</Text>
-            {formData.documents.map((document) => (
+            {uploadedDocuments.map((document, index) => (
               <View
-                key={document.id}
+                key={`${document.id}-${document.file_url}-${index}`}
                 style={{
                   width: "100%",
                   flexDirection: "row",
@@ -97,11 +121,17 @@ export default function Step_3({ formData, setFormData }: Props) {
                     borderRadius: 10,
                     padding: 10,
                   }}
-                  onPress={() => {}}
+                  onPress={() => {
+                    navigate({
+                      pathname: "/(client)/quotations/viewer",
+                      params: {
+                        fileUrl: encodeURIComponent(document.file_url),
+                        fileName: encodeURIComponent(document.file_name),
+                      },
+                    });
+                  }}
                 >
-                  <Text numberOfLines={1}>
-                    File Name: {document.file_name}
-                  </Text>
+                  <Text numberOfLines={1}>File Name: {document.file_name}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
@@ -111,18 +141,24 @@ export default function Step_3({ formData, setFormData }: Props) {
                     alignItems: "center",
                     backgroundColor: "#ffeaea",
                   }}
-                  onPress={() => handleRemoveFile(document.id)}
+                  onPress={() =>
+                    handleRemoveFile(document.id, document.file_url)
+                  }
                 >
                   <X size={20} color="red" />
                 </TouchableOpacity>
               </View>
             ))}
           </View>
-        ): (  <View style={{ padding: 20, alignItems: 'center' }}>
-      <Text style={[styles.content, { color: '#666', fontStyle: 'italic' }]}>
-        "No documents available."
-      </Text>
-    </View>)}
+        ) : (
+          <View style={{ padding: 20, alignItems: "center" }}>
+            <Text
+              style={[styles.content, { color: "#666", fontStyle: "italic" }]}
+            >
+              No documents available.
+            </Text>
+          </View>
+        )}
       </View>
 
       <View style={{ marginTop: 20 }}>
@@ -170,7 +206,7 @@ const styles = StyleSheet.create({
   },
   resultTitle: { fontWeight: "bold", marginBottom: 5, color: "green" },
   info: { fontSize: 12, marginBottom: 5, fontFamily: "monospace" },
-    content: {
+  content: {
     fontSize: 12,
     fontWeight: "600",
   },

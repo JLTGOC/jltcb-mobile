@@ -21,9 +21,21 @@ export function appendFilesToFormData(
   files: QuoteForm["documents"] | undefined,
   fieldName = "documents[]",
 ) {
-  if (!files?.length) return;
+  if (!Array.isArray(files) || !files.length) return;
 
   files.forEach((file, index) => {
+    if (
+      !file ||
+      typeof file.file_url !== "string" ||
+      !file.file_url ||
+      !(
+        file.file_url.startsWith("file://") ||
+        file.file_url.startsWith("content://")
+      )
+    ) {
+      return;
+    }
+
     data.append(fieldName, {
       uri: file.file_url,
       name: file.file_name || `file_${index}`,
