@@ -33,7 +33,7 @@ export default function Details({ quotationId }: Props) {
     if (status === "REQUESTED") {
       navigate({
         pathname: "/(client)/quotations",
-        params: { id: quotationId, mode: "edit" },
+        params: { id: quotationId, mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
       await WebBrowser.openBrowserAsync(url);

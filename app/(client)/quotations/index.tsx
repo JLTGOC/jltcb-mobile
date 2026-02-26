@@ -80,7 +80,7 @@ export default function CreateUpdateQuote() {
   });
 
   useEffect(() => {
-    if (data && mode === "edit") {
+    if (data && mode === "EDIT") {
       setFormData(normalizeQuoteForm(data));
     }
   }, [data, mode]);
@@ -159,9 +159,9 @@ export default function CreateUpdateQuote() {
         renderItem={() => (
           <>
             <Header
-              title={mode === "edit" ? "Update Quote" : "Get Quote"}
+              title={mode === "EDIT" ? "Update Quote" : "Get Quote"}
               route={
-                mode === "edit"
+                mode === "EDIT"
                   ? routes.CLIENT_REQ_QUOTE_RECORDS
                   : routes.CLIENT_DB
               }
