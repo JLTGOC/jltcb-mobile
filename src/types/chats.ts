@@ -22,26 +22,33 @@ export interface Quotation {
   date_created: string;
 }
 
-export interface QuotationCardMessage {
+export interface BaseMessage {
   id: number;
-  type: "QUOTATION_CARD";
+  type: "TEXT" | "QUOTATION_CARD";
   created_at: string;
   sender: Sender;
-  quotation: Quotation;
+  client_id?: string; // ✅ snake_case everywhere
 }
 
-export interface TextMessage {
-  id: number;
+export interface TextMessage extends BaseMessage {
   type: "TEXT";
-  created_at: string;
-  sender: Sender;
   content: string;
+}
+
+export interface QuotationCardMessage extends BaseMessage {
+  type: "QUOTATION_CARD";
+  quotation: Quotation;
 }
 
 export type Message = QuotationCardMessage | TextMessage;
 
+export interface MessageSentEvent {
+  message: Message;
+  client_id: string;
+}
+
 export interface ChatEventMap {
-  "message.sent": Message;
+  "message.sent": MessageSentEvent;
 }
 
 export type ChatEvent = keyof ChatEventMap;
@@ -52,8 +59,10 @@ export type SendMessageData =
   | {
       type: "TEXT";
       content: string;
+      client_id: string;
     }
   | {
       type: Exclude<SendMessageType, "TEXT">;
       file: string;
+      client_id: string;
     };

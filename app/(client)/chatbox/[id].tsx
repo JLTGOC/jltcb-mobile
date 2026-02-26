@@ -3,17 +3,21 @@ import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard"
 import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { useAuth } from "@/src/hooks/useAuth";
+import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
 import { apiGet } from "@/src/services/axiosInstance";
 import { sendMessage } from "@/src/services/chats";
-import { ChatEvent, Message, SendMessageData } from "@/src/types/chats";
+import {
+  ChatEvent,
+  Message,
+  MessageSentEvent,
+  SendMessageData,
+} from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Pusher,
-  type PusherEvent,
-} from "@pusher/pusher-websocket-react-native";
+import type { PusherEvent } from "@pusher/pusher-websocket-react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import * as Crypto from "expo-crypto";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -30,8 +34,6 @@ import * as z from "zod";
 const messageSchema = z.object({
   content: z.string().trim(),
 });
-
-const pusher = Pusher.getInstance();
 
 export default function Chatbox() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -59,6 +61,7 @@ export default function Chatbox() {
         id: Date.now(), // temporary id
         ...(newMessage.type === "TEXT" && { content: newMessage.content }),
         type: newMessage.type,
+        client_id: newMessage.client_id,
         sender: { id: userData?.id! },
       };
 
@@ -78,7 +81,9 @@ export default function Chatbox() {
   });
 
   const onSubmit = handleSubmit(({ content }) => {
-    sendMutate.mutate({ content, type: "TEXT" });
+    const client_id = Crypto.randomUUID();
+
+    sendMutate.mutate({ content, type: "TEXT", client_id });
     reset();
   });
 
@@ -89,13 +94,13 @@ export default function Chatbox() {
     select: (data) => data.toReversed(),
   });
 
-  useEffect(() => {
-    console.log(
-      messages?.map(
-        (message) => message.type === "TEXT" && [message.content, message.id],
-      ),
-    );
-  }, [messages]);
+  // useEffect(() => {
+  //   console.log(
+  //     messages?.map(
+  //       (message) => message.type === "TEXT" && [message.content, message.id],
+  //     ),
+  //   );
+  // }, [messages]);
 
   const queryClient = useQueryClient();
 
@@ -105,30 +110,25 @@ export default function Chatbox() {
 
     switch (chatEventName) {
       case "message.sent":
-        const chatData = parseEventData<{ message: Message }>(data);
+        const chatData = parseEventData<MessageSentEvent>(data);
+
         if (!chatData) return;
 
-        // if (chatData.message.sender.id === userData?.id) {
-        //   return;
-        // }
+        const { message, client_id } = chatData;
 
         queryClient.setQueryData<Message[]>(
           chatKeys.getChat(id),
           (old = []) => {
-            const filtered = old.filter(
-              (msg) =>
-                !(
-                  msg.sender.id === userData?.id &&
-                  msg.type === chatData.message.type &&
-                  msg.type === "TEXT" &&
-                  chatData.message.type === "TEXT" &&
-                  msg.content === chatData.message.content &&
-                  typeof msg.id === "number" &&
-                  msg.id > 1000000000000
-                ),
+            const exists = old.some((msg) => msg.id === message.id);
+            if (exists) return old;
+
+            const replaced = old.map((msg) =>
+              msg.client_id === client_id ? message : msg,
             );
 
-            return [...filtered, chatData.message];
+            const didReplace = replaced.some((m) => m.id === message.id);
+
+            return didReplace ? replaced : [...old, message];
           },
         );
         break;
