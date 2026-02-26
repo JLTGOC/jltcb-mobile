@@ -2,6 +2,7 @@ import { BANNERS } from "@/src/constants/banners";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
+import { PropsWithChildren } from "react";
 import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -18,7 +19,8 @@ export default function BannerHeader({
   back = true,
   title,
   variant,
-}: BannerHeaderProps) {
+  children,
+}: BannerHeaderProps & PropsWithChildren) {
   const router = useRouter();
 
   const textColorStyle: TextStyle = {
@@ -37,6 +39,7 @@ export default function BannerHeader({
             <Ionicons name="arrow-back" size={24} style={textColorStyle} />
           </TouchableOpacity>
         )}
+        {children}
         <Text variant="titleLarge" style={[styles.title, textColorStyle]}>
           {title}
         </Text>

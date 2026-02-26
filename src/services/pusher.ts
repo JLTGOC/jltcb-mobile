@@ -1,17 +1,10 @@
-import { Pusher } from "@pusher/pusher-websocket-react-native";
+import type { PusherAuthorizerResult } from "@pusher/pusher-websocket-react-native";
+import api from "./axiosInstance";
 
-export const initPusher = async () => {
-  const pusher = Pusher.getInstance();
+interface PusherAuthBody {
+  socket_id: string;
+  channel_name: string;
+}
 
-  await pusher.init({
-    apiKey: process.env.EXPO_PUBLIC_PUSHER_API_KEY!,
-    cluster: process.env.EXPO_PUBLIC_PUSHER_API_CLUSTER!,
-    onConnectionStateChange: (currentState: string, previousState: string) => {
-      console.log(
-        `onConnectionStateChange. previousState=${previousState} newState=${currentState}`,
-      );
-    },
-  });
-
-  await pusher.connect();
-};
+export const auth = (data: PusherAuthBody) =>
+  api.post<PusherAuthorizerResult>("broadcasting/auth", data);
