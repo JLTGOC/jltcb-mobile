@@ -1,13 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
-import {
-  ActivityIndicator,
-  Button,
-  Card,
-  Divider,
-  Text,
-} from "react-native-paper";
+import { ActivityIndicator, Button, Card, Text } from "react-native-paper";
 
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
@@ -18,11 +11,11 @@ type Props = {
 export default function Details({ quotationId }: Props) {
   const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [quotationId],
-    queryFn: () => fetchClientQuote(quotationId as any),
+    queryFn: () => fetchClientQuote(Number(quotationId)),
     enabled: !!quotationId,
   });
 
-  console.log("documents.tsx", data)
+  console.log("documents.tsx", quotationId);
 
   if (isLoading) {
     return (
@@ -37,34 +30,33 @@ export default function Details({ quotationId }: Props) {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.cardsContainer}>
         {Array.isArray(data?.documents) ? (
-
-    data.documents.map((files, index) => (
-      <Card
-        key={index}
-        style={{
-          paddingHorizontal: 20,
-          paddingVertical: 10,
-          marginBottom: 10,
-        }}
-      >
-        <View style={styles.titleContainer}>
-          <Text style={styles.content}>
-            File name: {decodeURIComponent(files.file_name)}
-          </Text>
-        </View>
-      </Card>
-    ))
-  ) : (
-
-    <View style={{ padding: 20, alignItems: 'center' }}>
-      <Text style={[styles.content, { color: '#666', fontStyle: 'italic' }]}>
-        {data?.documents || "No documents available."}
-      </Text>
-    </View>
-  )}
+          data.documents.map((files, index) => (
+            <Card
+              key={index}
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                marginBottom: 10,
+              }}
+            >
+              <View style={styles.titleContainer}>
+                <Text style={styles.content}>
+                  File name: {decodeURIComponent(files.file_name)}
+                </Text>
+              </View>
+            </Card>
+          ))
+        ) : (
+          <View style={{ padding: 20, alignItems: "center" }}>
+            <Text
+              style={[styles.content, { color: "#666", fontStyle: "italic" }]}
+            >
+              {data?.documents || "No documents available."}
+            </Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.buttonContainer}>

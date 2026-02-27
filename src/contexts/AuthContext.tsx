@@ -1,4 +1,4 @@
-import { User } from "@/src/types/auth";
+import type { User, UserRole } from "@/src/types/auth";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { pusher } from "../lib/pusher";
 import { login, logout } from "../services/auth";
 
 type AuthContextType = {
-  role: string | null;
+  role: UserRole | null;
   token: string | null;
   userData: User | null;
 
@@ -20,7 +20,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<UserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (storedToken && storedRole) {
         setToken(storedToken);
-        setRole(storedRole);
+        setRole(storedRole as UserRole);
         if (storedUser) {
           setUserData(JSON.parse(storedUser));
         }

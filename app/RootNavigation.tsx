@@ -35,7 +35,7 @@ export default function RootNaviagtion() {
     }
 
     if (role === "Client") {
-      replace(routes.CLIENT_DB);
+      replace(routes.CLIENT);
     } else if (role === "Account Specialist") {
       replace(routes.AS_DB);
     }
@@ -53,14 +53,14 @@ export default function RootNaviagtion() {
         backgroundColor: "#b1b1b3ff",
       }}
     >
-      {!hideHeader && <HeaderNavBar />}
+      {!hideHeader && role !== "Client" && <HeaderNavBar />}
       <Stack
         screenOptions={{
           headerShown: false,
           animation: "fade",
         }}
       />
-      {!hideNavigationBar && <BottomNavBar />}
+      {!hideNavigationBar && role !== "Client" && <BottomNavBar />}
     </SafeAreaView>
   );
 }

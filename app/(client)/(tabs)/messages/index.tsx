@@ -105,7 +105,10 @@ export default function Index() {
       }
       renderItem={({ item }) => (
         <Link
-          href={{ pathname: "/(client)/chatbox/[id]", params: { id: item.id } }}
+          href={{
+            pathname: "/(client)/(tabs)/messages/[id]",
+            params: { id: item.id },
+          }}
           asChild
           style={[styles.container, styles.inboxListItem]}
         >

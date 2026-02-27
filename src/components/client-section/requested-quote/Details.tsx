@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import * as WebBrowser from "expo-web-browser";
 import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import {
@@ -8,17 +9,16 @@ import {
   Divider,
   Text,
 } from "react-native-paper";
-import * as WebBrowser from "expo-web-browser";
 
-import { useNavigate } from "@/src/hooks/useNavigate";
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
+import { useRouter } from "expo-router";
 
 type Props = {
   quotationId?: string;
 };
 export default function Details({ quotationId }: Props) {
-  const { navigate } = useNavigate();
+  const router = useRouter();
 
   //fetch the quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
@@ -31,9 +31,9 @@ export default function Details({ quotationId }: Props) {
 
   const handleOnPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
-      navigate({
-        pathname: "/(client)/quotations",
-        params: { id: quotationId, mode: "EDIT" },
+      router.push({
+        pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
+        params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
       await WebBrowser.openBrowserAsync(url);

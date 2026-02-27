@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -9,12 +9,12 @@ import {
   Menu,
 } from "react-native-paper";
 
-import Header from "@/src/components/client-section/Header";
+import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
 import {
-  fetchClientQuotes,
   deleteClientSingleQuote,
+  fetchClientQuotes,
 } from "@/src/services/clientQuotation";
 
 type TableItem = {
@@ -54,10 +54,9 @@ export default function RespondedQuotes() {
 
   const handleOnPress = async (title: string, id: number) => {
     if (title === "ACCEPT") {
-      console.log(title)
-      
+      console.log(title);
     } else {
-      deletedSingleQuotation(id)
+      deletedSingleQuotation(id);
     }
   };
 
@@ -65,7 +64,7 @@ export default function RespondedQuotes() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Header title={"QUOTATIONS"} route={routes.CLIENT_DB} />
+      <BannerHeader title="QUOTATIONS" variant="dark" />
 
       <DataTable>
         <DataTable.Header style={styles.header}>
@@ -93,7 +92,7 @@ export default function RespondedQuotes() {
                 onPress={() => {
                   navigate({
                     pathname: routes.CLIENT_QUOTE_DETAILS,
-                    params: { quotationId: item.id, title: item.commodity },
+                    params: { id: item.id, title: item.commodity },
                   });
                 }}
               >

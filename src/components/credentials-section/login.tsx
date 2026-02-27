@@ -1,11 +1,11 @@
+import { routes } from "@/src/constants/routes";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useNavigate } from "@/src/hooks/useNavigate";
 import { useMutation } from "@tanstack/react-query";
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Button } from "react-native-paper";
-import { routes } from "@/src/constants/routes";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
 
 export default function Login() {
   const { replace } = useNavigate();
@@ -20,7 +20,7 @@ export default function Login() {
     mutationFn: loginContext,
     onSuccess: ({ data }) => {
       const role = data.user.role;
-      if (role === "Client") replace(routes.CLIENT_DB);
+      if (role === "Client") replace(routes.CLIENT);
       else if (role === "Account Specialist") replace(routes.AS_DB);
       else if (role === "Marketing") replace(routes.MARKETING_DB);
       else replace(routes.HOME);
@@ -53,7 +53,7 @@ export default function Login() {
       <View style={styles.main}>
         <TextInput
           testID="email_input"
-		  accessibilityLabel="email_input"
+          accessibilityLabel="email_input"
           style={[styles.input, styles.boxShadow]}
           value={formData.email}
           onChangeText={(text) => {
@@ -67,7 +67,7 @@ export default function Login() {
 
         <TextInput
           testID="password_input"
-		  accessibilityLabel="password_input"
+          accessibilityLabel="password_input"
           style={[styles.input, styles.boxShadow]}
           value={formData.password}
           onChangeText={(text) => {

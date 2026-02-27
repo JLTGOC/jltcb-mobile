@@ -11,7 +11,7 @@ const NavIcons: {
   iconName: IconName;
   route: (typeof routes)[keyof typeof routes];
 }[] = [
-  { iconName: "view-dashboard", route: routes.CLIENT_DB },
+  { iconName: "view-dashboard", route: routes.CLIENT },
   { iconName: "book-open-outline", route: routes.HOME },
   { iconName: "book-plus-outline", route: routes.CLIENT_CREATE_QUOTE },
   { iconName: "message", route: routes.CHATBOX },

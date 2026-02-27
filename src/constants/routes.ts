@@ -13,11 +13,13 @@ export const routes = {
   LANDING_PAGE2: "/(pages)/landing-page/customs-brokerage",
   CAREERS: "/(pages)/careers",
   SIGN_IN: "/(pages)/sign-in",
-  CLIENT_DB: "/(client)/dashboard",
-  CLIENT_CREATE_QUOTE: "/(client)/quotations" as Href,
-  CLIENT_QUOTE_DETAILS: "/(client)/quotations/[id]",
-  CLIENT_REQ_QUOTE_RECORDS: "/(client)/quotations/RequestedQuotes",
-  CLIENT_RES_QUOTE_RECORDS: "/(client)/quotations/RespondedQuotes",
+  CLIENT: "/(client)/(tabs)/dashboard",
+  CLIENT_AHTN: "/(client)/(tabs)/ahtn-checker",
+  CLIENT_CREATE_QUOTE: "/(client)/(tabs)/get-quote",
+  CLIENT_QUOTE_DETAILS: "/(client)/(tabs)/dashboard/quotations/[id]",
+  CLIENT_REQ_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/requested-quotes",
+  CLIENT_RES_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/responded-quotes",
+  CLIENT_MESSAGES: "/(client)/(tabs)/messages",
   AS_DB: "/(employee-account-specialist)/dashboard",
   AS_QUOTE_REQUESTS: "/(employee-account-specialist)/quotations/new-request",
   AS_QUOTE_REQUEST_LIST:
@@ -29,7 +31,6 @@ export const routes = {
   AS_QUOTE_RESPONDED:
     "/(employee-account-specialist)/quotations/responded" as Href,
   MARKETING_DB: "/(employee-marketing)/dashboard",
-  CHATBOX: "/(client)/chatbox",
   UNAUTHORIZED: "/(pages)/Unauthorized",
-  UNDERCONSTRUCTION: "/UnderConstruction"
+  UNDERCONSTRUCTION: "/UnderConstruction",
 } as const satisfies Record<string, Href>;

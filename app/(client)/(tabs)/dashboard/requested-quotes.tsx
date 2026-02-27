@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -10,11 +10,14 @@ import {
   TextInput,
 } from "react-native-paper";
 
-import Header from "@/src/components/client-section/Header";
+import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
 import useDebounce from "@/src/hooks/useDebounce";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { fetchClientQuotes, deleteClientSingleQuote } from "@/src/services/clientQuotation";
+import {
+  deleteClientSingleQuote,
+  fetchClientQuotes,
+} from "@/src/services/clientQuotation";
+import { useRouter } from "expo-router";
 
 type TableItem = {
   id: number;
@@ -36,27 +39,26 @@ export default function RequestedQuotes() {
 
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
-  const { navigate } = useNavigate();
+  const router = useRouter();
 
   const debouncedSearch = useDebounce(search, 500) || "";
 
   // Data Fetching
   const { data, isLoading } = useQuery({
-    queryKey: ['quotes', "REQUESTED", debouncedSearch],
+    queryKey: ["quotes", "REQUESTED", debouncedSearch],
     queryFn: () =>
       fetchClientQuotes({ status: "REQUESTED", search: debouncedSearch }),
     placeholderData: (previousData) => previousData,
   });
 
-
   // Delete single quotation
-  const {mutate: deletedSingleQuotation} = useMutation({
-  mutationFn: (id:number) => deleteClientSingleQuote(id),
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['quotes'] });
-    console.log("Deleted successfully!");
-  },
-})
+  const { mutate: deletedSingleQuotation } = useMutation({
+    mutationFn: (id: number) => deleteClientSingleQuote(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["quotes"] });
+      console.log("Deleted successfully!");
+    },
+  });
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -65,11 +67,10 @@ export default function RequestedQuotes() {
       style={{
         flex: 1,
         backgroundColor: "#fff",
-        alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <Header title={"REQUESTED QUOTATION"} route={routes.CLIENT_DB} />
+      <BannerHeader title="REQUESTED QUOTATION" variant="dark" />
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -112,10 +113,10 @@ export default function RequestedQuotes() {
               <TouchableOpacity
                 key={item.id}
                 onPress={() => {
-                  navigate({
+                  router.push({
                     pathname: routes.CLIENT_QUOTE_DETAILS,
                     params: {
-                      quotationId: item.id,
+                      id: item.id,
                       title: item.commodity,
                     },
                   });
@@ -150,16 +151,16 @@ export default function RequestedQuotes() {
                           key={index}
                           onPress={() => {
                             if (menu.title === "EDIT") {
-                              navigate({
-                                pathname: "/(client)/quotations",
+                              router.push({
+                                pathname:
+                                  "/(client)/(tabs)/dashboard/quotations/[id]/update",
                                 params: {
                                   id: item.id,
-                                  title: item.commodity,
-                                  mode: menu.title
+                                  mode: menu.title,
                                 },
                               });
                             } else {
-                              deletedSingleQuotation(item.id)
+                              deletedSingleQuotation(item.id);
                             }
                             setVisibleMenuId(null);
                           }}

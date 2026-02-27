@@ -1,22 +1,21 @@
-import Header from "@/src/components/client-section/Header";
 import Details from "@/src/components/client-section/requested-quote/Details";
-import Documents from "@/src/components/client-section/requested-quote/Documents"
+import Documents from "@/src/components/client-section/requested-quote/Documents";
+import BannerHeader from "@/src/components/ui/BannerHeader";
 
+import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
+  Dimensions,
   FlatList,
   StyleSheet,
-  View,
-  TouchableOpacity,
   Text,
-  Dimensions,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { routes } from "@/src/constants/routes";
 
 export default function QuoteDetails() {
-  const { quotationId, title } = useLocalSearchParams<{
-    quotationId: string;
+  const { id, title } = useLocalSearchParams<{
+    id: string;
     title: string;
   }>();
 
@@ -29,11 +28,11 @@ export default function QuoteDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details quotationId={quotationId}/>;
+        return <Details quotationId={id} />;
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Documents quotationId={quotationId}/>
+            <Documents quotationId={id} />
           </View>
         );
       default:
@@ -47,7 +46,7 @@ export default function QuoteDetails() {
       keyExtractor={(item) => item.toString()}
       renderItem={({}) => (
         <>
-          <Header title={title} route={routes.CLIENT_REQ_QUOTE_RECORDS} />
+          <BannerHeader title={title} variant="dark" />
 
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (

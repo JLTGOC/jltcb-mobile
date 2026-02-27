@@ -6,11 +6,11 @@ import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 
 import Success from "@/src/components/client-section/get-quote/Success";
-import Buttons from "../../../src/components/client-section/get-quote/Buttons";
-import Step_1 from "../../../src/components/client-section/get-quote/Step_1";
-import Step_2 from "../../../src/components/client-section/get-quote/Step_2";
-import Step_3 from "../../../src/components/client-section/get-quote/Step_3";
-import Header from "../../../src/components/client-section/Header";
+
+import Buttons from "@/src/components/client-section/get-quote/Buttons";
+import Step_1 from "@/src/components/client-section/get-quote/Step_1";
+import Step_2 from "@/src/components/client-section/get-quote/Step_2";
+import Step_3 from "@/src/components/client-section/get-quote/Step_3";
 
 import {
   fetchClientQuote,
@@ -18,11 +18,11 @@ import {
   updateClientQuote,
 } from "@/src/services/clientQuotation";
 
-import { FieldConfig, QuoteForm } from "../../../src/types/client-type";
+import { FieldConfig, QuoteForm } from "@/src/types/client-type";
 
-import { initialQuoteForm } from "../../../src/constants/client-const";
+import { initialQuoteForm } from "@/src/constants/client-const";
 
-import { routes } from "@/src/constants/routes";
+import BannerHeader from "@/src/components/ui/BannerHeader";
 
 export default function CreateUpdateQuote() {
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -82,6 +82,8 @@ export default function CreateUpdateQuote() {
   useEffect(() => {
     if (data && mode === "EDIT") {
       setFormData(normalizeQuoteForm(data));
+    } else {
+      setFormData(initialQuoteForm);
     }
   }, [data, mode]);
 
@@ -158,14 +160,7 @@ export default function CreateUpdateQuote() {
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => (
           <>
-            <Header
-              title={mode === "EDIT" ? "Update Quote" : "Get Quote"}
-              route={
-                mode === "EDIT"
-                  ? routes.CLIENT_REQ_QUOTE_RECORDS
-                  : routes.CLIENT_DB
-              }
-            />
+            <BannerHeader title="Get Quote" variant="dark" />
             <View style={{ padding: 20, flex: 1 }}>
               <StepIndicator
                 customStyles={stepIndicatorStyles}
