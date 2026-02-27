@@ -17,8 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { PusherEvent } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Crypto from "expo-crypto";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+
+import { useCallback, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   FlatList,
@@ -62,60 +63,62 @@ export default function SharedChat() {
     reset();
   });
 
-  useEffect(() => {
-    const channelName = `private-chat.${id}`;
+  useFocusEffect(
+    useCallback(() => {
+      const channelName = `private-chat.${id}`;
 
-    const onEvent = (e: PusherEvent) => {
-      const { eventName, data } = e;
-      const chatEventName = eventName as ChatEvent;
+      const onEvent = (e: PusherEvent) => {
+        const { eventName, data } = e;
+        const chatEventName = eventName as ChatEvent;
 
-      switch (chatEventName) {
-        case "message.sent":
-          const chatData = parseEventData<MessageSentEvent>(data);
+        switch (chatEventName) {
+          case "message.sent":
+            const chatData = parseEventData<MessageSentEvent>(data);
 
-          if (!chatData) return;
+            if (!chatData) return;
 
-          const { message, client_id } = chatData;
+            const { message, client_id } = chatData;
 
-          queryClient.setQueryData<MessagesResponse>(
-            chatKeys.getChat(id),
-            (old) => {
-              if (!old) return old;
+            queryClient.setQueryData<MessagesResponse>(
+              chatKeys.getChat(id),
+              (old) => {
+                if (!old) return old;
 
-              const exists = old.data.some((msg) => msg.id === message.id);
-              if (exists) return old;
+                const exists = old.data.some((msg) => msg.id === message.id);
+                if (exists) return old;
 
-              const replacedMessages = old.data.map((msg) =>
-                msg.client_id === client_id ? message : msg,
-              );
+                const replacedMessages = old.data.map((msg) =>
+                  msg.client_id === client_id ? message : msg,
+                );
 
-              const didReplace = replacedMessages.some(
-                (m) => m.id === message.id,
-              );
+                const didReplace = replacedMessages.some(
+                  (m) => m.id === message.id,
+                );
 
-              return didReplace
-                ? { ...old, data: replacedMessages }
-                : { ...old, data: [...old.data, message] };
-            },
-          );
-          break;
-      }
-    };
+                return didReplace
+                  ? { ...old, data: replacedMessages }
+                  : { ...old, data: [...old.data, message] };
+              },
+            );
+            break;
+        }
+      };
 
-    let channel: any;
+      let channel: any;
 
-    const subscribe = async () => {
-      channel = await subscribeToChat(id, onEvent);
-    };
+      const subscribe = async () => {
+        channel = await subscribeToChat(id, onEvent);
+      };
 
-    subscribe();
+      subscribe();
 
-    return () => {
-      if (channel) {
-        pusher.unsubscribe({ channelName });
-      }
-    };
-  }, [id, queryClient]);
+      return () => {
+        if (channel) {
+          pusher.unsubscribe({ channelName });
+        }
+      };
+    }, [id, queryClient]),
+  );
 
   const renderItem = ({ item }: { item: Message }) => {
     switch (item.type) {

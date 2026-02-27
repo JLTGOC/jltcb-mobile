@@ -6,8 +6,8 @@ import { pusher } from "@/src/lib/pusher";
 import { chatsQueryOptions } from "@/src/query-options/chats/chatsQueryOptions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { Link, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, HelperText } from "react-native-paper";
@@ -20,35 +20,41 @@ const searchSchema = z.object({
 export default function Index() {
   const { userData } = useAuth();
 
-  useEffect(() => {
-    if (!userData) return;
+  useFocusEffect(
+    useCallback(() => {
+      if (!userData) return;
 
-    const channelName = `private-user.${userData.id}`;
+      const channelName = `private-user.${userData.id}`;
 
-    const subscribe = async () => {
-      const inboxChannel = await pusher.subscribe({
-        channelName,
-        // onEvent: (e: PusherEvent) => {
-        //   console.log(e);
-        // },
-        onSubscriptionError: (channelName: string, message: string, e: any) => {
-          console.log({ channelName, message, e });
-        },
-        onSubscriptionSucceeded: (data) => {
-          console.log({ data });
-        },
-      });
-    };
+      const subscribe = async () => {
+        const inboxChannel = await pusher.subscribe({
+          channelName,
+          // onEvent: (e: PusherEvent) => {
+          //   console.log(e);
+          // },
+          onSubscriptionError: (
+            channelName: string,
+            message: string,
+            e: any,
+          ) => {
+            console.log({ channelName, message, e });
+          },
+          onSubscriptionSucceeded: (data) => {
+            console.log({ data });
+          },
+        });
+      };
 
-    subscribe();
+      subscribe();
 
-    return () => {
-      pusher
-        .unsubscribe({ channelName })
-        .then(() => console.log(`unsubbed ${channelName}`))
-        .catch((e) => console.error(e));
-    };
-  }, [userData]);
+      return () => {
+        pusher
+          .unsubscribe({ channelName })
+          .then(() => console.log(`unsubbed ${channelName}`))
+          .catch((e) => console.error(e));
+      };
+    }, [userData]),
+  );
 
   const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
