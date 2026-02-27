@@ -3,5 +3,7 @@ export const chatKeys = {
   getChats: (search: string) =>
     [...chatKeys.all(), "list", { search }] as const,
   getChat: (conversationId: string) =>
-    [...chatKeys.all(), "detail", { conversationId }] as const,
+    [...chatKeys.all(), "detail", conversationId] as const,
+  getMessages: (conversationId: string) =>
+    [...chatKeys.getChat(conversationId), "messages"] as const,
 };

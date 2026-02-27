@@ -3,8 +3,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
 import { PropsWithChildren } from "react";
-import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
-import { Text } from "react-native-paper";
+import {
+  StyleSheet,
+  type TextStyle,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text, type TextProps } from "react-native-paper";
 
 const TEXT_COLOR_DARK = "#1C213B";
 const TEXT_COLOR_LIGHT = "#FF9933";
@@ -13,12 +18,14 @@ interface BannerHeaderProps {
   back?: boolean;
   title: string;
   variant: "light" | "dark";
+  titleProps: Omit<TextProps<never>, "children">;
 }
 
 export default function BannerHeader({
   back = true,
   title,
   variant,
+  titleProps,
   children,
 }: BannerHeaderProps & PropsWithChildren) {
   const router = useRouter();
@@ -40,7 +47,11 @@ export default function BannerHeader({
           </TouchableOpacity>
         )}
         {children}
-        <Text variant="titleLarge" style={[styles.title, textColorStyle]}>
+        <Text
+          variant="titleLarge"
+          style={[styles.title, textColorStyle]}
+          {...titleProps}
+        >
           {title}
         </Text>
       </View>

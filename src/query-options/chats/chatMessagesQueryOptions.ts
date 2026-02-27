@@ -4,6 +4,6 @@ import { queryOptions } from "@tanstack/react-query";
 
 export const chatMessagesQueryOptions = (conversationId: string) =>
   queryOptions({
-    queryKey: chatKeys.getChat(conversationId),
+    queryKey: chatKeys.getMessages(conversationId),
     queryFn: () => fetchChatMessages(conversationId),
   });

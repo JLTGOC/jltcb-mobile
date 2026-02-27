@@ -10,7 +10,7 @@ type MessagesResponse = ApiResponse<Message[]>;
 
 export function useSendMessageMutation(conversationId: string) {
   const { userData } = useAuth();
-  const queryKey = chatKeys.getChat(conversationId);
+  const queryKey = chatKeys.getMessages(conversationId);
 
   return useMutation<
     MessageResponse,

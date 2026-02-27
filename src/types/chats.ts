@@ -2,7 +2,7 @@ import { ApiResponse } from "@/src/types/api";
 
 export interface Inbox {
   id: string;
-  type: string;
+  type: "DIRECT" | "GROUP";
   title: string;
   image_path: string | null;
   last_message: string;

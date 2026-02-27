@@ -6,6 +6,7 @@ import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
 import { chatMessagesQueryOptions } from "@/src/query-options/chats/chatMessagesQueryOptions";
+import { chatQueryOptions } from "@/src/query-options/chats/chatQueryOptions";
 import type {
   ChatEvent,
   Message,
@@ -45,6 +46,8 @@ export default function SharedChat() {
     select: (data) => ({ ...data, data: data.data.toReversed() }),
   });
 
+  const { data: chatDetails } = useQuery(chatQueryOptions(id));
+
   const { control, handleSubmit, reset } = useForm<
     z.infer<typeof messageSchema>
   >({
@@ -80,7 +83,7 @@ export default function SharedChat() {
             const { message, client_id } = chatData;
 
             queryClient.setQueryData<MessagesResponse>(
-              chatKeys.getChat(id),
+              chatKeys.getMessages(id),
               (old) => {
                 if (!old) return old;
 
@@ -136,8 +139,19 @@ export default function SharedChat() {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
-        <BannerHeader title="Message Title" variant="dark">
-          <Avatar.Text label="GC" size={36} />
+        <BannerHeader
+          title={chatDetails?.data.title ?? ""}
+          titleProps={{ numberOfLines: 1 }}
+          variant="dark"
+        >
+          {chatDetails?.data.type === "GROUP" ? (
+            <Avatar.Text label="GC" size={36} />
+          ) : (
+            <Avatar.Image
+              source={{ uri: chatDetails?.data.image_path ?? undefined }}
+              size={36}
+            />
+          )}
         </BannerHeader>
       </View>
 
