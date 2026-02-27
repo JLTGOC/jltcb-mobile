@@ -16,7 +16,6 @@ type Props = {
 export default function ChatMessageInput({
   sendDisabled,
   onSend,
-  onSubmitEditing,
   style,
   ...props
 }: TextInputProps & Props) {
@@ -37,7 +36,8 @@ export default function ChatMessageInput({
         placeholder="Type something"
         placeholderTextColor="#9F9C9C"
         style={[styles.messageInput, style]}
-        onSubmitEditing={sendDisabled ? undefined : onSubmitEditing}
+        multiline
+        numberOfLines={6}
         {...props}
       />
       <TouchableOpacity

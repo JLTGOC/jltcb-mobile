@@ -1,3 +1,5 @@
+import { ApiResponse } from "@/src/types/api";
+
 export interface Inbox {
   id: string;
   type: string;
@@ -22,9 +24,11 @@ export interface Quotation {
   date_created: string;
 }
 
+export type MessageType = "TEXT" | "QUOTATION_CARD" | "FILE";
+
 export interface BaseMessage {
   id: number;
-  type: "TEXT" | "QUOTATION_CARD";
+  type: MessageType;
   created_at: string;
   sender: Sender;
   client_id?: string; // ✅ snake_case everywhere
@@ -38,6 +42,12 @@ export interface TextMessage extends BaseMessage {
 export interface QuotationCardMessage extends BaseMessage {
   type: "QUOTATION_CARD";
   quotation: Quotation;
+}
+
+export interface FileMessage extends BaseMessage {
+  type: "FILE";
+  file_name: string;
+  file_url: string;
 }
 
 export type Message = QuotationCardMessage | TextMessage;
@@ -66,3 +76,6 @@ export type SendMessageData =
       file: string;
       client_id: string;
     };
+
+export type MessageResponse = ApiResponse<Message>;
+export type MessagesResponse = ApiResponse<Message[]>;

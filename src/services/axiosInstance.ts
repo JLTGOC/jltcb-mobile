@@ -52,27 +52,27 @@ api.interceptors.response.use(
     return response;
   },
   (error: AxiosError | unknown) => {
-    let errorMessage = "Unknown API error";
-    let errorData: unknown;
-    let method = "REQUEST";
-    let url = "";
+    // let errorMessage = "Unknown API error";
+    // let errorData: unknown;
+    // let method = "REQUEST";
+    // let url = "";
 
-    if (axios.isAxiosError(error)) {
-      method = error.config?.method?.toUpperCase() ?? method;
-      url = error.config?.url ?? url;
-      errorData = error.response?.data;
-      errorMessage =
-        (error.response?.data as { message?: string } | undefined)?.message ??
-        error.message ??
-        errorMessage;
+    // if (axios.isAxiosError(error)) {
+    //   method = error.config?.method?.toUpperCase() ?? method;
+    //   url = error.config?.url ?? url;
+    //   errorData = error.response?.data;
+    //   errorMessage =
+    //     (error.response?.data as { message?: string } | undefined)?.message ??
+    //     error.message ??
+    //     errorMessage;
 
-      if (!error.response) {
-        errorMessage = `Network Error. Check EXPO_PUBLIC_API_URL (${baseURL}) and device network access.`;
-      }
-    }
+    //   if (!error.response) {
+    //     errorMessage = `Network Error. Check EXPO_PUBLIC_API_URL (${baseURL}) and device network access.`;
+    //   }
+    // }
 
-    console.error(`[API ${method}] ${url} - ${errorMessage}`);
-    console.error(`[API ${method}] ${url} - error data:`, errorData);
+    // console.error(`[API ${method}] ${url} - ${errorMessage}`);
+    // console.error(`[API ${method}] ${url} - error data:`, errorData);
 
     return Promise.reject(error);
   },
