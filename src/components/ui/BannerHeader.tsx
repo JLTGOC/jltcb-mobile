@@ -18,7 +18,7 @@ interface BannerHeaderProps {
   back?: boolean;
   title: string;
   variant: "light" | "dark";
-  titleProps: Omit<TextProps<never>, "children">;
+  titleProps?: Omit<TextProps<never>, "children">;
 }
 
 export default function BannerHeader({
