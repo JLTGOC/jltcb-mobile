@@ -36,7 +36,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Avatar } from "react-native-paper";
+import { ActivityIndicator, Avatar } from "react-native-paper";
 
 type Props = {
   variant: "dark" | "light";
@@ -47,7 +47,7 @@ export default function SharedChat({ variant }: Props) {
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
 
-  const { data: messages } = useQuery({
+  const { data: messages, isPending: isMessagesPending } = useQuery({
     ...chatMessagesQueryOptions(id),
     select: (data) => ({ ...data, data: data.data.toReversed() }),
   });
@@ -163,15 +163,21 @@ export default function SharedChat({ variant }: Props) {
         keyboardVerticalOffset={110}
       >
         <View style={{ flex: 1 }}>
-          <FlatList
-            inverted
-            data={messages?.data}
-            keyExtractor={(item) => item.id.toString()}
-            ref={flatListRef}
-            contentContainerStyle={styles.messagesListContainer}
-            keyboardShouldPersistTaps="handled"
-            renderItem={renderItem}
-          />
+          {isMessagesPending ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            <FlatList
+              inverted
+              data={messages?.data}
+              keyExtractor={(item) => item.id.toString()}
+              ref={flatListRef}
+              contentContainerStyle={styles.messagesListContainer}
+              keyboardShouldPersistTaps="handled"
+              renderItem={renderItem}
+            />
+          )}
         </View>
 
         <Controller
@@ -193,6 +199,11 @@ export default function SharedChat({ variant }: Props) {
 }
 
 const styles = StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   messagesListContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
