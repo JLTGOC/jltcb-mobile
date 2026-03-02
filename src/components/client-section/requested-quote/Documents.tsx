@@ -37,7 +37,7 @@ export default function Details({ quotationId }: Props) {
       <View style={styles.cardsContainer}>
         {Array.isArray(data?.documents) ? (
           data.documents.map((files, index) => (
-            <Card
+            <View
               key={index}
               style={{
                 paddingHorizontal: 20,
@@ -49,8 +49,11 @@ export default function Details({ quotationId }: Props) {
                 <Text style={styles.content}>
                   File name: {decodeURIComponent(files.file_name)}
                 </Text>
+                <Text style={[styles.content, {color: "green"}]}>
+                  UPLOADED
+                </Text>
               </View>
-            </Card>
+            </View>
           ))
         ) : (
           <View style={{ padding: 20, alignItems: "center" }}>
@@ -83,17 +86,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
+    width: '90%'
   },
   cardsContainer: {
     flexGrow: 1,
   },
   buttonContainer: {
-    marginBottom: 20, // optional spacing from bottom
+    marginBottom: 20, 
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+    justifyContent: "space-between",
   },
   content: {
     fontSize: 12,

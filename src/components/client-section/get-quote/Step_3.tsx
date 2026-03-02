@@ -21,7 +21,6 @@ export default function Step_3({ formData, setFormData }: Props) {
   const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
 
-  console.log("step_3.tsx", formData)
 
   const uploadedDocuments = Array.isArray(formData.documents)
     ? formData.documents.filter(
@@ -116,32 +115,21 @@ export default function Step_3({ formData, setFormData }: Props) {
                   gap: 10,
                 }}
               >
-                <TouchableOpacity
+                <View
                   style={{
                     backgroundColor: "#ffffff",
                     width: "85%",
-                    borderRadius: 10,
+                    borderRadius: 4,
                     padding: 10,
-                  }}
-                  onPress={() => {
-                    navigate({
-                      pathname: "/(client)/quotations/viewer",
-                      params: {
-                        fileUrl: encodeURIComponent(document.file_url),
-                        fileName: encodeURIComponent(document.file_name),
-                      },
-                    });
                   }}
                 >
                   <Text numberOfLines={1}>File Name: {document.file_name}</Text>
-                </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                   style={{
-                    width: "10%",
-                    borderRadius: 10,
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor: "#ffeaea",
+                    marginRight: 10,
                   }}
                   onPress={() =>
                     handleRemoveFile(document.id, document.file_url)
