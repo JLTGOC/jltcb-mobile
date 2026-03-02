@@ -17,8 +17,6 @@ export default function Details({ quotationId }: Props) {
     enabled: !!quotationId,
   });
 
-  console.log("documents.tsx", data);
-
   const handleOnPress = async (url?: string) => {
     await WebBrowser.openBrowserAsync(url as any);
   };
