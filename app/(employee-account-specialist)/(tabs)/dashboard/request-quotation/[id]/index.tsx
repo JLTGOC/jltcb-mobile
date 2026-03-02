@@ -1,7 +1,6 @@
 import QuotationRequestDetailCard from "@/src/components/quote-section/QuotationRequestDetailCard";
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { routes } from "@/src/constants/routes";
 import { quotationQueryOptions } from "@/src/query-options/quotations/quotationQueryOptions";
 import type { Document, QuotationDetailsSection } from "@/src/types/quotations";
 import { useQuery } from "@tanstack/react-query";
@@ -171,7 +170,7 @@ export default function Quotation() {
             <Link
               asChild
               href={{
-                pathname: routes.AS_QUOTE_REQUEST_UPLOAD,
+                pathname: "/dashboard/request-quotation/[id]/upload",
                 params: { id, clientName },
               }}
               style={[styles.button, styles.container]}

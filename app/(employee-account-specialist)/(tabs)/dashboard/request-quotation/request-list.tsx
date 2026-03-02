@@ -1,5 +1,4 @@
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { routes } from "@/src/constants/routes";
 import type { Quotation } from "@/src/types/quotations";
 import { format, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -60,7 +59,7 @@ export default function RequestList() {
               key={quotation.id}
               onPress={() => {
                 router.push({
-                  pathname: routes.AS_QUOTE_REQUEST,
+                  pathname: "/dashboard/request-quotation/[id]",
                   params: { id: quotation.id, clientName },
                 });
               }}

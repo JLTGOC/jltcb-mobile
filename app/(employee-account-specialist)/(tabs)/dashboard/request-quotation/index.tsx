@@ -1,6 +1,5 @@
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import Search from "@/src/components/ui/Search";
-import { routes } from "@/src/constants/routes";
 import { asQuotationsQueryOptions } from "@/src/query-options/quotations/asQuotationsQueryOptions";
 import type { QuotationFilter } from "@/src/types/quotations";
 import { useQuery } from "@tanstack/react-query";
@@ -79,7 +78,7 @@ export default function NewRequest() {
                 key={userRow.name}
                 onPress={() => {
                   router.push({
-                    pathname: routes.AS_QUOTE_REQUEST_LIST,
+                    pathname: "/dashboard/request-quotation/request-list",
                     params: {
                       quotations: JSON.stringify(userRow.quotations),
                       clientName: userRow.name,

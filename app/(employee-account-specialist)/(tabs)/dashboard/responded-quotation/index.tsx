@@ -23,7 +23,7 @@ const MENUS: { icon: string; title: string; href: Href }[] = [
   {
     icon: "table-edit",
     title: "Edit Quotation",
-    href: "/quotations/responded/[id]/upload",
+    href: "/dashboard/responded-quotation/[id]/upload",
   },
 ];
 
@@ -35,7 +35,7 @@ export default function RespondedQuotation() {
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
   const getUploadRoute = (id: string | number, clientName: string): Href => ({
-    pathname: "/quotations/responded/[id]/upload",
+    pathname: "/dashboard/responded-quotation/[id]/upload",
     params: { id: id.toString(), clientName },
   });
 
@@ -102,7 +102,10 @@ export default function RespondedQuotation() {
                             onPress={() => {
                               setVisibleMenuId(null);
                               router.navigate(
-                                getUploadRoute(quotation.id, quotation.client_name),
+                                getUploadRoute(
+                                  quotation.id,
+                                  quotation.client_name,
+                                ),
                               );
                             }}
                           />

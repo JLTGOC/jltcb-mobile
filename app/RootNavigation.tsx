@@ -53,14 +53,18 @@ export default function RootNaviagtion() {
         backgroundColor: "#b1b1b3ff",
       }}
     >
-      {!hideHeader && role !== "Client" && <HeaderNavBar />}
+      {!hideHeader && role !== "Client" && role !== "Account Specialist" && (
+        <HeaderNavBar />
+      )}
       <Stack
         screenOptions={{
           headerShown: false,
           animation: "fade",
         }}
       />
-      {!hideNavigationBar && role !== "Client" && <BottomNavBar />}
+      {!hideNavigationBar &&
+        role !== "Client" &&
+        role !== "Account Specialist" && <BottomNavBar />}
     </SafeAreaView>
   );
 }
