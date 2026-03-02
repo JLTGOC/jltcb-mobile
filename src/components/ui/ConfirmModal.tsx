@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+
 import type { ReactElement } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Modal, type ModalProps } from "react-native-paper";
@@ -14,10 +14,10 @@ interface ConfirmModalProps extends Omit<ModalProps, "children"> {
 }
 
 export default function ConfirmModal({
-  icon = <AntDesign name="warning" size={100} color="red" />,
+  icon,
   loading,
-  confirmButtonText = "Yes",
-  cancelButtonText = "Cancel",
+  confirmButtonText,
+  cancelButtonText,
   onConfirm,
   title,
   description,

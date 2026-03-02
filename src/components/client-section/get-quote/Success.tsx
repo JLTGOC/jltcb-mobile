@@ -9,7 +9,7 @@ export default function Sucess() {
       <View style={{ alignItems: "center", justifyContent: "center" }}></View>
       <Receipt size={100} />
       <Text>Congratulations.</Text>
-      <Text>Your Request For Quotation is Submitted</Text>
+      <Text style={{textAlign:"center"}}>Your Request For Quotation is Submitted</Text>
       <Text style={{textAlign:"center"}}>We will send your notification when the quotation is ready.</Text>
     </View>
   );
