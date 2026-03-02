@@ -1,4 +1,6 @@
+import { AntDesign } from "@expo/vector-icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -7,7 +9,13 @@ import {
   Icon,
   IconButton,
   Menu,
+  Portal,
 } from "react-native-paper";
+
+import ConfirmModal from "@/src/components/ui/ConfirmModal";
+import SuccesModal from "@/src/components/ui/SuccessModal";
+import { useAuth } from "@/src/hooks/useAuth";
+import { acceptQuotation } from "@/src/services/shipment";
 
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
@@ -35,8 +43,15 @@ const menuItems = [
 export default function RespondedQuotes() {
   const queryClient = useQueryClient();
 
-  const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
+  const router = useRouter();
   const { navigate } = useNavigate();
+  const { token } = useAuth();
+
+  const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Data Fetching
   const { data, isLoading, isError, error } = useQuery({
@@ -45,18 +60,43 @@ export default function RespondedQuotes() {
     placeholderData: (previousData) => previousData,
   });
 
-  console.log("RespondedQoutes.tsx", data);
+  console.log("responed data", data);
 
   // Delete single quotation
   const { mutate: deletedSingleQuotation } = useMutation({
-    mutationFn: (id: number) => deleteClientSingleQuote(id),
+    mutationFn: (id: string) => deleteClientSingleQuote(id as any),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
+    },
   });
 
-  const handleOnPress = async (title: string, id: number) => {
+  // Accept the quotation
+  const { mutate: handleAccept, isPending: isAccepting } = useMutation({
+    mutationFn: (reference_number: string) => {
+      if (!token) throw new Error("No auth token found");
+      return acceptQuotation(reference_number);
+    },
+    onSuccess: (data) => {
+      console.log("hello", data);
+
+      queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
+      setModalVisible(false);
+      setSuccessModalVisible(true);
+    },
+    onError: (err) => {
+      console.error("Failed to accept:", err);
+      setModalVisible(false);
+    },
+  });
+
+  const handleOnPress = (title: string, reference_number: string) => {
+    setVisibleMenuId(null);
+
     if (title === "ACCEPT") {
-      console.log(title);
+      setSelectedId(reference_number);
+      setModalVisible(true);
     } else {
-      deletedSingleQuotation(id);
+      deletedSingleQuotation(reference_number);
     }
   };
 
@@ -126,36 +166,41 @@ export default function RespondedQuotes() {
                   </DataTable.Cell>
 
                   <DataTable.Cell numeric style={{ flex: 0.5 }}>
-                    <Menu
-                      visible={visibleMenuId === item.id}
-                      onDismiss={() => setVisibleMenuId(null)}
-                      anchor={
-                        <IconButton
-                          icon="dots-vertical"
-                          size={20}
-                          onPress={() => setVisibleMenuId(item.id)}
-                        />
-                      }
-                    >
-                      {menuItems.map((menu, index) => (
-                        <Menu.Item
-                          key={index}
-                          onPress={() => {
-                            handleOnPress(menu.title, item.id);
-                          }}
-                          leadingIcon={({ size }) => (
-                            <Icon
-                              source={menu.iconName}
-                              color={menu.color}
-                              size={size}
-                            />
-                          )}
-                          title={menu.title}
-                          style={styles.menuItem}
-                          titleStyle={{ color: menu.color }}
-                        />
-                      ))}
-                    </Menu>
+                    {item?.status === "ACCEPTED" ? null : (
+                      <Menu
+                        visible={visibleMenuId === item.id}
+                        onDismiss={() => setVisibleMenuId(null)}
+                        anchor={
+                          <IconButton
+                            icon="dots-vertical"
+                            size={20}
+                            onPress={() => setVisibleMenuId(item.id)}
+                          />
+                        }
+                      >
+                        {menuItems.map((menu, index) => (
+                          <Menu.Item
+                            key={index}
+                            onPress={() => {
+                              handleOnPress(
+                                menu.title,
+                                item.reference_number as any,
+                              );
+                            }}
+                            leadingIcon={({ size }) => (
+                              <Icon
+                                source={menu.iconName}
+                                color={menu.color}
+                                size={size}
+                              />
+                            )}
+                            title={menu.title}
+                            style={styles.menuItem}
+                            titleStyle={{ color: menu.color }}
+                          />
+                        ))}
+                      </Menu>
+                    )}
                   </DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
@@ -163,6 +208,30 @@ export default function RespondedQuotes() {
           </ScrollView>
         )}
       </DataTable>
+
+      <Portal>
+        <ConfirmModal
+          icon={<AntDesign name="file-protect" size={100} color="gray" />}
+          confirmButtonText="Yes"
+          cancelButtonText="Cancel"
+          loading={isAccepting}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+          onConfirm={() => selectedId && handleAccept(selectedId)}
+          title="ACCEPT QUOTATION"
+          description="Once you accept this quotation, the terms will be final and no changes or negotiations can be made. Please review all details carefully before confirming you acceptance"
+        />
+
+        <SuccesModal
+          onConfirm={() => {
+            setSuccessModalVisible(false);
+            router.replace(routes.CLIENT_DB);
+          }}
+          visible={successModalVisible}
+          title="Successfully Submitted!"
+          description="We’ll notify you as soon as the client accepted the quotation!"
+        />
+      </Portal>
     </View>
   );
 }

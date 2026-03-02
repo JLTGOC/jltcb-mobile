@@ -35,7 +35,7 @@ export default function RootNaviagtion() {
     }
 
     if (role === "Client") {
-      replace(routes.CLIENT);
+      replace(routes.CLIENT_DB);
     } else if (role === "Account Specialist") {
       replace(routes.AS_DB);
     }

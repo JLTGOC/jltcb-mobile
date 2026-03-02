@@ -20,14 +20,14 @@ type Props = {
 export default function Details({ quotationId }: Props) {
   const router = useRouter();
 
-  //fetch the quotation details
+  //fetch the single quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [quotationId],
     queryFn: () => fetchClientQuote(quotationId as any),
     enabled: !!quotationId,
   });
 
-  console.log("Details.tsx", data);
+  console.log("details.tsx", data);
 
   const handleOnPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
@@ -152,7 +152,7 @@ export default function Details({ quotationId }: Props) {
           onPress={() => {
             handleOnPress(
               data?.status,
-              data?.quotation_file?.[0]?.file_url as any,
+              data?.quotation_file?.[0]?.file_url
             );
           }}
         >

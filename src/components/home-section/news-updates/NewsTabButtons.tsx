@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Href, usePathname, useRouter } from "expo-router";
 import {
   Dimensions,
   StyleSheet,
@@ -6,43 +6,41 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { routes } from "@/src/constants/routes";
+
+const TABS: { title: string; href: Href }[] = [
+  { title: "Latest", href: "/home" },
+  { title: "Careers", href: "/home/careers" },
+];
+
 export default function NewsTabButtons() {
-  const { navigate } = useNavigate();
-
-  const [active, setActive] = useState(0);
-
-  const tabs = ["LATEST", "CAREERS", ""];
-  
-  // const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
+  const pathname = usePathname();
+  const router = useRouter();
 
   const screenWidth = Dimensions.get("screen").width;
 
+  const isActive = (href: Href) => pathname === href;
+
   return (
     <View style={styles.buttonContainer}>
-      {tabs.map((t, i) => (
+      {TABS.map((t) => (
         <TouchableOpacity
-          key={i}
+          key={t.title}
           style={styles.button}
           onPress={() => {
-            setActive(i);
-            if (t === "CAREERS") {
-              navigate(routes.CAREERS);
-            }
+            router.navigate(t.href);
           }}
         >
           <Text
             style={[
               styles.buttonText,
               { fontSize: screenWidth * 0.025 },
-              active === i && styles.activeText,
+              isActive(t.href) && styles.activeText,
             ]}
             allowFontScaling={false}
           >
-            {t}
+            {t.title}
           </Text>
-          {active === i && <View style={styles.underline} />}
+          {isActive(t.href) && <View style={styles.underline} />}
         </TouchableOpacity>
       ))}
     </View>
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    flex: 1,
+    flex: 0.33,
     alignItems: "center",
     paddingVertical: 5,
     paddingTop: 10,

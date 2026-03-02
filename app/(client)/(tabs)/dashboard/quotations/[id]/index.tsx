@@ -14,9 +14,10 @@ import {
 } from "react-native";
 
 export default function QuoteDetails() {
-  const { id, title } = useLocalSearchParams<{
+  const { id, title, status } = useLocalSearchParams<{
     id: string;
     title: string;
+    status: string;
   }>();
 
   const [active, setActive] = useState(0);

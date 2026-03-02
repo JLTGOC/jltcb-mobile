@@ -20,7 +20,7 @@ export default function Login() {
     mutationFn: loginContext,
     onSuccess: ({ data }) => {
       const role = data.user.role;
-      if (role === "Client") replace(routes.CLIENT);
+      if (role === "Client") replace(routes.CLIENT_DB);
       else if (role === "Account Specialist") replace(routes.AS_DB);
       else if (role === "Marketing") replace(routes.MARKETING_DB);
       else replace(routes.HOME);

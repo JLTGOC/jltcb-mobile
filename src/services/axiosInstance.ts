@@ -44,11 +44,6 @@ api.interceptors.response.use(
     const method = response.config.method?.toUpperCase() ?? "REQUEST";
     const url = response.config.url ?? "";
 
-    console.log(
-      `[API ${method}] ${url} - ${apiMessage ?? "Request successful"}`,
-    );
-    console.log(`[API ${method}] ${url} - data:`, apiData ?? response.data);
-
     return response;
   },
   (error: AxiosError | unknown) => {

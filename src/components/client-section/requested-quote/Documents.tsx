@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import * as WebBrowser from "expo-web-browser";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, Card, Text } from "react-native-paper";
 
@@ -9,13 +10,18 @@ type Props = {
   quotationId?: string;
 };
 export default function Details({ quotationId }: Props) {
+  //fetch the single quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [quotationId],
     queryFn: () => fetchClientQuote(Number(quotationId)),
     enabled: !!quotationId,
   });
 
-  console.log("documents.tsx", quotationId);
+  console.log("documents.tsx", data);
+
+  const handleOnPress = async (url?: string) => {
+    await WebBrowser.openBrowserAsync(url as any);
+  };
 
   if (isLoading) {
     return (
@@ -58,17 +64,19 @@ export default function Details({ quotationId }: Props) {
           </View>
         )}
       </View>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          buttonColor="#161F3C"
-          textColor="white"
-          style={{ borderRadius: 4 }}
-        >
-          VIEW QUOTATION
-        </Button>
-      </View>
+      {data?.status === "RESPONDED" && data?.quotation_file?.[0]?.file_url && (
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            buttonColor="#161F3C"
+            textColor="white"
+            style={{ borderRadius: 4 }}
+            onPress={() => handleOnPress(data?.quotation_file?.[0]?.file_url)}
+          >
+            VIEW QUOTATION
+          </Button>
+        </View>
+      )}
     </View>
   );
 }
