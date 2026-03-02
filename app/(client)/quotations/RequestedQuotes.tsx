@@ -48,10 +48,12 @@ export default function RequestedQuotes() {
     placeholderData: (previousData) => previousData,
   });
 
+  console.log("REQUESTEDQUOTES", data)
+
 
   // Delete single quotation
   const {mutate: deletedSingleQuotation} = useMutation({
-  mutationFn: (id:number) => deleteClientSingleQuote(id),
+  mutationFn: (quotationId:number) => deleteClientSingleQuote(quotationId),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['quotes'] });
     console.log("Deleted successfully!");
@@ -117,6 +119,7 @@ export default function RequestedQuotes() {
                     params: {
                       quotationId: item.id,
                       title: item.commodity,
+                      status: item.status
                     },
                   });
                 }}

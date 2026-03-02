@@ -8,6 +8,7 @@ import {
   ClientQuoteResponse,
   QuoteForm,
   QuotesParams,
+  QuotesListItem
 } from "../types/client-type";
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
@@ -83,6 +84,7 @@ const postMultipart = async <T>(
   return parsedResponse as ApiResponse<T>;
 };
 
+
 // Post Quote
 export async function postClientQuote(formData: QuoteForm) {
   const token = await SecureStore.getItemAsync("token");
@@ -117,7 +119,7 @@ export async function postClientQuote(formData: QuoteForm) {
 
 // Update Quote
 export async function updateClientQuote(
-  id: number,
+  quotationId: number,
   formData: QuoteForm,
 ): Promise<ClientQuoteResponse> {
   const token = await SecureStore.getItemAsync("token");
@@ -140,7 +142,7 @@ export async function updateClientQuote(
 
   if (!newFiles.length) {
     return (
-      await apiPost<ClientQuoteResponse>(`quotations/${id}`, {
+      await apiPost<ClientQuoteResponse>(`quotations/${quotationId}`, {
         ...(formData.account_specialist
           ? { account_specialist: formData.account_specialist }
           : {}),
@@ -175,28 +177,28 @@ export async function updateClientQuote(
   }
 
   return (
-    await postMultipart<ClientQuoteResponse>(`quotations/${id}`, token, data)
+    await postMultipart<ClientQuoteResponse>(`quotations/${quotationId}`, token, data)
   ).data;
 }
 
 // Fetch Quotes
-export async function fetchClientQuotes({ status, search }: QuotesParams) {
+export async function fetchClientQuotes({ status, search }: QuotesParams): Promise<QuotesListItem> {
   const params = {
     "filter[status]": status,
     search: search || undefined,
   };
-  const response = await apiGet(`quotations`, {
+  const response = await apiGet<QuotesListItem>(`quotations`, {
     params,
   });
   return response.data;
 }
 
 // Get Single Quote
-export async function fetchClientQuote(id: number): Promise<QuoteForm> {
-  return (await apiGet<QuoteForm>(`quotations/${id}`)).data;
+export async function fetchClientQuote(quotationId: number): Promise<QuoteForm> {
+  return (await apiGet<QuoteForm>(`quotations/${quotationId}`)).data;
 }
 
 // Delete Single Quotation
-export async function deleteClientSingleQuote(id: number) {
-  return (await apiDelete(`quotations/${id}`)).data;
+export async function deleteClientSingleQuote(quotationId: number) {
+  return (await apiDelete(`quotations/${quotationId}`)).data;
 }

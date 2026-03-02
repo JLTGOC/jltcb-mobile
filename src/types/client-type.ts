@@ -2,14 +2,24 @@
 
 export type QuoteForm = {
   account_specialist: string;
+  removed_documents?: (string | number)[];
+  reference_number?: string;
+  status: string;
   company?: CompanyData;
   service?: ServiceData;
   commodity?: Commodity;
   shipment?: Shipment;
   documents?: ClientFile[];
   quotation_file?: Quotationfile[];
-  removed_documents?: (string | number)[];
-  status: string
+};
+
+export type QuotesListItem = {
+  client_name: string;
+  commodity: string;
+  date: string;
+  id: number;
+  reference_number: string;
+  status: "NEW" | "ACCEPTED"
 };
 
 export type QuotesParams = {
@@ -34,10 +44,10 @@ export type Field = {
 };
 
 export type Quotationfile = {
-  id: number,
-  file_name: string,
-  file_url: string,
-}
+  id: number;
+  file_name: string;
+  file_url: string;
+};
 
 export type ClientFile = {
   id: number;
