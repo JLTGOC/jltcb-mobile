@@ -21,6 +21,8 @@ export default function Step_3({ formData, setFormData }: Props) {
   const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
 
+  console.log("step_3.tsx", formData)
+
   const uploadedDocuments = Array.isArray(formData.documents)
     ? formData.documents.filter(
         (document): document is ClientFile =>
@@ -165,6 +167,8 @@ export default function Step_3({ formData, setFormData }: Props) {
         <Text>REMARKS</Text>
         <TextInput
           mode="flat"
+          value={formData.remarks || ""}
+          onChangeText={(text) => {setFormData((prev) => ({...prev, remarks: text}))}}
           multiline={true}
           numberOfLines={4}
           underlineColor="transparent"

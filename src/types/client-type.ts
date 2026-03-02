@@ -5,6 +5,7 @@ export type QuoteForm = {
   removed_documents?: (string | number)[];
   reference_number?: string;
   status: string;
+  remarks?: string;
   company?: CompanyData;
   service?: ServiceData;
   commodity?: Commodity;

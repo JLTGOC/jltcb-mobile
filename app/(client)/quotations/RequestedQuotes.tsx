@@ -48,9 +48,6 @@ export default function RequestedQuotes() {
     placeholderData: (previousData) => previousData,
   });
 
-  console.log("REQUESTEDQUOTES", data)
-
-
   // Delete single quotation
   const {mutate: deletedSingleQuotation} = useMutation({
   mutationFn: (quotationId:number) => deleteClientSingleQuote(quotationId),

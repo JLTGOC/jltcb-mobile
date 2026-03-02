@@ -29,6 +29,7 @@ export interface QuotationDetails {
   status: string;
   created_at: string;
   updated_at: string;
+  remarks?: string;
   company: Company;
   service: Service;
   commodity: Commodity;

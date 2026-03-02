@@ -39,6 +39,7 @@ export default function Quotation() {
         shipment,
         account_specialist,
         documents,
+        remarks,
       } = data;
 
       const consigneeDetails = {
@@ -61,7 +62,6 @@ export default function Quotation() {
           ["Service Type", service.type],
           ["Freight Transport Mode", service.transport_mode],
           ["Service", service.options.join(", ")],
-
           ["Commodity", commodity.commodity],
           [
             "Volume (Dimension)",
@@ -71,6 +71,7 @@ export default function Quotation() {
             key.replace(/_/g, " "),
             value,
           ]),
+          ["Remarks", remarks || ""],
         ],
       };
 

@@ -8,7 +8,7 @@ import {
   ClientQuoteResponse,
   QuoteForm,
   QuotesParams,
-  QuotesListItem
+  QuotesListItem,
 } from "../types/client-type";
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
@@ -44,6 +44,7 @@ const postMultipart = async <T>(
   token: string,
   body: FormData,
 ): Promise<ApiResponse<T>> => {
+  
   const response = await fetch(toAbsoluteApiUrl(path), {
     method: "POST",
     headers: {
@@ -84,7 +85,6 @@ const postMultipart = async <T>(
   return parsedResponse as ApiResponse<T>;
 };
 
-
 // Post Quote
 export async function postClientQuote(formData: QuoteForm) {
   const token = await SecureStore.getItemAsync("token");
@@ -95,13 +95,12 @@ export async function postClientQuote(formData: QuoteForm) {
   if (!newFiles.length) {
     return (
       await apiPost(`quotations`, {
-        ...(formData.account_specialist
-          ? { account_specialist: formData.account_specialist }
-          : {}),
-        ...(formData.company ? { company: formData.company } : {}),
-        ...(formData.service ? { service: formData.service } : {}),
-        ...(formData.commodity ? { commodity: formData.commodity } : {}),
-        ...(formData.shipment ? { shipment: formData.shipment } : {}),
+        account_specialist: formData.account_specialist || null,
+        company: formData.company,
+        service: formData.service,
+        commodity: formData.commodity,
+        shipment: formData.shipment,
+        remarks: formData.remarks || "",
       })
     ).data;
   }
@@ -113,6 +112,9 @@ export async function postClientQuote(formData: QuoteForm) {
   appendObjectToFormData(data, formData.service, "service");
   appendObjectToFormData(data, formData.commodity, "commodity");
   appendObjectToFormData(data, formData.shipment, "shipment");
+  if (formData.remarks !== undefined && formData.remarks !== null) {
+  data.append("remarks", formData.remarks);
+}
 
   return (await postMultipart("quotations", token, data)).data;
 }
@@ -143,14 +145,13 @@ export async function updateClientQuote(
   if (!newFiles.length) {
     return (
       await apiPost<ClientQuoteResponse>(`quotations/${quotationId}`, {
-        ...(formData.account_specialist
-          ? { account_specialist: formData.account_specialist }
-          : {}),
-        ...(formData.company ? { company: formData.company } : {}),
-        ...(formData.service ? { service: formData.service } : {}),
-        ...(formData.commodity ? { commodity: formData.commodity } : {}),
-        ...(formData.shipment ? { shipment: formData.shipment } : {}),
-        ...(removedDocumentIds.length
+        account_specialist: formData.account_specialist || null,
+        company: formData.company,
+        service: formData.service,
+        commodity: formData.commodity,
+        shipment: formData.shipment,
+        remarks: formData.remarks || "",
+        ...(removedDocumentIds?.length
           ? { removed_documents: removedDocumentIds }
           : {}),
       })
@@ -170,6 +171,10 @@ export async function updateClientQuote(
   appendObjectToFormData(data, formData.commodity, "commodity");
   appendObjectToFormData(data, formData.shipment, "shipment");
 
+if (formData.remarks !== undefined && formData.remarks !== null) {
+  data.append("remarks", formData.remarks);
+}
+
   if (removedDocumentIds.length) {
     removedDocumentIds.forEach((removedDocumentId) =>
       data.append("removed_documents[]", removedDocumentId.toString()),
@@ -177,12 +182,19 @@ export async function updateClientQuote(
   }
 
   return (
-    await postMultipart<ClientQuoteResponse>(`quotations/${quotationId}`, token, data)
+    await postMultipart<ClientQuoteResponse>(
+      `quotations/${quotationId}`,
+      token,
+      data,
+    )
   ).data;
 }
 
 // Fetch Quotes
-export async function fetchClientQuotes({ status, search }: QuotesParams): Promise<QuotesListItem> {
+export async function fetchClientQuotes({
+  status,
+  search,
+}: QuotesParams): Promise<QuotesListItem> {
   const params = {
     "filter[status]": status,
     search: search || undefined,
@@ -194,7 +206,9 @@ export async function fetchClientQuotes({ status, search }: QuotesParams): Promi
 }
 
 // Get Single Quote
-export async function fetchClientQuote(quotationId: number): Promise<QuoteForm> {
+export async function fetchClientQuote(
+  quotationId: number,
+): Promise<QuoteForm> {
   return (await apiGet<QuoteForm>(`quotations/${quotationId}`)).data;
 }
 

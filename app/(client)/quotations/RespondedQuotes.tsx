@@ -61,8 +61,6 @@ export default function RespondedQuotes() {
     placeholderData: (previousData) => previousData,
   });
 
-console.log("responed data", data)
-
   // Delete single quotation
   const { mutate: deletedSingleQuotation } = useMutation({
     mutationFn: (id: string) => deleteClientSingleQuote(id as any),
@@ -78,8 +76,7 @@ console.log("responed data", data)
       return acceptQuotation(reference_number);
     },
     onSuccess: (data) => {
-      console.log("hello", data);
-
+      
       queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
       setModalVisible(false);
       setSuccessModalVisible(true);
