@@ -55,18 +55,18 @@ export default function RootNaviagtion() {
         backgroundColor: "#b1b1b3ff",
       }}
     >
-      {(!hideHeader && role !== "Client" && role !== "Account Specialist") ||
-        (pathname === "/UnderConstruction" && <HeaderNavBar />)}
+      {((!hideHeader && role !== "Client" && role !== "Account Specialist") ||
+        pathname === "/UnderConstruction") && <HeaderNavBar />}
       <Stack
         screenOptions={{
           headerShown: false,
           animation: "fade",
         }}
       />
-      {(!hideNavigationBar &&
+      {((!hideNavigationBar &&
         role !== "Client" &&
         role !== "Account Specialist") ||
-        (pathname === "/UnderConstruction" && <BottomNavBar />)}
+        pathname === "/UnderConstruction") && <BottomNavBar />}
     </SafeAreaView>
   );
 }
