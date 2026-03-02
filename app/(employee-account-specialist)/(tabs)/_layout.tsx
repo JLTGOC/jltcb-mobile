@@ -40,6 +40,8 @@ export default function ASTabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen name="account-settings" options={{ href: null }} />
+      <Tabs.Screen name="ahtn-checker" options={{ href: null }} />
     </Tabs>
   );
 }

@@ -50,15 +50,15 @@ export const userNavigation: UserNavigation[] = [
     headerMenus: [
       {
         text: "Calculator",
-        link: routes.AS_DB,
+        link: routes.UNDERCONSTRUCTION,
       },
       {
         text: "AHTN Checker",
-        link: routes.AHTN,
+        link: routes.AS_AHTN,
       },
       {
         text: "Account Settings",
-        link: routes.AS_DB,
+        link: routes.ACCOUNT_SETTINGS,
       },
     ],
   },

@@ -23,6 +23,8 @@ export const routes = {
   AS_DB: "/(employee-account-specialist)/(tabs)/dashboard",
   AS_QUOTE_REQUESTS:
     "/(employee-account-specialist)/(tabs)/dashboard/request-quotation",
+  AS_AHTN: "/(employee-account-specialist)/(tabs)/ahtn-checker",
+  ACCOUNT_SETTINGS: "/account-settings",
   MARKETING_DB: "/(employee-marketing)/dashboard",
   UNAUTHORIZED: "/(pages)/Unauthorized",
   UNDERCONSTRUCTION: "/UnderConstruction",

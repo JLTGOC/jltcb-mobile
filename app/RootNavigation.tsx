@@ -26,6 +26,8 @@ export default function RootNaviagtion() {
   const hideNavigationBar =
     pathname === "/" || hidePaths.navigationBar.includes(pathname);
 
+  console.log(pathname);
+
   useEffect(() => {
     if (isLoading) return;
 
@@ -53,18 +55,18 @@ export default function RootNaviagtion() {
         backgroundColor: "#b1b1b3ff",
       }}
     >
-      {!hideHeader && role !== "Client" && role !== "Account Specialist" && (
-        <HeaderNavBar />
-      )}
+      {(!hideHeader && role !== "Client" && role !== "Account Specialist") ||
+        (pathname === "/UnderConstruction" && <HeaderNavBar />)}
       <Stack
         screenOptions={{
           headerShown: false,
           animation: "fade",
         }}
       />
-      {!hideNavigationBar &&
+      {(!hideNavigationBar &&
         role !== "Client" &&
-        role !== "Account Specialist" && <BottomNavBar />}
+        role !== "Account Specialist") ||
+        (pathname === "/UnderConstruction" && <BottomNavBar />)}
     </SafeAreaView>
   );
 }
