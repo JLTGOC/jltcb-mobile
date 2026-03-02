@@ -15,11 +15,18 @@ import type {
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { PusherEvent } from "@pusher/pusher-websocket-react-native";
+import type {
+  PusherChannel,
+  PusherEvent,
+} from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Crypto from "expo-crypto";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 
+import {
+  type MessageForm,
+  messageFormSchema,
+} from "@/src/schemas/messageSchema";
 import { useCallback, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -30,13 +37,12 @@ import {
   View,
 } from "react-native";
 import { Avatar } from "react-native-paper";
-import * as z from "zod";
 
-const messageSchema = z.object({
-  content: z.string().trim(),
-});
+type Props = {
+  variant: "dark" | "light";
+};
 
-export default function SharedChat() {
+export default function SharedChat({ variant }: Props) {
   const { id } = useLocalSearchParams<{ id: string }>();
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
@@ -48,10 +54,8 @@ export default function SharedChat() {
 
   const { data: chatDetails } = useQuery(chatQueryOptions(id));
 
-  const { control, handleSubmit, reset } = useForm<
-    z.infer<typeof messageSchema>
-  >({
-    resolver: zodResolver(messageSchema),
+  const { control, handleSubmit, reset } = useForm<MessageForm>({
+    resolver: zodResolver(messageFormSchema),
     defaultValues: {
       content: "",
     },
@@ -68,8 +72,6 @@ export default function SharedChat() {
 
   useFocusEffect(
     useCallback(() => {
-      const channelName = `private-chat.${id}`;
-
       const onEvent = (e: PusherEvent) => {
         const { eventName, data } = e;
         const chatEventName = eventName as ChatEvent;
@@ -107,7 +109,7 @@ export default function SharedChat() {
         }
       };
 
-      let channel: any;
+      let channel: PusherChannel;
 
       const subscribe = async () => {
         channel = await subscribeToChat(id, onEvent);
@@ -117,7 +119,7 @@ export default function SharedChat() {
 
       return () => {
         if (channel) {
-          pusher.unsubscribe({ channelName });
+          pusher.unsubscribe({ channelName: channel.channelName });
         }
       };
     }, [id, queryClient]),
@@ -142,7 +144,7 @@ export default function SharedChat() {
         <BannerHeader
           title={chatDetails?.data.title ?? ""}
           titleProps={{ numberOfLines: 1 }}
-          variant="dark"
+          variant={variant}
         >
           {chatDetails?.data.type === "GROUP" ? (
             <Avatar.Text label="GC" size={36} />
