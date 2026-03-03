@@ -53,6 +53,12 @@ export default function SharedChat({ variant }: Props) {
     select: (data) => ({ ...data, data: data.data.toReversed() }),
   });
 
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({ queryKey: chatKeys.lists() });
+    }, [queryClient]),
+  );
+
   const { data: chatDetails } = useQuery(chatQueryOptions(id));
 
   const { control, handleSubmit, reset } = useForm<MessageForm>({
