@@ -1,6 +1,7 @@
-import { User, UserRole } from "@/src/types/auth";
+import type { User, UserRole } from "@/src/types/auth";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
+import { pusher } from "../lib/pusher";
 import { login, logout } from "../services/auth";
 
 type AuthContextType = {
@@ -40,6 +41,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     loadAuth();
   }, []);
+
+  useEffect(() => {
+    if (pusher.connectionState !== "DISCONNECTED") return;
+
+    if (userData) {
+      pusher.connect();
+    } else {
+      pusher.disconnect();
+    }
+  }, [userData]);
 
   const loginContext = async (loginData: {
     email: string;

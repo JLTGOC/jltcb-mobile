@@ -7,10 +7,13 @@ import { ContactFormData } from "../../../src/types/get-quote";
 
 type ImageInputBoxProps = {
   setFormData: Dispatch<SetStateAction<ContactFormData>>;
-  formData: ContactFormData
+  formData: ContactFormData;
 };
 
-export default function SubForm_ImageInput({ setFormData, formData }: ImageInputBoxProps) {
+export default function SubForm_ImageInput({
+  setFormData,
+  formData,
+}: ImageInputBoxProps) {
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -23,15 +26,19 @@ export default function SubForm_ImageInput({ setFormData, formData }: ImageInput
   };
 
   return (
-    <View style={styles.container}>
-      {formData.imageUri ? (
-        <Image source={{ uri: formData.imageUri }} style={styles.image} contentFit="cover" />
-      ) : (
-        <TouchableOpacity onPress={pickImage}>
+    <TouchableOpacity onPress={pickImage}>
+      <View style={styles.container}>
+        {formData.imageUri ? (
+          <Image
+            source={{ uri: formData.imageUri }}
+            style={styles.image}
+            contentFit="cover"
+          />
+        ) : (
           <Ionicons name="image-outline" size={40} color="#888" />
-        </TouchableOpacity>
-      )}
-    </View>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 }
 

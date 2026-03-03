@@ -14,11 +14,11 @@
     "@expo-google-fonts/martel-sans": "^0.4.1",
     "@expo/vector-icons": "^15.0.3",
     "@hookform/resolvers": "^5.2.2",
+    "@pusher/pusher-websocket-react-native": "^1.3.2",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
-    "@sentry/react-native": "^8.1.0",
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.2",
     "date-fns": "^4.1.0",
@@ -27,6 +27,7 @@
     "expo-av": "~16.0.8",
     "expo-build-properties": "~1.0.10",
     "expo-constants": "~18.0.10",
+    "expo-crypto": "~15.0.8",
     "expo-dev-client": "~6.0.20",
     "expo-document-picker": "~14.0.8",
     "expo-file-system": "~19.0.21",
@@ -69,11 +70,17 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
-    "@types/react-native": "^0.72.8",
     "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "expo": {
+  "doctor": {
+    "reactNativeDirectoryCheck": {
+      "exclude": ["@pusher/pusher-websocket-react-native"]
+    }
+  }
+}
 }

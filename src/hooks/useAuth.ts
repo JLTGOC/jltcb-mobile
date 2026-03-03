@@ -1,7 +1,7 @@
-import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { AuthContext } from "../contexts/AuthContext";
+import { useContext } from "react";
 import { routes } from "../constants/routes";
+import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "./useNavigate";
 
 export function useAuth() {

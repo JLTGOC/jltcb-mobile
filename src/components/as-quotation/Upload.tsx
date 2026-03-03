@@ -12,6 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, HelperText, Portal, Text } from "react-native-paper";
+import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
   submitButtonText: string;
@@ -21,8 +22,8 @@ type Props = {
 
 export default function Upload({
   submitButtonText,
-  confirmModalTitle = "Send Quotation?",
-  confirmModalDescription = "You’re about to send this quotation to the client. Please review all details carefully. Changes after sending will require a revised quotation.",
+  confirmModalTitle,
+  confirmModalDescription,
 }: Props) {
   const { id, clientName } = useLocalSearchParams<{
     id: string;
@@ -117,12 +118,15 @@ export default function Upload({
 
       <Portal>
         <ConfirmModal
+          icon={<AntDesign name="warning" size={100} color="red" />}
+          confirmButtonText="Yes"
+          cancelButtonText="Cancel"
           loading={mutation.isPending}
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
           onConfirm={handleSendQuotation}
-          title={confirmModalTitle}
-          description={confirmModalDescription}
+          title={confirmModalTitle as any}
+          description={confirmModalDescription as any}
         />
         <SuccesModal
           onConfirm={() => {

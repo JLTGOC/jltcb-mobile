@@ -27,6 +27,8 @@ export default function NewsTabButtons() {
 
   const screenWidth = Dimensions.get("screen").width;
 
+  const isActive = (href: Href) => pathname === href;
+
   return (
     <View style={styles.buttonContainer}>
       {TABS.map((t) => (

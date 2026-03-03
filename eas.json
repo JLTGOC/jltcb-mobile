@@ -11,7 +11,7 @@
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "apk"
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api"
@@ -19,10 +19,11 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api"
+        "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api",
+        "SENTRY_ALLOW_FAILURE": "true"
       }
     }
     // "ios-simulator": {

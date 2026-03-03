@@ -14,23 +14,19 @@ export const routes = {
   CUSTOMS_BROKERAGE_LANDING: "/landing-page/customs-brokerage",
   CAREERS: "/home/careers",
   LOG_IN: "/login",
-  CLIENT_DB: "/(client)/dashboard",
-  CLIENT_CREATE_QUOTE: "/(client)/quotations" as Href,
-  CLIENT_QUOTE_DETAILS: "/(client)/quotations/[id]",
-  CLIENT_REQ_QUOTE_RECORDS: "/(client)/quotations/RequestedQuotes",
-  CLIENT_RES_QUOTE_RECORDS: "/(client)/quotations/RespondedQuotes",
-  AS_DB: "/(employee-account-specialist)/dashboard",
-  AS_QUOTE_REQUESTS: "/(employee-account-specialist)/quotations/new-request",
-  AS_QUOTE_REQUEST_LIST:
-    "/(employee-account-specialist)/quotations/new-request/request-list",
-  AS_QUOTE_REQUEST:
-    "/(employee-account-specialist)/quotations/new-request/[id]",
-  AS_QUOTE_REQUEST_UPLOAD:
-    "/(employee-account-specialist)/quotations/new-request/[id]/upload",
-  AS_QUOTE_RESPONDED:
-    "/(employee-account-specialist)/quotations/responded" as Href,
+  CLIENT_DB: "/(client)/(tabs)/dashboard",
+  CLIENT_AHTN: "/(client)/(tabs)/ahtn-checker",
+  CLIENT_CREATE_QUOTE: "/(client)/(tabs)/get-quote",
+  CLIENT_QUOTE_DETAILS: "/(client)/(tabs)/dashboard/quotations/[id]",
+  CLIENT_REQ_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/requested-quotes",
+  CLIENT_RES_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/responded-quotes",
+  CLIENT_MESSAGES: "/(client)/(tabs)/messages",
+  AS_DB: "/(employee-account-specialist)/(tabs)/dashboard",
+  AS_QUOTE_REQUESTS:
+    "/(employee-account-specialist)/(tabs)/dashboard/request-quotation",
+  AS_AHTN: "/(employee-account-specialist)/(tabs)/ahtn-checker",
+  ACCOUNT_SETTINGS: "/account-settings",
   MARKETING_DB: "/(employee-marketing)/dashboard",
-  CHATBOX: "/(client)/chatbox",
   UNAUTHORIZED: "/(pages)/Unauthorized",
   UNDERCONSTRUCTION: "/UnderConstruction",
 } as const satisfies Record<string, Href>;
