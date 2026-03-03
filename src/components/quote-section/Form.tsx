@@ -55,7 +55,7 @@ export default function Form() {
       </Text>
 
       {/* Image Input Area */}
-      <SubForm_ImageInput setFormData={setFormData} formData={formData} />
+      {/* <SubForm_ImageInput setFormData={setFormData} formData={formData} /> */}
 
       {/* Message area */}
       <Text variant="titleSmall" allowFontScaling={false}>

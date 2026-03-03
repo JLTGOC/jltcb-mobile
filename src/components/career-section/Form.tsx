@@ -1,16 +1,16 @@
+import { Field, OJTFormData, PositionsSample } from "@/src/types/careers";
+import * as Linking from "expo-linking";
 import { useState } from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
+  Button,
+  Checkbox,
+  List,
+  Surface,
   Text,
   TextInput,
-  List,
-  Button,
-  Surface,
-  Checkbox,
 } from "react-native-paper";
-import { Field, OJTFormData, PositionsSample } from "@/src/types/careers";
 import FileUploader from "../../../src/components/career-section/SubForm_FileUploader";
-import * as Linking from "expo-linking";
 
 const openLink = (url: string) => {
   Linking.openURL(url);
@@ -35,6 +35,19 @@ export default function Form() {
     position: "",
     cv_cover: [],
   });
+
+  const hasEmptyTextFields = textFields.some((field) => {
+    const value = formData[field.key];
+    return !value || value.trim() === "";
+  });
+
+  const hasAllRequiredUploads =
+    Array.isArray(formData.cv_cover) &&
+    formData.cv_cover.length >= 2 &&
+    formData.cv_cover.slice(0, 2).every((fileUri) => fileUri.trim() !== "");
+
+  const isSubmitDisabled =
+    !checked || hasEmptyTextFields || !hasAllRequiredUploads;
 
   return (
     <View style={{ marginTop: -35 }}>
@@ -152,8 +165,8 @@ export default function Form() {
             marginBottom: 30,
             width: 150,
           }}
-          disabled={!checked}
-          buttonColor={!checked ? "#161F3C" : "#323f68ff"}
+          disabled={isSubmitDisabled}
+          buttonColor={isSubmitDisabled ? "#C5C9D6" : "#161F3C"}
           onPress={() => (
             setFormData({
               position: "",

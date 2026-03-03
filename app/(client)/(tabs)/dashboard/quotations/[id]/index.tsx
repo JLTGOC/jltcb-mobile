@@ -66,7 +66,7 @@ export default function QuoteDetails() {
                 >
                   {t}
                 </Text>
-                {active === i && <View style={styles.underline} />}
+                {active === i && <View style={styles.underline}/>}
               </TouchableOpacity>
             ))}
           </View>

@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Check } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
+import { useFocusEffect } from "@react-navigation/native";
 
 import Success from "@/src/components/client-section/get-quote/Success";
 
@@ -71,21 +72,42 @@ export default function CreateUpdateQuote() {
 
   const quotationId = Number(id);
   const hasValidQuotationId = Number.isFinite(quotationId) && quotationId > 0;
+  const isEditMode = mode === "EDIT" && hasValidQuotationId;
 
   // Data Fetching for updating
   const { data, refetch } = useQuery<QuoteForm>({
     queryKey: ["client-quote", quotationId],
     queryFn: () => fetchClientQuote(quotationId),
-    enabled: hasValidQuotationId,
+    enabled: isEditMode,
   });
 
   useEffect(() => {
-    if (data && mode === "EDIT") {
-      setFormData(normalizeQuoteForm(data));
+    if (isEditMode) {
+      if (data) {
+        setFormData(normalizeQuoteForm(data));
+      }
     } else {
       setFormData(initialQuoteForm);
+      setCurrentPosition(0);
     }
-  }, [data, mode]);
+  }, [data, isEditMode]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (isEditMode) {
+        setCurrentPosition(0);
+
+        if (data) {
+          setFormData(normalizeQuoteForm(data));
+        }
+
+        refetch();
+      } else {
+        setCurrentPosition(0);
+        setFormData(initialQuoteForm);
+      }
+    }, [isEditMode, data, refetch]),
+  );
 
   const stepConfigs: Record<
     number,
@@ -113,14 +135,14 @@ export default function CreateUpdateQuote() {
 
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
-      if (hasValidQuotationId) {
+      if (isEditMode) {
         return await updateClientQuote(quotationId, formData);
       } else {
         return await postClientQuote(formData);
       }
     },
     onSuccess: async () => {
-      if (hasValidQuotationId) {
+      if (isEditMode) {
         const { data: updatedData } = await refetch();
 
         if (updatedData) {
@@ -148,6 +170,12 @@ export default function CreateUpdateQuote() {
     quoteMutation.mutate(formData);
   };
 
+  const handleAddAnotherQuotation = () => {
+    setFormData(initialQuoteForm);
+    setCurrentPosition(0);
+    quoteMutation.reset();
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -160,7 +188,7 @@ export default function CreateUpdateQuote() {
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => (
           <>
-            <BannerHeader title="Get Quote" variant="dark" />
+            <BannerHeader title={mode === "EDIT" ? "Edit Quote" : "Get Quote"} variant="dark" />
             <View style={{ padding: 20, flex: 1 }}>
               <StepIndicator
                 customStyles={stepIndicatorStyles}
@@ -190,7 +218,12 @@ export default function CreateUpdateQuote() {
                 <View
                   style={{ alignItems: "center", justifyContent: "center" }}
                 >
-                  {currentPosition === 3 && <Success />}
+                  {currentPosition === 3 && (
+                    <Success
+                      onAddAnotherQuotation={handleAddAnotherQuotation}
+                      show={true}
+                    />
+                  )}
                 </View>
               </View>
               {currentPosition < 3 && (

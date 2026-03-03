@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-import { Text, TextInput, List, Button } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Button, List, Text, TextInput } from "react-native-paper";
 
 const LOCATIONS = [
   "sample Location 1",
@@ -25,7 +25,11 @@ type FormData = {
   service: string;
 };
 
-export default function Form() {
+type Props = {
+  onSubmitted?: () => void;
+};
+
+export default function Form({ onSubmitted }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     meeting_location: null,
@@ -37,9 +41,17 @@ export default function Form() {
     service: "",
   });
 
+  const isSubmitDisabled = [
+    formData.full_name,
+    formData.email,
+    formData.phone_number,
+    formData.company_name,
+    formData.message,
+  ].some((value) => value.trim() === "");
+
   return (
-    <ScrollView 
-      contentContainerStyle={{ paddingBottom: 40 }} 
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 40 }}
       keyboardShouldPersistTaps="handled" // Prevents the keyboard from closing when tapping the accordion
     >
       <View style={styles.container}>
@@ -54,7 +66,7 @@ export default function Form() {
             onPress={() => setExpanded(!expanded)}
             style={styles.accordion}
             titleStyle={styles.accordionTitle}
-            left={() => null} 
+            left={() => null}
           >
             {LOCATIONS.map((loc) => (
               <List.Item
@@ -65,7 +77,7 @@ export default function Form() {
                     ...prev,
                     meeting_location: loc,
                   }));
-                  setExpanded(false); 
+                  setExpanded(false);
                 }}
                 style={styles.accordionItem}
                 titleStyle={styles.accordionItemTitle}
@@ -181,7 +193,8 @@ export default function Form() {
             marginBottom: 30,
             width: 150,
           }}
-          buttonColor={"#161F3C"}
+          disabled={isSubmitDisabled}
+          buttonColor={isSubmitDisabled ? "#C5C9D6" : "#161F3C"}
           onPress={() => {
             setFormData({
               meeting_location: null,
@@ -192,6 +205,7 @@ export default function Form() {
               message: "",
               service: "",
             });
+            onSubmitted?.();
           }}
         >
           SUBMIT

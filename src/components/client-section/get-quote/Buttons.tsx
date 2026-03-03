@@ -1,7 +1,10 @@
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { View } from "react-native";
-import { Button } from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import { FieldConfig, QuoteForm } from "../../../types/client-type";
+
+const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
+const COMPANY_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|ph)$/i;
 
 type Props = {
   currentPosition: number;
@@ -24,6 +27,8 @@ export default function Buttons({
   handleSumbit,
   loading,
 }: Props) {
+  const [isNextLoading, setIsNextLoading] = useState(false);
+
   const isStepInvalid = useMemo(() => {
     const config = stepConfigs[currentPosition];
     if (!config) return false;
@@ -36,10 +41,21 @@ export default function Buttons({
 
     if (hasEmptyRequiredFields) return true;
 
+    if (currentPosition === 0) {
+      const company = formData.company;
+      const isContactNumberValid = CONTACT_NUMBER_REGEX.test(
+        company?.contact_number || "",
+      );
+      const isEmailValid = COMPANY_EMAIL_REGEX.test(company?.email || "");
+
+      return !isContactNumberValid || !isEmailValid;
+    }
+
     if (currentPosition === 1) {
       const service = formData.service;
       const commodity = formData.commodity;
       const shipment = formData.shipment;
+
       return (
         !service?.type ||
         !commodity?.commodity ||
@@ -51,25 +67,49 @@ export default function Buttons({
       );
     }
 
+    if (currentPosition === 2) {
+      const hasUploadedDocuments = Array.isArray(formData.documents)
+        ? formData.documents.some(
+            (document) =>
+              !!document &&
+              typeof document.file_name === "string" &&
+              document.file_name.trim().length > 0 &&
+              typeof document.file_url === "string" &&
+              document.file_url.trim().length > 0,
+          )
+        : false;
+
+      return !hasUploadedDocuments;
+    }
+
     return false;
   }, [formData, currentPosition, stepConfigs]);
 
+  const isActionLoading = loading || isNextLoading;
+
   const handleNext = () => {
-    if (isStepInvalid) {
+    if (isStepInvalid || isActionLoading) {
       return;
     }
 
     if (currentPosition < 2) {
-      setCurrentPosition((prev) => prev + 1);
+      setIsNextLoading(true);
+      setTimeout(() => {
+        setCurrentPosition((prev) => prev + 1);
+        setIsNextLoading(false);
+      }, 500);
     }
   };
+
+  const showNextLoading = currentPosition < 2 && isNextLoading;
+  const showSubmitLoading = currentPosition === 2 && loading;
 
   return (
     <View style={styles.buttonRow}>
       {currentPosition > 0 ? (
         <Button
           mode="outlined"
-          disabled={loading}
+          disabled={isActionLoading}
           onPress={() => setCurrentPosition((prev) => prev - 1)}
           style={styles.backBtn}
         >
@@ -82,8 +122,11 @@ export default function Buttons({
       <Button
         style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
         mode="contained"
-        loading={loading}
+        disabled={isActionLoading || isStepInvalid}
         onPress={() => {
+          if (isStepInvalid || isActionLoading) {
+            return;
+          }
           if (currentPosition < 2) {
             handleNext();
           } else {
@@ -91,7 +134,13 @@ export default function Buttons({
           }
         }}
       >
-        {currentPosition === 2 ? "Submit" : "Next"}
+        {showNextLoading || showSubmitLoading ? (
+          <ActivityIndicator color="#FFFFFF" size={18} />
+        ) : currentPosition === 2 ? (
+          "Submit"
+        ) : (
+          "Next"
+        )}
       </Button>
     </View>
   );

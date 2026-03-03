@@ -10,6 +10,9 @@ type Props = {
   fields: Field[];
 };
 
+const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
+const COMPANY_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|ph)$/i;
+
 const companySchema = z.object({
   name: z
     .string()
@@ -19,11 +22,17 @@ const companySchema = z.object({
   contact_person: z.string().min(1, "Contact person name is required"),
   contact_number: z
     .string()
-    .length(11, "Number must be exactly 11 digits")
-    .regex(/^\d+$/, "Must contain only numbers"),
-  email: z.string().min(1, "Email is required").email("Invalid email format"),
+    .regex(
+      CONTACT_NUMBER_REGEX,
+      "Contact number must start with 09 and be exactly 11 digits",
+    ),
+  email: z
+    .string()
+    .regex(
+      COMPANY_EMAIL_REGEX,
+      "Email must be valid and end with .com or .ph",
+    ),
 });
-
 export default function Step_1({ setFormData, formData, fields }: Props) {
   const validationResult = useMemo(() => {
     return companySchema.safeParse(formData.company);

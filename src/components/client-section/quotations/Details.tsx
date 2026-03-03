@@ -32,7 +32,7 @@ export default function Details({ quotationId }: Props) {
   const handleOnPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
       router.push({
-        pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
+        pathname: "/(client)/(tabs)/get-quote",
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
@@ -150,10 +150,7 @@ export default function Details({ quotationId }: Props) {
           textColor="white"
           style={{ borderRadius: 4 }}
           onPress={() => {
-            handleOnPress(
-              data?.status,
-              data?.quotation_file?.[0]?.file_url
-            );
+            handleOnPress(data?.status, data?.quotation_file?.[0]?.file_url);
           }}
         >
           VIEW QUOTATION
