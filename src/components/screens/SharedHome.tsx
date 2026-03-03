@@ -5,9 +5,21 @@ import Reels from "@/src/components/home-section/reels/ReelsContainer";
 import { articlesQueryOptions } from "@/src/query-options/articles/articlesQueryOptions";
 import { reelsQueryOptions } from "@/src/query-options/reels/reelsQueryOptions";
 import { useQueries } from "@tanstack/react-query";
-import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  FlatList,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export default function SharedHome() {
+  const [isReelsVisible, setIsReelsVisible] = useState(true);
+  const reelsLayoutY = useRef(0);
+
   const [
     {
       data: reels,
@@ -38,14 +50,36 @@ export default function SharedHome() {
 
   return (
     <FlatList
+      onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollY = e.nativeEvent.contentOffset.y;
+        const screenHeight = e.nativeEvent.layoutMeasurement.height;
+
+        const reelsTop = reelsLayoutY.current;
+        const reelsBottom = reelsTop + 50; // height to autoplay reels
+
+        const isVisible =
+          reelsBottom > scrollY && reelsTop < scrollY + screenHeight;
+
+        setIsReelsVisible(isVisible);
+      }}
+      scrollEventThrottle={16}
+      ListHeaderComponentStyle={styles.listHeaderComponent}
       ListHeaderComponent={
         <>
-          <Reels
-            reels={reels?.data}
-            isPending={isReelsPending}
-            refetch={refetchReels}
-            error={reelsError}
-          />
+          <View
+            onLayout={(e) => {
+              reelsLayoutY.current = e.nativeEvent.layout.y;
+            }}
+          >
+            <Reels
+              reels={reels?.data}
+              isPending={isReelsPending}
+              refetch={refetchReels}
+              error={reelsError}
+              isVisible={isReelsVisible}
+            />
+          </View>
+
           <NewsUpdates />
         </>
       }
@@ -92,5 +126,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 56,
+  },
+  listHeaderComponent: {
+    paddingVertical: 10,
   },
 });

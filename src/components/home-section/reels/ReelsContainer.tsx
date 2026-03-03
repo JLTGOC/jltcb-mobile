@@ -1,20 +1,20 @@
 import type { ApiResponse } from "@/src/types/api";
 import type { Reel } from "@/src/types/reels";
 import type {
-	QueryObserverResult,
-	RefetchOptions,
+  QueryObserverResult,
+  RefetchOptions,
 } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
-	Dimensions,
-	FlatList,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-	type ViewabilityConfig,
-	type ViewToken,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type ViewabilityConfig,
+  type ViewToken,
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import ReelsPlayer from "./ReelsPlayer";
@@ -26,12 +26,14 @@ type ReelsContainerProps = {
     options?: RefetchOptions,
   ) => Promise<QueryObserverResult<ApiResponse<Reel[]>, Error>>;
   error?: Error | null;
+  isVisible?: boolean;
 };
 
 export default function ReelsContainer({
   reels,
   isPending,
   refetch,
+  isVisible,
   error,
 }: ReelsContainerProps) {
   const router = useRouter();
@@ -116,7 +118,10 @@ export default function ReelsContainer({
             }}
             style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
           >
-            <ReelsPlayer reel={item} shouldPlay={activeItemId === item.id} />
+            <ReelsPlayer
+              reel={item}
+              shouldPlay={activeItemId === item.id && !!isVisible}
+            />
           </Pressable>
         )}
       />
