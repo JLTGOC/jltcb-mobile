@@ -1,31 +1,29 @@
 import { routes } from "@/src/constants/routes";
-import { useNavigate } from "@/src/hooks/useNavigate";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Link } from "expo-router";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Header() {
-  const { navigate } = useNavigate();
-
+export default function GuestHeader() {
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView edges={["top", "right", "left"]} style={styles.container}>
         <Image
           source={require("../../../src/assets/white_logos/fullLogo.png")}
           style={styles.logo}
           contentFit="contain"
         />
-        <TouchableOpacity
-          style={styles.profileContainer}
-          onPress={() => navigate(routes.SIGN_IN)}
-        >
-          <Image
-            source={require("../../../src/assets/images/profile.png")}
-            style={styles.profileImage}
-            contentFit="contain"
-          />
-        </TouchableOpacity>
-      </View>
+        <Link href={routes.LOG_IN} asChild style={styles.profileContainer}>
+          <TouchableOpacity>
+            <Image
+              source={require("../../../src/assets/images/profile.png")}
+              style={styles.profileImage}
+              contentFit="contain"
+            />
+          </TouchableOpacity>
+        </Link>
+      </SafeAreaView>
       <LinearGradient
         colors={["#EE9034", "#161F3C"]}
         style={styles.borderBottom}
