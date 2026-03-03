@@ -23,6 +23,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Crypto from "expo-crypto";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 
+import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import {
   type MessageForm,
   messageFormSchema,
@@ -48,10 +49,16 @@ export default function SharedChat({ variant }: Props) {
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
 
-  const { data: messages, isPending: isMessagesPending } = useQuery({
+  const {
+    data: messages,
+    isPending: isMessagesPending,
+    refetch,
+  } = useQuery({
     ...chatMessagesQueryOptions(id),
     select: (data) => ({ ...data, data: data.data.toReversed() }),
   });
+
+  useRefreshOnFocus(refetch);
 
   useFocusEffect(
     useCallback(() => {
