@@ -1,0 +1,133 @@
+import { StyleSheet, View } from "react-native";
+import { Card, Text, Avatar, Button, Divider } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+export default function Ongoing() {
+  return (
+    <Card style={styles.card} mode="elevated" elevation={1}>
+      <Card.Content style={styles.content}>
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <MaterialCommunityIcons
+              name="package-variant-closed"
+              size={24}
+              color="#333"
+              style={styles.icon}
+            />
+            <View>
+              <Text style={styles.label}>REFERENCE NO</Text>
+              <Text style={styles.referenceNo}>IM-09-2026-052</Text>
+            </View>
+          </View>
+          <Text style={styles.status}>IN TRANSIT</Text>
+        </View>
+
+        <Divider style={styles.divider} />
+
+        <Text style={styles.itemName}>CASTABLE 16 REFRACTOR</Text>
+
+        <View style={styles.timeline}>
+          <Text style={styles.date}>JANUARY 13, 2026</Text>
+          <View style={styles.arrowContainer}>
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={24}
+              color="#aaa"
+            />
+          </View>
+          <Text style={styles.date}>FEBRUARY 13, 2026</Text>
+        </View>
+
+        <Divider style={styles.divider} />
+
+        <Card.Actions style={styles.actions}>
+          <Button
+            onPress={() => {}}
+            mode="text"
+            labelStyle={styles.viewDetailsText}
+          >
+            VIEW DETAILS
+          </Button>
+        </Card.Actions>
+      </Card.Content>
+    </Card>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "white",
+    borderRadius: 16,
+    margin: 16,
+  },
+  content: {
+    padding: 16,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  icon: {
+    marginRight: 12,
+  },
+  label: {
+    fontSize: 10,
+    color: "#aaa",
+    textTransform: "uppercase",
+  },
+  referenceNo: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "500",
+  },
+  status: {
+    fontSize: 12,
+    color: "green",
+    textTransform: "uppercase",
+    fontWeight: "500",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#eee",
+    marginHorizontal: -16,
+  },
+  itemName: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  timeline: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  date: {
+    fontSize: 12,
+    color: "#888",
+    textTransform: "uppercase",
+  },
+  arrowContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  actions: {
+    justifyContent: "center",
+    paddingBottom: 0,
+    paddingTop: 8,
+  },
+  viewDetailsText: {
+    fontSize: 12,
+    color: "#888",
+    textTransform: "uppercase",
+  },
+});

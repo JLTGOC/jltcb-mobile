@@ -1,5 +1,5 @@
-import Details from "@/src/components/client-section/requested-quote/Details";
-import Documents from "@/src/components/client-section/requested-quote/Documents";
+import Details from "@/src/components/client-section/quotations/Details";
+import Documents from "@/src/components/client-section/quotations/Documents";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
 import { useLocalSearchParams } from "expo-router";

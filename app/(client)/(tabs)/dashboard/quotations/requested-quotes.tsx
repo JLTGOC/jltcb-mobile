@@ -17,6 +17,7 @@ import {
   deleteClientSingleQuote,
   fetchClientQuotes,
 } from "@/src/services/clientQuotation";
+import Search from "@/src/components/client-section/shipment/Search"
 import { useRouter } from "expo-router";
 
 type TableItem = {
@@ -72,25 +73,7 @@ export default function RequestedQuotes() {
     >
       <BannerHeader title="REQUESTED QUOTATION" variant="dark" />
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          mode="flat"
-          placeholder="ENTER REFERENCE NUMBER"
-          placeholderTextColor="#666"
-          style={styles.input}
-          underlineColor="transparent"
-          activeUnderlineColor="transparent"
-          selectionColor="#f2994a"
-        />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => console.log("Submit")}
-        >
-          <Icon source="magnify" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+      <Search search={search} setSearch={setSearch}/>
 
       <DataTable style={{ flex: 1 }}>
         <DataTable.Header style={styles.header}>
