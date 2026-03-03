@@ -24,7 +24,16 @@ export interface Quotation {
   date_created: string;
 }
 
-export type MessageType = "TEXT" | "QUOTATION_CARD" | "FILE";
+export interface Shipment {
+  id: number;
+  reference_number: string;
+  commodity: string;
+  cargo_type: string;
+  volume: string | null;
+  date_created: string;
+}
+
+export type MessageType = "TEXT" | "QUOTATION_CARD" | "FILE" | "SHIPMENT_CARD";
 
 export interface BaseMessage {
   id: number;
@@ -50,7 +59,16 @@ export interface FileMessage extends BaseMessage {
   file_url: string;
 }
 
-export type Message = QuotationCardMessage | TextMessage;
+export interface ShipmentCardMessage extends BaseMessage {
+  type: "SHIPMENT_CARD";
+  shipment: Shipment;
+}
+
+export type Message =
+  | QuotationCardMessage
+  | TextMessage
+  | FileMessage
+  | ShipmentCardMessage;
 
 export interface MessageSentEvent {
   message: Message;

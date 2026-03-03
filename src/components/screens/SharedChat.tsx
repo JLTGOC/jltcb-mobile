@@ -37,6 +37,7 @@ import {
   View,
 } from "react-native";
 import { ActivityIndicator, Avatar } from "react-native-paper";
+import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
 type Props = {
   variant: "dark" | "light";
@@ -132,6 +133,9 @@ export default function SharedChat({ variant }: Props) {
 
       case "QUOTATION_CARD":
         return <ChatQuotationCard quotation={item} />;
+
+      case "SHIPMENT_CARD":
+        return <ChatShipmentCard shipment={item} />;
 
       default:
         return null;
