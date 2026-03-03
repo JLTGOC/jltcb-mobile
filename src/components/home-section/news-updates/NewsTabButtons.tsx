@@ -20,11 +20,10 @@ export default function NewsTabButtons() {
   const pathname = usePathname();
 
   const isTabActive = (route: Href) =>
-    pathname.includes("articles") && route === routes.HOME
+    (pathname.includes("articles") || pathname.includes("reels")) &&
+    route === routes.HOME
       ? true
       : pathname === route;
-
-  // const tabs = ["LATEST", "ARTICLES", "CAREERS", ""];
 
   const screenWidth = Dimensions.get("screen").width;
 
