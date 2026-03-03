@@ -38,6 +38,7 @@
     "expo-intent-launcher": "^13.0.8",
     "expo-linear-gradient": "~15.0.8",
     "expo-linking": "~8.0.11",
+    "expo-network": "~8.0.8",
     "expo-router": "~6.0.23",
     "expo-secure-store": "~15.0.8",
     "expo-sharing": "^14.0.8",
@@ -77,10 +78,12 @@
   },
   "private": true,
   "expo": {
-  "doctor": {
-    "reactNativeDirectoryCheck": {
-      "exclude": ["@pusher/pusher-websocket-react-native"]
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "@pusher/pusher-websocket-react-native"
+        ]
+      }
     }
   }
-}
 }

@@ -6,7 +6,11 @@ import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useNavigate } from "@/src/hooks/useNavigate";
 
+import { useAppState } from "@/src/hooks/useAppState";
+import { useOnlineManager } from "@/src/hooks/useOnlineManager";
 import { initPusher } from "@/src/lib/pusher";
+import { focusManager } from "@tanstack/react-query";
+import { Platform, type AppStateStatus } from "react-native";
 import BottomNavBar from "../src/components/bottom-nav-bar-section/index";
 import HeaderNavBar from "../src/components/header-nav-bar-section/index";
 
@@ -15,7 +19,17 @@ const hidePaths = {
   navigationBar: ["/landing-page", "/landing-page/customs-brokerage"],
 };
 
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active')
+  }
+}
+
 export default function RootNaviagtion() {
+  useOnlineManager()
+
+  useAppState(onAppStateChange)
+
   const { replace } = useNavigate();
   const { token, role, userData, isLoading } = useAuth();
   console.log(token);
