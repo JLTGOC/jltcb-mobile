@@ -2,7 +2,7 @@ import { Asset } from "expo-asset";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, Button,View } from "react-native";
-import * as Sentry from "@sentry/react-native"
+
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -111,10 +111,6 @@ export default function SplashScreen() {
           contentFit="contain"
         />
         <View style={{ marginTop: 20 }}>
-          {/* <Button 
-            title='Test Sentry Error' 
-            onPress={() => { Sentry.captureException(new Error('Sentry Setup Test!')) }} 
-          /> */}
         </View>
       </Animated.View>
     </Animated.View>

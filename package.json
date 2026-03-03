@@ -19,7 +19,6 @@
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
-    "@sentry/react-native": "~7.2.0",
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.2",
     "date-fns": "^4.1.0",
@@ -76,5 +75,12 @@
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "expo": {
+  "doctor": {
+    "reactNativeDirectoryCheck": {
+      "exclude": ["@pusher/pusher-websocket-react-native"]
+    }
+  }
+}
 }
