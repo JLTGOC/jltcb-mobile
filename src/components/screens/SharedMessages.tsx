@@ -2,6 +2,8 @@ import InboxListItem from "@/src/components/chats-section/InboxListItem";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import Search from "@/src/components/ui/Search";
 import { useAuth } from "@/src/hooks/useAuth";
+import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { pusher } from "@/src/lib/pusher";
 import { chatsQueryOptions } from "@/src/query-options/chats/chatsQueryOptions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +11,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ActivityIndicator, HelperText } from "react-native-paper";
 import * as z from "zod";
 
@@ -23,6 +31,25 @@ type Props = {
 
 export default function SharedMessages({ variant }: Props) {
   const { userData } = useAuth();
+  const [submittedSearch, setSubmittedSearch] = useState("");
+  const { data, isPending, isRefetching, error, refetch } = useQuery({
+    ...chatsQueryOptions(submittedSearch),
+    placeholderData: (prev) => prev,
+  });
+
+  const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
+
+  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
+    resolver: zodResolver(searchSchema),
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  const onSubmit = handleSubmit(({ search }) =>
+    setSubmittedSearch(search.trim()),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -60,24 +87,6 @@ export default function SharedMessages({ variant }: Props) {
     }, [userData]),
   );
 
-  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
-    resolver: zodResolver(searchSchema),
-    defaultValues: {
-      search: "",
-    },
-  });
-
-  const [submittedSearch, setSubmittedSearch] = useState("");
-
-  const { data, isPending, isRefetching, error } = useQuery({
-    ...chatsQueryOptions(submittedSearch),
-    placeholderData: (prev) => prev,
-  });
-
-  const onSubmit = handleSubmit(({ search }) =>
-    setSubmittedSearch(search.trim()),
-  );
-
   if (error) {
     console.log(error);
     return null;
@@ -86,6 +95,12 @@ export default function SharedMessages({ variant }: Props) {
   return (
     <FlatList
       keyboardShouldPersistTaps="handled"
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
       data={data?.data}
       contentContainerStyle={{ flex: 1 }}
       ListHeaderComponent={
