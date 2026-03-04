@@ -147,7 +147,6 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
 
 const styles = StyleSheet.create({
   tabsBackground: {
-    justifyContent: "space-around",
   },
   tabButton: {
     marginHorizontal: "auto",
@@ -187,10 +186,12 @@ const styles = StyleSheet.create({
   leftTabLink: {
     paddingTop: 8,
     paddingBottom: 8,
+    flex: 0
   },
   rightTabLink: {
     paddingTop: 8,
     paddingBottom: 8,
+    flex: 0,
     justifyContent: "flex-end",
   },
 });

@@ -38,7 +38,7 @@ export default function HeadlessTabButton({
   ...props
 }: HeadlessTabButtonProps & PropsWithChildren & TabTriggerSlotProps) {
   const baseStyle: ViewStyle = {
-    flex: 0,
+    flex: 1,
     minWidth: 80,
     alignItems: "center",
     justifyContent: "center",
