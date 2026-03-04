@@ -1,8 +1,21 @@
 import { StyleSheet, View } from "react-native";
 import { Card, Text, Avatar, Button, Divider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { formatDate } from "@/src/utils/formatDate";
 
-export default function Ongoing() {
+type Props = {
+  reference_number: string;
+  status: string;
+  commodity: string;
+  date: string;
+};
+
+export default function Ongoing({
+  reference_number,
+  status,
+  commodity,
+  date,
+}: Props) {
   return (
     <Card style={styles.card} mode="elevated" elevation={1}>
       <Card.Content style={styles.content}>
@@ -16,18 +29,18 @@ export default function Ongoing() {
             />
             <View>
               <Text style={styles.label}>REFERENCE NO</Text>
-              <Text style={styles.referenceNo}>IM-09-2026-052</Text>
+              <Text style={styles.referenceNo}>{reference_number}</Text>
             </View>
           </View>
-          <Text style={styles.status}>IN TRANSIT</Text>
+          <Text style={styles.status}>{status}</Text>
         </View>
 
         <Divider style={styles.divider} />
 
-        <Text style={styles.itemName}>CASTABLE 16 REFRACTOR</Text>
+        <Text style={styles.itemName}>{commodity}</Text>
 
         <View style={styles.timeline}>
-          <Text style={styles.date}>JANUARY 13, 2026</Text>
+          <Text style={styles.date}>{formatDate(date)}</Text>
           <View style={styles.arrowContainer}>
             <MaterialCommunityIcons
               name="arrow-right-thin"
@@ -35,7 +48,7 @@ export default function Ongoing() {
               color="#aaa"
             />
           </View>
-          <Text style={styles.date}>FEBRUARY 13, 2026</Text>
+          <Text style={styles.date}>{formatDate(date)}</Text>
         </View>
 
         <Divider style={styles.divider} />

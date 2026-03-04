@@ -188,7 +188,7 @@ export default function CreateUpdateQuote() {
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => (
           <>
-            <BannerHeader title={mode === "EDIT" ? "Edit Quote" : "Get Quote"} variant="dark" />
+            <BannerHeader title={"Get Quote"} variant="dark" />
             <View style={{ padding: 20, flex: 1 }}>
               <StepIndicator
                 customStyles={stepIndicatorStyles}

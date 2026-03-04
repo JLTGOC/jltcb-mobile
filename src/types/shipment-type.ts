@@ -1,8 +1,20 @@
+export type ShipmentData ={
+  shipments: ShipmentDetails[];
+  pagination: Pagination;
+}
+
 export type ShipmentDetails = {
-    general_info: GeneralInfo;
-    commodity_details: CommodityDetails;
-    contact_person: ContactPerson;
-    shipment_information: ShipmentDetails;
+  general_info: GeneralInfo;
+  commodity_details: CommodityDetails;
+  contact_person: ContactPerson;
+  shipment_information: ShipmentInformation
+};
+
+export type Pagination = {
+  prev_cursor: string | null;
+  next_cursor: string | null;
+  prev_page_url: string | null;
+  next_page_url: string | null;
 };
 
 export type GeneralInfo = {
@@ -29,6 +41,6 @@ export type ContactPerson = {
 export type ShipmentInformation = {
   origin: string;
   destination: string;
-  creates_at: string;
-  updates_at: string;
+  created_at: string;
+  updated_at: string;
 };
