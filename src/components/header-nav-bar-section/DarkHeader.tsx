@@ -1,3 +1,7 @@
+import ClientHeaderMenuLink from "@/src/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
+import type { HeaderMenu } from "@/src/constants/user-navigation";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useNavigate } from "@/src/hooks/useNavigate";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -5,10 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
-import ClientHeaderMenuLink from "@/src/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
-import type { HeaderMenu } from "@/src/constants/user-navigation";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type DarkHeaderProps = {
 	menus: HeaderMenu[];
@@ -33,7 +34,7 @@ export default function DarkHeader({ menus: menuOptions }: DarkHeaderProps) {
 
 	return (
 		<View style={{ position: "relative", zIndex: 100 }}>
-			<View style={styles.container}>
+			<SafeAreaView edges={["top", 'right', 'left']} style={styles.container}>
 				<Image
 					source={require("../../../src/assets/white_logos/fullLogo.png")}
 					style={styles.logo}
@@ -47,7 +48,7 @@ export default function DarkHeader({ menus: menuOptions }: DarkHeaderProps) {
 						<Ionicons name="menu" size={30} color="white" />
 					</TouchableOpacity>
 				</View>
-			</View>
+			</SafeAreaView>
 
 			<LinearGradient
 				colors={["#EE9034", "#161F3C"]}

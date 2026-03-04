@@ -1,15 +1,16 @@
+import type { Reel } from "@/src/types/reels";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useIsFocused } from "@react-navigation/native";
 import { useEvent } from "expo";
 import { Image } from "expo-image";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { useEffect } from "react";
-import { Dimensions, StyleSheet, Text, View, AppState } from "react-native";
+import { AppState, Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import type { Reel } from "@/src/types/reels";
 
 type ReelsPlayerProps = {
   reel: Reel;
@@ -17,8 +18,12 @@ type ReelsPlayerProps = {
 };
 
 export default function ReelsPlayer({ reel, shouldPlay }: ReelsPlayerProps) {
+  const isFocused = useIsFocused();
+
   const screenWidth = Dimensions.get("window").width;
   const videoSize = { width: screenWidth * 0.2, height: screenWidth * 0.3 };
+
+  const canPlay = shouldPlay && isFocused;
 
   return (
     <View pointerEvents="none" style={[styles.videoSize, videoSize]}>
@@ -27,7 +32,7 @@ export default function ReelsPlayer({ reel, shouldPlay }: ReelsPlayerProps) {
         source={reel?.thumbnail_path ? encodeURI(reel.thumbnail_path) : ""}
         style={styles.fullscreenVideo}
       />
-      {shouldPlay && <ActiveVideo reel={reel} />}
+      {canPlay && <ActiveVideo reel={reel} />}
       <View style={styles.viewsContainer}>
         <Ionicons name="eye" color="white" />
         <Text style={styles.viewCountText}>{reel.view_count}</Text>
@@ -41,7 +46,10 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
 
   // Create the player safely
   const player = useVideoPlayer(
-    { uri: reel?.video_path ? encodeURI(reel.video_path) : "", useCaching: true },
+    {
+      uri: reel?.video_path ? encodeURI(reel.video_path) : "",
+      useCaching: true,
+    },
     (p) => {
       p.muted = true;
       p.loop = true;
@@ -50,28 +58,27 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
       } catch (e) {
         console.warn("Initial play failed:", e);
       }
-    }
+    },
   );
 
   // Handle app state changes safely
   useEffect(() => {
-  const subscription = AppState.addEventListener("change", (nextAppState) => {
-    if (!player) return; 
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (!player) return;
 
-    try {
-      if (nextAppState !== "active") {
-        player.pause();
-      } else {
-        player.play();
-      }
-    } catch (e) {
-    }
-  });
+      try {
+        if (nextAppState !== "active") {
+          player.pause();
+        } else {
+          player.play();
+        }
+      } catch (e) {}
+    });
 
-  return () => {
-    subscription?.remove?.();
-  };
-}, [player]);
+    return () => {
+      subscription?.remove?.();
+    };
+  }, [player]);
 
   // Listen for status changes
   const { status } = useEvent(player, "statusChange", {
@@ -111,7 +118,6 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   videoSize: {

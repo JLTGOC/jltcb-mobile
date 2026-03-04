@@ -1,8 +1,8 @@
+import Form from "@/src/components/appointment-section/Form";
+import TimeDate from "@/src/components/appointment-section/TimeDate";
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { FlatList, Text, View } from "react-native";
-import Form from "../../../src/components/appointment-section/Form";
-import TimeDate from "../../../src/components/appointment-section/TimeDate";
 
 export default function GetAppointment() {
   const [appointmentResetKey, setAppointmentResetKey] = useState(0);
@@ -15,7 +15,7 @@ export default function GetAppointment() {
       ListHeaderComponent={() => (
         <View>
           <ImageBackground
-            source={require("../../../src/assets/banners/large.png")}
+            source={require("@/src/assets/banners/large.png")}
             style={{
               padding: 20,
               aspectRatio: 2,

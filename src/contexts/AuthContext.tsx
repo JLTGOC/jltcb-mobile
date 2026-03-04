@@ -1,9 +1,6 @@
 import type { User, UserRole } from "@/src/types/auth";
-import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
-import { routes } from "../constants/routes";
-import { useNavigate } from "../hooks/useNavigate";
 import { pusher } from "../lib/pusher";
 import { login, logout } from "../services/auth";
 
@@ -24,8 +21,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const { replace } = useNavigate();
 
   useEffect(() => {
     const loadAuth = async () => {
@@ -76,9 +71,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setRole(userRole);
       setUserData(userData);
 
-      if (router.canGoBack()) router.dismissAll();
-      replace(routes.HOME);
-
       return data;
     } catch (err) {
       console.error(err);
@@ -109,9 +101,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(null);
       setRole(null);
       setUserData(null);
-
-      if (router.canGoBack()) router.dismissAll();
-      replace(routes.HOME);
     }
   };
 

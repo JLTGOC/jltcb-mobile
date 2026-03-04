@@ -1,14 +1,12 @@
-import { Image } from "expo-image";
-import { ScrollView, Text, View } from "react-native";
 import CoreValuesTemplate from "@/src/components/about-section/CoreValuesTemplate";
 import PrincipleList from "@/src/components/about-section/PrincipleList";
-import styles from "./indexStyles";
-
-export default function Index() {
+import { Image } from "expo-image";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+export default function AboutUs() {
   return (
     <ScrollView style={styles.container}>
       <Image
-        source={require("../../../src/assets/about_us/header.png")}
+        source={require("@/src/assets/about_us/header.png")}
         style={styles.imageHeader}
       />
       <Text
@@ -26,8 +24,8 @@ export default function Index() {
         fast-growing customs brokerage and logistics firm in the Philippines.
         Built on strong regulatory expertise and ethical practice, we deliver
         reliable, precision-driven trade solutions to local and international
-        clients. Led by nationally recognized customs and logistics leader 
-		Jill L. Tolentino, JLTCB is known for operational excellence, strict
+        clients. Led by nationally recognized customs and logistics leader Jill
+        L. Tolentino, JLTCB is known for operational excellence, strict
         compliance, and a client-first approach—helping businesses move goods
         efficiently and with confidence.
       </Text>
@@ -50,3 +48,14 @@ export default function Index() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    width: "100%",
+  },
+  imageHeader: {
+    width: "100%",
+    height: 115,
+  },
+});

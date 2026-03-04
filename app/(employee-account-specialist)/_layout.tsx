@@ -5,7 +5,7 @@ export default function ASLayout() {
   return (
     <>
       <Index />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }} />;
     </>
   );
 }

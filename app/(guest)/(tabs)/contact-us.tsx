@@ -1,5 +1,5 @@
 import ContactDetails from "@/src/components/contact-section/ContactDetails";
-import { Image, ImageBackground } from "expo-image";
+import { ImageBackground } from "expo-image";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -7,7 +7,7 @@ export default function Index() {
     <>
       {/* banner */}
       <ImageBackground
-        source={require("../../../src/assets/banners/large.png")}
+        source={require("@/src/assets/banners/large.png")}
         style={{
           padding: 20,
           aspectRatio: 2,
@@ -34,7 +34,7 @@ export default function Index() {
           }}
         >
           <Text
-            style={{ fontSize: 15, color: "white",}}
+            style={{ fontSize: 15, color: "white" }}
             allowFontScaling={false}
           >
             If you have any inquiries get in touch with us. We’ll be happy to

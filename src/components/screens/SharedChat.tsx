@@ -11,7 +11,7 @@ import type {
   ChatEvent,
   Message,
   MessageSentEvent,
-  MessagesResponse,
+  MessagesResponse
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import { zodResolver } from "@hookform/resolvers/zod";

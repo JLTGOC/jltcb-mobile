@@ -1,4 +1,6 @@
+import { routes } from "@/src/constants/routes";
 import { Image, ImageBackground } from "expo-image";
+import { useRouter } from "expo-router";
 import {
   Platform,
   StyleSheet,
@@ -7,11 +9,8 @@ import {
   View,
 } from "react-native";
 
-import { routes } from "../../constants/routes";
-import { useNavigate } from "../../hooks/useNavigate";
-
 export default function LandingPage() {
-  const { navigate } = useNavigate();
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -19,7 +18,7 @@ export default function LandingPage() {
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
-            source={require("../../assets/black_logos/logo.png")}
+            source={require("@/src/assets/black_logos/logo.png")}
             contentFit="contain"
           />
           <Text style={styles.title} allowFontScaling={false}>
@@ -29,12 +28,12 @@ export default function LandingPage() {
 
         <View style={styles.solutions}>
           <TouchableOpacity
-            onPress={() => navigate(routes.LANDING_PAGE2)}
+            onPress={() => router.push(routes.CUSTOMS_BROKERAGE_LANDING)}
             style={styles.solution}
           >
             <Image
               style={styles.image}
-              source={require("../../assets/landing-page/customs-brokerage.png")}
+              source={require("@/src/assets/landing-page/customs-brokerage.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText} allowFontScaling={false}>
@@ -43,11 +42,11 @@ export default function LandingPage() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.solution}
-            onPress={() => navigate(routes.UNDERCONSTRUCTION)}
+            onPress={() => router.push(routes.UNDERCONSTRUCTION)}
           >
             <Image
               style={styles.image}
-              source={require("../../assets/landing-page/global-trade.png")}
+              source={require("@/src/assets/landing-page/global-trade.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText} allowFontScaling={false}>
@@ -56,11 +55,11 @@ export default function LandingPage() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.solution}
-            onPress={() => navigate(routes.UNDERCONSTRUCTION)}
+            onPress={() => router.push(routes.UNDERCONSTRUCTION)}
           >
             <Image
               style={styles.image}
-              source={require("../../assets/landing-page/world-wide-logistics.png")}
+              source={require("@/src/assets/landing-page/world-wide-logistics.png")}
               contentFit="contain"
             />
             <Text style={styles.solutionText} allowFontScaling={false}>
@@ -72,12 +71,12 @@ export default function LandingPage() {
 
       <ImageBackground
         style={styles.bottomBanner}
-        source={require("../../assets/banners/large.png")}
+        source={require("@/src/assets/banners/large.png")}
         contentFit="fill"
       >
         <Image
           style={styles.skyline}
-          source={require("../../assets/landing-page/skyline_vector_white 1.png")}
+          source={require("@/src/assets/landing-page/skyline_vector_white 1.png")}
           contentFit="cover"
         />
       </ImageBackground>
