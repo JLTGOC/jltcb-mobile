@@ -75,8 +75,13 @@ export interface MessageSentEvent {
   client_id: string;
 }
 
+export interface InboxUpdatedEvent {
+  inbox: Inbox;
+}
+
 export interface ChatEventMap {
   "message.sent": MessageSentEvent;
+  "inbox.updated": InboxUpdatedEvent;
 }
 
 export type ChatEvent = keyof ChatEventMap;
@@ -97,3 +102,5 @@ export type SendMessageData =
 
 export type MessageResponse = ApiResponse<Message>;
 export type MessagesResponse = ApiResponse<Message[]>;
+export type InboxResponse = ApiResponse<Inbox>;
+export type InboxListResponse = ApiResponse<Inbox[]>;

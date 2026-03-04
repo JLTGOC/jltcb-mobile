@@ -5,9 +5,20 @@ import { useAuth } from "@/src/hooks/useAuth";
 import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { pusher } from "@/src/lib/pusher";
+import { chatKeys } from "@/src/query-key-factories/chats";
 import { chatsQueryOptions } from "@/src/query-options/chats/chatsQueryOptions";
+import type {
+  ChatEvent,
+  InboxListResponse,
+  InboxUpdatedEvent,
+} from "@/src/types/chats";
+import { parseEventData, subscribeToUser } from "@/src/utils/pusher";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import type {
+  PusherChannel,
+  PusherEvent,
+} from "@pusher/pusher-websocket-react-native";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -31,6 +42,7 @@ type Props = {
 
 export default function SharedMessages({ variant }: Props) {
   const { userData } = useAuth();
+  const queryClient = useQueryClient();
   const [submittedSearch, setSubmittedSearch] = useState("");
   const { data, isPending, isRefetching, error, refetch } = useQuery({
     ...chatsQueryOptions(submittedSearch),
@@ -55,34 +67,49 @@ export default function SharedMessages({ variant }: Props) {
     useCallback(() => {
       if (!userData) return;
 
-      const channelName = `private-user.${userData.id}`;
+      const onEvent = (e: PusherEvent) => {
+        const { eventName, data } = e;
+        const inboxEventName = eventName as ChatEvent;
+
+        switch (inboxEventName) {
+          case "inbox.updated": {
+            const chatData = parseEventData<InboxUpdatedEvent>(data);
+
+            if (!chatData) return;
+
+            const { inbox } = chatData;
+
+            queryClient.setQueryData<InboxListResponse>(
+              chatKeys.getChats(submittedSearch),
+              (old) => {
+                if (!old) return old;
+
+                const newInbox = [
+                  inbox,
+                  ...old.data.filter((i) => i.id !== inbox.id),
+                ];
+
+                return { ...old, data: newInbox };
+              },
+            );
+
+            break;
+          }
+        }
+      };
+
+      let channel: PusherChannel;
 
       const subscribe = async () => {
-        const inboxChannel = await pusher.subscribe({
-          channelName,
-          // onEvent: (e: PusherEvent) => {
-          //   console.log(e);
-          // },
-          onSubscriptionError: (
-            channelName: string,
-            message: string,
-            e: any,
-          ) => {
-            console.log({ channelName, message, e });
-          },
-          onSubscriptionSucceeded: (data) => {
-            console.log({ data });
-          },
-        });
+        channel = await subscribeToUser(String(userData.id), onEvent);
       };
 
       subscribe();
 
       return () => {
-        pusher
-          .unsubscribe({ channelName })
-          .then(() => console.log(`unsubbed ${channelName}`))
-          .catch((e) => console.error(e));
+        if (channel) {
+          pusher.unsubscribe({ channelName: channel.channelName });
+        }
       };
     }, [userData]),
   );
