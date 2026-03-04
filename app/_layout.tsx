@@ -39,9 +39,9 @@ export default function RootLayout() {
 function RootNavigator() {
   const { userData, role } = useAuth();
 
-  useEffect(() => {
-    initPusher()
-  }, [])
+  // useEffect(() => {
+  //   initPusher()
+  // }, [])
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

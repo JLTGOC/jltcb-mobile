@@ -24,41 +24,41 @@ type Props = {
 export default function SharedMessages({ variant }: Props) {
   const { userData } = useAuth();
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!userData) return;
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (!userData) return;
 
-      const channelName = `private-user.${userData.id}`;
+  //     const channelName = `private-user.${userData.id}`;
 
-      const subscribe = async () => {
-        const inboxChannel = await pusher.subscribe({
-          channelName,
-          // onEvent: (e: PusherEvent) => {
-          //   console.log(e);
-          // },
-          onSubscriptionError: (
-            channelName: string,
-            message: string,
-            e: any,
-          ) => {
-            console.log({ channelName, message, e });
-          },
-          onSubscriptionSucceeded: (data) => {
-            console.log({ data });
-          },
-        });
-      };
+  //     const subscribe = async () => {
+  //       const inboxChannel = await pusher.subscribe({
+  //         channelName,
+  //         // onEvent: (e: PusherEvent) => {
+  //         //   console.log(e);
+  //         // },
+  //         onSubscriptionError: (
+  //           channelName: string,
+  //           message: string,
+  //           e: any,
+  //         ) => {
+  //           console.log({ channelName, message, e });
+  //         },
+  //         onSubscriptionSucceeded: (data) => {
+  //           console.log({ data });
+  //         },
+  //       });
+  //     };
 
-      subscribe();
+  //     subscribe();
 
-      return () => {
-        pusher
-          .unsubscribe({ channelName })
-          .then(() => console.log(`unsubbed ${channelName}`))
-          .catch((e) => console.error(e));
-      };
-    }, [userData]),
-  );
+  //     return () => {
+  //       pusher
+  //         .unsubscribe({ channelName })
+  //         .then(() => console.log(`unsubbed ${channelName}`))
+  //         .catch((e) => console.error(e));
+  //     };
+  //   }, [userData]),
+  // );
 
   const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),

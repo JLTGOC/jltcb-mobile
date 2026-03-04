@@ -70,60 +70,60 @@ export default function SharedChat({ variant }: Props) {
     reset();
   });
 
-  useFocusEffect(
-    useCallback(() => {
-      const onEvent = (e: PusherEvent) => {
-        const { eventName, data } = e;
-        const chatEventName = eventName as ChatEvent;
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const onEvent = (e: PusherEvent) => {
+  //       const { eventName, data } = e;
+  //       const chatEventName = eventName as ChatEvent;
 
-        switch (chatEventName) {
-          case "message.sent":
-            const chatData = parseEventData<MessageSentEvent>(data);
+  //       switch (chatEventName) {
+  //         case "message.sent":
+  //           const chatData = parseEventData<MessageSentEvent>(data);
 
-            if (!chatData) return;
+  //           if (!chatData) return;
 
-            const { message, client_id } = chatData;
+  //           const { message, client_id } = chatData;
 
-            queryClient.setQueryData<MessagesResponse>(
-              chatKeys.getMessages(id),
-              (old) => {
-                if (!old) return old;
+  //           queryClient.setQueryData<MessagesResponse>(
+  //             chatKeys.getMessages(id),
+  //             (old) => {
+  //               if (!old) return old;
 
-                const exists = old.data.some((msg) => msg.id === message.id);
-                if (exists) return old;
+  //               const exists = old.data.some((msg) => msg.id === message.id);
+  //               if (exists) return old;
 
-                const replacedMessages = old.data.map((msg) =>
-                  msg.client_id === client_id ? message : msg,
-                );
+  //               const replacedMessages = old.data.map((msg) =>
+  //                 msg.client_id === client_id ? message : msg,
+  //               );
 
-                const didReplace = replacedMessages.some(
-                  (m) => m.id === message.id,
-                );
+  //               const didReplace = replacedMessages.some(
+  //                 (m) => m.id === message.id,
+  //               );
 
-                return didReplace
-                  ? { ...old, data: replacedMessages }
-                  : { ...old, data: [...old.data, message] };
-              },
-            );
-            break;
-        }
-      };
+  //               return didReplace
+  //                 ? { ...old, data: replacedMessages }
+  //                 : { ...old, data: [...old.data, message] };
+  //             },
+  //           );
+  //           break;
+  //       }
+  //     };
 
-      let channel: PusherChannel;
+  //     let channel: PusherChannel;
 
-      const subscribe = async () => {
-        channel = await subscribeToChat(id, onEvent);
-      };
+  //     const subscribe = async () => {
+  //       channel = await subscribeToChat(id, onEvent);
+  //     };
 
-      subscribe();
+  //     subscribe();
 
-      return () => {
-        if (channel) {
-          pusher.unsubscribe({ channelName: channel.channelName });
-        }
-      };
-    }, [id, queryClient]),
-  );
+  //     return () => {
+  //       if (channel) {
+  //         pusher.unsubscribe({ channelName: channel.channelName });
+  //       }
+  //     };
+  //   }, [id, queryClient]),
+  // );
 
   const renderItem = ({ item }: { item: Message }) => {
     switch (item.type) {

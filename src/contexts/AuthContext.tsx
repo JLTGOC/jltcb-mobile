@@ -42,15 +42,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadAuth();
   }, []);
 
-  useEffect(() => {
-    if (pusher.connectionState !== "DISCONNECTED") return;
+  // useEffect(() => {
+  //   if (pusher.connectionState !== "DISCONNECTED") return;
 
-    if (userData) {
-      pusher.connect();
-    } else {
-      pusher.disconnect();
-    }
-  }, [userData]);
+  //   if (userData) {
+  //     pusher.connect();
+  //   } else {
+  //     pusher.disconnect();
+  //   }
+  // }, [userData]);
 
   const loginContext = async (loginData: {
     email: string;
