@@ -7,7 +7,10 @@ import { useSegments } from "expo-router";
 import { TabTrigger } from "expo-router/ui";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import type { SafeAreaViewProps } from "react-native-safe-area-context";
+import {
+  useSafeAreaInsets,
+  type SafeAreaViewProps,
+} from "react-native-safe-area-context";
 
 const leftMenuLinks: NavLink[] = [
   { name: "about-us", title: "About Us" },
@@ -26,8 +29,9 @@ const rightMenuLinks: NavLink[] = [
 export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
   const [isRightVisible, setIsRightVisible] = useState(false);
   const [isLeftVisible, setIsLeftVisible] = useState(false);
-  const [tabBarHeight, setTabBarHeight] = useState(0);
-
+  const [tabButtonHeight, setTabButtonHeight] = useState(0);
+  const insets = useSafeAreaInsets();
+  const menuBottomStyle = { bottom: tabButtonHeight + insets.bottom };
   const segments = useSegments();
 
   const isSideActive = (links: NavLink[]) => {
@@ -57,14 +61,8 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
   };
 
   return (
-    <TabsBackground
-      style={[styles.tabsBackground, style]}
-      onLayout={(e) => {
-        const { height } = e.nativeEvent.layout;
-        setTabBarHeight(height);
-      }}
-      {...props}
-    >
+     <TabsBackground style={[styles.tabsBackground, style]} {...props}>
+
       <HeadlessTabButton
         onPress={() => openSideMenu("left")}
         isFocused={leftActive}
@@ -75,6 +73,10 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
             {...props}
           />
         )}
+        onLayout={(e) => {
+          const { height } = e.nativeEvent.layout;
+          setTabButtonHeight(height);
+        }}
       />
 
       <TabTrigger name="home" asChild>
@@ -103,7 +105,7 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
           colors={["#1d2b5b", "#d5893c", "#ffffff"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[styles.menu, styles.leftMenu, { bottom: tabBarHeight }]}
+          style={[styles.menu, styles.leftMenu, menuBottomStyle]}
         >
           <View style={[styles.menuContent, styles.leftMenuContent]}>
             {leftMenuLinks.map((link) => (
@@ -125,7 +127,7 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
           colors={["#1d2b5b", "#d5893c", "#ffffff"]}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={[styles.menu, styles.rightMenu, { bottom: tabBarHeight }]}
+          style={[styles.menu, styles.rightMenu, menuBottomStyle]}
         >
           <View style={[styles.menuContent, styles.rightMenuContent]}>
             {rightMenuLinks.map((link) => (
