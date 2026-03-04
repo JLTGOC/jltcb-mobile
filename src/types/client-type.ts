@@ -14,14 +14,27 @@ export type QuoteForm = {
   quotation_file?: Quotationfile[];
 };
 
-export type QuotesListItem = {
+export type BaseQuotesListItem = {
   client_name: string;
   commodity: string;
   date: string;
   id: number;
   reference_number: string;
-  status: "NEW" | "ACCEPTED"
+  status: "NEW" | "ACCEPTED";
+  conversation_id: string | null;
 };
+
+export interface AcceptedQuoteItem extends BaseQuotesListItem {
+  status: "ACCEPTED";
+  conversation_id: string;
+}
+
+export interface NewQuoteItem extends BaseQuotesListItem {
+  status: "NEW";
+  conversation_id: string | null;
+}
+
+export type QuotesListItem = AcceptedQuoteItem | NewQuoteItem;
 
 export type QuotesParams = {
   status?: "REQUESTED" | "RESPONDED";

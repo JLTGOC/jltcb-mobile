@@ -7,8 +7,8 @@ import type { ApiResponse } from "../types/api";
 import {
   ClientQuoteResponse,
   QuoteForm,
-  QuotesParams,
   QuotesListItem,
+  QuotesParams,
 } from "../types/client-type";
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
@@ -194,12 +194,12 @@ if (formData.remarks !== undefined && formData.remarks !== null) {
 export async function fetchClientQuotes({
   status,
   search,
-}: QuotesParams): Promise<QuotesListItem> {
+}: QuotesParams) {
   const params = {
     "filter[status]": status,
     search: search || undefined,
   };
-  const response = await apiGet<QuotesListItem>(`quotations`, {
+  const response = await apiGet<QuotesListItem[]>(`quotations`, {
     params,
   });
   return response.data;

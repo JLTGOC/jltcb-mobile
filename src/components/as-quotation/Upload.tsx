@@ -130,9 +130,9 @@ export default function Upload({
         />
         <SuccesModal
           onConfirm={() => {
+            setSuccessModalVisible(false)
             router.dismissAll();
-            router.replace(routes.AS_DB);
-            router.push(routes.AS_QUOTE_RESPONDED);
+            router.navigate(routes.AS_QUOTE_RESPONDED)
           }}
           visible={successModalVisible}
           title="Successfully Submitted!"

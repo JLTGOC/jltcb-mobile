@@ -20,10 +20,12 @@ import { acceptQuotation } from "@/src/services/shipment";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
+import { useSendQuotationCardMutation } from "@/src/hooks/useSendQuotationCardMutation";
 import {
   deleteClientSingleQuote,
   fetchClientQuotes,
 } from "@/src/services/clientQuotation";
+import { QuotesListItem } from "@/src/types/client-type";
 
 type TableItem = {
   id: number;
@@ -36,6 +38,7 @@ type TableItem = {
 const tableHeaders = ["reference", "date", "shipment details", " status", ""];
 
 const menuItems = [
+  { iconName: "chat", title: "CHAT" },
   { iconName: "check", title: "ACCEPT", color: "green" },
   { iconName: "delete-outline", title: "DISCARD", color: "red" },
 ];
@@ -75,7 +78,6 @@ export default function RespondedQuotes() {
       return acceptQuotation(reference_number);
     },
     onSuccess: (data) => {
-      
       queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
       setModalVisible(false);
       setSuccessModalVisible(true);
@@ -86,18 +88,44 @@ export default function RespondedQuotes() {
     },
   });
 
-  const handleOnPress = (title: string, reference_number: string) => {
+  const handleOnPress = (title: string, quotation: QuotesListItem) => {
     setVisibleMenuId(null);
 
     if (title === "ACCEPT") {
-      setSelectedId(reference_number);
+      setSelectedId(quotation.reference_number);
       setModalVisible(true);
-    } else {
-      deletedSingleQuotation(reference_number);
+    } else if (title === "DISCARD") {
+      deletedSingleQuotation(quotation.reference_number);
+    } else if (title === "CHAT") {
+      handleChatButtonPress(quotation);
     }
   };
 
-  const quotes = (data as unknown as TableItem[]) || [];
+  const { mutateAsync: handleSendQuotationCard } =
+    useSendQuotationCardMutation();
+
+  const redirectToChat = (conversationId: string) => {
+    router.navigate({
+      pathname: "/messages/[id]",
+      params: { id: conversationId },
+    });
+  };
+
+  const handleChatButtonPress = async (quotation: QuotesListItem) => {
+    if (quotation.conversation_id) {
+      redirectToChat(quotation.conversation_id);
+      return;
+    }
+
+    try {
+      const res = await handleSendQuotationCard(String(quotation.id));
+      redirectToChat(res.data.conversation_id);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const quotes = data || [];
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -106,7 +134,7 @@ export default function RespondedQuotes() {
       <DataTable>
         <DataTable.Header style={styles.header}>
           {tableHeaders.map((header, index) => {
-            const flexValues = [2, 0, 2.5, 1, 0];
+            const flexValues = [1.35, 1, 2.15, 1, 0.5];
             const flexValue = flexValues[index] || 1;
             return (
               <DataTable.Title
@@ -136,7 +164,7 @@ export default function RespondedQuotes() {
                 <DataTable.Row>
                   <DataTable.Cell
                     textStyle={styles.cellText}
-                    style={{ flex: 1.5 }}
+                    style={{ flex: 1.35 }}
                   >
                     {item.reference_number}
                   </DataTable.Cell>
@@ -150,7 +178,7 @@ export default function RespondedQuotes() {
 
                   <DataTable.Cell
                     textStyle={styles.cellText}
-                    style={{ flex: 2.5 }}
+                    style={{ flex: 2.15 }}
                   >
                     {item.commodity}
                   </DataTable.Cell>
@@ -162,8 +190,20 @@ export default function RespondedQuotes() {
                     {item.status}
                   </DataTable.Cell>
 
-                  <DataTable.Cell numeric style={{ flex: 0.5 }}>
-                    {item?.status === "ACCEPTED" ? null : (
+                  <DataTable.Cell
+                    onPress={() => {}}
+                    numeric
+                    style={{ flex: 0.5, justifyContent: "center" }}
+                  >
+                    {item?.status === "ACCEPTED" ? (
+                      <IconButton
+                        icon="chat"
+                        size={20}
+                        onPress={() => {
+                          redirectToChat(item.conversation_id);
+                        }}
+                      />
+                    ) : (
                       <Menu
                         visible={visibleMenuId === item.id}
                         onDismiss={() => setVisibleMenuId(null)}
@@ -179,10 +219,7 @@ export default function RespondedQuotes() {
                           <Menu.Item
                             key={index}
                             onPress={() => {
-                              handleOnPress(
-                                menu.title,
-                                item.reference_number as any,
-                              );
+                              handleOnPress(menu.title, item);
                             }}
                             leadingIcon={({ size }) => (
                               <Icon
@@ -222,7 +259,7 @@ export default function RespondedQuotes() {
         <SuccesModal
           onConfirm={() => {
             setSuccessModalVisible(false);
-            router.replace(routes.CLIENT_DB);
+            router.dismissTo(routes.CLIENT_DB);
           }}
           visible={successModalVisible}
           title="Successfully Submitted!"
