@@ -1,13 +1,13 @@
-export type ShipmentData ={
+export type ShipmentData = {
   shipments: ShipmentDetails[];
   pagination: Pagination;
-}
+};
 
 export type ShipmentDetails = {
   general_info: GeneralInfo;
   commodity_details: CommodityDetails;
   contact_person: ContactPerson;
-  shipment_information: ShipmentInformation
+  shipment_information: ShipmentDetails;
 };
 
 export type Pagination = {
@@ -19,10 +19,10 @@ export type Pagination = {
 
 export type GeneralInfo = {
   reference_number: string;
-  quotation_id: number;
-  client: string;
-  accoun_speacialist: string;
+  id: number;
   status: string;
+  commodity: string;
+  date: string;
 };
 
 export type CommodityDetails = {
@@ -41,6 +41,7 @@ export type ContactPerson = {
 export type ShipmentInformation = {
   origin: string;
   destination: string;
-  created_at: string;
-  updated_at: string;
+  accounnd_handler: string,
+  creates_at: string;
+  updates_at: string;
 };

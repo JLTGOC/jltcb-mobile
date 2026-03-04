@@ -12,10 +12,17 @@ export async function acceptQuotation(
   ).data;
 }
 
-export async function fetchShipments({search, status}: {search?: string, status?: string}): Promise<ShipmentData> {
+export async function fetchShipments({
+  search,
+  status,
+}: {
+  search?: string;
+  status?: string;
+}): Promise<ShipmentData> {
   const params = {
     search: search || undefined,
     status: status || undefined,
+    cursor: cursor || undefined,
   };
 
   return (await apiGet<ShipmentData>(`shipments`, { params })).data;
