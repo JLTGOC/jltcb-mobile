@@ -18,12 +18,12 @@ export const routes = {
   CLIENT_AHTN: "/(client)/(tabs)/ahtn-checker",
   CLIENT_CREATE_QUOTE: "/(client)/(tabs)/get-quote",
   CLIENT_QUOTE_DETAILS: "/(client)/(tabs)/dashboard/quotations/[id]",
-  CLIENT_REQ_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/requested-quotes",
-  CLIENT_RES_QUOTE_RECORDS: "/(client)/(tabs)/dashboard/responded-quotes",
   CLIENT_MESSAGES: "/(client)/(tabs)/messages",
   AS_DB: "/(employee-account-specialist)/(tabs)/dashboard",
   AS_QUOTE_REQUESTS:
     "/(employee-account-specialist)/(tabs)/dashboard/request-quotation",
+  AS_QUOTE_RESPONDED:
+    "/(employee-account-specialist)/(tabs)/dashboard/responded-quotation",
   AS_AHTN: "/(employee-account-specialist)/(tabs)/ahtn-checker",
   ACCOUNT_SETTINGS: "/account-settings",
   MARKETING_DB: "/(employee-marketing)/dashboard",
