@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Text } from "react-native-paper";
+import { useMemo, useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import CardTemplate from "@/src/components/client-section/shipment/CardTemplate";
 import Search from "@/src/components/client-section/shipment/Search";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import useDebounce from "@/src/hooks/useDebounce";
 import { fetchShipments } from "@/src/services/shipment";
 import BannerHeader from "@/src/components/ui/BannerHeader";
@@ -15,13 +14,36 @@ export default function OnGoing() {
   const debouncedSearch = useDebounce(search, 500) || "";
 
   // Data Fetching
-  const { data, isLoading } = useQuery({
-    queryKey: ["shipments", debouncedSearch],
-    queryFn: () => fetchShipments({search: debouncedSearch, status:'ONGOING'}),
-    placeholderData: (previousData) => previousData,
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<
+    ShipmentData,
+    Error,
+    InfiniteData<ShipmentData>,
+    string[],
+    string
+  >({
+    queryKey: ["shipments", "ONGOING", debouncedSearch],
+    queryFn: ({ pageParam }) => 
+      fetchShipments({ 
+        search: debouncedSearch, 
+        status: "ONGOING", 
+        cursor: pageParam || undefined,
+      }),
+    initialPageParam: "",
+    // This tells React Query where to find the next cursor in your JSON
+    getNextPageParam: (lastPage) => lastPage.pagination.next_cursor || undefined,
   });
 
-  console.log("khate", data?.shipments);
+  // FlatList needs a flat array, so we flatten the 'pages' from React Query
+  const allShipments = useMemo(
+    () => data?.pages.flatMap((page) => page.shipments) ?? [],
+    [data],
+  );
 
   return (
     <View
@@ -37,7 +59,7 @@ export default function OnGoing() {
         <ActivityIndicator style={{ marginTop: 20 }} />
       ) : null}
       <FlatList
-        data={data?.shipments || []}
+        data={allShipments}
         keyExtractor={(item) => item.general_info.reference_number}
         renderItem={({ item }) => (
           <CardTemplate
@@ -48,6 +70,17 @@ export default function OnGoing() {
             shipment_id={item.general_info.id}
           />
         )}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5} // Trigger fetch when halfway through the last item
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator style={{ marginVertical: 20 }} />
+          ) : null
+        }
       />
     </View>
   );

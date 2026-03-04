@@ -15,9 +15,11 @@ export async function acceptQuotation(
 export async function fetchShipments({
   search,
   status,
+  cursor,
 }: {
   search?: string;
   status?: string;
+  cursor?: string;
 }): Promise<ShipmentData> {
   const params = {
     search: search || undefined,
