@@ -1,18 +1,18 @@
 import { userNavigation } from "@/src/constants/user-navigation";
 import { useAuth } from "@/src/hooks/useAuth";
-import GuestNavBar from "./GuestNavBar";
+import GuestNavBar from "./GuestHeader";
 
 export default function Index() {
-	const { role } = useAuth();
+  const { role } = useAuth();
 
-	if (!role) return <GuestNavBar />;
+  if (!role) return <GuestNavBar />;
 
-	const navigation = userNavigation.find((nav) => nav.role === role);
+  const navigation = userNavigation.find((nav) => nav.role === role);
 
-	const HeaderComponent = navigation?.headerComponent;
-	const menus = navigation?.headerMenus;
+  const HeaderComponent = navigation?.headerComponent;
+  const menus = navigation?.headerMenus;
 
-	if (!menus || !HeaderComponent) return null;
+  if (!menus || !HeaderComponent) return null;
 
-	return <HeaderComponent menus={menus} />;
+  return <HeaderComponent menus={menus} />;
 }

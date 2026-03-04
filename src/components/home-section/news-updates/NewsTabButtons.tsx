@@ -1,3 +1,4 @@
+import { routes } from "@/src/constants/routes";
 import { Href, usePathname, useRouter } from "expo-router";
 import {
   Dimensions,
@@ -7,14 +8,22 @@ import {
   View,
 } from "react-native";
 
-const TABS: { title: string; href: Href }[] = [
-  { title: "Latest", href: "/home" },
-  { title: "Careers", href: "/home/careers" },
-];
+type Tab = { title: string; route: Href };
+
+const TABS: Tab[] = [
+  { title: "Latest", route: routes.HOME },
+  { title: "Careers", route: routes.CAREERS },
+] as const;
 
 export default function NewsTabButtons() {
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isTabActive = (route: Href) =>
+    (pathname.includes("articles") || pathname.includes("reels")) &&
+    route === routes.HOME
+      ? true
+      : pathname === route;
 
   const screenWidth = Dimensions.get("screen").width;
 
@@ -26,21 +35,19 @@ export default function NewsTabButtons() {
         <TouchableOpacity
           key={t.title}
           style={styles.button}
-          onPress={() => {
-            router.navigate(t.href);
-          }}
+          onPress={() => router.navigate(t.route)}
         >
           <Text
             style={[
               styles.buttonText,
               { fontSize: screenWidth * 0.025 },
-              isActive(t.href) && styles.activeText,
+              isTabActive(t.route) && styles.activeText,
             ]}
             allowFontScaling={false}
           >
             {t.title}
           </Text>
-          {isActive(t.href) && <View style={styles.underline} />}
+          {isTabActive(t.route) && <View style={styles.underline} />}
         </TouchableOpacity>
       ))}
     </View>
@@ -55,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    flex: 0.33,
+    minWidth: 120,
     alignItems: "center",
     paddingVertical: 5,
     paddingTop: 10,
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 10,
     color: "#555",
+    textTransform: "uppercase",
   },
   activeText: {
     color: "#000",

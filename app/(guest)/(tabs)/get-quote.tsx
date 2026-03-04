@@ -1,13 +1,13 @@
+import Form from "@/src/components/quote-section/Form";
 import { ImageBackground } from "expo-image";
 import { ScrollView, Text, View } from "react-native";
-import Form from "../../../src/components/quote-section/Form";
 
 export default function Index() {
   return (
-    <ScrollView >
+    <ScrollView>
       {/* banner */}
       <ImageBackground
-        source={require("../../../src/assets/banners/large.png")}
+        source={require("@/src/assets/banners/large.png")}
         style={{
           padding: 20,
           aspectRatio: 2,

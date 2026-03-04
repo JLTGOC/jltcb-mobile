@@ -5,6 +5,7 @@ import SuccesModal from "@/src/components/ui/SuccessModal";
 import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { uploadQuotationFileMutationOptions } from "@/src/mutation-options/uploadQuotationFileMutationOptions";
+import { AntDesign } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useMutation } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
@@ -12,7 +13,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, HelperText, Portal, Text } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
   submitButtonText: string;

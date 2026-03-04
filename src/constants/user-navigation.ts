@@ -7,6 +7,8 @@ import type { FC } from "react";
 import type { UserRole } from "../types/auth";
 import { routes } from "./routes";
 
+export type NavLink = { name: string; title: string };
+
 export type HeaderMenu = {
   text: string;
   link: (typeof routes)[keyof typeof routes];
@@ -35,7 +37,7 @@ export const userNavigation: UserNavigation[] = [
       // },
       {
         text: "AHTN Checker",
-        link: routes.CLIENT_AHTN,
+        link: routes.AHTN_CHECKER,
       },
       // {
       // 	text: "Account Settings",
@@ -54,7 +56,7 @@ export const userNavigation: UserNavigation[] = [
       },
       {
         text: "AHTN Checker",
-        link: routes.AS_AHTN,
+        link: routes.AHTN_CHECKER,
       },
       {
         text: "Account Settings",
@@ -73,7 +75,7 @@ export const userNavigation: UserNavigation[] = [
       },
       {
         text: "AHTN Checker",
-        link: routes.AHTN,
+        link: routes.AHTN_CHECKER,
       },
       {
         text: "Account Settings",
@@ -92,7 +94,7 @@ export const userNavigation: UserNavigation[] = [
       },
       {
         text: "AHTN Checker",
-        link: routes.AHTN,
+        link: routes.AHTN_CHECKER,
       },
       {
         text: "Account Settings",
