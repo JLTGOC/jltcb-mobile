@@ -18,6 +18,7 @@ export const routes = {
   CLIENT_AHTN: "/(client)/(tabs)/ahtn-checker",
   CLIENT_CREATE_QUOTE: "/(client)/(tabs)/get-quote",
   CLIENT_QUOTE_DETAILS: "/(client)/(tabs)/dashboard/quotations/[id]",
+  CLIENT_SHIPMENT_DETAILS: "/(client)/(tabs)/dashboard/shipment/[id]/index",
   CLIENT_MESSAGES: "/(client)/(tabs)/messages",
   AS_DB: "/(employee-account-specialist)/(tabs)/dashboard",
   AS_QUOTE_REQUESTS:
