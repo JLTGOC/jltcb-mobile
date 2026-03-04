@@ -3,6 +3,7 @@ import type {
   ClientDashboard,
   DashboardFolderSection,
 } from "../types/dashboard";
+import { routes } from "./routes";
 
 export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[] =
   [
@@ -14,13 +15,13 @@ export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[
           title: "Ongoing",
           countKey: "ongoing_count",
           icon: "ongoing",
-          href: "/UnderConstruction",
+          href: routes.UNDERCONSTRUCTION,
         },
         {
           title: "Completed",
           countKey: "completed_count",
           icon: "delivered",
-          href: "/UnderConstruction",
+          href: routes.UNDERCONSTRUCTION,
         },
       ],
     },

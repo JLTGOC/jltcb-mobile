@@ -1,23 +1,12 @@
-import { StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { MoveLeft } from "lucide-react-native";
-import * as SecureStore from "expo-secure-store";
-import { useState, useEffect } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 
-import { useNavigate } from "@/src/hooks/useNavigate";
+import { useRouter } from "expo-router";
 
 export default function Index() {
-  const { replace } = useNavigate();
-  const [hasToken, setHasToken] = useState<boolean>(true)
-
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await SecureStore.getItem("token");
-      setHasToken(!!token);
-    };
-    checkToken();
-  }, []);
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -34,27 +23,20 @@ export default function Index() {
         </Text>
       </View>
 
-     {!hasToken && (
-        <View style={styles.backButtonContainer}>
-          <MoveLeft 
-            color="#EE9034" 
-            size={28} 
-            onPress={() => replace("/(pages)/landing-page")} 
-          />
-          <Text 
-            variant="labelLarge" 
-            style={{ color: "#EE9034" }}
-            onPress={() => replace("/(pages)/landing-page")}
-          >
-            Go Back
-          </Text>
-        </View>
-      )}
-        
-        <Text variant="bodySmall" style={styles.patienceText}>
-          Thank You For Your Patience
+      <Pressable
+        onPress={() => router.back()}
+        style={styles.backButtonContainer}
+      >
+        <MoveLeft color="#EE9034" size={28} />
+        <Text variant="labelLarge" style={{ color: "#EE9034" }}>
+          Go Back
         </Text>
-      </View>
+      </Pressable>
+
+      <Text variant="bodySmall" style={styles.patienceText}>
+        Thank You For Your Patience
+      </Text>
+    </View>
   );
 }
 
