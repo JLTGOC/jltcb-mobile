@@ -9,6 +9,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type LightHeaderProps = {
   menus: HeaderMenu[];
@@ -33,7 +34,7 @@ export default function LightHeader({ menus: menuOptions }: LightHeaderProps) {
 
   return (
     <View style={{ position: "relative", zIndex: 100 }}>
-      <View style={styles.container}>
+      <SafeAreaView edges={["top", "right", "left"]} style={styles.container}>
         <Image
           source={require("../../../src/assets/black_logos/full_logo.png")}
           style={styles.logo}
@@ -47,7 +48,7 @@ export default function LightHeader({ menus: menuOptions }: LightHeaderProps) {
             <Ionicons name="menu" size={30} color="#1C213B" />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
 
       <LinearGradient
         colors={["#1C213B", "#D7D7D7"]}
