@@ -82,31 +82,23 @@ export default function CreateUpdateQuote() {
   });
 
   useEffect(() => {
-    if (isEditMode) {
-      if (data) {
-        setFormData(normalizeQuoteForm(data));
-      }
-    } else {
+    if (!isEditMode) {
       setFormData(initialQuoteForm);
       setCurrentPosition(0);
+      return;
+    }
+
+    if (data) {
+      setFormData(normalizeQuoteForm(data));
     }
   }, [data, isEditMode]);
 
   useFocusEffect(
     useCallback(() => {
       if (isEditMode) {
-        setCurrentPosition(0);
-
-        if (data) {
-          setFormData(normalizeQuoteForm(data));
-        }
-
         refetch();
-      } else {
-        setCurrentPosition(0);
-        setFormData(initialQuoteForm);
       }
-    }, [isEditMode, data, refetch]),
+    }, [isEditMode, refetch]),
   );
 
   const stepConfigs: Record<
