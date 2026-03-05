@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import * as WebBrowser from "expo-web-browser";
 import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import {
@@ -13,6 +12,7 @@ import {
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 import { useRouter } from "expo-router";
+import { routes } from "@/src/constants/routes";
 
 type Props = {
   quotationId?: string;
@@ -36,7 +36,13 @@ export default function Details({ quotationId }: Props) {
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
-      await WebBrowser.openBrowserAsync(url);
+      router.push({
+        pathname: routes.CLIENT_QUOTATION_VIEWER,
+        params: {
+          url,
+          title: "View Quotation",
+        },
+      });
     }
   };
 
