@@ -4,10 +4,11 @@ export type ShipmentData = {
 };
 
 export type ShipmentDetails = {
-  general_info: GeneralInfo;
-  commodity_details: CommodityDetails;
-  contact_person: ContactPerson;
-  shipment_information: ShipmentDetails;
+  general_info: GeneralInformation;
+  commodity_details: CommodityInformation;
+  contact_person: ContactPersonInformation;
+  shipment_information: ShipmentInformation;
+  payment_details?: PaymentInformation;
 };
 
 export type Pagination = {
@@ -17,7 +18,7 @@ export type Pagination = {
   next_page_url: string | null;
 };
 
-export type GeneralInfo = {
+export type GeneralInformation = {
   reference_number: string;
   id: number;
   status: string;
@@ -25,14 +26,14 @@ export type GeneralInfo = {
   date: string;
 };
 
-export type CommodityDetails = {
+export type CommodityInformation = {
   commodity: string;
   consignee_name: string;
-  cargo_type_: string;
+  cargo_type: string;
   container_size: string;
 };
 
-export type ContactPerson = {
+export type ContactPersonInformation = {
   full_name: string;
   contact_number: string;
   email: string;
@@ -41,7 +42,14 @@ export type ContactPerson = {
 export type ShipmentInformation = {
   origin: string;
   destination: string;
-  accounnd_handler: string,
-  creates_at: string;
-  updates_at: string;
+  account_handler?: string;
+  created_at?: string;
+  eta?: string;
+};
+
+export type PaymentInformation = {
+  status?: string;
+  paid_by?: string;
+  billing_date?: string;
+  payment_date?: string;
 };

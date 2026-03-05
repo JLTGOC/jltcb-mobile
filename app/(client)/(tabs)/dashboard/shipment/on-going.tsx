@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import CardTemplate from "@/src/components/client-section/shipment/CardTemplate";
 import Search from "@/src/components/client-section/shipment/Search";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
@@ -17,6 +17,9 @@ export default function OnGoing() {
   const {
     data,
     isLoading,
+    isError,
+    error,
+    refetch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -37,11 +40,12 @@ export default function OnGoing() {
     initialPageParam: "",
     // This tells React Query where to find the next cursor in your JSON
     getNextPageParam: (lastPage) => lastPage.pagination.next_cursor || undefined,
+    retry: false,
   });
 
   // FlatList needs a flat array, so we flatten the 'pages' from React Query
   const allShipments = useMemo(
-    () => data?.pages.flatMap((page) => page.shipments) ?? [],
+    () => data?.pages.flatMap((page) => page.shipments ?? []) ?? [],
     [data],
   );
 
@@ -57,6 +61,16 @@ export default function OnGoing() {
       <Search search={search} setSearch={setSearch} />
       {isLoading ? (
         <ActivityIndicator style={{ marginTop: 20 }} />
+      ) : null}
+      {isError ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>
+            {error?.message || "Failed to load shipments."}
+          </Text>
+          <Text style={styles.retryText} onPress={() => refetch()}>
+            Tap to retry
+          </Text>
+        </View>
       ) : null}
       <FlatList
         data={allShipments}
@@ -86,4 +100,16 @@ export default function OnGoing() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  errorContainer: {
+    marginHorizontal: 16,
+    marginTop: 12,
+  },
+  errorText: {
+    fontSize: 14,
+  },
+  retryText: {
+    fontSize: 14,
+    marginTop: 6,
+  },
+});
