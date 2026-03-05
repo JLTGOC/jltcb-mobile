@@ -19,14 +19,14 @@ import type {
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   FlatList,
+  Pressable,
   RefreshControl,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { ActivityIndicator, HelperText } from "react-native-paper";
@@ -42,6 +42,7 @@ type Props = {
 
 export default function SharedMessages({ variant }: Props) {
   const { userData } = useAuth();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [submittedSearch, setSubmittedSearch] = useState("");
   const { data, isPending, isRefetching, error, refetch } = useQuery({
@@ -156,18 +157,14 @@ export default function SharedMessages({ variant }: Props) {
         </>
       }
       renderItem={({ item }) => (
-        <Link
-          href={{
-            pathname: "/messages/[id]",
-            params: { id: item.id },
-          }}
-          asChild
+        <Pressable
+          onPress={() =>
+            router.push({ pathname: "/messages/[id]", params: { id: item.id } })
+          }
           style={[styles.container, styles.inboxListItem]}
         >
-          <TouchableOpacity>
-            <InboxListItem {...item} />
-          </TouchableOpacity>
-        </Link>
+          <InboxListItem {...item} />
+        </Pressable>
       )}
       ListEmptyComponent={() => {
         if (isPending && !isRefetching) {
