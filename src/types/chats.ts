@@ -106,7 +106,19 @@ export interface SendFileBody extends BaseSendMessageData {
 
 export type SendMessageData = SendMessageBody | SendFileBody;
 
-export type MessageResponse = ApiResponse<Message>;
-export type MessagesResponse = ApiResponse<Message[]>;
-export type InboxResponse = ApiResponse<Inbox>;
-export type InboxListResponse = ApiResponse<Inbox[]>;
+export interface MessagesPagination {
+  prev_cursor: null | string;
+  next_cursor: null | string;
+  prev_page_url: null | string;
+  next_page_url: null | string;
+}
+
+export interface MessagesResponse {
+  messages: Message[];
+  pagination: MessagesPagination;
+}
+
+export type MessageApiResponse = ApiResponse<Message>;
+export type MessagesApiResponse = ApiResponse<MessagesResponse>;
+export type InboxApiResponse = ApiResponse<Inbox>;
+export type InboxListApiResponse = ApiResponse<Inbox[]>;

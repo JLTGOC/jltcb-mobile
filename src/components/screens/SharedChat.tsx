@@ -10,7 +10,7 @@ import type {
   ChatEvent,
   Message,
   MessageSentEvent,
-  MessagesResponse,
+  MessagesApiResponse,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import type {
@@ -45,10 +45,7 @@ export default function SharedChat({ variant }: Props) {
     data: messages,
     isPending: isMessagesPending,
     refetch,
-  } = useQuery({
-    ...chatMessagesQueryOptions(id),
-    select: (data) => ({ ...data, data: data.data.toReversed() }),
-  });
+  } = useQuery(chatMessagesQueryOptions(id));
 
   useRefreshOnFocus(refetch);
 
@@ -74,15 +71,17 @@ export default function SharedChat({ variant }: Props) {
 
             const { message, client_id } = chatData;
 
-            queryClient.setQueryData<MessagesResponse>(
+            queryClient.setQueryData<MessagesApiResponse>(
               chatKeys.getMessages(id),
               (old) => {
                 if (!old) return old;
 
-                const exists = old.data.some((msg) => msg.id === message.id);
+                const exists = old.data.messages.some(
+                  (msg) => msg.id === message.id,
+                );
                 if (exists) return old;
 
-                const replacedMessages = old.data.map((msg) =>
+                const replacedMessages = old.data.messages.map((msg) =>
                   msg.client_id === client_id ? message : msg,
                 );
 
@@ -91,8 +90,17 @@ export default function SharedChat({ variant }: Props) {
                 );
 
                 return didReplace
-                  ? { ...old, data: replacedMessages }
-                  : { ...old, data: [...old.data, message] };
+                  ? {
+                      ...old,
+                      data: { ...old.data, messages: replacedMessages },
+                    }
+                  : {
+                      ...old,
+                      data: {
+                        ...old.data,
+                        messages: [...old.data.messages, message],
+                      },
+                    };
               },
             );
             break;
@@ -163,7 +171,7 @@ export default function SharedChat({ variant }: Props) {
           ) : (
             <FlatList
               inverted
-              data={messages?.data}
+              data={messages?.data.messages}
               keyExtractor={(item) => item.id.toString()}
               ref={flatListRef}
               contentContainerStyle={styles.messagesListContainer}

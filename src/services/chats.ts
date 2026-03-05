@@ -2,6 +2,7 @@ import { apiGet, apiPost } from "@/src/services/axiosInstance";
 import type {
   Inbox,
   Message,
+  MessagesResponse,
   SendFileBody,
   SendMessageBody,
 } from "@/src/types/chats";
@@ -13,7 +14,9 @@ export const fetchConversationData = (converstationId: string) =>
   apiGet<Inbox>(`conversations/${converstationId}`);
 
 export const fetchChatMessages = (conversationId: string) =>
-  apiGet<Message[]>(`conversations/${conversationId}/messages`);
+  apiGet<MessagesResponse>(`conversations/${conversationId}/messages`, {
+    params: { sortOrder: "desc" },
+  });
 
 export const sendMessage = (conversationId: string, data: SendMessageBody) =>
   apiPost<Message>(`conversations/${conversationId}`, data);

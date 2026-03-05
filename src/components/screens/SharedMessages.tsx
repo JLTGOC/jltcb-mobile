@@ -9,7 +9,7 @@ import { chatKeys } from "@/src/query-key-factories/chats";
 import { chatsQueryOptions } from "@/src/query-options/chats/chatsQueryOptions";
 import type {
   ChatEvent,
-  InboxListResponse,
+  InboxListApiResponse,
   InboxUpdatedEvent,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToUser } from "@/src/utils/pusher";
@@ -80,7 +80,7 @@ export default function SharedMessages({ variant }: Props) {
 
             const { inbox } = chatData;
 
-            queryClient.setQueryData<InboxListResponse>(
+            queryClient.setQueryData<InboxListApiResponse>(
               chatKeys.getChats(submittedSearch),
               (old) => {
                 if (!old) return old;
