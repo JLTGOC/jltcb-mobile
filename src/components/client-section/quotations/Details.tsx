@@ -40,7 +40,7 @@ export default function Details({ quotationId }: Props) {
         pathname: routes.CLIENT_QUOTATION_VIEWER,
         params: {
           url,
-          title: "View Quotation",
+          title: data?.reference_number,
         },
       });
     }

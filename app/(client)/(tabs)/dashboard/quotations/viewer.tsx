@@ -29,7 +29,7 @@ export default function QuotationViewer() {
   if (!fileUrl) {
     return (
       <View style={styles.container}>
-        <BannerHeader title="View Quotation" variant="dark" />
+        <BannerHeader title={title || "View Quotation"} variant="dark" />
         <View style={styles.emptyState}>
           <Text>Unable to open file. Missing file URL.</Text>
         </View>
