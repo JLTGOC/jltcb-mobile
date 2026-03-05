@@ -1,11 +1,14 @@
+import { useSendFileMutation } from "@/src/hooks/useSendFileMutation";
 import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
 import { MessageForm, messageFormSchema } from "@/src/schemas/messageSchema";
+import { SendFileBody } from "@/src/types/chats";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Crypto from "expo-crypto";
+import * as DocumentPicker from "expo-document-picker";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import { TextInputProps } from "react-native-paper";
+import type { TextInputProps } from "react-native-paper";
 
 type Props = {
   chatId: string;
@@ -32,9 +35,38 @@ export default function ChatMessageInput({
     reset();
   });
 
+  const sendFileMutation = useSendFileMutation(chatId);
+
+  const onSelectFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["application/*", "text/*", "audio/*"],
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      const { uri, name, mimeType } = result.assets[0];
+
+      const sendFileBody: SendFileBody = {
+        client_id: Crypto.randomUUID(),
+        type: "FILE",
+        file: {
+          uri,
+          name,
+          type: mimeType,
+        },
+      };
+
+      sendFileMutation.mutate(sendFileBody);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <View style={styles.messageInputContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onSelectFile}>
         <Ionicons
           name="attach"
           style={styles.fileIcon}

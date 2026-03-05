@@ -1,4 +1,5 @@
 import { ApiResponse } from "@/src/types/api";
+import type { ReactNativeFile } from "./files";
 
 export interface Inbox {
   id: string;
@@ -88,17 +89,22 @@ export type ChatEvent = keyof ChatEventMap;
 
 export type SendMessageType = "TEXT" | "FILE" | "IMAGE";
 
-export type SendMessageData =
-  | {
-      type: "TEXT";
-      content: string;
-      client_id: string;
-    }
-  | {
-      type: Exclude<SendMessageType, "TEXT">;
-      file: string;
-      client_id: string;
-    };
+interface BaseSendMessageData {
+  type: SendMessageType;
+  client_id: string;
+}
+
+export interface SendMessageBody extends BaseSendMessageData {
+  type: "TEXT";
+  content: string;
+}
+
+export interface SendFileBody extends BaseSendMessageData {
+  type: "FILE";
+  file: ReactNativeFile;
+}
+
+export type SendMessageData = SendMessageBody | SendFileBody;
 
 export type MessageResponse = ApiResponse<Message>;
 export type MessagesResponse = ApiResponse<Message[]>;

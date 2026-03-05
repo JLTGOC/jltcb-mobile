@@ -2,7 +2,7 @@ import { useAuth } from "@/src/hooks/useAuth";
 import { chatKeys } from "@/src/query-key-factories/chats";
 import { sendMessage } from "@/src/services/chats";
 import type { ApiResponse } from "@/src/types/api";
-import type { Message, SendMessageData } from "@/src/types/chats";
+import type { Message, SendMessageBody } from "@/src/types/chats";
 import { useMutation } from "@tanstack/react-query";
 
 type MessageResponse = ApiResponse<Message>;
@@ -15,10 +15,10 @@ export function useSendMessageMutation(conversationId: string) {
   return useMutation<
     MessageResponse,
     Error,
-    SendMessageData,
+    SendMessageBody,
     { previousMessagesData?: MessagesResponse }
   >({
-    mutationFn: (data: SendMessageData) => sendMessage(conversationId, data),
+    mutationFn: (data: SendMessageBody) => sendMessage(conversationId, data),
     onMutate: async (newMessage, context) => {
       await context.client.cancelQueries({ queryKey });
 
