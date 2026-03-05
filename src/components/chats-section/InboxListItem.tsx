@@ -1,4 +1,5 @@
 import { Inbox } from "@/src/types/chats";
+import { formatInboxItemTime } from "@/src/utils/chatTimeFormatter";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 
@@ -9,6 +10,8 @@ export default function InboxListItem({
   title,
   last_message,
 }: Inbox) {
+  const formattedLastMessageTime = formatInboxItemTime(time);
+
   return (
     <View style={styles.container}>
       {image_path ? (
@@ -23,7 +26,7 @@ export default function InboxListItem({
         <Text numberOfLines={1}>{last_message}</Text>
       </View>
       <View style={styles.details}>
-        <Text>{time}</Text>
+        <Text>{formattedLastMessageTime}</Text>
         {unread_count ? (
           <Text style={styles.unreadCount}>{unread_count}</Text>
         ) : (
