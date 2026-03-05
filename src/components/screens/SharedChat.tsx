@@ -30,6 +30,7 @@ import {
   View,
 } from "react-native";
 import { ActivityIndicator, Avatar } from "react-native-paper";
+import ChatFileCard from "../chats-section/ChatFileCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
 type Props = {
@@ -98,7 +99,7 @@ export default function SharedChat({ variant }: Props) {
                       ...old,
                       data: {
                         ...old.data,
-                        messages: [...old.data.messages, message],
+                        messages: [message, ...old.data.messages],
                       },
                     };
               },
@@ -133,6 +134,9 @@ export default function SharedChat({ variant }: Props) {
 
       case "SHIPMENT_CARD":
         return <ChatShipmentCard shipment={item} />;
+
+      case "FILE":
+        return <ChatFileCard file={item} />;
 
       default:
         return null;

@@ -33,8 +33,6 @@ export const sendFile = (
   formData.append("client_id", client_id);
   formData.append("file", file as unknown as Blob);
 
-  console.log(formData);
-
   return apiPost<Message>(`conversations/${conversationId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
