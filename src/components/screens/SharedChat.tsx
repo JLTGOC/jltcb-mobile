@@ -2,7 +2,6 @@ import ChatMessageInput from "@/src/components/chats-section/ChatMessageInput";
 import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard";
 import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
 import { chatMessagesQueryOptions } from "@/src/query-options/chats/chatMessagesQueryOptions";
@@ -11,25 +10,18 @@ import type {
   ChatEvent,
   Message,
   MessageSentEvent,
-  MessagesResponse
+  MessagesResponse,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
-import { zodResolver } from "@hookform/resolvers/zod";
 import type {
   PusherChannel,
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import * as Crypto from "expo-crypto";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
-import {
-  type MessageForm,
-  messageFormSchema,
-} from "@/src/schemas/messageSchema";
 import { useCallback, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -67,22 +59,6 @@ export default function SharedChat({ variant }: Props) {
   );
 
   const { data: chatDetails } = useQuery(chatQueryOptions(id));
-
-  const { control, handleSubmit, reset } = useForm<MessageForm>({
-    resolver: zodResolver(messageFormSchema),
-    defaultValues: {
-      content: "",
-    },
-  });
-
-  const sendMessageMutation = useSendMessageMutation(id);
-
-  const onSendMessage = handleSubmit(({ content }) => {
-    const client_id = Crypto.randomUUID();
-
-    sendMessageMutation.mutate({ content, type: "TEXT", client_id });
-    reset();
-  });
 
   useFocusEffect(
     useCallback(() => {
@@ -197,19 +173,7 @@ export default function SharedChat({ variant }: Props) {
           )}
         </View>
 
-        <Controller
-          control={control}
-          name="content"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <ChatMessageInput
-              onSend={onSendMessage}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              sendDisabled={!value}
-            />
-          )}
-        />
+        <ChatMessageInput chatId={id} />
       </KeyboardAvoidingView>
     </View>
   );

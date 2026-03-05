@@ -1,24 +1,37 @@
+import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
+import { MessageForm, messageFormSchema } from "@/src/schemas/messageSchema";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  GestureResponderEvent,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Crypto from "expo-crypto";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { TextInputProps } from "react-native-paper";
 
 type Props = {
-  onSend: (event: GestureResponderEvent) => void;
-  sendDisabled?: boolean;
+  chatId: string;
 };
 
 export default function ChatMessageInput({
-  sendDisabled,
-  onSend,
+  chatId,
   style,
   ...props
 }: TextInputProps & Props) {
+  const { control, handleSubmit, reset } = useForm<MessageForm>({
+    resolver: zodResolver(messageFormSchema),
+    defaultValues: {
+      content: "",
+    },
+  });
+
+  const sendMessageMutation = useSendMessageMutation(chatId);
+
+  const onSendMessage = handleSubmit(({ content }) => {
+    const client_id = Crypto.randomUUID();
+
+    sendMessageMutation.mutate({ content, type: "TEXT", client_id });
+    reset();
+  });
+
   return (
     <View style={styles.messageInputContainer}>
       <TouchableOpacity>
@@ -32,25 +45,36 @@ export default function ChatMessageInput({
       <View style={styles.dividerContainer}>
         <View style={styles.divider} />
       </View>
-      <TextInput
-        placeholder="Type something"
-        placeholderTextColor="#9F9C9C"
-        style={[styles.messageInput, style]}
-        multiline
-        numberOfLines={6}
-        {...props}
+      <Controller
+        name="content"
+        control={control}
+        render={({ field: { onBlur, onChange, value } }) => (
+          <>
+            <TextInput
+              placeholder="Type something"
+              placeholderTextColor="#9F9C9C"
+              style={[styles.messageInput, style]}
+              multiline
+              numberOfLines={6}
+              onBlur={onBlur}
+              value={value}
+              onChangeText={onChange}
+              {...props}
+            />
+            <TouchableOpacity
+              style={{ opacity: !value ? 0.3 : undefined }}
+              disabled={!value}
+              onPress={onSendMessage}
+            >
+              <MaterialCommunityIcons
+                name="send-variant-outline"
+                size={32}
+                color="#0000f5"
+              />
+            </TouchableOpacity>
+          </>
+        )}
       />
-      <TouchableOpacity
-        style={{ opacity: sendDisabled ? 0.3 : undefined }}
-        disabled={sendDisabled}
-        onPress={onSend}
-      >
-        <MaterialCommunityIcons
-          name="send-variant-outline"
-          size={32}
-          color="#0000f5"
-        />
-      </TouchableOpacity>
     </View>
   );
 }
