@@ -4,6 +4,9 @@ export default function ChatboxLayout() {
   return (
     <Stack
       screenOptions={{ headerShown: false, animation: "fade_from_bottom" }}
-    />
+    >
+      <Stack.Screen name="index" />
+      <Stack.Screen name="[id]" />
+    </Stack>
   );
 }

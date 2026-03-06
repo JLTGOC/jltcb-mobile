@@ -48,6 +48,12 @@ export default function ClientTabsLayout() {
       />
       <Tabs.Screen
         name="messages"
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("messages", { screen: "index" });
+          },
+        })}
         options={{
           tabBarIcon: (props) => (
             <MaterialCommunityIcons name="message" {...props} />

@@ -18,7 +18,7 @@ import type {
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { useCallback, useRef } from "react";
@@ -39,6 +39,7 @@ type Props = {
 
 export default function SharedChat({ variant }: Props) {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
 
@@ -147,6 +148,7 @@ export default function SharedChat({ variant }: Props) {
     <View style={{ flex: 1 }}>
       <View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
         <BannerHeader
+          onBack={() => router.dismissTo("/messages")}
           title={chatDetails?.data.title ?? ""}
           titleProps={{ numberOfLines: 1 }}
           variant={variant}

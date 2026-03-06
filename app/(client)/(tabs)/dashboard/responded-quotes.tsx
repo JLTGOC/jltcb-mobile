@@ -106,7 +106,7 @@ export default function RespondedQuotes() {
 
   const redirectToChat = (conversationId: string) => {
     router.navigate({
-      pathname: "/messages/[id]",
+      pathname: "/(client)/(tabs)/messages/[id]",
       params: { id: conversationId },
     });
   };

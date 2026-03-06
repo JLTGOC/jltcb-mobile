@@ -112,7 +112,7 @@ export default function SharedMessages({ variant }: Props) {
           pusher.unsubscribe({ channelName: channel.channelName });
         }
       };
-    }, [userData]),
+    }, [queryClient, submittedSearch, userData]),
   );
 
   if (error) {
