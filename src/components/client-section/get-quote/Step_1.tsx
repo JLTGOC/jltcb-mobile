@@ -11,7 +11,8 @@ type Props = {
 };
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
-const COMPANY_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|ph)$/i;
+const COMPANY_EMAIL_REGEX =
+  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/i;
 
 const companySchema = z.object({
   name: z
@@ -30,7 +31,7 @@ const companySchema = z.object({
     .string()
     .regex(
       COMPANY_EMAIL_REGEX,
-      "Email must be valid and end with .com or .ph",
+      "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
     ),
 });
 export default function Step_1({ setFormData, formData, fields }: Props) {
