@@ -7,7 +7,7 @@ import { initPusher } from "@/src/lib/pusher";
 import { queryClient } from "@/src/lib/queryClient";
 import { QueryClientProvider, focusManager } from "@tanstack/react-query";
 import { Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 

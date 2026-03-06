@@ -1,4 +1,5 @@
 import type { User, UserRole } from "@/src/types/auth";
+import { useQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
 import { pusher } from "../lib/pusher";
@@ -17,6 +18,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient()
   const [role, setRole] = useState<UserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
@@ -97,6 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         SecureStore.deleteItemAsync("role"),
         SecureStore.deleteItemAsync("userData"),
       ]);
+
+      queryClient.clear()
 
       setToken(null);
       setRole(null);
