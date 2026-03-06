@@ -57,7 +57,10 @@ export default function SharedChat({ variant }: Props) {
     }, [queryClient]),
   );
 
-  const { data: chatDetails } = useQuery(chatQueryOptions(id));
+  const { data: chatDetails } = useQuery({
+    ...chatQueryOptions(id),
+    staleTime: Infinity,
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -92,6 +95,7 @@ export default function SharedChat({ variant }: Props) {
                 } else {
                   // receiver: append new message
                   updatedMessages = [message, ...old.data.messages];
+                  // TODO: Call mark as read api
                 }
 
                 return {
