@@ -1,4 +1,5 @@
 import { QuotationCardMessage } from "@/src/types/chats";
+import { format, parseISO } from "date-fns";
 import { StyleSheet, View } from "react-native";
 
 import { Avatar, Card, Text } from "react-native-paper";
@@ -23,7 +24,8 @@ export default function ChatQuotationCard({ quotation }: Props) {
     commodity: serializedQuotation.commodity,
   });
   const leftColDetails = mapQuotations({
-    date_created: serializedQuotation.date_created,
+    date_created: format(parseISO(serializedQuotation.date_created), "P"),
+    account_handler: serializedQuotation.as_full_name,
   });
   const rightColDetails = mapQuotations({ volume: serializedQuotation.volume });
 

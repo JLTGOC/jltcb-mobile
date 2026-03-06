@@ -19,6 +19,7 @@ export interface Sender {
 
 export interface Quotation {
   id: number;
+  as_full_name: string;
   reference_number: string;
   commodity: string;
   volume: number | null;
@@ -27,6 +28,7 @@ export interface Quotation {
 
 export interface Shipment {
   id: number;
+  as_full_name: string;
   reference_number: string;
   commodity: string;
   cargo_type: string;

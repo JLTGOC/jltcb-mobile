@@ -1,4 +1,5 @@
 import type { ShipmentCardMessage } from "@/src/types/chats";
+import { format, parseISO } from "date-fns";
 import { StyleSheet, View } from "react-native";
 
 import { Avatar, Card, Text } from "react-native-paper";
@@ -23,7 +24,8 @@ export default function ChatShipmentCard({ shipment }: Props) {
     commodity: serializedShipment.commodity,
   });
   const leftColDetails = mapShipments({
-    date_created: serializedShipment.date_created,
+    date_created: format(parseISO(serializedShipment.date_created), "P"),
+    account_handler: serializedShipment.as_full_name,
   });
   const rightColDetails = mapShipments({ volume: serializedShipment.volume });
 
