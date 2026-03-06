@@ -47,7 +47,7 @@ export function useSendMessageMutation(conversationId: string) {
 
       return { previousMessagesData };
     },
-    onError: (err, newTodo, onMutateResult, context) => {
+    onError: (_err, _newMessage, onMutateResult, context) => {
       context.client.setQueryData(
         queryKey,
         onMutateResult?.previousMessagesData,

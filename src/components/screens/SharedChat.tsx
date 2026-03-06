@@ -9,8 +9,8 @@ import { chatQueryOptions } from "@/src/query-options/chats/chatQueryOptions";
 import type {
   ChatEvent,
   Message,
-  MessageSentEvent,
   MessagesApiResponse,
+  MessageSentEvent,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import type {
@@ -29,7 +29,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { ActivityIndicator, Avatar } from "react-native-paper";
+import { ActivityIndicator, Avatar, Text } from "react-native-paper";
 import ChatFileCard from "../chats-section/ChatFileCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
@@ -79,32 +79,31 @@ export default function SharedChat({ variant }: Props) {
                 if (!old) return old;
 
                 const exists = old.data.messages.some(
-                  (msg) => msg.id === message.id,
-                );
-                if (exists) return old;
-
-                const replacedMessages = old.data.messages.map((msg) =>
-                  msg.client_id === client_id ? message : msg,
+                  (m) => m.client_id === client_id,
                 );
 
-                const didReplace = replacedMessages.some(
-                  (m) => m.id === message.id,
-                );
+                let updatedMessages;
 
-                return didReplace
-                  ? {
-                      ...old,
-                      data: { ...old.data, messages: replacedMessages },
-                    }
-                  : {
-                      ...old,
-                      data: {
-                        ...old.data,
-                        messages: [message, ...old.data.messages],
-                      },
-                    };
+                if (exists) {
+                  // sender: replace optimistic message
+                  updatedMessages = old.data.messages.map((m) =>
+                    m.client_id === client_id ? message : m,
+                  );
+                } else {
+                  // receiver: append new message
+                  updatedMessages = [message, ...old.data.messages];
+                }
+
+                return {
+                  ...old,
+                  data: {
+                    ...old.data,
+                    messages: updatedMessages,
+                  },
+                };
               },
             );
+
             break;
         }
       };
@@ -126,22 +125,42 @@ export default function SharedChat({ variant }: Props) {
   );
 
   const renderItem = ({ item }: { item: Message }) => {
+    let message;
+
     switch (item.type) {
       case "TEXT":
-        return <ChatTextBubble message={item} />;
+        message = <ChatTextBubble message={item} />;
+        break;
 
       case "QUOTATION_CARD":
-        return <ChatQuotationCard quotation={item} />;
+        message = <ChatQuotationCard quotation={item} />;
+        break;
 
       case "SHIPMENT_CARD":
-        return <ChatShipmentCard shipment={item} />;
+        message = <ChatShipmentCard shipment={item} />;
+        break;
 
       case "FILE":
-        return <ChatFileCard file={item} />;
+        message = <ChatFileCard file={item} />;
+        break;
 
       default:
         return null;
     }
+
+    return (
+      <>
+        {item.client_id && (
+          <Text
+            variant="bodySmall"
+            style={{ alignSelf: "flex-end", marginTop: 2 }}
+          >
+            Sending...
+          </Text>
+        )}
+        {message}
+      </>
+    );
   };
 
   return (
