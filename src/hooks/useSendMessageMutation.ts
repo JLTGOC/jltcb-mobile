@@ -15,8 +15,6 @@ export function useSendMessageMutation(conversationId: string) {
   return useMutation({
     mutationFn: (data: SendMessageBody) => sendMessage(conversationId, data),
     onMutate: async (newMessage, context) => {
-      await context.client.cancelQueries({ queryKey });
-
       const previousMessagesData =
         context.client.getQueryData<MessagesApiResponse>(queryKey);
 

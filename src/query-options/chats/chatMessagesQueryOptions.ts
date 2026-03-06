@@ -6,4 +6,5 @@ export const chatMessagesQueryOptions = (conversationId: string) =>
   queryOptions({
     queryKey: chatKeys.getMessages(conversationId),
     queryFn: () => fetchChatMessages(conversationId),
+    staleTime: Infinity,
   });

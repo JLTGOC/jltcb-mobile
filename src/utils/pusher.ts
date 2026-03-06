@@ -24,7 +24,7 @@ const subscribe = async (
       console.log({ channelName, message, e });
     },
     onSubscriptionSucceeded: (data) => {
-      console.log({ data });
+      // console.log({ data });
     },
   });
 };
