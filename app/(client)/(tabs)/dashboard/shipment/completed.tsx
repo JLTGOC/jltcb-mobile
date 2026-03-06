@@ -41,7 +41,7 @@ export default function Completed() {
           <CardTemplate
             reference_number={item.general_info.reference_number}
             status={item.general_info.status}
-            commodity={item.general_info.commodity}
+            commodity={item.commodity_details.commodity}
             date={item.general_info.date}
             shipment_id={item.general_info.id}
           />

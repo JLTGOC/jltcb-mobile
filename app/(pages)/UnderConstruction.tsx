@@ -39,12 +39,12 @@ export default function Index() {
           <MoveLeft 
             color="#EE9034" 
             size={28} 
-            onPress={() => replace("/(pages)/landing-page")} 
+            onPress={() => replace("/landing-page")} 
           />
           <Text 
             variant="labelLarge" 
             style={{ color: "#EE9034" }}
-            onPress={() => replace("/(pages)/landing-page")}
+            onPress={() => replace("/landing-page")}
           >
             Go Back
           </Text>
