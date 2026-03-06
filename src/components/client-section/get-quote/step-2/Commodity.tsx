@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { Card, Checkbox, Text } from "react-native-paper";
+import { Card, Checkbox, Text, TextInput } from "react-native-paper";
 
 import {
   QuoteForm,
@@ -9,7 +8,6 @@ import {
 
 import {
   cargo_type,
-  commodities,
   container_size,
 } from "../../../../constants/client-const";
 
@@ -23,30 +21,26 @@ export default function Commodity({ formData, setFormData }: Props) {
     <View>
       {/* Dropdown */}
       <Text>Commodity</Text>
-      <AutocompleteDropdown
-        clearOnFocus={false}
-        closeOnBlur={true}
-        closeOnSubmit={false}
-        direction="up"
-        initialValue={formData.commodity?.commodity}
-        onSelectItem={(item) => {
+      <TextInput
+        underlineColor="transparent"
+        activeUnderlineColor="transparent"
+        selectionColor="blue"
+        mode="flat"
+        style={styles.textInputContainer}
+        theme={{
+          roundness: 10,
+        }}
+        value={formData.commodity?.commodity ?? ""}
+        onChangeText={(text) => {
           setFormData((prev) => ({
             ...prev,
-            commodity: { ...prev.commodity, commodity: item?.title ?? "" },
+            commodity: { ...prev.commodity, commodity: text },
           }));
         }}
-        dataSet={commodities.map((type) => ({ id: type, title: type }))}
-        inputContainerStyle={styles.inputContainer}
-        textInputProps={{
-          style: styles.textInput,
-          placeholderTextColor: "#888",
-        }}
-        suggestionsListContainerStyle={styles.suggestedContainer}
-        suggestionsListTextStyle={styles.suggestedText}
       />
 
       {/* CheckBox */}
-      {formData.commodity?.commodity === commodities[0] && (
+      {formData.commodity?.commodity !== "" && (
         <>
           <FlatList
             data={cargo_type}
@@ -147,9 +141,10 @@ export default function Commodity({ formData, setFormData }: Props) {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  textInputContainer: {
+    borderRadius: 10,
+    height: 40,
     backgroundColor: "#fff",
-    borderRadius: 8,
     borderColor: "#ffffff",
   },
   textInput: {

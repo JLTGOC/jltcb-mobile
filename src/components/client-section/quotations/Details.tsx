@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import * as WebBrowser from "expo-web-browser";
 import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import {
@@ -13,6 +12,7 @@ import {
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 import { useRouter } from "expo-router";
+import { routes } from "@/src/constants/routes";
 
 type Props = {
   quotationId?: string;
@@ -32,11 +32,17 @@ export default function Details({ quotationId }: Props) {
   const handleOnPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
       router.push({
-        pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
+        pathname: "/(client)/(tabs)/get-quote",
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
-      await WebBrowser.openBrowserAsync(url);
+      router.push({
+        pathname: routes.CLIENT_QUOTATION_VIEWER,
+        params: {
+          url,
+          title: data?.reference_number,
+        },
+      });
     }
   };
 
@@ -150,10 +156,7 @@ export default function Details({ quotationId }: Props) {
           textColor="white"
           style={{ borderRadius: 4 }}
           onPress={() => {
-            handleOnPress(
-              data?.status,
-              data?.quotation_file?.[0]?.file_url
-            );
+            handleOnPress(data?.status, data?.quotation_file?.[0]?.file_url);
           }}
         >
           VIEW QUOTATION

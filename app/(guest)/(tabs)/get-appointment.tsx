@@ -1,9 +1,12 @@
 import Form from "@/src/components/appointment-section/Form";
 import TimeDate from "@/src/components/appointment-section/TimeDate";
 import { ImageBackground } from "expo-image";
+import { useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
 export default function GetAppointment() {
+  const [appointmentResetKey, setAppointmentResetKey] = useState(0);
+
   return (
     <FlatList
       data={[1]} // dummy item
@@ -50,8 +53,12 @@ export default function GetAppointment() {
               </Text>
             </View>
           </ImageBackground>
-          <TimeDate />
-          <Form />
+          <TimeDate resetKey={appointmentResetKey} />
+          <Form
+            onSubmitted={() =>
+              setAppointmentResetKey((prevResetKey) => prevResetKey + 1)
+            }
+          />
         </View>
       )}
     />

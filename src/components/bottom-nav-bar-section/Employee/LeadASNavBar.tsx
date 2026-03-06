@@ -32,6 +32,10 @@ export default function LeadASNavBar() {
 				<View key={index}>
 					<TouchableOpacity
 						onPress={() => (setActiveIndex(index), navigate(icon.route as any))}
+						style={[
+							styles.tabButton,
+							index === activeIndex && styles.activeTabButton,
+						]}
 					>
 						<MaterialCommunityIcons
 							name={icon.iconName as any}
@@ -53,4 +57,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "#ffffffff",
 		paddingHorizontal: 20,
 	},
+		tabButton: {
+			borderBottomWidth: 2,
+			borderBottomColor: "transparent",
+		},
+		activeTabButton: {
+			borderBottomColor: "#EE9034",
+		},
 });

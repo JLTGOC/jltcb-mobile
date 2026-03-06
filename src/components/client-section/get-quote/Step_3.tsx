@@ -82,6 +82,8 @@ export default function Step_3({ formData, setFormData }: Props) {
     }));
   };
 
+  console.log("step_3.tsx", formData)
+
   return (
     <ScrollView
       style={{ gap: 10, padding: 10 }}
@@ -125,7 +127,7 @@ export default function Step_3({ formData, setFormData }: Props) {
                 >
                   <Text numberOfLines={1}>File Name: {document.file_name}</Text>
                 </View>
-                <TouchableOpacity
+                {formData.documents && formData.documents.length > 1 ? ( <TouchableOpacity
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
@@ -136,7 +138,8 @@ export default function Step_3({ formData, setFormData }: Props) {
                   }
                 >
                   <X size={20} color="red" />
-                </TouchableOpacity>
+                </TouchableOpacity> ) : null }
+               
               </View>
             ))}
           </View>

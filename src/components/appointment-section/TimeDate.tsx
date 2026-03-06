@@ -1,13 +1,23 @@
-import { Text, Chip } from "react-native-paper";
-import { Dimensions, View, FlatList } from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, FlatList, View } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { useState } from "react";
-export default function TImeDate() {
+import { Chip, Text } from "react-native-paper";
+
+type Props = {
+  resetKey?: number;
+};
+
+export default function TImeDate({ resetKey }: Props) {
   const screenWidth = Dimensions.get("window").width;
 
   const [date, setDate] = useState<string>("");
 
   const [selectedTime, setSelectedTime] = useState<string>("");
+
+  useEffect(() => {
+    setDate("");
+    setSelectedTime("");
+  }, [resetKey]);
 
   const availableTimes = [
     "08:00 AM",

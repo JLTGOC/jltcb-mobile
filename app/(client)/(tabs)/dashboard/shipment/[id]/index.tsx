@@ -1,5 +1,6 @@
-import Details from "@/src/components/client-section/quotations/Details";
-import Documents from "@/src/components/client-section/quotations/Documents";
+import Details from "@/src/components/client-section/shipment/Details";
+import Documents from "@/src/components/client-section/shipment/Documents";
+import Billing from  "@/src/components/client-section/shipment/Billing";  
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
 import { useLocalSearchParams } from "expo-router";
@@ -13,27 +14,41 @@ import {
   View,
 } from "react-native";
 
-export default function QuoteDetails() {
-  const { id, title, status } = useLocalSearchParams<{
+export default function ShipmentDetails() {
+  const { id, reference_number } = useLocalSearchParams<{
     id: string;
-    title: string;
-    status: string;
+    reference_number?: string;
   }>();
+  const shipmentId = Number(id);
+  const referenceNumber =
+    reference_number && !Number.isNaN(Number(reference_number))
+      ? Number(reference_number)
+      : undefined;
+  const headerTitle =
+    referenceNumber !== undefined
+      ? String(referenceNumber)
+      : (reference_number ?? "Shipment Details");
 
   const [active, setActive] = useState(0);
 
-  const tabs = ["DETAILS", "DOCUMENTS", "", ""];
+  const tabs = ["DETAILS", "DOCUMENTS", "BILLING", ""];
 
   const screenWidth = Dimensions.get("screen").width;
 
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details quotationId={id} />;
+        return <Details />;
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Documents quotationId={id} />
+            <Documents/>
+          </View>
+        );
+      case 2:
+        return (
+          <View style={styles.placeholder}>
+            <Documents/>
           </View>
         );
       default:
@@ -47,7 +62,7 @@ export default function QuoteDetails() {
       keyExtractor={(item) => item.toString()}
       renderItem={({}) => (
         <>
-          <BannerHeader title={title} variant="dark" />
+          <BannerHeader title={headerTitle} variant="dark" />
 
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (
@@ -66,7 +81,7 @@ export default function QuoteDetails() {
                 >
                   {t}
                 </Text>
-                {active === i && <View style={styles.underline}/>}
+                {active === i && <View style={styles.underline} />}
               </TouchableOpacity>
             ))}
           </View>

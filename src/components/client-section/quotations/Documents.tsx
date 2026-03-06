@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import * as WebBrowser from "expo-web-browser";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, Card, Text } from "react-native-paper";
+import { useRouter } from "expo-router";
 
+import { routes } from "@/src/constants/routes";
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 
@@ -10,6 +11,8 @@ type Props = {
   quotationId?: string;
 };
 export default function Details({ quotationId }: Props) {
+  const router = useRouter();
+
   //fetch the single quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [quotationId],
@@ -17,8 +20,18 @@ export default function Details({ quotationId }: Props) {
     enabled: !!quotationId,
   });
 
-  const handleOnPress = async (url?: string) => {
-    await WebBrowser.openBrowserAsync(url as any);
+  const handleOnPress = (url?: string) => {
+    if (!url) {
+      return;
+    }
+
+    router.push({
+      pathname: routes.CLIENT_QUOTATION_VIEWER,
+      params: {
+        url,
+        title: "View Quotation",
+      },
+    });
   };
 
   if (isLoading) {

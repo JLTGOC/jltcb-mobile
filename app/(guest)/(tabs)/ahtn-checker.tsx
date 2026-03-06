@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { Button, Checkbox } from "react-native-paper";
 
-export default function AHTNChecker() {
+export default function SharedAHTNChecker() {
+  const [searchValue, setSearchValue] = useState("");
   const [selectedTariffSchedules, setSelectedTariffSchedules] = useState<
     string[]
   >([]);
@@ -31,10 +32,20 @@ export default function AHTNChecker() {
     );
   }
 
+  function handleSubmit() {
+    setSearchValue("");
+    setSelectedTariffSchedules([]);
+  }
+
+  const isSubmitDisabled =
+    searchValue.trim().length === 0 && selectedTariffSchedules.length === 0;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={{ gap: 10 }}>
         <TextInput
+          value={searchValue}
+          onChangeText={setSearchValue}
           style={styles.input}
           placeholderTextColor="#888"
           textAlign="center"
@@ -81,6 +92,10 @@ export default function AHTNChecker() {
 
       <Button
         mode="contained"
+        onPress={handleSubmit}
+        disabled={isSubmitDisabled}
+        buttonColor={isSubmitDisabled ? "#9CA3AF" : "#161F3C"}
+        textColor="#FFFFFF"
         labelStyle={{
           fontSize: 16,
         }}
@@ -100,7 +115,6 @@ const styles = StyleSheet.create({
     marginBlockStart: 10,
   },
   button: {
-    backgroundColor: "#161F3C", // button color
     borderRadius: 10, // round corners
     paddingBlock: 4,
   },
