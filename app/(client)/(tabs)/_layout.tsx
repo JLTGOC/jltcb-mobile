@@ -1,10 +1,11 @@
 import { THEMES } from "@/src/constants/themes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ClientTabsLayout() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const tabBarStyle: Animated.WithAnimatedValue<StyleProp<ViewStyle>> = {
@@ -48,12 +49,11 @@ export default function ClientTabsLayout() {
       />
       <Tabs.Screen
         name="messages"
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            navigation.navigate("messages", { screen: "index" });
+        listeners={{
+          tabPress: () => {
+            router.dismissTo("/(client)/(tabs)/messages");
           },
-        })}
+        }}
         options={{
           tabBarIcon: (props) => (
             <MaterialCommunityIcons name="message" {...props} />
