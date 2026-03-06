@@ -16,6 +16,7 @@ const TEXT_COLOR_LIGHT = "#FF9933";
 
 interface BannerHeaderProps {
   back?: boolean;
+  onBack?: () => void;
   title: string;
   variant: "light" | "dark";
   titleProps?: Omit<TextProps<never>, "children">;
@@ -23,6 +24,7 @@ interface BannerHeaderProps {
 
 export default function BannerHeader({
   back = true,
+  onBack,
   title,
   variant,
   titleProps,
@@ -34,6 +36,14 @@ export default function BannerHeader({
     color: variant === "dark" ? TEXT_COLOR_LIGHT : TEXT_COLOR_DARK,
   };
 
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
+
   return (
     <ImageBackground
       source={BANNERS[variant]}
@@ -42,7 +52,7 @@ export default function BannerHeader({
     >
       <View style={styles.content}>
         {back && (
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={handleBack}>
             <Ionicons name="arrow-back" size={24} style={textColorStyle} />
           </TouchableOpacity>
         )}

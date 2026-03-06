@@ -2,7 +2,6 @@ import ChatMessageInput from "@/src/components/chats-section/ChatMessageInput";
 import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard";
 import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
 import { chatMessagesQueryOptions } from "@/src/query-options/chats/chatMessagesQueryOptions";
@@ -11,25 +10,18 @@ import type {
   ChatEvent,
   Message,
   MessageSentEvent,
-  MessagesResponse
+  MessagesApiResponse,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
-import { zodResolver } from "@hookform/resolvers/zod";
 import type {
   PusherChannel,
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import * as Crypto from "expo-crypto";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
-import {
-  type MessageForm,
-  messageFormSchema,
-} from "@/src/schemas/messageSchema";
 import { useCallback, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -38,6 +30,7 @@ import {
   View,
 } from "react-native";
 import { ActivityIndicator, Avatar } from "react-native-paper";
+import ChatFileCard from "../chats-section/ChatFileCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
 type Props = {
@@ -46,6 +39,7 @@ type Props = {
 
 export default function SharedChat({ variant }: Props) {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
 
@@ -53,10 +47,7 @@ export default function SharedChat({ variant }: Props) {
     data: messages,
     isPending: isMessagesPending,
     refetch,
-  } = useQuery({
-    ...chatMessagesQueryOptions(id),
-    select: (data) => ({ ...data, data: data.data.toReversed() }),
-  });
+  } = useQuery(chatMessagesQueryOptions(id));
 
   useRefreshOnFocus(refetch);
 
@@ -67,22 +58,6 @@ export default function SharedChat({ variant }: Props) {
   );
 
   const { data: chatDetails } = useQuery(chatQueryOptions(id));
-
-  const { control, handleSubmit, reset } = useForm<MessageForm>({
-    resolver: zodResolver(messageFormSchema),
-    defaultValues: {
-      content: "",
-    },
-  });
-
-  const sendMessageMutation = useSendMessageMutation(id);
-
-  const onSendMessage = handleSubmit(({ content }) => {
-    const client_id = Crypto.randomUUID();
-
-    sendMessageMutation.mutate({ content, type: "TEXT", client_id });
-    reset();
-  });
 
   useFocusEffect(
     useCallback(() => {
@@ -98,15 +73,17 @@ export default function SharedChat({ variant }: Props) {
 
             const { message, client_id } = chatData;
 
-            queryClient.setQueryData<MessagesResponse>(
+            queryClient.setQueryData<MessagesApiResponse>(
               chatKeys.getMessages(id),
               (old) => {
                 if (!old) return old;
 
-                const exists = old.data.some((msg) => msg.id === message.id);
+                const exists = old.data.messages.some(
+                  (msg) => msg.id === message.id,
+                );
                 if (exists) return old;
 
-                const replacedMessages = old.data.map((msg) =>
+                const replacedMessages = old.data.messages.map((msg) =>
                   msg.client_id === client_id ? message : msg,
                 );
 
@@ -115,8 +92,17 @@ export default function SharedChat({ variant }: Props) {
                 );
 
                 return didReplace
-                  ? { ...old, data: replacedMessages }
-                  : { ...old, data: [...old.data, message] };
+                  ? {
+                      ...old,
+                      data: { ...old.data, messages: replacedMessages },
+                    }
+                  : {
+                      ...old,
+                      data: {
+                        ...old.data,
+                        messages: [message, ...old.data.messages],
+                      },
+                    };
               },
             );
             break;
@@ -150,6 +136,9 @@ export default function SharedChat({ variant }: Props) {
       case "SHIPMENT_CARD":
         return <ChatShipmentCard shipment={item} />;
 
+      case "FILE":
+        return <ChatFileCard file={item} />;
+
       default:
         return null;
     }
@@ -159,6 +148,7 @@ export default function SharedChat({ variant }: Props) {
     <View style={{ flex: 1 }}>
       <View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
         <BannerHeader
+          onBack={() => router.dismissTo("/messages")}
           title={chatDetails?.data.title ?? ""}
           titleProps={{ numberOfLines: 1 }}
           variant={variant}
@@ -187,7 +177,7 @@ export default function SharedChat({ variant }: Props) {
           ) : (
             <FlatList
               inverted
-              data={messages?.data}
+              data={messages?.data.messages}
               keyExtractor={(item) => item.id.toString()}
               ref={flatListRef}
               contentContainerStyle={styles.messagesListContainer}
@@ -197,19 +187,7 @@ export default function SharedChat({ variant }: Props) {
           )}
         </View>
 
-        <Controller
-          control={control}
-          name="content"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <ChatMessageInput
-              onSend={onSendMessage}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              sendDisabled={!value}
-            />
-          )}
-        />
+        <ChatMessageInput chatId={id} />
       </KeyboardAvoidingView>
     </View>
   );
