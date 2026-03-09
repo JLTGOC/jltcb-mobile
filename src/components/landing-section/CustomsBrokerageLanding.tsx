@@ -122,7 +122,7 @@ function SocialLogos() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.socialLink}
-        onPress={() => openLink("https://x.com/jltcb_ph")}
+        onPress={() => openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")}
       >
         <Image
           style={styles.socialIcon}

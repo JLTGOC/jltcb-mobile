@@ -1,10 +1,9 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { Card, Text, Avatar, Button, Divider } from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { formatDate } from "@/src/utils/formatDate";
-import { useNavigate } from "@/src/hooks/useNavigate";
 import { routes } from "@/src/constants/routes";
-import { type Href, router } from "expo-router";
+import { useNavigate } from "@/src/hooks/useNavigate";
+import { formatDate } from "@/src/utils/formatDate";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
+import { Button, Card, Divider, Text } from "react-native-paper";
 
 type Props = {
   reference_number: string;
@@ -26,14 +25,13 @@ export default function Ongoing({
   const handleViewDetails = () => {
     if (!shipment_id && shipment_id !== 0) return;
 
-    router.push(
-      {
-        pathname: `/dashboard/shipment/${shipment_id}` as Href,
-        params: {
-          reference_number,
-        },
-      } as Href,
-    );
+    navigate({
+      pathname: routes.CLIENT_SHIPMENT_DETAILS,
+      params: {
+        id: String(shipment_id),
+        reference_number,
+      },
+    });
   };
 
   return (
@@ -72,7 +70,6 @@ export default function Ongoing({
         </View>
 
         <Divider style={styles.divider} />
-        <TouchableOpacity>
         <Card.Actions style={styles.actions}>
           <Button
             onPress={handleViewDetails}
@@ -81,7 +78,7 @@ export default function Ongoing({
           >
             VIEW DETAILS
           </Button>
-        </Card.Actions></TouchableOpacity>
+        </Card.Actions>
       </Card.Content>
     </Card>
   );
