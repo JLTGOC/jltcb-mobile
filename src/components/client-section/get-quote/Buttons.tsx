@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import { View } from "react-native";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, Button, Text } from "react-native-paper";
 import { FieldConfig, QuoteForm } from "../../../types/client-type";
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
-const COMPANY_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|ph)$/i;
+const COMPANY_EMAIL_REGEX =
+  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/i;
 
 type Props = {
   currentPosition: number;
@@ -44,9 +45,11 @@ export default function Buttons({
     if (currentPosition === 0) {
       const company = formData.company;
       const isContactNumberValid = CONTACT_NUMBER_REGEX.test(
-        company?.contact_number || "",
+        (company?.contact_number || "").trim(),
       );
-      const isEmailValid = COMPANY_EMAIL_REGEX.test(company?.email || "");
+      const isEmailValid = COMPANY_EMAIL_REGEX.test(
+        (company?.email || "").trim(),
+      );
 
       return !isContactNumberValid || !isEmailValid;
     }
@@ -103,6 +106,7 @@ export default function Buttons({
 
   const showNextLoading = currentPosition < 2 && isNextLoading;
   const showSubmitLoading = currentPosition === 2 && loading;
+  const showButtonLoading = showNextLoading || showSubmitLoading;
 
   return (
     <View style={styles.buttonRow}>
@@ -119,42 +123,63 @@ export default function Buttons({
         <View style={{ width: 100 }} />
       )}
 
-      <Button
-        style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
-        mode="contained"
-        disabled={isActionLoading || isStepInvalid}
-        onPress={() => {
-          if (isStepInvalid || isActionLoading) {
-            return;
-          }
-          if (currentPosition < 2) {
-            handleNext();
-          } else {
-            handleSumbit();
-          }
-        }}
-      >
-        {showNextLoading || showSubmitLoading ? (
-          <ActivityIndicator color="#FFFFFF" size={18} />
-        ) : currentPosition === 2 ? (
-          "Submit"
-        ) : (
-          "Next"
-        )}
-      </Button>
+      {showButtonLoading ? (
+        <View style={styles.loadingButton}>
+          <View style={styles.loadingContent}>
+            <ActivityIndicator color="#FFFFFF" size={16} />
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        </View>
+      ) : (
+        <Button
+          style={{ backgroundColor: isStepInvalid ? "#C5C9D6" : "#161F3C" }}
+          mode="contained"
+          disabled={isStepInvalid}
+          onPress={() => {
+            if (isStepInvalid || isActionLoading) {
+              return;
+            }
+            if (currentPosition < 2) {
+              handleNext();
+            } else {
+              handleSumbit();
+            }
+          }}
+        >
+          {currentPosition === 2 ? "Submit" : "Next"}
+        </Button>
+      )}
     </View>
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   buttonRow: {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
-    alignItems: "center" as const,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 20,
     paddingBottom: 10,
   },
   backBtn: {
     borderColor: "#161F3C",
   },
-};
+  loadingContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  loadingButton: {
+    backgroundColor: "#161F3C",
+    borderRadius: 20,
+    minHeight: 40,
+    minWidth: 130,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  loadingText: {
+    color: "#FFFFFF",
+    marginVertical: 0,
+  },
+});
