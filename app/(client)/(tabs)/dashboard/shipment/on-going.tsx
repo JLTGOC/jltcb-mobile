@@ -38,7 +38,6 @@ export default function OnGoing() {
         cursor: pageParam || undefined,
       }),
     initialPageParam: "",
-    // This tells React Query where to find the next cursor in your JSON
     getNextPageParam: (lastPage) => lastPage.pagination.next_cursor || undefined,
     retry: false,
   });
