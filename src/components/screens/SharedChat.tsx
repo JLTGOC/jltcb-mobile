@@ -47,7 +47,7 @@ export default function SharedChat({ variant }: Props) {
     data: messages,
     isPending: isMessagesPending,
     refetch,
-  } = useQuery(chatMessagesQueryOptions(id));
+  } = useQuery({ ...chatMessagesQueryOptions(id), staleTime: Infinity });
 
   useRefreshOnFocus(refetch);
 
@@ -57,10 +57,7 @@ export default function SharedChat({ variant }: Props) {
     }, [queryClient]),
   );
 
-  const { data: chatDetails } = useQuery({
-    ...chatQueryOptions(id),
-    staleTime: Infinity,
-  });
+  const { data: chatDetails } = useQuery(chatQueryOptions(id));
 
   useFocusEffect(
     useCallback(() => {
