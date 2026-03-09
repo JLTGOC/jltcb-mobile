@@ -1,4 +1,5 @@
 import type { FileMessage } from "@/src/types/chats";
+import * as Linking from "expo-linking";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Card, Text } from "react-native-paper";
 
@@ -7,8 +8,12 @@ type Props = {
 };
 
 export default function ChatFileCard({ file }: Props) {
+  const handlePress = async () => {
+    await Linking.openURL(file.file_url)
+  }
+
   return (
-    <Card mode="contained">
+    <Card mode="contained" onPress={handlePress}>
       <Card.Content style={styles.content}>
         <Avatar.Icon size={32} icon="file" />
         <View style={styles.textContentContainer}>
