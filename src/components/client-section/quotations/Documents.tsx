@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button, Card, Text } from "react-native-paper";
-import { useRouter } from "expo-router";
+import { Alert, Linking, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Button, Text } from "react-native-paper";
 
-import { routes } from "@/src/constants/routes";
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 
@@ -11,8 +9,6 @@ type Props = {
   quotationId?: string;
 };
 export default function Details({ quotationId }: Props) {
-  const router = useRouter();
-
   //fetch the single quotation details
   const { data, isLoading, error } = useQuery<QuoteForm>({
     queryKey: [quotationId],
@@ -20,18 +16,19 @@ export default function Details({ quotationId }: Props) {
     enabled: !!quotationId,
   });
 
-  const handleOnPress = (url?: string) => {
+  const handleOnPress = async (url?: string) => {
     if (!url) {
       return;
     }
 
-    router.push({
-      pathname: routes.CLIENT_QUOTATION_VIEWER,
-      params: {
-        url,
-        title: "View Quotation",
-      },
-    });
+    const canOpen = await Linking.canOpenURL(url);
+
+    if (!canOpen) {
+      Alert.alert("Unable to open file", "Invalid file URL.");
+      return;
+    }
+
+    await Linking.openURL(url);
   };
 
   if (isLoading) {
@@ -62,7 +59,7 @@ export default function Details({ quotationId }: Props) {
                 <Text style={styles.content}>
                   File name: {decodeURIComponent(files.file_name)}
                 </Text>
-                <Text style={[styles.content, {color: "green"}]}>
+                <Text style={[styles.content, { color: "green" }]}>
                   UPLOADED
                 </Text>
               </View>
@@ -99,13 +96,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    width: '90%'
+    width: "90%",
   },
   cardsContainer: {
     flexGrow: 1,
   },
   buttonContainer: {
-    marginBottom: 20, 
+    marginBottom: 20,
   },
   titleContainer: {
     flexDirection: "row",

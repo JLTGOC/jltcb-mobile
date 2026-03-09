@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Building2 } from "lucide-react-native";
-import { StyleSheet, View } from "react-native";
+import { Alert, Linking, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   Button,
@@ -12,7 +12,6 @@ import {
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
 import { useRouter } from "expo-router";
-import { routes } from "@/src/constants/routes";
 
 type Props = {
   quotationId?: string;
@@ -36,13 +35,14 @@ export default function Details({ quotationId }: Props) {
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
-      router.push({
-        pathname: routes.CLIENT_QUOTATION_VIEWER,
-        params: {
-          url,
-          title: data?.reference_number,
-        },
-      });
+      const canOpen = await Linking.canOpenURL(url);
+
+      if (!canOpen) {
+        Alert.alert("Unable to open file", "Invalid file URL.");
+        return;
+      }
+
+      await Linking.openURL(url);
     }
   };
 
