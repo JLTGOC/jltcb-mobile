@@ -21,6 +21,9 @@ export const fetchChatMessages = (conversationId: string) =>
 export const sendMessage = (conversationId: string, data: SendMessageBody) =>
   apiPost<Message>(`conversations/${conversationId}`, data);
 
+export const markAsRead = (conversationId: string) =>
+  apiPost(`conversations/${conversationId}/read`);
+
 export const sendQuotationCard = (quotationId: string) =>
   apiPost<{ conversation_id: string }>(`quotations/${quotationId}/chat`);
 

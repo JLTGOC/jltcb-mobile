@@ -21,6 +21,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
+import { markAsRead } from "@/src/services/chats";
 import { useCallback, useRef } from "react";
 import {
   FlatList,
@@ -28,6 +29,7 @@ import {
   Platform,
   StyleSheet,
   View,
+  ViewToken,
 } from "react-native";
 import { ActivityIndicator, Avatar, Text } from "react-native-paper";
 import ChatFileCard from "../chats-section/ChatFileCard";
@@ -42,6 +44,7 @@ export default function SharedChat({ variant }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
+  const hasMarkedRead = useRef(false);
 
   const {
     data: messages,
@@ -92,7 +95,7 @@ export default function SharedChat({ variant }: Props) {
                 } else {
                   // receiver: append new message
                   updatedMessages = [message, ...old.data.messages];
-                  // TODO: Call mark as read api
+                  hasMarkedRead.current = false;
                 }
 
                 return {
@@ -124,6 +127,24 @@ export default function SharedChat({ variant }: Props) {
       };
     }, [id, queryClient]),
   );
+
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken<Message>[] }) => {
+      const isLastMessageVisible = viewableItems.some(
+        (item) => item.index === 0,
+      );
+
+      if (isLastMessageVisible && !hasMarkedRead.current) {
+        hasMarkedRead.current = true;
+        markAsRead(id);
+      }
+    },
+    [id],
+  );
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 90,
+  });
 
   const renderItem = ({ item }: { item: Message }) => {
     let message;
@@ -203,6 +224,8 @@ export default function SharedChat({ variant }: Props) {
               contentContainerStyle={styles.messagesListContainer}
               keyboardShouldPersistTaps="handled"
               renderItem={renderItem}
+              onViewableItemsChanged={onViewableItemsChanged}
+              viewabilityConfig={viewabilityConfig.current}
             />
           )}
         </View>
