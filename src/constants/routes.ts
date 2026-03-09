@@ -29,6 +29,5 @@ export const routes = {
   AS_AHTN: "/(employee-account-specialist)/(tabs)/ahtn-checker",
   ACCOUNT_SETTINGS: "/account-settings",
   MARKETING_DB: "/(employee-marketing)/dashboard",
-  UNAUTHORIZED: "/(pages)/Unauthorized",
   UNDERCONSTRUCTION: "/UnderConstruction",
 } as const satisfies Record<string, Href>;

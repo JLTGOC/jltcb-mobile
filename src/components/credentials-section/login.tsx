@@ -1,42 +1,55 @@
-import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
+import {
+  loginFormSchema,
+  LoginFormSchema,
+} from "@/src/schemas/loginFormSchema";
+import { ApiLoginResponse } from "@/src/types/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { ImageBackground } from "expo-image";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, HelperText } from "react-native-paper";
 
 export default function Login() {
-  const { replace } = useNavigate();
   const { loginContext } = useAuth();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const {
+    control,
+    handleSubmit,
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const loginMutation = useMutation({
     mutationFn: loginContext,
-    onSuccess: ({ data }) => {
-      const role = data.user.role;
-      if (role === "Client") replace(routes.CLIENT_DB);
-      else if (role === "Account Specialist") replace(routes.AS_DB);
-      else if (role === "Marketing") replace(routes.MARKETING_DB);
-      else replace(routes.HOME);
-    },
-    onError: (err) => {
-      console.log("Login Failed", err);
-      replace(routes.UNAUTHORIZED);
+    onError: (err: AxiosError<ApiLoginResponse>) => {
+      if (err.response?.data.code === 401) {
+        setError("root", {
+          type: "manual",
+          message: err.response.data.message,
+        });
+      }
     },
   });
 
-  const handleLogin = () => {
-    loginMutation.mutate(formData);
-  };
+  const onSubmit = handleSubmit((data) => {
+    loginMutation.mutate(data);
+  });
 
   return (
-    <ScrollView contentContainerStyle={styles.view}>
+    <ScrollView
+      contentContainerStyle={styles.view}
+      keyboardShouldPersistTaps="handled"
+    >
       <ImageBackground
         source={require("@/src/assets/banners/large.png")}
         style={styles.imageBackground}
@@ -51,39 +64,93 @@ export default function Login() {
       </ImageBackground>
 
       <View style={styles.main}>
-        <TextInput
-          testID="email_input"
-          accessibilityLabel="email_input"
-          style={[styles.input, styles.boxShadow]}
-          value={formData.email}
-          onChangeText={(text) => {
-            setFormData((f) => ({ ...f, email: text }));
-          }}
-          placeholder="Email"
-          inputMode="email"
-          placeholderTextColor="black"
-          allowFontScaling={false}
-        />
+        <View style={styles.field}>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value }, fieldState }) => (
+              <TextInput
+                testID="email_input"
+                accessibilityLabel="email_input"
+                style={[
+                  styles.input,
+                  styles.boxShadow,
+                  fieldState.invalid && {
+                    borderColor: "#EF4444",
+                  },
+                ]}
+                value={value}
+                onChangeText={(text) => {
+                  clearErrors("root");
+                  onChange(text);
+                }}
+                onBlur={onBlur}
+                placeholder="Email"
+                inputMode="email"
+                placeholderTextColor="black"
+                allowFontScaling={false}
+                autoCapitalize="none"
+              />
+            )}
+          />
+          <HelperText style={styles.fieldError} type="error">
+            {errors.email?.message}
+          </HelperText>
+        </View>
 
-        <TextInput
-          testID="password_input"
-          accessibilityLabel="password_input"
-          style={[styles.input, styles.boxShadow]}
-          value={formData.password}
-          onChangeText={(text) => {
-            setFormData((f) => ({ ...f, password: text }));
-          }}
-          placeholder="Password"
-          secureTextEntry
-          placeholderTextColor="black"
-          allowFontScaling={false}
-        />
+        <View style={styles.field}>
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, onBlur, value }, fieldState }) => (
+              <TextInput
+                testID="password_input"
+                accessibilityLabel="password_input"
+                style={[
+                  styles.input,
+                  styles.boxShadow,
+                  fieldState.invalid && {
+                    borderColor: "#EF4444",
+                  },
+                ]}
+                value={value}
+                onChangeText={(text) => {
+                  clearErrors("root");
+                  onChange(text);
+                }}
+                onBlur={onBlur}
+                placeholder="Password"
+                secureTextEntry
+                placeholderTextColor="black"
+                allowFontScaling={false}
+                autoCapitalize="none"
+                onSubmitEditing={onSubmit}
+              />
+            )}
+          />
+          {errors.password ? (
+            <>
+              <HelperText style={styles.fieldError} type="error">
+                {errors.password.message}
+              </HelperText>
+              {errors.root && (
+                <HelperText style={styles.fieldError} type="error">
+                  {errors.root.message}
+                </HelperText>
+              )}
+            </>
+          ) : (
+            <HelperText style={styles.fieldError} type="error">
+              {errors.root?.message}
+            </HelperText>
+          )}
+        </View>
 
         <Button
           mode="contained"
           style={[styles.button, styles.boxShadow]}
           labelStyle={styles.buttonLabel}
-          onPress={handleLogin}
+          onPress={onSubmit}
           loading={loginMutation.isPending}
           disabled={loginMutation.isPending}
           theme={{ colors: { onSurfaceDisabled: "#c2c2c2" } }}
@@ -108,7 +175,7 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 30,
     paddingVertical: 10,
-    gap: 35,
+    gap: 14,
   },
   title: {
     color: "#EE9034",
@@ -123,10 +190,16 @@ const styles = StyleSheet.create({
     borderLeftColor: "#EE9034",
     paddingLeft: 10,
   },
+  field: {},
+  fieldError: {
+    minHeight: 28,
+  },
   input: {
     borderRadius: 6,
     padding: 10,
     color: "black",
+    borderWidth: 1,
+    borderColor: "transparent",
   },
   button: {
     backgroundColor: "#1D274E",

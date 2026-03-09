@@ -22,6 +22,4 @@ export default function IndexRoute() {
   if (role === "Marketing") {
     return <Redirect href={routes.MARKETING_DB} />;
   }
-
-  return <Redirect href={routes.UNAUTHORIZED} />;
 }
