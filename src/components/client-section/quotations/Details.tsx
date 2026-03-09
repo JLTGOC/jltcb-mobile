@@ -78,7 +78,7 @@ export default function Details({ quotationId }: Props) {
         { label: "COMMODITY", info: data?.commodity?.commodity },
         {
           label: "VOLUME (DIMENSION)",
-          info: `${data?.commodity?.cargo_type} - ${data?.commodity?.cargo_type}`,
+          info: `${data?.commodity?.cargo_type} - ${data?.commodity?.container_size}`,
         },
         { label: "ORIGIN", info: data?.shipment?.origin },
       ],

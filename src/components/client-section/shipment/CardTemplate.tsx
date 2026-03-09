@@ -2,7 +2,7 @@ import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { formatDate } from "@/src/utils/formatDate";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Card, Divider, Text } from "react-native-paper";
 
 type Props = {
@@ -70,15 +70,11 @@ export default function Ongoing({
         </View>
 
         <Divider style={styles.divider} />
-        <Card.Actions style={styles.actions}>
-          <Button
-            onPress={handleViewDetails}
-            mode="text"
-            labelStyle={styles.viewDetailsText}
-          >
-            VIEW DETAILS
-          </Button>
-        </Card.Actions>
+        <TouchableOpacity style={styles.actions} onPress={handleViewDetails}>
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text style={styles.viewDetailsText}>VIEW DETAILS</Text>
+          </View>
+        </TouchableOpacity>
       </Card.Content>
     </Card>
   );
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   viewDetailsText: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#888",
     textTransform: "uppercase",
   },

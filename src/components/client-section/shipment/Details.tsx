@@ -1,8 +1,8 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Card, Divider, Text } from "react-native-paper";
+import { Image } from "expo-image";
 
 import { fetchShipmentDetails } from "@/src/services/shipment";
 import type { ShipmentDetails } from "@/src/types/shipment-type";
@@ -45,10 +45,14 @@ function BasicCard({ title, rows, middleBadge }: BasicCardData) {
         {middleBadge ? (
           <View style={styles.badgeWrap}>
             <View style={styles.badge}>
-              <MaterialCommunityIcons
-                name="package-variant-closed"
-                size={36}
-                color="#6b7280"
+              <Image
+                source={
+                  middleBadge.toLowerCase() === "1x20"
+                    ? require("@/src/assets/get_quote/container20.png")
+                    : require("@/src/assets/get_quote/container40.png")
+                }
+                style={styles.badgeImage}
+                contentFit="contain"
               />
               <Text style={styles.badgeText}>{middleBadge}</Text>
             </View>
@@ -90,7 +94,7 @@ export default function Details() {
     retry: false,
   });
 
-  console.log(data)
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -145,8 +149,7 @@ export default function Details() {
         { label: "ORIGIN", value: data?.shipment_information.origin },
         {
           label: "ACCOUNT HANDLER",
-          value:
-            data?.shipment_information.account_handler 
+          value: data?.shipment_information.account_handler,
         },
         {
           label: "CONFIRMATION DATE",
@@ -257,6 +260,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     color: "#111827",
+  },
+  badgeImage: {
+    width: 64,
+    height: 64,
   },
   loadingWrap: {
     alignItems: "center",
