@@ -6,7 +6,7 @@ import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
-import { chatMessagesQueryOptions } from "@/src/query-options/chats/chatMessagesQueryOptions";
+import { chatMessagesInfiniteQueryOptions } from "@/src/query-options/chats/chatMessagesInfiniteQueryOptions";
 import { chatsQueryOptions } from "@/src/query-options/chats/chatsQueryOptions";
 import type {
   ChatEvent,
@@ -101,7 +101,7 @@ export default function SharedMessages({ variant }: Props) {
               },
             );
 
-            queryClient.prefetchQuery(chatMessagesQueryOptions(inbox.id));
+            queryClient.prefetchInfiniteQuery(chatMessagesInfiniteQueryOptions(inbox.id));
 
             break;
           }

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { InfiniteData, useMutation } from "@tanstack/react-query";
 import { sendFileMutationOptions } from "../mutation-options/sendFileMutationOptions";
 import { chatKeys } from "../query-key-factories/chats";
 import { Message, MessagesApiResponse } from "../types/chats";
@@ -12,11 +12,11 @@ export function useSendFileMutation(conversationId: string) {
     ...sendFileMutationOptions(conversationId),
     onMutate: async (newFile, context) => {
       const previousMessagesData =
-        context.client.getQueryData<MessagesApiResponse>(queryKey);
+        context.client.getQueryData<InfiniteData<MessagesApiResponse>>(queryKey);
 
       const optimisticFile: Message = {
         created_at: new Date().toISOString(),
-        id: Date.now(), // temporary id
+        id: Date.now(),
         type: newFile.type,
         client_id: newFile.client_id,
         sender: {
@@ -28,25 +28,27 @@ export function useSendFileMutation(conversationId: string) {
         file_url: newFile.file.uri,
       };
 
-      context.client.setQueryData<MessagesApiResponse>(queryKey, (old) => {
+      context.client.setQueryData<InfiniteData<MessagesApiResponse>>(queryKey, (old) => {
         if (!old) return old;
 
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            messages: [optimisticFile, ...old.data.messages],
-          },
-        };
+        const updatedPages = old.pages.map((page, index) => {
+          if (index !== 0) return page;
+          return {
+            ...page,
+            data: {
+              ...page.data,
+              messages: [optimisticFile, ...page.data.messages],
+            },
+          };
+        });
+
+        return { ...old, pages: updatedPages };
       });
 
       return { previousMessagesData };
     },
-    onError: (_err, _newMessage, onMutateResult, context) => {
-      context.client.setQueryData(
-        queryKey,
-        onMutateResult?.previousMessagesData,
-      );
+    onError: (_err, _newFile, onMutateResult, context) => {
+      context.client.setQueryData(queryKey, onMutateResult?.previousMessagesData);
     },
   });
 }

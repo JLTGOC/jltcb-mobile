@@ -4,7 +4,6 @@ import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
-import { chatMessagesQueryOptions } from "@/src/query-options/chats/chatMessagesQueryOptions";
 import { chatQueryOptions } from "@/src/query-options/chats/chatQueryOptions";
 import type {
   ChatEvent,
@@ -17,11 +16,12 @@ import type {
   PusherChannel,
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
+import { chatMessagesInfiniteQueryOptions } from "@/src/query-options/chats/chatMessagesInfiniteQueryOptions";
 import { markAsRead } from "@/src/services/chats";
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -46,10 +46,22 @@ export default function SharedChat({ variant }: Props) {
   const hasMarkedRead = useRef(false);
 
   const {
-    data: messages,
+    data,
     isPending: isMessagesPending,
     refetch,
-  } = useQuery({ ...chatMessagesQueryOptions(id), staleTime: Infinity });
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    ...chatMessagesInfiniteQueryOptions(id),
+    staleTime: Infinity,
+  });
+
+  // Flatten all pages into a single messages array
+  const messages = useMemo(
+    () => data?.pages.flatMap((page) => page.data.messages) ?? [],
+    [data],
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -77,43 +89,48 @@ export default function SharedChat({ variant }: Props) {
         switch (chatEventName) {
           case "message.sent":
             const chatData = parseEventData<MessageSentEvent>(data);
-
             if (!chatData) return;
 
             const { message, client_id } = chatData;
 
-            queryClient.setQueryData<MessagesApiResponse>(
-              chatKeys.getMessages(id),
-              (old) => {
-                if (!old) return old;
+            queryClient.setQueryData<{
+              pages: MessagesApiResponse[];
+              pageParams: unknown[];
+            }>(chatKeys.getMessages(id), (old) => {
+              if (!old) return old;
 
-                const exists = old.data.messages.some(
-                  (m) => m.client_id === client_id,
-                );
+              // Check if the optimistic message exists in any page
+              const exists = old.pages.some((page) =>
+                page.data.messages.some((m) => m.client_id === client_id),
+              );
+
+              const updatedPages = old.pages.map((page, pageIndex) => {
+                if (pageIndex !== 0) return page; // Only modify the first (latest) page
 
                 let updatedMessages;
 
                 if (exists) {
-                  // sender: replace optimistic message
-                  updatedMessages = old.data.messages.map((m) =>
+                  // Sender: replace optimistic message
+                  updatedMessages = page.data.messages.map((m) =>
                     m.client_id === client_id ? message : m,
                   );
                 } else {
-                  // receiver: append new message
-                  updatedMessages = [message, ...old.data.messages];
+                  // Receiver: prepend new message (list is inverted)
+                  updatedMessages = [message, ...page.data.messages];
                   hasMarkedRead.current = false;
                 }
 
                 return {
-                  ...old,
+                  ...page,
                   data: {
-                    ...old.data,
+                    ...page.data,
                     messages: updatedMessages,
                   },
                 };
-              },
-            );
+              });
 
+              return { ...old, pages: updatedPages };
+            });
             break;
         }
       };
@@ -159,19 +176,15 @@ export default function SharedChat({ variant }: Props) {
       case "TEXT":
         message = <ChatTextBubble message={item} />;
         break;
-
       case "QUOTATION_CARD":
         message = <ChatQuotationCard quotation={item} />;
         break;
-
       case "SHIPMENT_CARD":
         message = <ChatShipmentCard shipment={item} />;
         break;
-
       case "FILE":
         message = <ChatFileCard file={item} />;
         break;
-
       default:
         return null;
     }
@@ -188,6 +201,15 @@ export default function SharedChat({ variant }: Props) {
         )}
         {message}
       </>
+    );
+  };
+
+  const renderFooter = () => {
+    if (!isFetchingNextPage) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" />
+      </View>
     );
   };
 
@@ -224,7 +246,7 @@ export default function SharedChat({ variant }: Props) {
           ) : (
             <FlatList
               inverted
-              data={messages?.data.messages}
+              data={messages}
               keyExtractor={(item) => item.id.toString()}
               ref={flatListRef}
               contentContainerStyle={styles.messagesListContainer}
@@ -232,6 +254,13 @@ export default function SharedChat({ variant }: Props) {
               renderItem={renderItem}
               onViewableItemsChanged={onViewableItemsChanged}
               viewabilityConfig={viewabilityConfig.current}
+              onEndReached={() => {
+                if (hasNextPage && !isFetchingNextPage) {
+                  fetchNextPage();
+                }
+              }}
+              onEndReachedThreshold={0.3}
+              ListFooterComponent={renderFooter}
             />
           )}
         </View>
@@ -251,7 +280,11 @@ const styles = StyleSheet.create({
   messagesListContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    paddingBottom: 120,
+    paddingBottom: 150,
     gap: 18,
+  },
+  footerLoader: {
+    paddingVertical: 12,
+    alignItems: "center",
   },
 });

@@ -13,9 +13,9 @@ export const fetchChats = (search: string) =>
 export const fetchConversationData = (converstationId: string) =>
   apiGet<Inbox>(`conversations/${converstationId}`);
 
-export const fetchChatMessages = (conversationId: string) =>
+export const fetchChatMessages = (conversationId: string, cursor: string) =>
   apiGet<MessagesResponse>(`conversations/${conversationId}/messages`, {
-    params: { sortOrder: "desc" },
+    params: { sortOrder: "desc", cursor, perPage: 8 },
   });
 
 export const sendMessage = (conversationId: string, data: SendMessageBody) =>

@@ -6,7 +6,7 @@ import type {
   MessagesApiResponse,
   SendMessageBody,
 } from "@/src/types/chats";
-import { useMutation } from "@tanstack/react-query";
+import { InfiniteData, useMutation } from "@tanstack/react-query";
 
 export function useSendMessageMutation(conversationId: string) {
   const { userData } = useAuth();
@@ -16,11 +16,11 @@ export function useSendMessageMutation(conversationId: string) {
     mutationFn: (data: SendMessageBody) => sendMessage(conversationId, data),
     onMutate: async (newMessage, context) => {
       const previousMessagesData =
-        context.client.getQueryData<MessagesApiResponse>(queryKey);
+        context.client.getQueryData<InfiniteData<MessagesApiResponse>>(queryKey);
 
       const optimisticMessage: Message = {
         created_at: new Date().toISOString(),
-        id: Date.now(), // temporary id
+        id: Date.now(),
         content: newMessage.content,
         type: newMessage.type,
         client_id: newMessage.client_id,
@@ -31,25 +31,27 @@ export function useSendMessageMutation(conversationId: string) {
         },
       };
 
-      context.client.setQueryData<MessagesApiResponse>(queryKey, (old) => {
+      context.client.setQueryData<InfiniteData<MessagesApiResponse>>(queryKey, (old) => {
         if (!old) return old;
 
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            messages: [optimisticMessage, ...old.data.messages],
-          },
-        };
+        const updatedPages = old.pages.map((page, index) => {
+          if (index !== 0) return page;
+          return {
+            ...page,
+            data: {
+              ...page.data,
+              messages: [optimisticMessage, ...page.data.messages],
+            },
+          };
+        });
+
+        return { ...old, pages: updatedPages };
       });
 
       return { previousMessagesData };
     },
     onError: (_err, _newMessage, onMutateResult, context) => {
-      context.client.setQueryData(
-        queryKey,
-        onMutateResult?.previousMessagesData,
-      );
+      context.client.setQueryData(queryKey, onMutateResult?.previousMessagesData);
     },
   });
 }
