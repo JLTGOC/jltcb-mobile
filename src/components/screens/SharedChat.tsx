@@ -53,8 +53,11 @@ export default function SharedChat({ variant }: Props) {
 
   useFocusEffect(
     useCallback(() => {
-      refetch()
-    }, [refetch]),
+      refetch().then(() => {
+        hasMarkedRead.current = false;
+        markAsRead(id);
+      });
+    }, [id, refetch]),
   );
 
   useFocusEffect(
