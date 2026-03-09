@@ -8,7 +8,7 @@ type Props = {
 
 export default function ChatFileCard({ file }: Props) {
   return (
-    <Card>
+    <Card mode="contained">
       <Card.Content style={styles.content}>
         <Avatar.Icon size={32} icon="file" />
         <View style={styles.textContentContainer}>

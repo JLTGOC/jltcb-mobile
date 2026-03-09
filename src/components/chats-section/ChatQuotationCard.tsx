@@ -31,7 +31,11 @@ export default function ChatQuotationCard({ quotation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Card style={styles.bubble}>
+      <Card
+        mode="contained"
+        theme={{ colors: { surfaceVariant: "#FFF" } }}
+        style={styles.bubble}
+      >
         <Card.Content>
           <Text variant="titleMedium" style={{ textAlign: "right" }}>
             JLTCB

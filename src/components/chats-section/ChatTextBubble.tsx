@@ -16,14 +16,19 @@ export default function ChatTextBubble({ message }: Props) {
     color: isUserMessage ? "white" : "",
   };
 
-  const userMessageTheme: ThemeProp = {
-    colors: { elevation: { level1: "#0000F5" } },
+  const senderMessageTheme: ThemeProp = {
+    colors: { surfaceVariant: "#0000F5" },
+  };
+
+  const receiverMessageTheme: ThemeProp = {
+    colors: { surfaceVariant: "#FFF" },
   };
 
   return (
     <Card
+      mode="contained"
       style={styles.bubble}
-      theme={isUserMessage ? userMessageTheme : undefined}
+      theme={isUserMessage ? senderMessageTheme : receiverMessageTheme}
     >
       <Card.Content>
         <Text style={textStyle}>{message.content}</Text>
