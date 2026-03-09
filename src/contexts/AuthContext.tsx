@@ -1,5 +1,5 @@
 import type { User, UserRole } from "@/src/types/auth";
-import { useQueryClient } from "@tanstack/react-query";
+import { onlineManager, useQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
 import { pusher } from "../lib/pusher";
@@ -18,7 +18,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [role, setRole] = useState<UserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
@@ -45,13 +45,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (pusher.connectionState !== "DISCONNECTED") return;
-
-    if (userData) {
-      pusher.connect();
-    } else {
+    if (!userData) {
       pusher.disconnect();
+      return;
     }
+
+    if (pusher.connectionState === "DISCONNECTED") {
+      pusher.connect();
+    }
+
+    const unsubscribe = onlineManager.subscribe(() => {
+      if (
+        onlineManager.isOnline() &&
+        pusher.connectionState === "DISCONNECTED"
+      ) {
+        pusher.connect();
+      } else if (!onlineManager.isOnline()) {
+        pusher.disconnect();
+      }
+    });
+
+    return () => unsubscribe();
   }, [userData]);
 
   const loginContext = async (loginData: {
@@ -100,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         SecureStore.deleteItemAsync("userData"),
       ]);
 
-      queryClient.clear()
+      queryClient.clear();
 
       setToken(null);
       setRole(null);

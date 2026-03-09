@@ -21,7 +21,7 @@ import type {
 } from "@pusher/pusher-websocket-react-native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   FlatList,
@@ -46,6 +46,8 @@ export default function SharedMessages({ variant }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [submittedSearch, setSubmittedSearch] = useState("");
+  const submittedSearchRef = useRef(submittedSearch);
+
   const { data, isPending, isRefetching, error, refetch } = useQuery({
     ...chatsQueryOptions(submittedSearch),
     placeholderData: (prev) => prev,
@@ -60,6 +62,10 @@ export default function SharedMessages({ variant }: Props) {
       search: "",
     },
   });
+
+  useEffect(() => {
+    submittedSearchRef.current = submittedSearch;
+  }, [submittedSearch]);
 
   const onSubmit = handleSubmit(({ search }) =>
     setSubmittedSearch(search.trim()),
@@ -82,7 +88,7 @@ export default function SharedMessages({ variant }: Props) {
             const { inbox } = chatData;
 
             queryClient.setQueryData<InboxListApiResponse>(
-              chatKeys.getChats(submittedSearch),
+              chatKeys.getChats(submittedSearchRef.current),
               (old) => {
                 if (!old) return old;
 
@@ -115,7 +121,7 @@ export default function SharedMessages({ variant }: Props) {
           pusher.unsubscribe({ channelName: channel.channelName });
         }
       };
-    }, [queryClient, submittedSearch, userData]),
+    }, [queryClient, userData]),
   );
 
   if (error) {

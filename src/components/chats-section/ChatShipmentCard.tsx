@@ -60,7 +60,11 @@ export default function ChatShipmentCard({ shipment }: Props) {
         </Card.Content>
       </Card>
       <View style={styles.senderImageContainer}>
-        <Avatar.Image size={36} source={{ uri: shipment.sender.image_path }} />
+        <Avatar.Image
+          style={styles.avatarImage}
+          size={36}
+          source={{ uri: shipment.sender.image_path }}
+        />
       </View>
     </View>
   );
@@ -114,5 +118,8 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     color: "#666666",
+  },
+  avatarImage: {
+    backgroundColor: "#0a1c47",
   },
 });

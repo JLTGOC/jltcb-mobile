@@ -20,7 +20,6 @@ import type {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
-import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { markAsRead } from "@/src/services/chats";
 import { useCallback, useRef } from "react";
 import {
@@ -52,7 +51,14 @@ export default function SharedChat({ variant }: Props) {
     refetch,
   } = useQuery({ ...chatMessagesQueryOptions(id), staleTime: Infinity });
 
-  useRefreshOnFocus(refetch);
+  useFocusEffect(
+    useCallback(() => {
+      refetch().then(() => {
+        hasMarkedRead.current = false;
+        markAsRead(id);
+      });
+    }, [id, refetch]),
+  );
 
   useFocusEffect(
     useCallback(() => {
