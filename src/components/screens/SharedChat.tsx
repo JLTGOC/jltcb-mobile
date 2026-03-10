@@ -16,7 +16,11 @@ import type {
   PusherChannel,
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
-import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
 import { chatMessagesInfiniteQueryOptions } from "@/src/query-options/chats/chatMessagesInfiniteQueryOptions";
@@ -32,6 +36,7 @@ import {
 } from "react-native";
 import { ActivityIndicator, Avatar, Text } from "react-native-paper";
 import ChatFileCard from "../chats-section/ChatFileCard";
+import ChatImageCard from "../chats-section/ChatImageCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
 type Props = {
@@ -185,6 +190,9 @@ export default function SharedChat({ variant }: Props) {
       case "FILE":
         message = <ChatFileCard file={item} />;
         break;
+      case "IMAGE":
+        message = <ChatImageCard image={item} />;
+        break;
       default:
         return null;
     }
@@ -265,7 +273,7 @@ export default function SharedChat({ variant }: Props) {
           )}
         </View>
 
-        <ChatMessageInput chatId={id} />
+        <ChatMessageInput />
       </KeyboardAvoidingView>
     </View>
   );
