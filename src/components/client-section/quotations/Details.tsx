@@ -31,7 +31,7 @@ export default function Details({ quotationId }: Props) {
   const handleOnPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
       router.push({
-        pathname: "/(client)/(tabs)/get-quote",
+        pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {

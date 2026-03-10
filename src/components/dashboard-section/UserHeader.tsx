@@ -36,14 +36,14 @@ export default function UserHeader({ variant = "dark" }: UserHeaderProps) {
       style={[styles.container, { width }]}
     >
       <View style={styles.content}>
-        <Link href="/account-settings" asChild>
-          <TouchableOpacity>
+        {/* <Link href="/account-settings" asChild>
+          <TouchableOpacity> */}
             <Image
               source={{ uri: encodeURI(userData?.image_path ?? "") }}
               style={styles.userImage}
             />
-          </TouchableOpacity>
-        </Link>
+          {/* </TouchableOpacity>
+        </Link> */}
         <View style={styles.textContainer}>
           <Text
             style={[textStyles, { fontWeight: 700 }]}
