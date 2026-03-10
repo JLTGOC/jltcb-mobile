@@ -15,7 +15,7 @@ export const fetchConversationData = (converstationId: string) =>
 
 export const fetchChatMessages = (conversationId: string, cursor: string) =>
   apiGet<MessagesResponse>(`conversations/${conversationId}/messages`, {
-    params: { sortOrder: "desc", cursor, perPage: 8 },
+    params: { sortOrder: "desc", cursor },
   });
 
 export const sendMessage = (conversationId: string, data: SendMessageBody) =>
