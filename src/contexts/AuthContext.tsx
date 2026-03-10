@@ -2,6 +2,8 @@ import type { User, UserRole } from "@/src/types/auth";
 import { onlineManager, useQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
+import { type AppStateStatus, Platform } from "react-native";
+import { useAppState } from "../hooks/useAppState";
 import { pusher } from "../lib/pusher";
 import { login, logout } from "../services/auth";
 
@@ -67,6 +69,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => unsubscribe();
   }, [userData]);
+
+  useAppState((status: AppStateStatus) => {
+    if (Platform.OS === "web") return;
+    if (!userData) return;
+    if (status === "active" && pusher.connectionState === "DISCONNECTED") {
+      pusher.connect();
+    }
+  });
 
   const loginContext = async (loginData: {
     email: string;
