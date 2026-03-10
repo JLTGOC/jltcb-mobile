@@ -23,8 +23,8 @@ export async function fetchShipments({
 }): Promise<ShipmentData> {
   const params = {
     search: search || undefined,
-    status: status || undefined,
-    // "filter[status}": status || undefined,
+    // status: status || undefined,
+    "filter[status]": status || undefined,
     cursor: cursor || undefined,
   };
 
