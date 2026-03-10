@@ -42,7 +42,8 @@ export default function OnGoing() {
     retry: false,
   });
 
-  // FlatList needs a flat array, so we flatten the 'pages' from React Query
+console.log(data?.pageParams)
+
   const allShipments = useMemo(
     () => data?.pages.flatMap((page) => page.shipments ?? []) ?? [],
     [data],
