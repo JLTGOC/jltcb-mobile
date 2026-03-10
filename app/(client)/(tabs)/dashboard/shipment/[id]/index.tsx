@@ -48,7 +48,7 @@ export default function ShipmentDetails() {
       case 2:
         return (
           <View style={styles.placeholder}>
-            <Documents/>
+            <Billing/>
           </View>
         );
       default:

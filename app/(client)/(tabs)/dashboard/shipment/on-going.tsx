@@ -79,7 +79,7 @@ export default function OnGoing() {
           <CardTemplate
             reference_number={item.general_info.reference_number}
             status={item.general_info.status}
-            commodity={item.commodity_details.commodity}
+            commodity={item.general_info.commodity}
             date={item.general_info.date}
             shipment_id={item.general_info.id}
           />
@@ -111,5 +111,6 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     marginTop: 6,
+    color: "blue",
   },
 });
