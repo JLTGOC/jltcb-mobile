@@ -1,16 +1,16 @@
 import { type InfiniteData, useMutation } from "@tanstack/react-query";
-import { sendFileMutationOptions } from "../mutation-options/sendFileMutationOptions";
+import { sendImageMutationOptions } from "../mutation-options/sendImageMutationOptions";
 import { chatKeys } from "../query-key-factories/chats";
 import type { Message, MessagesApiResponse } from "../types/chats";
 import { useAuth } from "./useAuth";
 
-export function useSendFileMutation(conversationId: string) {
+export function useSendImageMutation(conversationId: string) {
   const { userData } = useAuth();
   const queryKey = chatKeys.getMessages(conversationId);
 
   return useMutation({
-    ...sendFileMutationOptions(conversationId),
-    onMutate: async (newFile, context) => {
+    ...sendImageMutationOptions(conversationId),
+    onMutate: async (newImage, context) => {
       const previousMessagesData =
         context.client.getQueryData<InfiniteData<MessagesApiResponse>>(
           queryKey,
@@ -19,15 +19,17 @@ export function useSendFileMutation(conversationId: string) {
       const optimisticFile: Message = {
         created_at: new Date().toISOString(),
         id: Date.now(),
-        type: newFile.type,
-        client_id: newFile.client_id,
+        type: newImage.type,
+        client_id: newImage.client_id,
         sender: {
           id: userData?.id!,
           full_name: userData?.full_name!,
           image_path: userData?.image_path!,
         },
-        file_name: newFile.file.name,
-        file_url: newFile.file.uri,
+        file_name: newImage.file.name,
+        file_url: newImage.file.uri,
+        width: newImage.file.width,
+        height: newImage.file.height,
       };
 
       context.client.setQueryData<InfiniteData<MessagesApiResponse>>(

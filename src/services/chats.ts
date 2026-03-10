@@ -4,6 +4,7 @@ import type {
   Message,
   MessagesResponse,
   SendFileBody,
+  SendImageBody,
   SendMessageBody,
 } from "@/src/types/chats";
 
@@ -30,6 +31,22 @@ export const sendQuotationCard = (quotationId: string) =>
 export const sendFile = (
   conversationId: string,
   { client_id, type, file }: SendFileBody,
+) => {
+  const formData = new FormData();
+  formData.append("type", type);
+  formData.append("client_id", client_id);
+  formData.append("file", file as unknown as Blob);
+
+  return apiPost<Message>(`conversations/${conversationId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const sendImage = (
+  conversationId: string,
+  { client_id, type, file }: SendImageBody,
 ) => {
   const formData = new FormData();
   formData.append("type", type);

@@ -36,14 +36,19 @@ export interface Shipment {
   date_created: string;
 }
 
-export type MessageType = "TEXT" | "QUOTATION_CARD" | "FILE" | "SHIPMENT_CARD";
+export type MessageType =
+  | "TEXT"
+  | "QUOTATION_CARD"
+  | "FILE"
+  | "SHIPMENT_CARD"
+  | "IMAGE";
 
 export interface BaseMessage {
   id: number;
   type: MessageType;
   created_at: string;
   sender: Sender;
-  client_id?: string; // ✅ snake_case everywhere
+  client_id?: string;
 }
 
 export interface TextMessage extends BaseMessage {
@@ -62,6 +67,14 @@ export interface FileMessage extends BaseMessage {
   file_url: string;
 }
 
+export interface ImageMessage extends BaseMessage {
+  type: "IMAGE";
+  file_name: string;
+  file_url: string;
+  width: number;
+  height: number;
+}
+
 export interface ShipmentCardMessage extends BaseMessage {
   type: "SHIPMENT_CARD";
   shipment: Shipment;
@@ -71,7 +84,8 @@ export type Message =
   | QuotationCardMessage
   | TextMessage
   | FileMessage
-  | ShipmentCardMessage;
+  | ShipmentCardMessage
+  | ImageMessage;
 
 export interface MessageSentEvent {
   message: Message;
@@ -106,7 +120,17 @@ export interface SendFileBody extends BaseSendMessageData {
   file: ReactNativeFile;
 }
 
-export type SendMessageData = SendMessageBody | SendFileBody;
+export interface ImageFile extends ReactNativeFile {
+  width: number;
+  height: number;
+}
+
+export interface SendImageBody extends BaseSendMessageData {
+  type: "IMAGE";
+  file: ImageFile;
+}
+
+export type SendMessageData = SendMessageBody | SendFileBody | SendImageBody;
 
 export interface MessagesPagination {
   prev_cursor: null | string;

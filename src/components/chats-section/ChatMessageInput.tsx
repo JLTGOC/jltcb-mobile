@@ -6,19 +6,16 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Crypto from "expo-crypto";
 import * as DocumentPicker from "expo-document-picker";
+import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import type { TextInputProps } from "react-native-paper";
+import ChatImagePicker from "./ChatImagePicker";
 
-type Props = {
-  chatId: string;
-};
+interface Props extends TextInputProps {}
 
-export default function ChatMessageInput({
-  chatId,
-  style,
-  ...props
-}: TextInputProps & Props) {
+export default function ChatMessageInput({ style, ...props }: Props) {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { control, handleSubmit, reset } = useForm<MessageForm>({
     resolver: zodResolver(messageFormSchema),
     defaultValues: {
@@ -26,7 +23,7 @@ export default function ChatMessageInput({
     },
   });
 
-  const sendMessageMutation = useSendMessageMutation(chatId);
+  const sendMessageMutation = useSendMessageMutation(id);
 
   const onSendMessage = handleSubmit(({ content }) => {
     const client_id = Crypto.randomUUID();
@@ -35,7 +32,7 @@ export default function ChatMessageInput({
     reset();
   });
 
-  const sendFileMutation = useSendFileMutation(chatId);
+  const sendFileMutation = useSendFileMutation(id);
 
   const onSelectFile = async () => {
     try {
@@ -66,14 +63,18 @@ export default function ChatMessageInput({
 
   return (
     <View style={styles.messageInputContainer}>
-      <TouchableOpacity onPress={onSelectFile}>
-        <Ionicons
-          name="attach"
-          style={styles.fileIcon}
-          color="gray"
-          size={30}
-        />
-      </TouchableOpacity>
+      <View style={styles.uploadSection}>
+        <TouchableOpacity onPress={onSelectFile}>
+          <Ionicons
+            name="attach"
+            style={styles.fileIcon}
+            color="gray"
+            size={30}
+          />
+        </TouchableOpacity>
+        <ChatImagePicker />
+      </View>
+
       <View style={styles.dividerContainer}>
         <View style={styles.divider} />
       </View>
@@ -119,6 +120,11 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 20,
     padding: 12,
+  },
+  uploadSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   fileIcon: {
     transform: [{ rotate: "20deg" }],
