@@ -22,4 +22,10 @@ export default function IndexRoute() {
   if (role === "Marketing") {
     return <Redirect href={routes.MARKETING_DB} />;
   }
+
+  if (role === "Operations") {
+    return <Redirect href={routes.OPERATIONS_DB} />;
+  }
+
+  return <Redirect href={routes.LANDING_PAGE} />;
 }

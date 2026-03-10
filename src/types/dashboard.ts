@@ -56,6 +56,14 @@ export type AccountSpecialistDashboard = {
 	};
 };
 
+export type OperationsDashboard = {
+	user: DashboardUser;
+	shipments: {
+		ongoing_count: number;
+		delivered_count: number;
+	};
+};
+
 export type ClientDashboard = {
 	user: DashboardUser;
 	shipments: {

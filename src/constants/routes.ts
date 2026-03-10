@@ -27,6 +27,7 @@ export const routes = {
   AS_QUOTE_RESPONDED:
     "/(employee-account-specialist)/(tabs)/dashboard/responded-quotation",
   AS_AHTN: "/(employee-account-specialist)/(tabs)/ahtn-checker",
+  OPERATIONS_DB: "/(employee-operations)/(tabs)/dashboard/index",
   ACCOUNT_SETTINGS: "/account-settings",
   MARKETING_DB: "/(employee-marketing)/dashboard",
   UNDERCONSTRUCTION: "/UnderConstruction",
