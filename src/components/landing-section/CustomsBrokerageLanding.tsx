@@ -113,7 +113,7 @@ function SocialLogos() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.socialLink}
-        onPress={() => openLink("https://www.tiktok.com/@jltcustomsbrokerage")}
+        onPress={() => openLink("https://www.tiktok.com/@jltcbph")}
       >
         <Image
           style={styles.socialIcon}

@@ -24,6 +24,7 @@ export async function fetchShipments({
   const params = {
     search: search || undefined,
     status: status || undefined,
+    // "filter[status}": status || undefined,
     cursor: cursor || undefined,
   };
 

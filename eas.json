@@ -15,8 +15,8 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api",
-        "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
-        "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1"
+        // "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
+        // "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1"
       }
     },
     "production": {
@@ -25,8 +25,8 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api",
-        "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
-        "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1",
+        // "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
+        // "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1",
         "SENTRY_ALLOW_FAILURE": "true"
       }
     }
