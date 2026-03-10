@@ -47,12 +47,12 @@ export default function Form() {
         </View>
       ))}
       {/* Image */}
-      <Text variant="titleSmall" allowFontScaling={false}>
+      {/* <Text variant="titleSmall" allowFontScaling={false}>
         Upload File
         <Text variant="labelSmall" allowFontScaling={false}>
           (Commercial Invoice, Packing List, Airway Bill / Bill of Lading)
         </Text>
-      </Text>
+      </Text> */}
 
       {/* Image Input Area */}
       {/* <SubForm_ImageInput setFormData={setFormData} formData={formData} /> */}

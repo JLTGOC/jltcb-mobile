@@ -38,7 +38,7 @@ export default function ShipmentDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details />;
+        return <Details shipment={shipmentId}/>;
       case 1:
         return (
           <View style={styles.placeholder}>
@@ -48,7 +48,7 @@ export default function ShipmentDetails() {
       case 2:
         return (
           <View style={styles.placeholder}>
-            <Documents/>
+            <Billing/>
           </View>
         );
       default:

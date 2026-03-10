@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Card, Divider, Text } from "react-native-paper";
 import { Image } from "expo-image";
@@ -83,18 +82,29 @@ function StatusCard({ title, status, rows }: StatusCardData) {
   );
 }
 
-export default function Details() {
-  const { id } = useLocalSearchParams<{ id?: string }>();
-  const shipmentId = Number(id);
+
+type Props = {shipment: number};
+export default function Details({ shipment }: Props) {
+  const hasValidShipmentId = Number.isFinite(shipment) && shipment > 0;
 
   const { data, isLoading, isError, error } = useQuery<ShipmentDetails, Error>({
-    queryKey: ["shipment-details", shipmentId],
-    queryFn: () => fetchShipmentDetails(shipmentId),
-    enabled: Number.isFinite(shipmentId) && shipmentId > -1,
+    queryKey: ["shipment-details", shipment],
+    queryFn: () => fetchShipmentDetails(shipment),
+    enabled: hasValidShipmentId,
     retry: false,
   });
 
-  console.log(data);
+  const isNotFoundError =
+    isError &&
+    /record not found|not found/i.test(error?.message || "");
+
+  if (!hasValidShipmentId) {
+    return (
+      <View style={styles.loadingWrap}>
+        <Text style={styles.emptyText}>No record found.</Text>
+      </View>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -106,11 +116,27 @@ export default function Details() {
   }
 
   if (isError) {
+    if (isNotFoundError) {
+      return (
+        <View style={styles.loadingWrap}>
+          <Text style={styles.emptyText}>No record found.</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.loadingWrap}>
         <Text style={styles.errorText}>
           {error?.message || "Failed to fetch shipment details."}
         </Text>
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View style={styles.loadingWrap}>
+        <Text style={styles.emptyText}>No record found.</Text>
       </View>
     );
   }
@@ -274,5 +300,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#dc2626",
+  },
+  emptyText: {
+    color: "#6b7280",
+    fontWeight: "600",
   },
 });

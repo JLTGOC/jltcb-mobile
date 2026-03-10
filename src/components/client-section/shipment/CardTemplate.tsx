@@ -1,8 +1,8 @@
 import { routes } from "@/src/constants/routes";
-import { useNavigate } from "@/src/hooks/useNavigate";
 import { formatDate } from "@/src/utils/formatDate";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useNavigate } from "@/src/hooks/useNavigate";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Card, Divider, Text } from "react-native-paper";
 
 type Props = {
@@ -20,7 +20,8 @@ export default function Ongoing({
   date,
   shipment_id,
 }: Props) {
-  const { navigate } = useNavigate();
+
+const {navigate} = useNavigate()
 
   const handleViewDetails = () => {
     if (!shipment_id && shipment_id !== 0) return;

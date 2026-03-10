@@ -110,5 +110,6 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     marginTop: 6,
+    color: "blue",
   },
 });
