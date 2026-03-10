@@ -3,7 +3,7 @@ import { AuthProvider } from "@/src/contexts/AuthContext";
 import { useAppState } from "@/src/hooks/useAppState";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useOnlineManager } from "@/src/hooks/useOnlineManager";
-import { initPusher } from "@/src/lib/pusher";
+import { initPusher, pusher } from "@/src/lib/pusher";
 import { queryClient } from "@/src/lib/queryClient";
 import { QueryClientProvider, focusManager } from "@tanstack/react-query";
 import { Stack } from "expo-router";
@@ -42,20 +42,24 @@ export default function RootLayout() {
 
 function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== "web") {
-    focusManager.setFocused(status === "active")
+    focusManager.setFocused(status === "active");
+
+    if (status === "active" && pusher.connectionState === "DISCONNECTED") {
+      pusher.connect();
+    }
   }
 }
 
 function RootNavigator() {
   const { userData, role } = useAuth();
 
-  useOnlineManager()
+  useOnlineManager();
 
-  useAppState(onAppStateChange)
+  useAppState(onAppStateChange);
 
   useEffect(() => {
-    initPusher()
-  }, [])
+    initPusher();
+  }, []);
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
