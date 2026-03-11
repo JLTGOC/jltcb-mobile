@@ -101,7 +101,9 @@ export default function SharedMessages({ variant }: Props) {
               },
             );
 
-            queryClient.prefetchInfiniteQuery(chatMessagesInfiniteQueryOptions(inbox.id));
+            queryClient.prefetchInfiniteQuery(
+              chatMessagesInfiniteQueryOptions(inbox.id),
+            );
 
             break;
           }
@@ -168,7 +170,10 @@ export default function SharedMessages({ variant }: Props) {
       renderItem={({ item }) => (
         <Pressable
           onPress={() =>
-            router.push({ pathname: "/messages/[id]", params: { id: item.id } })
+            router.push({
+              pathname: "/messages/[id]",
+              params: { id: item.id, group: String(item.type === "GROUP") },
+            })
           }
           style={[styles.container, styles.inboxListItem]}
         >
