@@ -18,7 +18,14 @@ function mapQuotations(quotations: object) {
 }
 
 export default function ChatQuotationCard({ quotation }: Props) {
-  const { id, ...serializedQuotation } = quotation.quotation;
+  const serializedQuotation = quotation.quotation;
+
+  // Some server payloads can contain a null quotation card body.
+  // Guarding here prevents the entire chat screen from crashing.
+  if (!serializedQuotation) {
+    return null;
+  }
+
   const fullLengthDetails = mapQuotations({
     reference_no: serializedQuotation.reference_number,
     commodity: serializedQuotation.commodity,

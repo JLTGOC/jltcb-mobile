@@ -46,37 +46,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadAuth();
   }, []);
 
-  // useEffect(() => {
-  //   if (!userData) {
-  //     pusher.disconnect();
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!userData) {
+      pusher.disconnect();
+      return;
+    }
 
-  //   if (pusher.connectionState === "DISCONNECTED") {
-  //     pusher.connect();
-  //   }
+    if (pusher.connectionState === "DISCONNECTED") {
+      pusher.connect();
+    }
 
-  //   const unsubscribe = onlineManager.subscribe(() => {
-  //     if (
-  //       onlineManager.isOnline() &&
-  //       pusher.connectionState === "DISCONNECTED"
-  //     ) {
-  //       pusher.connect();
-  //     } else if (!onlineManager.isOnline()) {
-  //       pusher.disconnect();
-  //     }
-  //   });
+    const unsubscribe = onlineManager.subscribe(() => {
+      if (
+        onlineManager.isOnline() &&
+        pusher.connectionState === "DISCONNECTED"
+      ) {
+        pusher.connect();
+      } else if (!onlineManager.isOnline()) {
+        pusher.disconnect();
+      }
+    });
 
-  //   return () => unsubscribe();
-  // }, [userData]);
+    return () => unsubscribe();
+  }, [userData]);
 
-  // useAppState((status: AppStateStatus) => {
-  //   if (Platform.OS === "web") return;
-  //   if (!userData) return;
-  //   if (status === "active" && pusher.connectionState === "DISCONNECTED") {
-  //     pusher.connect();
-  //   }
-  // });
+  useAppState((status: AppStateStatus) => {
+    if (Platform.OS === "web") return;
+    if (!userData) return;
+    if (status === "active" && pusher.connectionState === "DISCONNECTED") {
+      pusher.connect();
+    }
+  });
 
   const loginContext = async (loginData: {
     email: string;

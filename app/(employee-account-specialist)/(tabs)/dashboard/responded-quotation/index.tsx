@@ -1,5 +1,5 @@
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { asQuotationsQueryOptions } from "@/src/query-options/quotations/asQuotationsQueryOptions";
+import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { Href, useRouter } from "expo-router";

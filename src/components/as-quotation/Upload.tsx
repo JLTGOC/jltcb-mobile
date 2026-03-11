@@ -4,7 +4,7 @@ import ConfirmModal from "@/src/components/ui/ConfirmModal";
 import SuccesModal from "@/src/components/ui/SuccessModal";
 import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
-import { uploadQuotationFileMutationOptions } from "@/src/mutation-options/uploadQuotationFileMutationOptions";
+import { uploadQuotationFileMutationOptions } from "@/src/mutation-options/asLead-quotations/uploadQuotationFileMutationOptions";
 import { AntDesign } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useMutation } from "@tanstack/react-query";
@@ -130,9 +130,9 @@ export default function Upload({
         />
         <SuccesModal
           onConfirm={() => {
-            setSuccessModalVisible(false)
+            setSuccessModalVisible(false);
             router.dismissAll();
-            router.navigate(routes.AS_QUOTE_RESPONDED)
+            router.navigate(routes.AS_QUOTE_RESPONDED);
           }}
           visible={successModalVisible}
           title="Successfully Submitted!"
