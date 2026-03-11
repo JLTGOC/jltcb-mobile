@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -12,19 +12,16 @@ import {
   Portal,
 } from "react-native-paper";
 
+import BannerHeader from "@/src/components/ui/BannerHeader";
 import ConfirmModal from "@/src/components/ui/ConfirmModal";
 import SuccesModal from "@/src/components/ui/SuccessModal";
-import { useAuth } from "@/src/hooks/useAuth";
-import { acceptQuotation } from "@/src/services/shipment";
-
-import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
+import { useAuth } from "@/src/hooks/useAuth";
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { useSendQuotationCardMutation } from "@/src/hooks/useSendQuotationCardMutation";
-import {
-  deleteClientSingleQuote,
-  fetchClientQuotes,
-} from "@/src/services/clientQuotation";
+import { acceptClientQuotationMutationOptions } from "@/src/mutation-options/client-quotations/acceptClientQuotationMutationOptions";
+import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
+import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
 import { QuotesListItem } from "@/src/types/client-type";
 
 type TableItem = {
@@ -44,8 +41,6 @@ const menuItems = [
 ];
 
 export default function RespondedQuotes() {
-  const queryClient = useQueryClient();
-
   const router = useRouter();
   const { navigate } = useNavigate();
   const { token } = useAuth();
@@ -58,27 +53,19 @@ export default function RespondedQuotes() {
 
   // Data Fetching
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["RESPONDED"],
-    queryFn: () => fetchClientQuotes({ status: "RESPONDED" }),
+    ...clientQuotesQueryOptions({ status: "RESPONDED" }),
     placeholderData: (previousData) => previousData,
   });
 
   // Delete single quotation
-  const { mutate: deletedSingleQuotation } = useMutation({
-    mutationFn: (id: string) => deleteClientSingleQuote(id as any),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
-    },
-  });
+  const { mutate: deletedSingleQuotation } = useMutation(
+    deleteClientSingleQuoteMutationOptions(),
+  );
 
   // Accept the quotation
   const { mutate: handleAccept, isPending: isAccepting } = useMutation({
-    mutationFn: (reference_number: string) => {
-      if (!token) throw new Error("No auth token found");
-      return acceptQuotation(reference_number);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["RESPONDED"] });
+    ...acceptClientQuotationMutationOptions(token),
+    onSuccess: () => {
       setModalVisible(false);
       setSuccessModalVisible(true);
     },
@@ -95,7 +82,7 @@ export default function RespondedQuotes() {
       setSelectedId(quotation.reference_number);
       setModalVisible(true);
     } else if (title === "DISCARD") {
-      deletedSingleQuotation(quotation.reference_number);
+      deletedSingleQuotation(quotation.id);
     } else if (title === "CHAT") {
       handleChatButtonPress(quotation);
     }

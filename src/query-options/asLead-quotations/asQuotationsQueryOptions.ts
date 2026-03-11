@@ -1,12 +1,12 @@
-import { quotationKeys } from "@/src/query-key-factories/quotations";
+import { quotationKeys } from "@/src/query-key-factories/asLeadQuotations";
 import { fetchQuotations } from "@/src/services/quotations";
 import type { QuotationFilter } from "@/src/types/quotations";
 import { queryOptions } from "@tanstack/react-query";
 
 export const asQuotationsQueryOptions = <T extends "REQUESTED" | "RESPONDED">(
-	filter: QuotationFilter<T>,
+  filter: QuotationFilter<T>,
 ) =>
-	queryOptions({
-		queryKey: quotationKeys.getQuotations(filter),
-		queryFn: () => fetchQuotations(filter),
-	});
+  queryOptions({
+    queryKey: quotationKeys.getQuotations(filter),
+    queryFn: () => fetchQuotations(filter),
+  });
