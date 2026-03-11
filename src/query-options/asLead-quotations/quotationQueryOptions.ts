@@ -1,4 +1,4 @@
-import { quotationKeys } from "@/src/query-key-factories/quotations";
+import { quotationKeys } from "@/src/query-key-factories/asLeadQuotations";
 import { fetchQuotation } from "@/src/services/quotations";
 import { queryOptions } from "@tanstack/react-query";
 
