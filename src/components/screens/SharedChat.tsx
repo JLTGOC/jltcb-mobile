@@ -23,10 +23,12 @@ import {
 } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 
+import { useAuth } from "@/src/hooks/useAuth";
 import { chatMessagesInfiniteQueryOptions } from "@/src/query-options/chats/chatMessagesInfiniteQueryOptions";
 import { markAsRead } from "@/src/services/chats";
 import { useCallback, useMemo, useRef } from "react";
 import {
+  Dimensions,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -39,12 +41,15 @@ import ChatFileCard from "../chats-section/ChatFileCard";
 import ChatImageCard from "../chats-section/ChatImageCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
+const MAX_WIDTH = Dimensions.get("window").width * 0.65;
+
 type Props = {
   variant: "dark" | "light";
 };
 
 export default function SharedChat({ variant }: Props) {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, group } = useLocalSearchParams<{ id: string; group?: string }>();
+  const { userData } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
@@ -175,6 +180,11 @@ export default function SharedChat({ variant }: Props) {
   });
 
   const renderItem = ({ item }: { item: Message }) => {
+    const isCurrentUser = item.sender.id === userData?.id;
+    const isGroup = group === "true";
+    const showSenderInfo = isGroup && !isCurrentUser && item.sender.id;
+    const isAttachment = item.type === "FILE" || item.type === "IMAGE";
+
     let message;
 
     switch (item.type) {
@@ -198,17 +208,51 @@ export default function SharedChat({ variant }: Props) {
     }
 
     return (
-      <>
-        {item.client_id && (
-          <Text
-            variant="bodySmall"
-            style={{ alignSelf: "flex-end", marginTop: 2 }}
-          >
-            Sending...
-          </Text>
+      <View
+        style={{
+          flexDirection: isCurrentUser ? "row-reverse" : "row",
+          alignItems: "flex-end",
+          gap: 8,
+        }}
+      >
+        {showSenderInfo && (
+          <Avatar.Image
+            source={{ uri: item.sender.image_path || undefined }}
+            size={32}
+            style={{ marginBottom: 4 }}
+          />
         )}
-        {message}
-      </>
+        <View
+          style={[
+            {
+              flex: 1,
+            },
+            isAttachment && { maxWidth: MAX_WIDTH },
+          ]}
+        >
+          {showSenderInfo && (
+            <Text
+              variant="labelSmall"
+              style={{
+                marginBottom: 4,
+                color: "gray",
+                marginLeft: 4,
+              }}
+            >
+              {item.sender.full_name}
+            </Text>
+          )}
+          {message}
+          {item.client_id && (
+            <Text
+              variant="bodySmall"
+              style={{ alignSelf: "flex-end", marginTop: 2 }}
+            >
+              Sending...
+            </Text>
+          )}
+        </View>
+      </View>
     );
   };
 
