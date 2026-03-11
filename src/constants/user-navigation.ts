@@ -1,5 +1,6 @@
 import ClientTabs from "@/src/components/bottom-nav-bar-section/ClientNavBar";
 import LeadASTabs from "@/src/components/bottom-nav-bar-section/Employee/LeadASNavBar";
+import OperationsTabs from "@/src/components/bottom-nav-bar-section/Employee/OperationsNavBar";
 import MarketingTabs from "@/src/components/bottom-nav-bar-section/Employee/MarketingNavBar";
 import DarkHeader from "@/src/components/header-nav-bar-section/DarkHeader";
 import LightHeader from "@/src/components/header-nav-bar-section/LightHeader";
@@ -80,6 +81,25 @@ export const userNavigation: UserNavigation[] = [
       {
         text: "Account Settings",
         link: routes.CLIENT_DB,
+      },
+    ],
+  },
+  {
+    role: "Operations",
+    headerComponent: LightHeader,
+    tabsComponent: OperationsTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.UNDERCONSTRUCTION,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.ACCOUNT_SETTINGS,
       },
     ],
   },

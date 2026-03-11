@@ -2,6 +2,7 @@ import type {
   AccountSpecialistDashboard,
   ClientDashboard,
   DashboardFolderSection,
+  OperationsDashboard
 } from "../types/dashboard";
 import { routes } from "./routes";
 
@@ -40,6 +41,28 @@ export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[
           countKey: "responded_count",
           icon: "quotations",
           href: "/(client)/(tabs)/dashboard/quotations/responded-quotes",
+        },
+      ],
+    },
+  ] as const;
+
+export const OPERATIONS_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDashboard>[] =
+  [
+    {
+      title: "Shipment",
+      sectionKey: "shipments",
+      data: [
+        {
+          title: "Ongoing",
+          countKey: "ongoing_count",
+          icon: "ongoing",
+          href: "/(employee-account-specialist)/(tabs)/dashboard",
+        },
+        {
+          title: "Delivered",
+          countKey: "delivered_count",
+          icon: "delivered",
+          href: "/(employee-account-specialist)/(tabs)/dashboard",
         },
       ],
     },

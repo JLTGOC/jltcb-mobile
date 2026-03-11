@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
@@ -7,18 +8,15 @@ import {
   Icon,
   IconButton,
   Menu,
-  Text
+  Text,
 } from "react-native-paper";
 
 import Search from "@/src/components/client-section/shipment/Search";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
 import useDebounce from "@/src/hooks/useDebounce";
-import {
-  deleteClientSingleQuote,
-  fetchClientQuotes,
-} from "@/src/services/clientQuotation";
-import { useRouter } from "expo-router";
+import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
+import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
 
 type TableItem = {
   id: number;
@@ -36,8 +34,6 @@ const menuItems = [
 ];
 
 export default function RequestedQuotes() {
-  const queryClient = useQueryClient();
-
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const router = useRouter();
@@ -46,20 +42,17 @@ export default function RequestedQuotes() {
 
   // Data Fetching
   const { data, isLoading } = useQuery({
-    queryKey: ["quotes", "REQUESTED", debouncedSearch],
-    queryFn: () =>
-      fetchClientQuotes({ status: "REQUESTED", search: debouncedSearch }),
+    ...clientQuotesQueryOptions({
+      status: "REQUESTED",
+      search: debouncedSearch,
+    }),
     placeholderData: (previousData) => previousData,
   });
 
   // Delete single quotation
-  const { mutate: deletedSingleQuotation } = useMutation({
-    mutationFn: (quotationId: number) => deleteClientSingleQuote(quotationId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["quotes"] });
-      console.log("Deleted successfully!");
-    },
-  });
+  const { mutate: deletedSingleQuotation } = useMutation(
+    deleteClientSingleQuoteMutationOptions(),
+  );
 
   const quotes = (data as unknown as TableItem[]) || [];
 

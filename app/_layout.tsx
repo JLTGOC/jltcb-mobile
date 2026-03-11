@@ -67,6 +67,7 @@ function RootNavigator() {
       <Stack.Protected guard={!!userData}>
         <Stack.Protected guard={role === "Client"}>
           <Stack.Screen name="(client)" />
+          {/* <Stack.Screen name="(employee-operations)" /> */}
         </Stack.Protected>
 
         <Stack.Protected guard={role === "Account Specialist"}>

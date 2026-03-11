@@ -1,7 +1,7 @@
 import QuotationRequestDetailCard from "@/src/components/quote-section/QuotationRequestDetailCard";
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { quotationQueryOptions } from "@/src/query-options/quotations/quotationQueryOptions";
+import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
 import type { Document, QuotationDetailsSection } from "@/src/types/quotations";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
