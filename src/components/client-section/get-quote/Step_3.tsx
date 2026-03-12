@@ -2,13 +2,7 @@ import { useNavigate } from "@/src/hooks/useNavigate";
 import * as DocumentPicker from "expo-document-picker";
 import { FileUp, X } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { ClientFile, QuoteForm } from "../../../types/client-type";
 
@@ -20,7 +14,6 @@ type Props = {
 export default function Step_3({ formData, setFormData }: Props) {
   const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
-
 
   const uploadedDocuments = Array.isArray(formData.documents)
     ? formData.documents.filter(
@@ -82,7 +75,7 @@ export default function Step_3({ formData, setFormData }: Props) {
     }));
   };
 
-  console.log("step_3.tsx", formData)
+  console.log("step_3.tsx", formData);
 
   return (
     <ScrollView
@@ -95,12 +88,17 @@ export default function Step_3({ formData, setFormData }: Props) {
         {/* Upload Button */}
         <View style={styles.container}>
           {error && <Text style={styles.errorText}>{error}</Text>}
-          <TouchableOpacity
-            style={styles.fileInput}
+          <Pressable
             onPress={handlePickDocument}
+            style={({ pressed }) => [
+              styles.fileInput,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
           >
             <FileUp size={40} fill={"#b2b2b2"} color={"white"} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* List of Uploaded Files */}
@@ -127,19 +125,25 @@ export default function Step_3({ formData, setFormData }: Props) {
                 >
                   <Text numberOfLines={1}>File Name: {document.file_name}</Text>
                 </View>
-                {formData.documents && formData.documents.length > 1 ? ( <TouchableOpacity
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginRight: 10,
-                  }}
-                  onPress={() =>
-                    handleRemoveFile(document.id, document.file_url)
-                  }
-                >
-                  <X size={20} color="red" />
-                </TouchableOpacity> ) : null }
-               
+                {formData.documents && formData.documents.length > 1 ? (
+                  <Pressable
+                    style={({ pressed }) => [
+                      {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginRight: 10,
+                      },
+                      {
+                        opacity: pressed ? 0.7 : 1,
+                      },
+                    ]}
+                    onPress={() =>
+                      handleRemoveFile(document.id, document.file_url)
+                    }
+                  >
+                    <X size={20} color="red" />
+                  </Pressable>
+                ) : null}
               </View>
             ))}
           </View>
@@ -159,7 +163,9 @@ export default function Step_3({ formData, setFormData }: Props) {
         <TextInput
           mode="flat"
           value={formData.remarks || ""}
-          onChangeText={(text) => {setFormData((prev) => ({...prev, remarks: text}))}}
+          onChangeText={(text) => {
+            setFormData((prev) => ({ ...prev, remarks: text }));
+          }}
           multiline={true}
           numberOfLines={4}
           underlineColor="transparent"

@@ -1,7 +1,7 @@
 import { OJTFormData } from "@/src/types/careers";
 import { Image } from "expo-image";
 import { Dispatch, SetStateAction } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
 import { Surface, Text } from "react-native-paper";
 import * as DocumentPicker from "expo-document-picker";
 import { X } from "lucide-react-native";
@@ -13,9 +13,10 @@ type Props = {
 
 export default function SubForm_FileUploader({ setFormData, formData }: Props) {
   // Ensure array is initialized safely for our 2 slots
-  const cvCoverArray = formData.cv_cover && formData.cv_cover.length > 0 
-    ? formData.cv_cover 
-    : ["", ""];
+  const cvCoverArray =
+    formData.cv_cover && formData.cv_cover.length > 0
+      ? formData.cv_cover
+      : ["", ""];
 
   const handlePickDocument = async (index: 0 | 1) => {
     try {
@@ -29,12 +30,13 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
         const fileUri = result.assets[0].uri;
 
         setFormData((prev) => {
-          const newCvCover = prev.cv_cover && prev.cv_cover.length > 0 
-            ? [...prev.cv_cover] 
-            : ["", ""];
-            
+          const newCvCover =
+            prev.cv_cover && prev.cv_cover.length > 0
+              ? [...prev.cv_cover]
+              : ["", ""];
+
           newCvCover[index] = fileUri; // Update the specific slot
-          
+
           return { ...prev, cv_cover: newCvCover };
         });
       }
@@ -52,19 +54,35 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
   };
 
   // Helper to extract a readable file name from the URI string
-  const getFileName = (uri: string) => uri ? uri.split('/').pop() : "";
+  const getFileName = (uri: string) => (uri ? uri.split("/").pop() : "");
 
   return (
     <>
-      <Text variant="titleSmall" allowFontScaling={false} style={{ marginBottom: 8 }}>
+      <Text
+        variant="titleSmall"
+        allowFontScaling={false}
+        style={{ marginBottom: 8 }}
+      >
         CV AND COVER LETTER
       </Text>
 
       {/* --- CV Slot (Index 0) --- */}
-      <TouchableOpacity onPress={() => handlePickDocument(0)}>
+      <Pressable
+        onPress={() => handlePickDocument(0)}
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+      >
         <Surface style={styles.surface}>
           <View style={styles.uploadBox}>
-            <Text style={{ marginRight: 10, color: cvCoverArray[0] ? "#000" : "#888" }}>
+            <Text
+              style={{
+                marginRight: 10,
+                color: cvCoverArray[0] ? "#000" : "#888",
+              }}
+            >
               {cvCoverArray[0] ? "Change CV" : "Upload CV"}
             </Text>
             <Image
@@ -73,13 +91,25 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
             />
           </View>
         </Surface>
-      </TouchableOpacity>
+      </Pressable>
 
       {/* --- Cover Letter Slot (Index 1) --- */}
-      <TouchableOpacity onPress={() => handlePickDocument(1)}>
+      <Pressable
+        onPress={() => handlePickDocument(1)}
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+      >
         <Surface style={[styles.surface, { marginTop: 10 }]}>
           <View style={styles.uploadBox}>
-             <Text style={{ marginRight: 10, color: cvCoverArray[1] ? "#000" : "#888" }}>
+            <Text
+              style={{
+                marginRight: 10,
+                color: cvCoverArray[1] ? "#000" : "#888",
+              }}
+            >
               {cvCoverArray[1] ? "Change Cover Letter" : "Upload Cover Letter"}
             </Text>
             <Image
@@ -88,7 +118,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
             />
           </View>
         </Surface>
-      </TouchableOpacity>
+      </Pressable>
 
       {/* --- UPLOADED FILES LIST --- */}
       {(cvCoverArray[0] !== "" || cvCoverArray[1] !== "") && (
@@ -96,7 +126,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
           <Text style={{ fontWeight: "bold", fontSize: 12, color: "#666" }}>
             UPLOADED FILES:
           </Text>
-          
+
           {cvCoverArray.map((uri, index) => {
             if (!uri) return null; // Don't render if the slot is empty
             const label = index === 0 ? "CV" : "Cover Letter";
@@ -119,26 +149,29 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
                     padding: 15,
                     borderWidth: 1,
                     borderColor: "#eee",
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
-                  <Text numberOfLines={1} style={{ fontSize: 13, color: "#333" }}>
-                    <Text style={{ fontWeight: "bold" }}>{label}:</Text> {getFileName(uri)}
+                  <Text
+                    numberOfLines={1}
+                    style={{ fontSize: 13, color: "#333" }}
+                  >
+                    <Text style={{ fontWeight: "bold" }}>{label}:</Text>{" "}
+                    {getFileName(uri)}
                   </Text>
                 </View>
-                
-                <TouchableOpacity
-                  style={{
-                    width: 50,
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#ffeaea",
-                  }}
+
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.removeFIleButton,
+                    {
+                      opacity: pressed ? 0.7 : 1,
+                    },
+                  ]}
                   onPress={() => handleRemoveFile(index)}
                 >
                   <X size={20} color="red" />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             );
           })}
@@ -150,7 +183,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
 
 const styles = StyleSheet.create({
   surface: {
-    elevation: 2, // Slightly lowered elevation for a cleaner modern look
+    elevation: 2,
     borderRadius: 10,
     marginVertical: 2,
   },
@@ -160,11 +193,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row", // Added to align text and image
+    flexDirection: "row",
   },
   uploadImg: {
     aspectRatio: 19 / 25,
     height: 25,
     opacity: 0.6,
+  },
+  removeFIleButton: {
+    width: 50,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffeaea",
   },
 });

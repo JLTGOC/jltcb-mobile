@@ -18,7 +18,7 @@ export default function ClientHeaderMenuLink({
 		<Pressable
 			style={({ pressed }) => [
 				styles.menuLink,
-				{ opacity: pressed ? 0.5 : 1 },
+				{ opacity: pressed ? 0.7 : 1 },
 				style,
 			]}
 			{...props}

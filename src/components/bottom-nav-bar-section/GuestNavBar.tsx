@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ButtonIcon from "@/src/components/nav-bar-section/ButtonIcon";
 import MenuItem from "@/src/components/nav-bar-section/MenuItem";
@@ -50,7 +50,14 @@ export default function NavigationBar() {
           { height: 50 + insets.bottom, paddingBottom: 10 + insets.bottom },
         ]}
       >
-        <TouchableOpacity onPress={() => toggleMenu("left")}>
+        <Pressable
+          onPress={() => toggleMenu("left")}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <View style={styles.navBarButton}>
             <ButtonIcon
               iconName="newspaper"
@@ -58,13 +65,27 @@ export default function NavigationBar() {
               iconColor="#898989"
             />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate(routes.HOME)}>
+        </Pressable>
+        <Pressable
+          onPress={() => navigate(routes.HOME)}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <View style={styles.navBarButton}>
             <ButtonIcon iconName="home" iconSize={25} iconColor="#EE9034" />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => toggleMenu("right")}>
+        </Pressable>
+        <Pressable
+          onPress={() => toggleMenu("right")}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <View style={styles.navBarButton}>
             <ButtonIcon
               iconName="clipboard"
@@ -72,7 +93,7 @@ export default function NavigationBar() {
               iconColor="#898989"
             />
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Curve Left */}
@@ -97,7 +118,7 @@ export default function NavigationBar() {
                 <MenuItem
                   key={item.route}
                   label={item.label}
-                   textAlign="left"
+                  textAlign="left"
                   onPress={() => navigate(item.route)}
                 />
               ))}

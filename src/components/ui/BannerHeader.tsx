@@ -3,12 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
 import { PropsWithChildren } from "react";
-import {
-  StyleSheet,
-  type TextStyle,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, View, type TextStyle } from "react-native";
 import { Text, type TextProps } from "react-native-paper";
 
 const TEXT_COLOR_DARK = "#1C213B";
@@ -52,9 +47,16 @@ export default function BannerHeader({
     >
       <View style={styles.content}>
         {back && (
-          <TouchableOpacity onPress={handleBack}>
+          <Pressable
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={handleBack}
+          >
             <Ionicons name="arrow-back" size={24} style={textColorStyle} />
-          </TouchableOpacity>
+          </Pressable>
         )}
         {children}
         <Text

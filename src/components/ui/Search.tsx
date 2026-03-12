@@ -1,9 +1,9 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   GestureResponderEvent,
+  Pressable,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
   type StyleProp,
   type TextInputProps,
@@ -28,17 +28,20 @@ export default function Search({
   return (
     <View style={[styles.inputContainer, styles.boxShadow, containerStyle]}>
       <TextInput {...props} style={[styles.input, style]} />
-      <TouchableOpacity
+      <Pressable
         onPress={onSearch}
-        style={[
+        style={({ pressed }) => [
           styles.searchButton,
           searchButtonStyle,
           searchButtonDisabled && styles.disabledSearchButton,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
         ]}
         disabled={searchButtonDisabled}
       >
         <Ionicons name="search" size={16} color="white" />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

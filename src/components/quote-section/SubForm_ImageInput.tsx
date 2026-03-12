@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Dispatch, SetStateAction } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { ContactFormData } from "../../../src/types/get-quote";
 
 type ImageInputBoxProps = {
@@ -26,7 +26,14 @@ export default function SubForm_ImageInput({
   };
 
   return (
-    <TouchableOpacity onPress={pickImage}>
+    <Pressable
+      style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}
+      onPress={pickImage}
+    >
       <View style={styles.container}>
         {formData.imageUri ? (
           <Image
@@ -38,7 +45,7 @@ export default function SubForm_ImageInput({
           <Ionicons name="image-outline" size={40} color="#888" />
         )}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

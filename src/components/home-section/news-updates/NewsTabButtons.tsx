@@ -1,12 +1,6 @@
 import { routes } from "@/src/constants/routes";
 import { Href, usePathname, useRouter } from "expo-router";
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Tab = { title: string; route: Href };
 
@@ -32,9 +26,14 @@ export default function NewsTabButtons() {
   return (
     <View style={styles.buttonContainer}>
       {TABS.map((t) => (
-        <TouchableOpacity
+        <Pressable
           key={t.title}
-          style={styles.button}
+          style={({ pressed }) => [
+            styles.button,
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
           onPress={() => router.navigate(t.route)}
         >
           <Text
@@ -48,7 +47,7 @@ export default function NewsTabButtons() {
             {t.title}
           </Text>
           {isTabActive(t.route) && <View style={styles.underline} />}
-        </TouchableOpacity>
+        </Pressable>
       ))}
     </View>
   );

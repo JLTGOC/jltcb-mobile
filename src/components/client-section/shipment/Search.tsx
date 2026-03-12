@@ -1,42 +1,38 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import {
-  ActivityIndicator,
-  DataTable,
-  Icon,
-  IconButton,
-  Menu,
-  TextInput,
-} from "react-native-paper";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Icon, TextInput } from "react-native-paper";
 
 type Props = {
   search: string;
   setSearch: (value: string) => void;
-}
+};
 
 export default function Search({ search, setSearch }: Props) {
-    return (
-        <View style={styles.inputContainer}>
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          mode="flat"
-          placeholder="ENTER REFERENCE NUMBER"
-          placeholderTextColor="#666"
-          style={styles.input}
-          underlineColor="transparent"
-          activeUnderlineColor="transparent"
-          selectionColor="#f2994a"
-        />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => console.log("Submit")}
-        >
-          <Icon source="magnify" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-    );
+  return (
+    <View style={styles.inputContainer}>
+      <TextInput
+        value={search}
+        onChangeText={setSearch}
+        mode="flat"
+        placeholder="ENTER REFERENCE NUMBER"
+        placeholderTextColor="#666"
+        style={styles.input}
+        underlineColor="transparent"
+        activeUnderlineColor="transparent"
+        selectionColor="#f2994a"
+      />
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => console.log("Submit")}
+      >
+        <Icon source="magnify" size={24} color="black" />
+      </Pressable>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

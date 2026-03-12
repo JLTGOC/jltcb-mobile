@@ -175,7 +175,13 @@ export default function SharedMessages({ variant }: Props) {
               params: { id: item.id, group: String(item.type === "GROUP") },
             })
           }
-          style={[styles.container, styles.inboxListItem]}
+          style={({ pressed }) => [
+            styles.container,
+            styles.inboxListItem,
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
         >
           <InboxListItem {...item} />
         </Pressable>

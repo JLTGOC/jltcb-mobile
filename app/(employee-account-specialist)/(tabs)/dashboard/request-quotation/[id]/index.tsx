@@ -12,7 +12,7 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
@@ -119,10 +119,15 @@ export default function Quotation() {
         style={[styles.tabs, styles.container, { backgroundColor: "#F5F5F5" }]}
       >
         {TABS.map((tab) => (
-          <TouchableOpacity
+          <Pressable
             onPress={() => setActiveTab(tab)}
-            style={styles.tabButton}
             key={tab}
+            style={({ pressed }) => [
+              styles.tabButton,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
           >
             <Text
               numberOfLines={1}
@@ -134,7 +139,7 @@ export default function Quotation() {
               {tab}
             </Text>
             {isTabActive(tab) && <View style={styles.underline} />}
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
 

@@ -7,7 +7,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -41,12 +41,25 @@ export default function LightHeader({ menus: menuOptions }: LightHeaderProps) {
           contentFit="contain"
         />
         <View style={styles.icons}>
-          <TouchableOpacity>
+          <Pressable
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
             <Ionicons name="notifications" size={30} color="#1C213B" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsMenuToggled((prev) => !prev)}>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={() => setIsMenuToggled((prev) => !prev)}
+          >
             <Ionicons name="menu" size={30} color="#1C213B" />
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </SafeAreaView>
 

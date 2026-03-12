@@ -57,7 +57,15 @@ export default function SharedAHTNChecker() {
         </Text>
 
         <View style={styles.checkboxList}>
-          <Pressable onPress={handleSelectAll} style={styles.checkboxWrapper}>
+          <Pressable
+            onPress={handleSelectAll}
+            style={({ pressed }) => [
+              styles.checkboxWrapper,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
             <Checkbox.Android
               color="#161F3C"
               status={
@@ -72,7 +80,12 @@ export default function SharedAHTNChecker() {
           </Pressable>
           {TARIFF_SCHEDULES.map((t) => (
             <Pressable
-              style={styles.checkboxWrapper}
+              style={({ pressed }) => [
+                styles.checkboxWrapper,
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
               onPress={() => handleCheckboxValueChange(t.value)}
               key={t.value}
             >

@@ -2,7 +2,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Pressable, View } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
@@ -139,7 +139,7 @@ export default function RespondedQuotes() {
         ) : (
           <ScrollView>
             {quotes.map((item) => (
-              <TouchableOpacity
+              <Pressable
                 key={item.id}
                 onPress={() => {
                   navigate({
@@ -147,6 +147,11 @@ export default function RespondedQuotes() {
                     params: { id: item.id, title: item.commodity },
                   });
                 }}
+                style={({ pressed }) => [
+                  {
+                    opacity: pressed ? 0.7 : 1,
+                  },
+                ]}
               >
                 <DataTable.Row>
                   <DataTable.Cell
@@ -224,7 +229,7 @@ export default function RespondedQuotes() {
                     )}
                   </DataTable.Cell>
                 </DataTable.Row>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </ScrollView>
         )}

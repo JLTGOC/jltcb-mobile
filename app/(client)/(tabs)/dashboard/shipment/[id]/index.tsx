@@ -1,6 +1,6 @@
 import Details from "@/src/components/client-section/shipment/Details";
 import Documents from "@/src/components/client-section/shipment/Documents";
-import Billing from  "@/src/components/client-section/shipment/Billing";  
+import Billing from "@/src/components/client-section/shipment/Billing";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
 import { useLocalSearchParams } from "expo-router";
@@ -10,7 +10,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 
@@ -38,17 +38,17 @@ export default function ShipmentDetails() {
   const renderTabContent = () => {
     switch (active) {
       case 0:
-        return <Details shipment={shipmentId}/>;
+        return <Details shipment={shipmentId} />;
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Documents/>
+            <Documents />
           </View>
         );
       case 2:
         return (
           <View style={styles.placeholder}>
-            <Billing/>
+            <Billing />
           </View>
         );
       default:
@@ -66,10 +66,15 @@ export default function ShipmentDetails() {
 
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (
-              <TouchableOpacity
+              <Pressable
                 key={i}
-                style={styles.button}
                 onPress={() => setActive(i)}
+                style={({ pressed }) => [
+                  styles.button,
+                  {
+                    opacity: pressed ? 0.7 : 1,
+                  },
+                ]}
               >
                 <Text
                   style={[
@@ -82,7 +87,7 @@ export default function ShipmentDetails() {
                   {t}
                 </Text>
                 {active === i && <View style={styles.underline} />}
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
 

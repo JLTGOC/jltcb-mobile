@@ -2,7 +2,7 @@ import { routes } from "@/src/constants/routes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Href, useRouter, useSegments } from "expo-router";
 import { ComponentProps } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
@@ -35,9 +35,14 @@ export default function ClientNavBar() {
       ]}
     >
       {NavIcons.map((icon, index) => (
-        <TouchableOpacity
+        <Pressable
           key={index}
           onPress={() => router.navigate(icon.route as Href)}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
         >
           <View style={styles.navBarButton}>
             <MaterialCommunityIcons
@@ -46,7 +51,7 @@ export default function ClientNavBar() {
               color={path === NavIcons[index].route ? "#EE9034" : "#000000"}
             />
           </View>
-        </TouchableOpacity>
+        </Pressable>
       ))}
     </View>
   );

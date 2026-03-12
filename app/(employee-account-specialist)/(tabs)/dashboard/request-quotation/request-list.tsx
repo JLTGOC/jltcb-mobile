@@ -2,7 +2,7 @@ import BannerHeader from "@/src/components/ui/BannerHeader";
 import type { Quotation } from "@/src/types/quotations";
 import { format, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Pressable } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { DataTable, Text } from "react-native-paper";
 
@@ -55,7 +55,7 @@ export default function RequestList() {
             "MM/dd/yyyy",
           );
           return (
-            <TouchableOpacity
+            <Pressable
               key={quotation.id}
               onPress={() => {
                 router.push({
@@ -63,12 +63,17 @@ export default function RequestList() {
                   params: { id: quotation.id, clientName },
                 });
               }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
             >
               <DataTable.Row>
                 <DataTable.Cell style={{ flex: 2 }}>
-                  <TouchableOpacity>
+                  <Pressable>
                     <Text>{formattedDate}</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </DataTable.Cell>
                 <DataTable.Cell
                   textStyle={[styles.uppercase, { flex: 1 }]}
@@ -105,7 +110,7 @@ export default function RequestList() {
                   />
                 </DataTable.Cell>
               </DataTable.Row>
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
       </DataTable>

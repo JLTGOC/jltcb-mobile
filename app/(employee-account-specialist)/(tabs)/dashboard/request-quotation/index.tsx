@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Pressable } from "react-native";
 import { ActivityIndicator, DataTable } from "react-native-paper";
 
 const TABLE_HEADERS = [
@@ -75,7 +75,7 @@ export default function NewRequest() {
               "MM/dd/yyyy",
             );
             return (
-              <TouchableOpacity
+              <Pressable
                 key={userRow.name}
                 onPress={() => {
                   router.push({
@@ -86,6 +86,11 @@ export default function NewRequest() {
                     },
                   });
                 }}
+                style={({ pressed }) => [
+                  {
+                    opacity: pressed ? 0.7 : 1,
+                  },
+                ]}
               >
                 <DataTable.Row>
                   <DataTable.Cell style={styles.flexLow}>
@@ -105,7 +110,7 @@ export default function NewRequest() {
                     {userRow.request_count}
                   </DataTable.Cell>
                 </DataTable.Row>
-              </TouchableOpacity>
+              </Pressable>
             );
           })}
         </DataTable>

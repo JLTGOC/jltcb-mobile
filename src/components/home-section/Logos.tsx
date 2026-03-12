@@ -1,12 +1,11 @@
-
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import {
   Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  View,
   FlatList,
+  Pressable,
+  StyleSheet,
+  View,
 } from "react-native";
 
 // --- Data ---
@@ -38,16 +37,21 @@ export default function GovernmentLogosMarquee() {
         data={logos}
         horizontal
         renderItem={({ item }) => (
-          <TouchableOpacity
+          <Pressable
             onPress={() => openLink(item.url)}
-            style={{ marginRight: GAP }}
+            style={({ pressed }) => [
+              { marginRight: GAP },
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
           >
             <Image
               source={item.logo}
               style={{ height: LOGO_SIZE, width: LOGO_SIZE }}
               contentFit="contain"
             />
-          </TouchableOpacity>
+          </Pressable>
         )}
       />
     </View>
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 2,
     backgroundColor: "#fff",
-    alignItems:"center"
+    alignItems: "center",
   },
 });
 
