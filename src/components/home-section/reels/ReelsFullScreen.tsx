@@ -7,13 +7,7 @@ import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { useEffect } from "react";
-import {
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function ReelsFullScreen() {
@@ -79,10 +73,12 @@ export default function ReelsFullScreen() {
 
       {/* Overlay Play/Pause Button */}
       <Pressable
-        style={[
+        style={({ pressed }) => [
           styles.buttonOverlay,
           { width: screenWidth, height: screenHeight * 0.81 },
-          { opacity: isPlaying ? 0 : 1 },
+          {
+            opacity: isPlaying ? 0 : pressed ? 0.7 : 1,
+          },
         ]}
         onPress={togglePlay}
       >
@@ -94,9 +90,16 @@ export default function ReelsFullScreen() {
       </Pressable>
 
       <View style={styles.headerOverlay}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+          onPress={() => router.back()}
+        >
           <Ionicons name="close" size={28} color="white" />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </>
   );

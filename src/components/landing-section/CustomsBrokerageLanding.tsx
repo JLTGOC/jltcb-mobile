@@ -4,7 +4,7 @@ import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { Link } from "expo-router";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
 export default function CustomsBrokerageLanding() {
@@ -35,7 +35,13 @@ export default function CustomsBrokerageLanding() {
           }}
         >
           <Link href={routes.GUEST_HOME} asChild>
-            <TouchableOpacity>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
               <LinearGradient
                 colors={["#161F3C", "#000000"]} // BUTTON gradient fill
                 start={{ x: 0, y: 0 }}
@@ -51,7 +57,7 @@ export default function CustomsBrokerageLanding() {
                   Guest
                 </Text>
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
           </Link>
           <Text variant="titleMedium" allowFontScaling={false}>
             Already have an account?{" "}
@@ -80,17 +86,27 @@ const openLink = (url: string) => {
 function SocialLogos() {
   return (
     <View style={styles.socialIconsContainer}>
-      <TouchableOpacity
-        style={styles.socialLink}
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
         onPress={() => openLink("https://www.facebook.com/jltcb.ph")}
       >
         <Image
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/facebook.png")}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.socialLink}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
         onPress={() =>
           openLink("https://www.instagram.com/jltcustomsbrokerage")
         }
@@ -99,9 +115,14 @@ function SocialLogos() {
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/instagram.png")}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.socialLink}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
         onPress={() =>
           openLink("https://www.youtube.com/@jilll.tolentinocustomsbrok4791")
         }
@@ -110,34 +131,51 @@ function SocialLogos() {
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/youtube.png")}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.socialLink}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
         onPress={() => openLink("https://www.tiktok.com/@jltcbph")}
       >
         <Image
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/tiktok.png")}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.socialLink}
-        onPress={() => openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")
+        }
       >
         <Image
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/linkedIn.png")}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.socialLink}
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
         onPress={() => openLink("https://x.com/jltcb_ph")}
       >
         <Image
           style={styles.socialIcon}
           source={require("@/src/assets/social_logos/twitter.png")}
         />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

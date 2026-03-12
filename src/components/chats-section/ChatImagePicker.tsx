@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Crypto from "expo-crypto";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { Pressable } from "react-native";
 
 export default function ChatImagePicker() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,8 +41,15 @@ export default function ChatImagePicker() {
   };
 
   return (
-    <TouchableOpacity onPress={onSelectImage}>
+    <Pressable
+      onPress={onSelectImage}
+      style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}
+    >
       <Ionicons name="image" color="gray" size={26} />
-    </TouchableOpacity>
+    </Pressable>
   );
 }

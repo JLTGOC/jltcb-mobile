@@ -25,7 +25,12 @@ export default function Index() {
 
       <Pressable
         onPress={() => router.back()}
-        style={styles.backButtonContainer}
+        style={({ pressed }) => [
+          styles.backButtonContainer,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
       >
         <MoveLeft color="#EE9034" size={28} />
         <Text variant="labelLarge" style={{ color: "#EE9034" }}>

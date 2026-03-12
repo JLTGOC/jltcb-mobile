@@ -1,7 +1,7 @@
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function ContactDetails() {
   const [active, setActive] = useState(0);
@@ -32,9 +32,15 @@ export default function ContactDetails() {
       {/* tabs */}
       <View style={styles.tabsContainer}>
         {tabs.map((t, i) => (
-          <TouchableOpacity
+          <Pressable
             key={i}
-            style={styles.button}
+            style={({ pressed }) => [
+              styles.button,
+
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
             onPress={() => {
               (setActive(i), setTab(t));
             }}
@@ -46,7 +52,7 @@ export default function ContactDetails() {
               {t}
             </Text>
             {active === i && <View style={styles.underline} />}
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
 
@@ -71,11 +77,12 @@ export default function ContactDetails() {
           ))
         )}
       </View>
-      {tab === "MAIN" && <Image
-        source={require("../../../src/assets/contact_us/location.png")}
-        style={{ height: 300, width: "100%" }}
-      />}
-     
+      {tab === "MAIN" && (
+        <Image
+          source={require("../../../src/assets/contact_us/location.png")}
+          style={{ height: 300, width: "100%" }}
+        />
+      )}
     </View>
   );
 }

@@ -116,7 +116,7 @@ export default function ReelsContainer({
                 params: { id: item.id, placeholder: item.thumbnail_path },
               });
             }}
-            style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
+            style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
           >
             <ReelsPlayer
               reel={item}

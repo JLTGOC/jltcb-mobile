@@ -8,7 +8,7 @@ import * as Crypto from "expo-crypto";
 import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import type { TextInputProps } from "react-native-paper";
 import ChatImagePicker from "./ChatImagePicker";
 
@@ -64,14 +64,21 @@ export default function ChatMessageInput({ style, ...props }: Props) {
   return (
     <View style={styles.messageInputContainer}>
       <View style={styles.uploadSection}>
-        <TouchableOpacity onPress={onSelectFile}>
+        <Pressable
+          onPress={onSelectFile}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <Ionicons
             name="attach"
             style={styles.fileIcon}
             color="gray"
             size={30}
           />
-        </TouchableOpacity>
+        </Pressable>
         <ChatImagePicker />
       </View>
 
@@ -94,8 +101,12 @@ export default function ChatMessageInput({ style, ...props }: Props) {
               onChangeText={onChange}
               {...props}
             />
-            <TouchableOpacity
-              style={{ opacity: !value ? 0.3 : undefined }}
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: !value ? 0.3 : (pressed ? 0.7 : 1),
+                },
+              ]}
               disabled={!value}
               onPress={onSendMessage}
             >
@@ -104,7 +115,7 @@ export default function ChatMessageInput({ style, ...props }: Props) {
                 size={32}
                 color="#0000f5"
               />
-            </TouchableOpacity>
+            </Pressable>
           </>
         )}
       />

@@ -1,9 +1,9 @@
 import { routes } from "@/src/constants/routes";
+import { useNavigate } from "@/src/hooks/useNavigate";
 import { formatDate } from "@/src/utils/formatDate";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigate } from "@/src/hooks/useNavigate";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { Button, Card, Divider, Text } from "react-native-paper";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Card, Divider, Text } from "react-native-paper";
 
 type Props = {
   reference_number: string;
@@ -20,8 +20,7 @@ export default function Ongoing({
   date,
   shipment_id,
 }: Props) {
-
-const {navigate} = useNavigate()
+  const { navigate } = useNavigate();
 
   const handleViewDetails = () => {
     if (!shipment_id && shipment_id !== 0) return;
@@ -71,11 +70,19 @@ const {navigate} = useNavigate()
         </View>
 
         <Divider style={styles.divider} />
-        <TouchableOpacity style={styles.actions} onPress={handleViewDetails}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.actions,
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+          onPress={handleViewDetails}
+        >
           <View style={{ width: "100%", alignItems: "center" }}>
             <Text style={styles.viewDetailsText}>VIEW DETAILS</Text>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </Card.Content>
     </Card>
   );

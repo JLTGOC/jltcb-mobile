@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Pressable, View } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
@@ -90,7 +90,7 @@ export default function RequestedQuotes() {
         ) : (
           <ScrollView>
             {quotes.map((item) => (
-              <TouchableOpacity
+              <Pressable
                 key={item.id}
                 onPress={() => {
                   router.push({
@@ -102,6 +102,11 @@ export default function RequestedQuotes() {
                     },
                   });
                 }}
+                style={({ pressed }) => [
+                  {
+                    opacity: pressed ? 0.7 : 1, 
+                  },
+                ]}
               >
                 <DataTable.Row>
                   <DataTable.Cell
@@ -160,7 +165,7 @@ export default function RequestedQuotes() {
                     </Menu>
                   </DataTable.Cell>
                 </DataTable.Row>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </ScrollView>
         )}

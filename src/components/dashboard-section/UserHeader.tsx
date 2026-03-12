@@ -1,13 +1,6 @@
 import { useAuth } from "@/src/hooks/useAuth";
 import { Image, ImageBackground } from "expo-image";
-import { Link } from "expo-router";
-import {
-  Dimensions,
-  StyleSheet,
-  type TextStyle,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, StyleSheet, View, type TextStyle } from "react-native";
 import { Text } from "react-native-paper";
 
 const BANNERS = {
@@ -37,12 +30,16 @@ export default function UserHeader({ variant = "dark" }: UserHeaderProps) {
     >
       <View style={styles.content}>
         {/* <Link href="/account-settings" asChild> */}
-          {/* <TouchableOpacity> */}
-            <Image
-              source={{ uri: encodeURI(userData?.image_path ?? "") }}
-              style={styles.userImage}
-            />
-          {/* </TouchableOpacity> */}
+        {/* <Pressable style={({ pressed }) => [
+    {
+      opacity: pressed ? 0.7 : 1, 
+    }
+  ]}> */}
+        <Image
+          source={{ uri: encodeURI(userData?.image_path ?? "") }}
+          style={styles.userImage}
+        />
+        {/* </Pressable> */}
         {/* </Link> */}
         <View style={styles.textContainer}>
           <Text

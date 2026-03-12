@@ -12,7 +12,7 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -39,13 +39,19 @@ export default function Index() {
         <View style={{ position: "relative" }}>
           <UserHeader variant="light" />
           <Link style={styles.toolLink} href="/dashboard/tools" asChild>
-            <TouchableOpacity>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
               <Image
                 style={styles.toolsIcon}
                 contentFit="contain"
                 source={require("@/src/assets/icons/tools.svg")}
               />
-            </TouchableOpacity>
+            </Pressable>
           </Link>
         </View>
       }

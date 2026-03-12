@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { Href, useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Pressable } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
@@ -66,7 +66,15 @@ export default function RespondedQuotation() {
                 "MM/dd/yyyy",
               );
               return (
-                <TouchableOpacity key={quotation.id} onPress={() => {}}>
+                <Pressable
+                  key={quotation.id}
+                  onPress={() => {}}
+                  style={({ pressed }) => [
+                    {
+                      opacity: pressed ? 0.7 : 1,
+                    },
+                  ]}
+                >
                   <DataTable.Row>
                     <DataTable.Cell>
                       {quotation.reference_number}
@@ -113,7 +121,7 @@ export default function RespondedQuotation() {
                       </Menu>
                     </DataTable.Cell>
                   </DataTable.Row>
-                </TouchableOpacity>
+                </Pressable>
               );
             })}
           </DataTable>

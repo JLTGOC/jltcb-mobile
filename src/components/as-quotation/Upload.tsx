@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
 import { Button, HelperText, Portal, Text } from "react-native-paper";
 
 type Props = {
@@ -77,12 +77,17 @@ export default function Upload({
             onRemove={handleRemoveDocument}
           />
         ) : (
-          <TouchableOpacity
+          <Pressable
             onPress={() => {
               mutation.reset();
               handlePickDocument();
             }}
-            style={styles.uploadButton}
+            style={({ pressed }) => [
+              styles.uploadButton,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
           >
             <MaterialCommunityIcons
               name="file-upload-outline"
@@ -95,7 +100,7 @@ export default function Upload({
             <Text variant="bodySmall" style={[styles.uppercase, styles.link]}>
               Browse
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
         {mutation.error && (
           <HelperText type="error">

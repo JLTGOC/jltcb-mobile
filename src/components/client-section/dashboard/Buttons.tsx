@@ -1,22 +1,26 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Divider, Text } from "react-native-paper";
+import { ImageBackground } from "expo-image";
 import {
-  Truck,
-  Package2,
   FileSpreadsheet,
   NotepadTextDashed,
+  Package2,
+  Truck,
 } from "lucide-react-native";
-import { ImageBackground } from "expo-image";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Divider, Text } from "react-native-paper";
 
 export default function Buttons() {
   return (
     <View style={styles.container}>
-      <Text style={{ fontWeight: 600, fontSize: 20 }}>
-        SHIPMENT
-      </Text>
+      <Text style={{ fontWeight: 600, fontSize: 20 }}>SHIPMENT</Text>
       <Divider />
       <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <ImageBackground
             source={require("./folder.png")}
             style={styles.imageBackground}
@@ -25,8 +29,14 @@ export default function Buttons() {
             <Truck color="black" size={30} />
             <Text style={{ fontWeight: 400 }}>ONGOING</Text>
           </ImageBackground>
-        </TouchableOpacity>
-        <TouchableOpacity>
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <ImageBackground
             source={require("./folder.png")}
             style={styles.imageBackground}
@@ -35,14 +45,22 @@ export default function Buttons() {
             <Package2 size={30} color="black" />
             <Text style={{ fontWeight: 400 }}>COMPLETED</Text>
           </ImageBackground>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
-      <Text style={{fontWeight:600}} variant="titleLarge">QUOTATION</Text>
+      <Text style={{ fontWeight: 600 }} variant="titleLarge">
+        QUOTATION
+      </Text>
       <Divider />
       <View style={{ flexDirection: "row" }}>
         <Divider />
-        <TouchableOpacity>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <ImageBackground
             source={require("./folder.png")}
             style={styles.imageBackground}
@@ -51,8 +69,14 @@ export default function Buttons() {
             <NotepadTextDashed size={30} color="black" />
             <Text style={{ fontWeight: 400 }}>REQUESTED</Text>
           </ImageBackground>
-        </TouchableOpacity>
-        <TouchableOpacity>
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
           <ImageBackground
             source={require("./folder.png")}
             style={styles.imageBackground}
@@ -61,7 +85,7 @@ export default function Buttons() {
             <FileSpreadsheet size={30} color="black" />
             <Text style={{ fontWeight: 400 }}>REPSONDED</Text>
           </ImageBackground>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -71,7 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 15, // space between icons
-    margin: 10
+    margin: 10,
   },
   imageBackground: {
     width: 120,

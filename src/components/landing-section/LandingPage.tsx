@@ -1,13 +1,7 @@
 import { routes } from "@/src/constants/routes";
 import { Image, ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -27,9 +21,14 @@ export default function LandingPage() {
         </View>
 
         <View style={styles.solutions}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => router.push(routes.CUSTOMS_BROKERAGE_LANDING)}
-            style={styles.solution}
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
           >
             <Image
               style={styles.image}
@@ -39,9 +38,14 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               CUSTOMS BROKERAGE
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.solution}
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
             onPress={() => router.push(routes.UNDERCONSTRUCTION)}
           >
             <Image
@@ -52,9 +56,14 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               GLOBAL TRADE AND BUSINESS SOLUTIONS CORPORATIONS
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.solution}
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
             onPress={() => router.push(routes.UNDERCONSTRUCTION)}
           >
             <Image
@@ -65,7 +74,7 @@ export default function LandingPage() {
             <Text style={styles.solutionText} allowFontScaling={false}>
               WORLD WIDE LOGISTICS CORPORATION
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
 

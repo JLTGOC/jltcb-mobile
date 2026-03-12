@@ -2,7 +2,7 @@ import { routes } from "@/src/constants/routes";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GuestHeader() {
@@ -15,13 +15,19 @@ export default function GuestHeader() {
           contentFit="contain"
         />
         <Link href={routes.LOG_IN} asChild style={styles.profileContainer}>
-          <TouchableOpacity>
+          <Pressable
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
             <Image
               source={require("../../../src/assets/images/profile.png")}
               style={styles.profileImage}
               contentFit="contain"
             />
-          </TouchableOpacity>
+          </Pressable>
         </Link>
       </SafeAreaView>
       <LinearGradient

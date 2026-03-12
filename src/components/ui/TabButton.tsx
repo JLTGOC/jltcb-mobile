@@ -18,7 +18,14 @@ export default function TabButton({
   ...props
 }: Props & TabTriggerSlotProps) {
   return (
-    <Pressable {...props}>
+    <Pressable
+      style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}
+      {...props}
+    >
       {icon?.({
         focused: !!isFocused,
         color: isFocused

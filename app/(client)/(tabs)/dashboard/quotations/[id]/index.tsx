@@ -9,7 +9,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 
@@ -51,10 +51,15 @@ export default function QuoteDetails() {
 
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (
-              <TouchableOpacity
+              <Pressable
                 key={i}
-                style={styles.button}
                 onPress={() => setActive(i)}
+                style={({ pressed }) => [
+                  styles.button,
+                  {
+                    opacity: pressed ? 0.7 : 1,
+                  },
+                ]}
               >
                 <Text
                   style={[
@@ -66,8 +71,8 @@ export default function QuoteDetails() {
                 >
                   {t}
                 </Text>
-                {active === i && <View style={styles.underline}/>}
-              </TouchableOpacity>
+                {active === i && <View style={styles.underline} />}
+              </Pressable>
             ))}
           </View>
 
