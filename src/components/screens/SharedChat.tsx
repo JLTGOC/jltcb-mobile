@@ -8,7 +8,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { type ReactElement, useCallback, useMemo, useRef } from "react";
+import { type ReactElement, useCallback, useRef } from "react";
 import {
 	Dimensions,
 	FlatList,
@@ -23,6 +23,10 @@ import ChatMessageInput from "@/src/components/chats-section/ChatMessageInput";
 import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard";
 import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import {
+	ChatPendingIdsProvider,
+	useChatPendingIdsContext,
+} from "@/src/contexts/ChatPendingIdsContext";
 import { useAuth } from "@/src/hooks/useAuth";
 import { pusher } from "@/src/lib/pusher";
 import { chatKeys } from "@/src/query-key-factories/chats";
@@ -47,12 +51,21 @@ type Props = {
 };
 
 export default function SharedChat({ variant }: Props) {
+	return (
+		<ChatPendingIdsProvider>
+			<SharedChatContent variant={variant} />
+		</ChatPendingIdsProvider>
+	);
+}
+
+function SharedChatContent({ variant }: Props) {
 	const { id, group } = useLocalSearchParams<{ id: string; group?: string }>();
 	const { userData } = useAuth();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const flatListRef = useRef<FlatList>(null);
 	const hasMarkedRead = useRef(false);
+	const { pendingClientIds } = useChatPendingIdsContext();
 
 	const {
 		data,
@@ -67,10 +80,7 @@ export default function SharedChat({ variant }: Props) {
 	});
 
 	// Flatten all pages into a single messages array
-	const messages = useMemo(
-		() => data?.pages.flatMap((page) => page.data.messages) ?? [],
-		[data],
-	);
+	const messages = data?.pages.flatMap((page) => page.data.messages) ?? [];
 
 	useFocusEffect(
 		useCallback(() => {
@@ -243,7 +253,7 @@ export default function SharedChat({ variant }: Props) {
 						</Text>
 					)}
 					{message}
-					{item.client_id && (
+					{item.client_id && pendingClientIds.has(item.client_id) && (
 						<Text
 							variant="bodySmall"
 							style={{ alignSelf: "flex-end", marginTop: 2 }}
