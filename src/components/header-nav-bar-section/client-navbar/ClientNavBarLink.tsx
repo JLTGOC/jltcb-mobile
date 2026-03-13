@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 type ClientHeaderMenuLinkProps = {
-	style: StyleProp<ViewStyle>;
+	style?: StyleProp<ViewStyle>;
 };
 
 export default function ClientHeaderMenuLink({

@@ -1,11 +1,17 @@
-import Index from "@/src/components/header-nav-bar-section";
 import { Stack } from "expo-router";
 
 export default function ASLayout() {
-  return (
-    <>
-      <Index />
-      <Stack screenOptions={{ headerShown: false }} />;
-    </>
-  );
+	return (
+		<Stack screenOptions={{ headerShown: false }}>
+			<Stack.Screen name="(tabs)" />
+			<Stack.Screen
+				name="image-viewer"
+				options={{
+					presentation: "transparentModal",
+					animation: "fade",
+					headerShown: false,
+				}}
+			/>
+		</Stack>
+	);
 }
