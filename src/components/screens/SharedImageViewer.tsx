@@ -100,16 +100,10 @@ export default function SharedImageViewer() {
 		setSaveStatus("idle");
 		try {
 			const destination = new Directory(Paths.cache, "images");
-			destination.create({ idempotent: true });
-
-			const cleanUrl = url.split("?")[0];
-			const inferredName = cleanUrl.substring(cleanUrl.lastIndexOf("/") + 1);
-			const name = fileName ?? inferredName ?? "image";
-
-			const outputFile = new File(destination, name);
-			if (outputFile.exists) {
-				outputFile.delete();
+			if (destination.exists) {
+				destination.delete();
 			}
+			destination.create();
 
 			const downloaded = await File.downloadFileAsync(url, destination);
 
