@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import {
@@ -67,9 +67,7 @@ export default function ClientTabsLayout() {
 			<Tabs.Screen
 				name="home"
 				options={{
-					tabBarIcon: (props) => (
-						<MaterialCommunityIcons name="book-open-outline" {...props} />
-					),
+					tabBarIcon: (props) => <MaterialIcons name="list-alt" {...props} />,
 				}}
 			/>
 			<Tabs.Screen
@@ -89,7 +87,7 @@ export default function ClientTabsLayout() {
 				}}
 				options={{
 					tabBarIcon: (props) => (
-						<MaterialCommunityIcons name="message" {...props} />
+						<MaterialCommunityIcons name="forum-outline" {...props} />
 					),
 				}}
 			/>

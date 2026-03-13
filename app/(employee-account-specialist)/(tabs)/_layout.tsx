@@ -68,7 +68,7 @@ export default function ASTabsLayout() {
 				options={{
 					tabBarItemStyle: { marginLeft: "auto", maxWidth: "25%" },
 					tabBarIcon: (props) => (
-						<MaterialCommunityIcons name="message" {...props} />
+						<MaterialCommunityIcons name="forum-outline" {...props} />
 					),
 				}}
 			/>
