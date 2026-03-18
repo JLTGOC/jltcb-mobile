@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Building2 } from "lucide-react-native";
-import { Alert, Linking, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   Button,
@@ -11,6 +11,7 @@ import {
 
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-type";
+import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import { useRouter } from "expo-router";
 
 type Props = {
@@ -28,21 +29,14 @@ export default function Details({ quotationId }: Props) {
 
   console.log("details.tsx", data);
 
-  const handleOnPress = async (status: string, url?: string) => {
+  const handleActionPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
       router.push({
         pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
-      const canOpen = await Linking.canOpenURL(url);
-
-      if (!canOpen) {
-        Alert.alert("Unable to open file", "Invalid file URL.");
-        return;
-      }
-
-      await Linking.openURL(url);
+      await handleFileOpen(url);
     }
   };
 
@@ -143,7 +137,7 @@ export default function Details({ quotationId }: Props) {
           textColor="white"
           style={{ borderRadius: 4 }}
           onPress={() => {
-            handleOnPress(data?.status);
+            handleActionPress(data?.status);
           }}
         >
           EDIT
@@ -156,7 +150,10 @@ export default function Details({ quotationId }: Props) {
           textColor="white"
           style={{ borderRadius: 4 }}
           onPress={() => {
-            handleOnPress(data?.status, data?.quotation_file?.[0]?.file_url);
+            handleActionPress(
+              data?.status,
+              data?.quotation_file?.[0]?.file_url,
+            );
           }}
         >
           VIEW QUOTATION

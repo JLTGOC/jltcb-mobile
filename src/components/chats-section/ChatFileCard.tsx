@@ -1,6 +1,6 @@
 import { useAuth } from "@/src/hooks/useAuth";
 import type { FileMessage } from "@/src/types/chats";
-import * as Linking from "expo-linking";
+import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import { StyleSheet, View } from "react-native";
 import { Avatar, Card, Text } from "react-native-paper";
 
@@ -13,7 +13,7 @@ export default function ChatFileCard({ file }: Props) {
   const isUserMessage = userData?.id === file.sender.id;
 
   const handlePress = async () => {
-    await Linking.openURL(file.file_url);
+    await handleFileOpen(file.file_url);
   };
 
   return (
