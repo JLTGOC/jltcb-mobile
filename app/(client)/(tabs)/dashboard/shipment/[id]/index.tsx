@@ -42,7 +42,7 @@ export default function ShipmentDetails() {
       case 1:
         return (
           <View style={styles.placeholder}>
-            <Documents />
+            <Documents shipment={shipmentId} />
           </View>
         );
       case 2:
