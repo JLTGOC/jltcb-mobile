@@ -7,9 +7,9 @@ import { useState } from "react";
 import {
   Dimensions,
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
-  Pressable,
   View,
 } from "react-native";
 
@@ -45,8 +45,9 @@ export default function QuoteDetails() {
     <FlatList
       data={[0]}
       keyExtractor={(item) => item.toString()}
+      contentContainerStyle={styles.listContent}
       renderItem={({}) => (
-        <>
+        <View style={styles.screenContent}>
           <BannerHeader title={title} variant="dark" />
 
           <View style={styles.buttonContainer}>
@@ -77,13 +78,19 @@ export default function QuoteDetails() {
           </View>
 
           {renderTabContent()}
-        </>
+        </View>
       )}
     />
   );
 }
 
 const styles = StyleSheet.create({
+  listContent: {
+    flexGrow: 1,
+  },
+  screenContent: {
+    flex: 1,
+  },
   buttonContainer: {
     flexDirection: "row",
     borderBottomWidth: 3,
@@ -112,6 +119,7 @@ const styles = StyleSheet.create({
     bottom: -3,
   },
   placeholder: {
+    flex: 1,
     padding: 20,
     alignItems: "center",
   },

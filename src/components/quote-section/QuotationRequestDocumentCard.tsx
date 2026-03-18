@@ -1,81 +1,102 @@
+import type { Document } from "@/src/types/quotations";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IconButton, Menu, Text } from "react-native-paper";
-import type { Document } from "@/src/types/quotations";
-
-const MENUS = [
-	{
-		leadingIcon: "eye",
-		title: "View",
-		onPress: () => {},
-	},
-	{
-		leadingIcon: "printer",
-		title: "Print",
-		onPress: () => {},
-	},
-];
+import { handleFileOpen } from "@/src/utils/handleFileOpen";
 
 interface QuotationRequestDocumentCardProps {
-	document: Partial<Document> & { file_name: string };
-	showRemoveButton?: boolean;
-	onRemove?: () => void;
+  document: Partial<Document> & { file_name: string; file_url?: string };
+  showRemoveButton?: boolean;
+  onRemove?: () => void;
+  onViewPress?: (url?: string) => void | Promise<void>;
 }
 
 export default function QuotationRequestDocumentCard({
-	document,
-	showRemoveButton,
-	onRemove,
+  document,
+  showRemoveButton,
+  onRemove,
+  onViewPress,
 }: QuotationRequestDocumentCardProps) {
-	const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-	return (
-		<View style={styles.container}>
-			<View style={styles.icon}></View>
-			<View style={styles.textContainer}>
-				<Text style={styles.title}>{document.file_name}</Text>
-				{/*<Text>{document.date}</Text>*/}
-			</View>
-			{showRemoveButton ? (
-				<IconButton icon="close" size={20} onPress={onRemove} />
-			) : (
-				<Menu
-					anchor={
-						<IconButton
-							icon="dots-vertical"
-							size={20}
-							onPress={() => setVisible(true)}
-						/>
-					}
-					visible={visible}
-					onDismiss={() => setVisible(false)}
-					anchorPosition="bottom"
-				>
-					{MENUS.map((menu) => (
-						<Menu.Item
-							key={menu.title}
-							title={menu.title}
-							onPress={menu.onPress}
-							leadingIcon={menu.leadingIcon}
-						/>
-					))}
-				</Menu>
-			)}
-		</View>
-	);
+  const handleViewPress = async () => {
+    setVisible(false);
+
+    if (onViewPress) {
+      await onViewPress(document.file_url);
+      return;
+    }
+
+    await handleFileOpen(document.file_url);
+  };
+
+  const menus = [
+    {
+      leadingIcon: "pencil",
+      title: "Rename",
+      onPress: () => setVisible(false),
+    },
+    {
+      leadingIcon: "eye",
+      title: "View",
+      onPress: handleViewPress,
+      disabled: !document.file_url,
+    },
+    {
+      leadingIcon: "printer",
+      title: "Print",
+      onPress: () => setVisible(false),
+    },
+  ];
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.icon}></View>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{document.file_name}</Text>
+        {/*<Text>{document.date}</Text>*/}
+      </View>
+      {showRemoveButton ? (
+        <IconButton icon="close" size={20} onPress={onRemove} />
+      ) : (
+        <Menu
+          anchor={
+            <IconButton
+              icon="dots-vertical"
+              size={20}
+              onPress={() => setVisible(true)}
+            />
+          }
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          anchorPosition="bottom"
+        >
+          {menus.map((menu) => (
+            <Menu.Item
+              key={menu.title}
+              title={menu.title}
+              onPress={menu.onPress}
+              leadingIcon={menu.leadingIcon}
+              disabled={menu.disabled}
+            />
+          ))}
+        </Menu>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#fff",
-	},
-	icon: {
-		width: 50,
-	},
-	textContainer: { flex: 1 },
-	title: {
-		color: "black",
-	},
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  icon: {
+    width: 50,
+  },
+  textContainer: { flex: 1 },
+  title: {
+    color: "black",
+  },
 });
