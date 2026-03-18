@@ -1,4 +1,3 @@
-import { reelQueryOptions } from "@/src/query-options/reels/reelQueryOptions";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -11,65 +10,70 @@ import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function ReelsFullScreen() {
-  const { id, placeholder } = useLocalSearchParams<{
-    id: string;
-    placeholder: string;
-  }>();
-  const { data, isPending } = useQuery(reelQueryOptions(id));
+	const { id, placeholder } = useLocalSearchParams<{
+		id: string;
+		placeholder: string;
+	}>();
+	const { data, isPending } = useQuery(reelQueryOptions(id));
 
-  const screenWidth = Dimensions.get("window").width;
-  const screenHeight = Dimensions.get("window").height;
+	const screenWidth = Dimensions.get("window").width;
+	const screenHeight = Dimensions.get("window").height;
 
-  const router = useRouter();
+	const router = useRouter();
 
-  const player = useVideoPlayer(
-    { uri: data?.data.video_path, useCaching: true },
-    (player) => {
-      player.loop = true;
-      player.play();
-    },
-  );
+	const player = useVideoPlayer(
+		{ uri: data?.data.video_path, useCaching: true },
+		(player) => {
+			player.loop = true;
+			player.play();
+		},
+	);
 
-  const { isPlaying } = useEvent(player, "playingChange", {
-    isPlaying: player.playing,
-  });
-  const { status, error } = useEvent(player, "statusChange", {
-    status: player.status,
-  });
+	const { isPlaying } = useEvent(player, "playingChange", {
+		isPlaying: player.playing,
+	});
+	const { status, error } = useEvent(player, "statusChange", {
+		status: player.status,
+	});
 
-  const togglePlay = () => (isPlaying ? player.pause() : player.play());
+	const togglePlay = () => (isPlaying ? player.pause() : player.play());
 
-  const isFocused = useIsFocused();
+	const isFocused = useIsFocused();
 
-  useEffect(() => {
-    if (!isFocused) {
-      player.pause();
-    } else {
-      player.play();
-    }
-  }, [isFocused, player]);
+	useEffect(() => {
+		if (!isFocused) {
+			player.pause();
+		} else {
+			player.play();
+		}
+	}, [isFocused, player]);
 
-  return (
-    <>
-      <VideoView
-        key={id}
-        player={player}
-        style={[
-          styles.videoSize,
-          { width: screenWidth, height: screenHeight * 0.81 },
-        ]}
-        contentFit="cover"
-        nativeControls={false}
-      />
+	return (
+		<>
+			<VideoView
+				key={id}
+				player={player}
+				style={[
+					styles.videoSize,
+					{ width: screenWidth, height: screenHeight * 0.81 },
+				]}
+				contentFit="cover"
+				nativeControls={false}
+			/>
 
-      {status !== "readyToPlay" && !isPending && (
-        <Image
-          source={{ uri: placeholder }}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-          transition={200}
-        />
-      )}
+			{status !== "readyToPlay" && !isPending && (
+				<Image
+					source={{ uri: placeholder }}
+					style={StyleSheet.absoluteFill}
+					contentFit="cover"
+					transition={200}
+				/>
+			)}
+
+			<View style={styles.viewsContainer}>
+				<Ionicons name="eye" color="white" size={24} />
+				<Text style={styles.viewCountText}>{data?.data.view_count}</Text>
+			</View>
 
       {/* Overlay Play/Pause Button */}
       <Pressable
@@ -106,27 +110,40 @@ export default function ReelsFullScreen() {
 }
 
 const styles = StyleSheet.create({
-  videoSize: {
-    marginRight: 5,
-    borderRadius: 5,
-    overflow: "hidden",
-  },
-  buttonOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffffff2d",
-  },
-  headerOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    paddingHorizontal: 10,
-    backgroundColor: "#00000080",
-  },
+	videoSize: {
+		marginRight: 5,
+		borderRadius: 5,
+		overflow: "hidden",
+	},
+	viewsContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		left: 12,
+		bottom: 12,
+		gap: 5,
+		position: "absolute",
+	},
+	viewCountText: {
+		color: "white",
+		fontWeight: "bold",
+		fontSize: 18,
+	},
+	buttonOverlay: {
+		...StyleSheet.absoluteFillObject,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#ffffff2d",
+	},
+	headerOverlay: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		height: 50,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "flex-end",
+		paddingHorizontal: 10,
+		backgroundColor: "#00000080",
+	},
 });
