@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IconButton, Menu, Text } from "react-native-paper";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
+import * as Print from "expo-print";
 
 interface QuotationRequestDocumentCardProps {
   document: Partial<Document> & { file_name: string; file_url?: string };
@@ -30,6 +31,17 @@ export default function QuotationRequestDocumentCard({
     await handleFileOpen(document.file_url);
   };
 
+  const handlePrintPress = async () => {
+    try {
+      await Print.printAsync({
+        uri: document.file_url,
+      });
+    } catch (error) {
+      console.error("Print error:", error);
+    }
+    setVisible(false);
+  };
+
   const menus = [
     {
       leadingIcon: "pencil",
@@ -45,7 +57,8 @@ export default function QuotationRequestDocumentCard({
     {
       leadingIcon: "printer",
       title: "Print",
-      onPress: () => setVisible(false),
+      onPress: handlePrintPress,
+      disabled: !document.file_url,
     },
   ];
 
