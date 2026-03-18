@@ -113,11 +113,9 @@ export default function CreateUpdateQuote() {
 
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
-      if (hasValidQuotationId) {
+  
         return await updateClientQuote(quotationId, formData);
-      } else {
-        return await postClientQuote(formData);
-      }
+     
     },
     onSuccess: async () => {
       if (hasValidQuotationId) {
