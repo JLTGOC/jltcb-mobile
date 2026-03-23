@@ -1,9 +1,15 @@
+import ASDropdown from "@/src/components/lead-as-section/ASDropdown";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import type { Quotation } from "@/src/types/quotations";
+import { useAuth } from "@/src/hooks/useAuth";
+import { updateAsMutationOptions } from "@/src/mutation-options/asLead-quotations/updateAsMutationOptions";
+import { asQueryOptions } from "@/src/query-options/users/asQueryOptions";
+import type { Quotation, UpdateAsArgs } from "@/src/types/quotations";
+import { showToast } from "@/src/utils/showToast";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ScrollView, StyleSheet, Pressable } from "react-native";
-import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { DataTable, Text } from "react-native-paper";
 
 const TABLE_HEADERS = [
@@ -21,14 +27,49 @@ const TABLE_HEADERS = [
   },
 ];
 
-const AS_USERS = ["Zoie Conroy", "Carrie Ryan", "Henry Bruen", "Ona Wilderman"];
-
 export default function RequestList() {
+  const { role } = useAuth();
   const router = useRouter();
   const { quotations: quotationsString, clientName } = useLocalSearchParams<{
     quotations: string;
     clientName: string;
   }>();
+  const isLeadAS = role === "Lead Account Specialist";
+  const { data: asUsers, isPending } = useQuery({
+    ...asQueryOptions,
+    select: (data) => {
+      const formattedNames = data.data.map((user) => ({
+        id: String(user.id),
+        title: user.full_name.split(" ")[0],
+      }));
+      return { ...data, data: formattedNames };
+    },
+    enabled: isLeadAS,
+  });
+  const { mutateAsync } = useMutation(updateAsMutationOptions);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
+
+  const handleChangeAs = async (data: UpdateAsArgs) => {
+    setUpdatingId(data.quotationId);
+    try {
+      await mutateAsync(data);
+      showToast(
+        `Changed AS to ${asUsers?.data.find((user) => Number(user.id) === data.asId)?.title}`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const navigateToQuotation = (quotationId: number, clientName: string) => {
+    router.push({
+      pathname: "/dashboard/request-quotation/[id]",
+      params: { id: quotationId, clientName },
+    });
+  };
+
   const quotations: Quotation[] = quotationsString
     ? JSON.parse(quotationsString)
     : [];
@@ -58,10 +99,7 @@ export default function RequestList() {
             <Pressable
               key={quotation.id}
               onPress={() => {
-                router.push({
-                  pathname: "/dashboard/request-quotation/[id]",
-                  params: { id: quotation.id, clientName },
-                });
+                navigateToQuotation(quotation.id, clientName);
               }}
               style={({ pressed }) => [
                 {
@@ -71,9 +109,7 @@ export default function RequestList() {
             >
               <DataTable.Row>
                 <DataTable.Cell style={{ flex: 2 }}>
-                  <Pressable>
-                    <Text>{formattedDate}</Text>
-                  </Pressable>
+                  {formattedDate}
                 </DataTable.Cell>
                 <DataTable.Cell
                   textStyle={[styles.uppercase, { flex: 1 }]}
@@ -81,33 +117,25 @@ export default function RequestList() {
                 >
                   {quotation.commodity}
                 </DataTable.Cell>
-                <DataTable.Cell onPress={() => {}} style={{ flex: 4 }}>
-                  <AutocompleteDropdown
-                    initialValue={String(AS_USERS.length + 1)}
-                    showClear={false}
-                    containerStyle={{ flex: 1, minWidth: 0 }}
-                    inputContainerStyle={{
-                      backgroundColor: "white",
-                    }}
-                    textInputProps={{
-                      style: {
-                        color: "black",
-                        paddingLeft: 4,
-                      },
-                    }}
-                    suggestionsListContainerStyle={{ backgroundColor: "white" }}
-                    suggestionsListTextStyle={{ color: "black" }}
-                    dataSet={[
-                      ...AS_USERS.map((user, i) => ({
-                        id: String(i + 1),
-                        title: user.split(" ")[0],
-                      })),
-                      {
-                        id: String(AS_USERS.length + 1),
-                        title: quotation.person_in_charge.split(" ")[0],
-                      },
-                    ]}
-                  />
+                <DataTable.Cell
+                  onPress={() => {
+                    if (!isLeadAS) {
+                      navigateToQuotation(quotation.id, clientName);
+                    }
+                  }}
+                  style={{ flex: 4 }}
+                >
+                  {isLeadAS ? (
+                    <ASDropdown
+                      quotationId={quotation.id}
+                      personInChargeName={quotation.person_in_charge}
+                      asUsers={asUsers?.data}
+                      loading={isPending || updatingId === quotation.id}
+                      handleChangeAs={handleChangeAs}
+                    />
+                  ) : (
+                    <Text>{quotation.person_in_charge}</Text>
+                  )}
                 </DataTable.Cell>
               </DataTable.Row>
             </Pressable>
