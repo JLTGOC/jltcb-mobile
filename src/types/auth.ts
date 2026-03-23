@@ -1,5 +1,6 @@
 export type UserRole =
 	| "Client"
+	| "Lead Account Specialist"
 	| "Account Specialist"
 	| "Operations"
 	| "Marketing"

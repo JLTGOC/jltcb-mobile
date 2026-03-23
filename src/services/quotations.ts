@@ -47,3 +47,6 @@ export const updateFileName = (
 	return apiPut(`/quotations/${quotationId}/files/${documentId}`, body);
 };
  
+export const updateAsQuotation = async (quotationId: number, asId: number) => {
+	return apiPost(`quotations/${quotationId}`, { as_id: asId });
+};
