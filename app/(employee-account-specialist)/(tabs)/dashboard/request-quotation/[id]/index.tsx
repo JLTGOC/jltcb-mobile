@@ -2,8 +2,9 @@ import QuotationRequestDetailCard from "@/src/components/quote-section/Quotation
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
+import { updateFileName } from "@/src/services/quotations";
 import type { Document, QuotationDetailsSection } from "@/src/types/quotations";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
 import { Building, Package } from "lucide-react-native";
 import { useState } from "react";
@@ -26,7 +27,31 @@ export default function Quotation() {
     id: string;
     clientName: string;
   }>();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<TabType>(TABS[0]);
+
+  const renameFileMutation = useMutation({
+    mutationFn: async ({
+      documentId,
+      fileName,
+    }: {
+      documentId: number;
+      fileName: string;
+    }) => {
+      const quotationId = Number(id);
+
+      if (!quotationId || Number.isNaN(quotationId)) {
+        throw new Error("Missing quotation id.");
+      }
+
+      return updateFileName(quotationId, documentId, fileName);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: quotationQueryOptions(id).queryKey,
+      });
+    },
+  });
 
   const { data, isPending, error, isRefetching, refetch } = useQuery({
     ...quotationQueryOptions(id),
@@ -106,7 +131,15 @@ export default function Quotation() {
 
     return (
       <View style={{ paddingHorizontal: 20 }}>
-        <QuotationRequestDocumentCard document={item as Document} />
+        <QuotationRequestDocumentCard
+          document={item as Document}
+          onRename={(newFileName) =>
+            renameFileMutation.mutateAsync({
+              documentId: (item as Document).id,
+              fileName: newFileName,
+            })
+          }
+        />
       </View>
     );
   };

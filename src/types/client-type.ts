@@ -1,6 +1,7 @@
 // Quotation Types
 
 export type QuoteForm = {
+  id: (string | number)[];
   account_specialist: string;
   removed_documents?: (string | number)[];
   reference_number?: string;
@@ -61,6 +62,7 @@ export type Quotationfile = {
   id: number;
   file_name: string;
   file_url: string;
+  file_type: string;
 };
 
 export type ClientFile = {
