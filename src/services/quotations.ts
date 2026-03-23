@@ -5,7 +5,7 @@ import type {
 	QuotationDetails,
 	QuotationFilter,
 } from "../types/quotations";
-import { apiGet, apiPost } from "./axiosInstance";
+import { apiGet, apiPost, apiPut } from "./axiosInstance";
 
 export const fetchQuotations = <T extends "REQUESTED" | "RESPONDED">({
 	filter,
@@ -36,3 +36,14 @@ export const uploadQuotationFile = (
 		},
 	});
 };
+
+export const updateFileName = (
+	quotationId: number,
+	documentId: number,
+	fileName: string,
+) => {
+	const body = { file_name: fileName };
+
+	return apiPut(`/quotations/${quotationId}/files/${documentId}`, body);
+};
+ 

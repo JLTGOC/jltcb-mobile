@@ -1,7 +1,15 @@
 import type { Document } from "@/src/types/quotations";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Menu, Text } from "react-native-paper";
+import {
+  Button,
+  Dialog,
+  IconButton,
+  Menu,
+  Portal,
+  Text,
+  TextInput,
+} from "react-native-paper";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import * as Print from "expo-print";
 
@@ -10,6 +18,7 @@ interface QuotationRequestDocumentCardProps {
   showRemoveButton?: boolean;
   onRemove?: () => void;
   onViewPress?: (url?: string) => void | Promise<void>;
+  onRename?: (newFileName: string) => void | Promise<unknown>;
 }
 
 export default function QuotationRequestDocumentCard({
@@ -17,8 +26,13 @@ export default function QuotationRequestDocumentCard({
   showRemoveButton,
   onRemove,
   onViewPress,
+  onRename,
 }: QuotationRequestDocumentCardProps) {
   const [visible, setVisible] = useState(false);
+  const [renameVisible, setRenameVisible] = useState(false);
+  const [renameFileName, setRenameFileName] = useState("");
+  const [renameError, setRenameError] = useState<string | null>(null);
+  const [isRenaming, setIsRenaming] = useState(false);
 
   const handleViewPress = async () => {
     setVisible(false);
@@ -42,11 +56,46 @@ export default function QuotationRequestDocumentCard({
     setVisible(false);
   };
 
+  const openRenameDialog = () => {
+    setVisible(false);
+    setRenameError(null);
+    setRenameFileName("");
+    setRenameVisible(true);
+  };
+
+  const handleRenamePress = async () => {
+    const trimmedFileName = renameFileName.trim();
+
+    if (!trimmedFileName) {
+      setRenameError("File name is required.");
+      return;
+    }
+
+    if (!onRename) {
+      setRenameVisible(false);
+      return;
+    }
+
+    try {
+      setIsRenaming(true);
+      await onRename(trimmedFileName);
+      setRenameVisible(false);
+      setRenameError(null);
+      setRenameFileName("");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to rename file.";
+      setRenameError(message);
+    } finally {
+      setIsRenaming(false);
+    }
+  };
+
   const menus = [
     {
       leadingIcon: "pencil",
       title: "Rename",
-      onPress: () => setVisible(false),
+      onPress: openRenameDialog,
     },
     {
       leadingIcon: "eye",
@@ -95,6 +144,51 @@ export default function QuotationRequestDocumentCard({
           ))}
         </Menu>
       )}
+
+      <Portal>
+        <Dialog
+          visible={renameVisible}
+          onDismiss={() => {
+            if (!isRenaming) {
+              setRenameVisible(false);
+              setRenameError(null);
+              setRenameFileName("");
+            }
+          }}
+        >
+          <Dialog.Title>Rename File</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              mode="outlined"
+              label={document.file_name}
+              value={renameFileName}
+              onChangeText={setRenameFileName}
+              autoCapitalize="none"
+              autoCorrect={false}
+              error={!!renameError}
+              disabled={isRenaming}
+            />
+            {renameError ? (
+              <Text style={styles.renameErrorText}>{renameError}</Text>
+            ) : null}
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                setRenameVisible(false);
+                setRenameError(null);
+                setRenameFileName("");
+              }}
+              disabled={isRenaming}
+            >
+              Cancel
+            </Button>
+            <Button onPress={handleRenamePress} loading={isRenaming}>
+              Save
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }
@@ -111,5 +205,9 @@ const styles = StyleSheet.create({
   textContainer: { flex: 1 },
   title: {
     color: "black",
+  },
+  renameErrorText: {
+    marginTop: 8,
+    color: "#B00020",
   },
 });

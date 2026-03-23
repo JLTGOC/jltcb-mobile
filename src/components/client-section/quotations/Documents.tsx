@@ -1,5 +1,6 @@
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import { fetchClientQuote, updateClientQuote } from "@/src/services/clientQuotation";
+import { updateFileName } from "@/src/services/quotations";
 import { ClientFile, QuoteForm } from "@/src/types/client-type";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -44,6 +45,35 @@ export default function Details({ quotationId }: Props) {
         mutationError instanceof Error
           ? mutationError.message
           : "Failed to upload document.";
+      setUploadError(message);
+    },
+  });
+
+  const renameDocumentMutation = useMutation({
+    mutationFn: async ({
+      documentId,
+      fileName,
+    }: {
+      documentId: number;
+      fileName: string;
+    }) => {
+      const quoteId = Number(quotationId);
+
+      if (!quoteId) {
+        throw new Error("Missing quotation id.");
+      }
+
+      return updateFileName(quoteId, documentId, fileName);
+    },
+    onSuccess: async () => {
+      setUploadError(null);
+      await queryClient.invalidateQueries({ queryKey: [quotationId] });
+    },
+    onError: (mutationError: unknown) => {
+      const message =
+        mutationError instanceof Error
+          ? mutationError.message
+          : "Failed to rename document.";
       setUploadError(message);
     },
   });
@@ -110,6 +140,12 @@ export default function Details({ quotationId }: Props) {
                   ...files,
                   file_name: decodeURIComponent(files.file_name),
                 }}
+                onRename={(newFileName) =>
+                  renameDocumentMutation.mutateAsync({
+                    documentId: files.id,
+                    fileName: newFileName,
+                  })
+                }
               />
             </Pressable>
           ))
