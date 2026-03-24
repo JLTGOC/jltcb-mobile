@@ -30,11 +30,11 @@ export default function OnGoing() {
     string[],
     string
   >({
-    queryKey: ["shipments", "ONGOING", debouncedSearch],
+    queryKey: ["shipments", "DELIVERED", debouncedSearch],
     queryFn: ({ pageParam }) => 
       fetchShipments({ 
         search: debouncedSearch, 
-        status: "ONGOING", 
+        status: "DELIVERED", 
         cursor: pageParam || undefined,
       }),
     initialPageParam: "",
@@ -47,6 +47,8 @@ export default function OnGoing() {
     [data],
   );
 
+  console.log(data?.pages[1]);
+
   return (
     <View
       style={{
@@ -55,7 +57,7 @@ export default function OnGoing() {
         justifyContent: "center",
       }}
     >
-      <BannerHeader title={"OnGoing Shipments"} variant="dark" />
+      <BannerHeader title={"Completed Shipments"} variant="dark" />
       <Search search={search} setSearch={setSearch} />
       {isLoading ? (
         <ActivityIndicator style={{ marginTop: 20 }} />
@@ -87,7 +89,7 @@ export default function OnGoing() {
             fetchNextPage();
           }
         }}
-        onEndReachedThreshold={0.5} // Trigger fetch when halfway through the last item
+        onEndReachedThreshold={0.5}
         ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={{ marginVertical: 20 }} />
