@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Crypto from "expo-crypto";
 import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import type { TextInputProps } from "react-native-paper";
 import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
 import {
@@ -33,55 +33,39 @@ export default function ChatMessageInput({ style, ...props }: Props) {
 		reset();
 	});
 
-  return (
-    <View style={styles.messageInputContainer}>
-      <View style={styles.uploadSection}>
-        <TouchableOpacity onPress={onSelectFile}>
-          <Ionicons
-            name="attach"
-            style={styles.fileIcon}
-            color="gray"
-            size={30}
-          />
-        </TouchableOpacity>
-        <ChatImagePicker />
-      </View>
+	return (
+		<View style={styles.messageInputContainer}>
+			<View style={styles.uploadSection}>
+				<ChatFilePicker />
+				<ChatImagePicker />
+			</View>
 
-      <View style={styles.dividerContainer}>
-        <View style={styles.divider} />
-      </View>
-      <Controller
-        name="content"
-        control={control}
-        render={({ field: { onBlur, onChange, value } }) => (
-          <>
-            <TextInput
-              placeholder="Type something"
-              placeholderTextColor="#9F9C9C"
-              style={[styles.messageInput, style]}
-              multiline
-              numberOfLines={6}
-              onBlur={onBlur}
-              value={value}
-              onChangeText={onChange}
-              {...props}
-            />
-            <TouchableOpacity
-              style={{ opacity: !value ? 0.3 : undefined }}
-              disabled={!value}
-              onPress={onSendMessage}
-            >
-              <MaterialCommunityIcons
-                name="send-variant-outline"
-                size={32}
-                color="#0000f5"
-              />
-            </TouchableOpacity>
-          </>
-        )}
-      />
-    </View>
-  );
+			<View style={styles.dividerContainer}>
+				<View style={styles.divider} />
+			</View>
+
+			<Controller
+				name="content"
+				control={control}
+				render={({ field: { onBlur, onChange, value } }) => (
+					<>
+						<TextInput
+							placeholder="Type something"
+							placeholderTextColor="#9F9C9C"
+							style={[styles.messageInput, style]}
+							multiline
+							numberOfLines={6}
+							onBlur={onBlur}
+							value={value}
+							onChangeText={onChange}
+							{...props}
+						/>
+						<ChatSendButton onPress={onSendMessage} disabled={!value} />
+					</>
+				)}
+			/>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
