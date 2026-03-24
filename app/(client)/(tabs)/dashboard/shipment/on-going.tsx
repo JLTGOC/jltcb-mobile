@@ -42,7 +42,7 @@ export default function OnGoing() {
     retry: false,
   });
 
-console.log(data?.pageParams)
+console.log(data?.pages)
 
   const allShipments = useMemo(
     () => data?.pages.flatMap((page) => page.shipments ?? []) ?? [],
@@ -89,7 +89,7 @@ console.log(data?.pageParams)
             fetchNextPage();
           }
         }}
-        onEndReachedThreshold={0.5} // Trigger fetch when halfway through the last item
+        onEndReachedThreshold={0.5}
         ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={{ marginVertical: 20 }} />
