@@ -112,7 +112,7 @@ export default function SharedImageViewer() {
 			const needsPermission =
 				Platform.OS === "ios" || Number(Platform.Version) < 33;
 			if (needsPermission) {
-				const { status } = await MediaLibrary.requestPermissionsAsync(false);
+				const { status } = await MediaLibrary.requestPermissionsAsync(true);
 				if (status !== "granted") {
 					setSaveStatus("error");
 					return;
