@@ -1,6 +1,10 @@
 import { ShipmentData, ShipmentDetails } from "../types/shipment-type";
 import { apiGet, apiPost } from "./axiosInstance";
 
+export type ShipmentListPage = ShipmentData & {
+  message?: string;
+};
+
 // Accepeted Quotation
 export async function acceptQuotation(
   reference_id: string,
