@@ -1,9 +1,9 @@
 import type { DocumentPickerAsset } from "expo-document-picker";
 import type {
-	ASRequestedQuotation,
-	ASRespondedQuotation,
-	QuotationDetails,
-	QuotationFilter,
+  ASRequestedQuotation,
+  ASRespondedQuotation,
+  QuotationDetails,
+  QuotationFilter,
 } from "../types/quotations";
 import { apiGet, apiPost, apiPut } from "./axiosInstance";
 
@@ -48,7 +48,7 @@ export const updateFileName = (
 };
 
 export const updateAsQuotation = async (quotationId: number, asId: number) => {
-  return apiPost(`quotations/${quotationId}`, { as_id: asId });
+  return apiPut(`quotations/${quotationId}/reassign-specialist`, { as_id: asId });
 };
 
 export const acceptQuotation = (quotationId: number) =>
