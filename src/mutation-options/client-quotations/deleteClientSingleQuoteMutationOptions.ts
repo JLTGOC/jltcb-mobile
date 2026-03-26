@@ -1,8 +1,9 @@
 import { clientQuotationKeys } from "@/src/query-key-factories/clientQuotations";
+import { dashboardKeys } from "@/src/query-key-factories/dashboard";
 import { deleteClientSingleQuote } from "@/src/services/clientQuotation";
 import { mutationOptions } from "@tanstack/react-query";
 
-export const deleteClientSingleQuoteMutationOptions = () =>
+export const deleteClientSingleQuoteMutationOptions = (userId: string) =>
   mutationOptions({
     mutationFn: (quotationId: number | string) => {
       const normalizedId =
@@ -17,6 +18,9 @@ export const deleteClientSingleQuoteMutationOptions = () =>
       return deleteClientSingleQuote(normalizedId);
     },
     meta: {
-      invalidatesQuery: clientQuotationKeys.all(),
+      invalidatesQuery: [
+        clientQuotationKeys.getQuotes({ status: "RESPONDED" }),
+        dashboardKeys.getDashboard(userId),
+      ],
     },
   });

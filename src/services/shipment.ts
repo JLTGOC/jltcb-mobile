@@ -1,20 +1,9 @@
-import { ShipmentData, ShipmentDetails } from "../types/shipment-type";
-import { apiGet, apiPost } from "./axiosInstance";
+import { ShipmentData } from "../types/shipment-type";
+import { apiGet } from "./axiosInstance";
 
 export type ShipmentListPage = ShipmentData & {
   message?: string;
 };
-
-// Accepeted Quotation
-export async function acceptQuotation(
-  reference_id: string,
-): Promise<ShipmentDetails> {
-  return (
-    await apiPost<ShipmentDetails>(`shipments`, {
-      reference_number: reference_id,
-    })
-  ).data;
-}
 
 export async function fetchShipments({
   search,
