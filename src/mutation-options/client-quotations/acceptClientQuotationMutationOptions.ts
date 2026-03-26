@@ -1,16 +1,15 @@
 import { clientQuotationKeys } from "@/src/query-key-factories/clientQuotations";
-import { acceptQuotation } from "@/src/services/shipment";
+import { dashboardKeys } from "@/src/query-key-factories/dashboard";
+import { acceptQuotation } from "@/src/services/quotations";
 import { mutationOptions } from "@tanstack/react-query";
 
-export const acceptClientQuotationMutationOptions = (
-  token?: string | null,
-) =>
+export const acceptClientQuotationMutationOptions = (userId: string) =>
   mutationOptions({
-    mutationFn: (referenceNumber: string) => {
-      if (!token) throw new Error("No auth token found");
-      return acceptQuotation(referenceNumber);
-    },
+    mutationFn: (quotationId: number) => acceptQuotation(quotationId),
     meta: {
-      invalidatesQuery: clientQuotationKeys.getQuotes({ status: "RESPONDED" }),
+      invalidatesQuery: [
+        clientQuotationKeys.getQuotes({ status: "RESPONDED" }),
+        dashboardKeys.getDashboard(userId),
+      ],
     },
   });
