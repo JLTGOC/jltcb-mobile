@@ -1,4 +1,4 @@
-import { ShipmentData } from "../types/shipment-type";
+import type { ShipmentData, ShipmentDetails } from "../types/shipment-type";
 import { apiGet } from "./axiosInstance";
 
 export type ShipmentListPage = ShipmentData & {
