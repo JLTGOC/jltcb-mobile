@@ -158,4 +158,16 @@ export const AS_DB_FOLDER_SECTIONS: DashboardFolderSection<AccountSpecialistDash
         },
       ],
     },
+     {
+      title: "Job Order",
+      sectionKey: "job_order", //total of job order created
+      data: [
+        {
+          title: "Created",
+          countKey: "ongoing_count",
+          icon: "ongoing",
+          href: "/(employee-account-specialist)/(tabs)/dashboard",
+        }
+      ],
+    },
   ] as const;
