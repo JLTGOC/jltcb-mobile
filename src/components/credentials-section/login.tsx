@@ -85,8 +85,7 @@ export default function Login() {
                   onChange(text);
                 }}
                 onBlur={onBlur}
-                placeholder="Email"
-                inputMode="email"
+                placeholder="Username or email"
                 placeholderTextColor="black"
                 allowFontScaling={false}
                 autoCapitalize="none"
