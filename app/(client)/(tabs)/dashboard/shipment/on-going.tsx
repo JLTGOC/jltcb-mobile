@@ -4,10 +4,9 @@ import CardTemplate from "@/src/components/client-section/shipment/CardTemplate"
 import Search from "@/src/components/client-section/shipment/Search";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import useDebounce from "@/src/hooks/useDebounce";
-import { fetchShipments } from "@/src/services/shipment";
+import { fetchShipments, type ShipmentListPage } from "@/src/services/shipment";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { ActivityIndicator } from "react-native-paper";
-import type { ShipmentData } from "@/src/types/shipment-type";
 
 export default function OnGoing() {
   const [search, setSearch] = useState<string>("");
@@ -24,9 +23,9 @@ export default function OnGoing() {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<
-    ShipmentData,
+    ShipmentListPage,
     Error,
-    InfiniteData<ShipmentData>,
+    InfiniteData<ShipmentListPage>,
     string[],
     string
   >({
@@ -42,12 +41,14 @@ export default function OnGoing() {
     retry: false,
   });
 
-console.log(data?.pages)
-
   const allShipments = useMemo(
     () => data?.pages.flatMap((page) => page.shipments ?? []) ?? [],
     [data],
   );
+
+  const showEmptyState = !isLoading && !isError && allShipments.length === 0;
+  const emptyMessage =
+    data?.pages.find((page) => page.message)?.message || "No Shipments available";
 
   return (
     <View
@@ -90,6 +91,13 @@ console.log(data?.pages)
           }
         }}
         onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+          showEmptyState ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>{emptyMessage}</Text>
+            </View>
+          ) : null
+        }
         ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={{ marginVertical: 20 }} />
@@ -112,5 +120,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 6,
     color: "blue",
+  },
+  emptyContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyText: {
+    fontSize: 14,
+    color: "#666",
   },
 });
