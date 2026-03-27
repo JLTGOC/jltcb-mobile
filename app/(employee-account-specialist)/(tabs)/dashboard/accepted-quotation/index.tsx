@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import * as Linking from "expo-linking";
 import * as Print from "expo-print";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import {
@@ -35,6 +36,7 @@ const MENU_OPTIONS = [
 type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 
 export default function AcceptedQuotation() {
+	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
@@ -71,7 +73,15 @@ export default function AcceptedQuotation() {
 	};
 
 	const handleMenuAction = async (title: MenuTitle, quotationId: string) => {
-		if (title === "Make Job Order") return;
+		if (title === "Make Job Order") {
+			router.push({
+				pathname:
+					"/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order",
+				params: { quotationId },
+			});
+			setVisibleMenuId(null);
+			return;
+		}
 
 		const fileUrl = await getQuotationFile(quotationId);
 		if (!fileUrl) return;
