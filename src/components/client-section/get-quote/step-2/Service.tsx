@@ -58,7 +58,7 @@ export default function Service({ formData, setFormData }: Props) {
       {/* Checkbox */}
 
       <View style={{ paddingHorizontal: 20 }}>
-        {formData.service?.type === "IMPORT" && (
+        {formData.service?.type !== "BUSINESS SOLUTION" && (
           <FlatList
             data={transpoMode}
             horizontal
@@ -90,13 +90,11 @@ export default function Service({ formData, setFormData }: Props) {
             )}
           />
         )}
-
-        {formData.service?.type === "EXPORT" && <Text>UNDER CONSTRUCTION</Text>}
         {formData.service?.type === "BUSINESS SOLUTION" && (
           <Text>UNDER CONSTRUCTION</Text>
         )}
 
-        {selectedMode === "SEA" && (
+        {formData.service?.type !== "BUSINESS SOLUTION" && selectedMode === "SEA" && (
           <>
             {/* SELECT ALL SECTION */}
             <View style={styles.optionRow}>
