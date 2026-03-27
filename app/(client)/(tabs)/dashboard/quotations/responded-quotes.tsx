@@ -2,7 +2,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Pressable, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
@@ -24,15 +24,7 @@ import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/c
 import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
 import { QuotesListItem } from "@/src/types/client-type";
 
-type TableItem = {
-  id: number;
-  commodity: string;
-  date: string;
-  reference_number: string;
-  status: string;
-};
-
-const tableHeaders = ["reference", "date", "shipment details", " status", ""];
+const tableHeaders = ["reference", "date", "shipment details", "status", ""];
 
 const menuItems = [
   { iconName: "chat", title: "CHAT" },
@@ -41,15 +33,15 @@ const menuItems = [
 ];
 
 export default function RespondedQuotes() {
+  const { userData } = useAuth();
   const router = useRouter();
   const { navigate } = useNavigate();
-  const { token } = useAuth();
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   // Data Fetching
   const { data, isLoading, isError, error } = useQuery({
@@ -59,12 +51,12 @@ export default function RespondedQuotes() {
 
   // Delete single quotation
   const { mutate: deletedSingleQuotation } = useMutation(
-    deleteClientSingleQuoteMutationOptions(),
+    deleteClientSingleQuoteMutationOptions(String(userData?.id)),
   );
 
   // Accept the quotation
   const { mutate: handleAccept, isPending: isAccepting } = useMutation({
-    ...acceptClientQuotationMutationOptions(token),
+    ...acceptClientQuotationMutationOptions(String(userData?.id)),
     onSuccess: () => {
       setModalVisible(false);
       setSuccessModalVisible(true);
@@ -79,7 +71,7 @@ export default function RespondedQuotes() {
     setVisibleMenuId(null);
 
     if (title === "ACCEPT") {
-      setSelectedId(quotation.reference_number);
+      setSelectedId(quotation.id);
       setModalVisible(true);
     } else if (title === "DISCARD") {
       deletedSingleQuotation(quotation.id);
