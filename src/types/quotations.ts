@@ -6,7 +6,7 @@ export interface ASRequestedQuotation {
 	quotations: Quotation[];
 }
 
-export interface ASRespondedQuotation {
+export interface ASQuotation {
 	id: number;
 	client_name: string;
 	reference_number: string;
@@ -34,7 +34,8 @@ export interface QuotationDetails {
 	service: Service;
 	commodity: Commodity;
 	shipment: Shipment;
-	documents: Document[];
+	documents: Document[] | string;
+	quotation_file: QuotationFile[] | string;
 }
 
 export interface Company {
@@ -67,9 +68,20 @@ export interface Document {
 	id: number;
 	file_name: string;
 	file_url: string;
+	file_type: string;
 }
 
-export type QuotationStatus = "REQUESTED" | "RESPONDED";
+export interface QuotationFile {
+	id: number;
+	file_name: string;
+	file_url: string;
+}
+
+export type QuotationStatus =
+	| "REQUESTED"
+	| "RESPONDED"
+	| "ACCEPTED"
+	| "DISCARDED";
 
 export interface QuotationFilter<T extends QuotationStatus = QuotationStatus> {
 	filter: T;
