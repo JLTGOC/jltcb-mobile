@@ -18,7 +18,7 @@ export default function Step_2({ formData, setFormData }: Props) {
       automaticallyAdjustKeyboardInsets={true}
     >
       <Service formData={formData} setFormData={setFormData} />
-      {formData.service?.type === "IMPORT" ? (
+      {formData.service?.type !== "BUSINESS SOLUTION" ? (
         <>
           <Commodity formData={formData} setFormData={setFormData} />
           <Shipment formData={formData} setFormData={setFormData} />
