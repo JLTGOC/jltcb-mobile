@@ -19,7 +19,10 @@ export default function MakeJobOrder() {
 				<Card style={styles.card}>
 					<Card.Content style={styles.cardContent}>
 						<MaterialCommunityIcons name="check-decagram-outline" size={24} />
-						<Text style={styles.upper}>Accreditation</Text>
+						<Text style={styles.cardTextContent}>
+							<Text style={styles.upper}>Regulatory Services</Text>
+							<Text style={styles.light}> (permits and licensing)</Text>
+						</Text>
 					</Card.Content>
 				</Card>
 
@@ -34,7 +37,10 @@ export default function MakeJobOrder() {
 					<Card style={styles.card}>
 						<Card.Content style={styles.cardContent}>
 							<MaterialCommunityIcons name="license" size={24} />
-							<Text style={styles.upper}>Shipment</Text>
+							<Text style={styles.cardTextContent}>
+								<Text style={styles.upper}>Logistics Services</Text>
+								<Text style={styles.light}> (shipments)</Text>
+							</Text>
 						</Card.Content>
 					</Card>
 				</Link>
@@ -64,5 +70,13 @@ const styles = StyleSheet.create({
 		paddingVertical: 12,
 		paddingHorizontal: 12,
 		gap: 12,
+	},
+	cardTextContent: {
+		flexDirection: "row",
+	},
+	light: {
+		color: "#666666",
+		fontSize: 13,
+		fontStyle: "italic",
 	},
 });
