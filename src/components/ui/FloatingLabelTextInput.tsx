@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 		minHeight: 24,
 	},
 	inputMultiline: {
-		minHeight: 100,
+		// minHeight: 100,
 	},
 	divider: {
 		height: 1,
