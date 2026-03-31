@@ -108,6 +108,25 @@ export const userNavigation: UserNavigation[] = [
 		],
 	},
 	{
+		role: "Finance",
+		headerComponent: LightHeader,
+		tabsComponent: OperationsTabs,
+		headerMenus: [
+			{
+				text: "Calculator",
+				link: routes.UNDERCONSTRUCTION,
+			},
+			{
+				text: "AHTN Checker",
+				link: routes.AHTN_CHECKER,
+			},
+			{
+				text: "Account Settings",
+				link: routes.ACCOUNT_SETTINGS,
+			},
+		],
+	},
+	{
 		role: "Human Resource",
 		headerComponent: LightHeader,
 		tabsComponent: ClientTabs,

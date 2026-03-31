@@ -2,7 +2,8 @@ import type {
   AccountSpecialistDashboard,
   ClientDashboard,
   DashboardFolderSection,
-  OperationsDashboard
+  OperationsDashboard,
+  FinanceDashboard
 } from "../types/dashboard";
 import { routes } from "./routes";
 
@@ -80,7 +81,7 @@ export const OPERATIONS_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDash
     },
   ] as const;
 
-  export const FINANCE_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDashboard>[] =
+  export const FINANCE_DB_FOLDER_SECTION: DashboardFolderSection<FinanceDashboard>[] =
   [
     {
       title: "Job Order",
