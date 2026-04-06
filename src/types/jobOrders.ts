@@ -23,11 +23,20 @@ export const BILLING_TYPES = [
 ] as const;
 export type BillingType = (typeof BILLING_TYPES)[number];
 
+export interface AutofillDetails {
+  company_name: string;
+  full_name: string;
+  commodity: string | null;
+  cargo_type: string | null;
+  container_size: string | null;
+}
+
 export interface JobOrderEnums {
   client_types: ClientType[];
   accredited: AccreditedType[];
   service_levels: ServiceLevelType[];
   shall_be_billed: BillingType[];
+  autofill_details: AutofillDetails | null;
 }
 
 type EnumOption<T> = { id: T; title: T };
@@ -37,4 +46,5 @@ export interface JobOrderEnumsFormatted {
   accredited: EnumOption<AccreditedType>[];
   service_levels: EnumOption<ServiceLevelType>[];
   shall_be_billed: EnumOption<BillingType>[];
+  autofill_details: AutofillDetails | null;
 }
