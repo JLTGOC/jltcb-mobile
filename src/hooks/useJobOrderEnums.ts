@@ -1,18 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { jobOrderKeys } from "../query-key-factories/jobOrders";
 import { fetchJobOrderEnums } from "../services/jobOrders";
-import { JobOrderEnumsFormatted } from "../types/jobOrders";
+import type { JobOrderEnumsFormatted } from "../types/jobOrders";
 
-export function useJobOrderEnums() {
+export function useJobOrderEnums(quotationReference?: string) {
   return useQuery({
-    queryKey: jobOrderKeys.getEnums(),
-    queryFn: fetchJobOrderEnums,
-    staleTime: Infinity,
+    queryKey: jobOrderKeys.getEnums(quotationReference),
+    queryFn: () => fetchJobOrderEnums(quotationReference),
     select: ({ data }) =>
       Object.fromEntries(
         Object.entries(data).map(([key, values]) => [
           key,
-          values.map((item: string) => ({ id: item, title: item })),
+          Array.isArray(values)
+            ? values.map((item: string) => ({ id: item, title: item }))
+            : values,
         ]),
       ) as JobOrderEnumsFormatted,
   });
