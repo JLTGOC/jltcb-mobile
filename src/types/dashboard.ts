@@ -54,8 +54,8 @@ export type AccountSpecialistDashboard = {
 	accounts: {
 		clients_count: number;
 	};
-	job_order: {
-		created: number
+	job_orders: {
+		created_count: number
 	}
 };
 
@@ -65,8 +65,8 @@ export type OperationsDashboard = {
 		ongoing_count: number;
 		delivered_count: number;
 	};
-	job_order: {
-		created: number
+	job_orders: {
+		created_count: number
 	}
 };
 
@@ -76,8 +76,8 @@ export type FinanceDashboard = {
 		ongoing_count: number;
 		delivered_count: number;
 	};
-	job_order: {
-		created: 20;
+	job_orders: {
+		created_count: number
 	}
 };
 
