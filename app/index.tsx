@@ -27,5 +27,9 @@ export default function IndexRoute() {
 		return <Redirect href={routes.OPERATIONS_DB} />;
 	}
 
+	if (role === "Finance") {
+		return <Redirect href={routes.FINANCE_DB} />;
+	}
+
 	return <Redirect href={routes.LANDING_PAGE} />;
 }

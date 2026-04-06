@@ -70,7 +70,16 @@ export type OperationsDashboard = {
 	}
 };
 
-
+export type FinanceDashboard = {
+	user: DashboardUser;
+	shipments: {
+		ongoing_count: number;
+		delivered_count: number;
+	};
+	job_order: {
+		created: 20;
+	}
+};
 
 export type ClientDashboard = {
 	user: DashboardUser;

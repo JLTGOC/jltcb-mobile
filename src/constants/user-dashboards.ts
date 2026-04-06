@@ -49,6 +49,52 @@ export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[
 export const OPERATIONS_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDashboard>[] =
 	[
 		{
+			title: "Job Order",
+			sectionKey: "job_order", //total of job order created
+			data: [
+				{
+					title: "Created",
+					countKey: "ongoing_count",
+					icon: "ongoing",
+					href: "/(employee-account-specialist)/(tabs)/dashboard",
+				},
+			],
+		},
+		{
+			title: "Shipment",
+			sectionKey: "shipments",
+			data: [
+				{
+					title: "Ongoing",
+					countKey: "ongoing_count",
+					icon: "ongoing",
+					href: "/(employee-account-specialist)/(tabs)/dashboard",
+				},
+				{
+					title: "Delivered",
+					countKey: "delivered_count",
+					icon: "delivered",
+					href: "/(employee-account-specialist)/(tabs)/dashboard",
+				},
+			],
+		},
+	] as const;
+
+export const FINANCE_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDashboard>[] =
+	[
+		{
+			title: "Job Order",
+			sectionKey: "job_order", //total of job order created
+			data: [
+				{
+					title: "Created",
+					countKey: "ongoing_count",
+					icon: "ongoing",
+					href: "/(employee-account-specialist)/(tabs)/dashboard",
+				},
+			],
+		},
+		{
 			title: "Shipment",
 			sectionKey: "shipments",
 			data: [
