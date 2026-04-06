@@ -3,7 +3,7 @@ import type {
   ClientDashboard,
   DashboardFolderSection,
   OperationsDashboard,
-  FinanceDashboard
+  FinanceDashboard,
 } from "../types/dashboard";
 import { routes } from "./routes";
 
@@ -51,14 +51,14 @@ export const OPERATIONS_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDash
   [
     {
       title: "Job Order",
-      sectionKey: "job_order", //total of job order created
+      sectionKey: "job_orders", //total of job order created
       data: [
         {
           title: "Created",
-          countKey: "ongoing_count",
+          countKey: "created_count",
           icon: "ongoing",
-          href: "/(employee-account-specialist)/(tabs)/dashboard",
-        }
+          href: "/(employee-operations)/(tabs)/dashboard/jobOrder/created",
+        },
       ],
     },
     {
@@ -69,30 +69,30 @@ export const OPERATIONS_DB_FOLDER_SECTION: DashboardFolderSection<OperationsDash
           title: "Ongoing",
           countKey: "ongoing_count",
           icon: "ongoing",
-          href: "/(employee-account-specialist)/(tabs)/dashboard",
+          href: "/(employee-operations)/(tabs)/dashboard",
         },
         {
           title: "Delivered",
           countKey: "delivered_count",
           icon: "delivered",
-          href: "/(employee-account-specialist)/(tabs)/dashboard",
+          href: "/(employee-operations)/(tabs)/dashboard",
         },
       ],
     },
   ] as const;
 
-  export const FINANCE_DB_FOLDER_SECTION: DashboardFolderSection<FinanceDashboard>[] =
+export const FINANCE_DB_FOLDER_SECTION: DashboardFolderSection<FinanceDashboard>[] =
   [
     {
       title: "Job Order",
-      sectionKey: "job_order", //total of job order created
+      sectionKey: "job_orders", //total of job order created
       data: [
         {
           title: "Created",
           countKey: "ongoing_count",
           icon: "ongoing",
           href: "/(employee-account-specialist)/(tabs)/dashboard",
-        }
+        },
       ],
     },
     {
@@ -205,16 +205,16 @@ export const AS_DB_FOLDER_SECTIONS: DashboardFolderSection<AccountSpecialistDash
         },
       ],
     },
-     {
+    {
       title: "Job Order",
-      sectionKey: "job_order", //total of job order created
+      sectionKey: "job_orders", //total of job order created
       data: [
         {
           title: "Created",
           countKey: "ongoing_count",
           icon: "ongoing",
           href: "/(employee-account-specialist)/(tabs)/dashboard",
-        }
+        },
       ],
     },
   ] as const;
