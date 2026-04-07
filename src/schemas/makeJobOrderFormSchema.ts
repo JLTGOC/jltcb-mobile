@@ -3,7 +3,7 @@ import {
   ACCREDITED_TYPES,
   CLIENT_TYPES,
   SERVICE_LEVEL_TYPES,
-} from "../types/jobOrders";
+} from "../types/jobOrderEnums";
 
 export const subjectSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required."),

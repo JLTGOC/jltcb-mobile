@@ -1,4 +1,4 @@
-import type { JobOrderEnums } from "../types/jobOrders";
+import type { JobOrderEnums } from "../types/jobOrderEnums";
 import { apiGet } from "./axiosInstance";
 
 export const fetchJobOrderEnums = (quotation_reference_number?: string) =>
