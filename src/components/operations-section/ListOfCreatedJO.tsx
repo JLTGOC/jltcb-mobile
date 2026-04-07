@@ -12,6 +12,7 @@ import JobOrderCardTemplate from "./JobOrderCardTemplate";
 export default function ListOfCreatedJO() {
   const [search, setSearch] = useState<string>("");
   const [submittedSearch, setSubmittedSearch] = useState("");
+  const [jobFilter, setJobFilter] = useState<"all" | "my_jobs">("all");
 
   const { data, isPending, error, refetch } = useQuery(
     createdJobOrdersQueryOptions({ status: "created" }),
@@ -59,6 +60,17 @@ export default function ListOfCreatedJO() {
         }}
       />
 
+      <SwitchToggle
+        value={jobFilter}
+        onValueChange={(value) => setJobFilter(value as "all" | "my_jobs")}
+        options={[
+          { label: "ALL", value: "all" },
+          { label: "MY JOBS", value: "my_jobs" },
+        ]}
+      />
+
+      {/* ALL */}
+      {}
       <FlatList
         style={{ flex: 1 }}
         data={data ?? []}
