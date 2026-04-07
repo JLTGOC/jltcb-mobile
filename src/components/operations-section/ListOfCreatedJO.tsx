@@ -76,6 +76,11 @@ export default function ListOfCreatedJO() {
                 ? "#16A34A"
                 : "#1F6FFF"
             }
+            rightActionLabel={
+              item.assigned_to.toLowerCase() === "available"
+                ? "ACCEPT"
+                : "REASSIGN"
+            }
           />
         )}
       />
