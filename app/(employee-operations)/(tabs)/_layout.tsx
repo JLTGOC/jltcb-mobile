@@ -13,7 +13,7 @@ export default function OperationsTabsLayout() {
 
   return (
     <Tabs
-      initialRouteName="dashboard/index"
+      initialRouteName="dashboard"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: THEMES.tabBarActiveTintColor,
@@ -24,7 +24,7 @@ export default function OperationsTabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="dashboard/index"
+        name="dashboard"
         options={{
           tabBarItemStyle: { marginRight: "auto", maxWidth: "25%" },
           tabBarIcon: ({ color, size }) => (

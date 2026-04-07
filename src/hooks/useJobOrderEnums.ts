@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { jobOrderKeys } from "../query-key-factories/jobOrders";
-import { fetchJobOrderEnums } from "../services/jobOrders";
-import type { JobOrderEnumsFormatted } from "../types/jobOrders";
+import { fetchJobOrderEnums } from "../services/jobOrderEnums";
+import type { JobOrderEnumsFormatted } from "../types/jobOrderEnums";
 
 export function useJobOrderEnums(quotationReference?: string) {
   return useQuery({
