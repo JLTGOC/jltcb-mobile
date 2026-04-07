@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     flexDirection: "row",
     marginBottom: 32,
+    backgroundColor: "white",
   },
   input: {
     flex: 1,
