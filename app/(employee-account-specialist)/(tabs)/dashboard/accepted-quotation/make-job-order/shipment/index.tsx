@@ -20,8 +20,8 @@ import {
 	step1Schema,
 } from "@/src/schemas/makeJobOrderFormSchema";
 
-const TEXT_COLOR = "#666666";
-const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {
+export const TEXT_COLOR = "#666666";
+export const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {
 	fontSize: 12,
 	color: TEXT_COLOR,
 };
