@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Pressable, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   DataTable,
@@ -14,6 +14,7 @@ import {
 import Search from "@/src/components/client-section/shipment/Search";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { routes } from "@/src/constants/routes";
+import { useAuth } from "@/src/hooks/useAuth";
 import useDebounce from "@/src/hooks/useDebounce";
 import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
 import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
@@ -36,12 +37,13 @@ const menuItems = [
 export default function RequestedQuotes() {
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
+  const { userData } = useAuth();
   const router = useRouter();
 
   const debouncedSearch = useDebounce(search, 500) || "";
 
   // Data Fetching
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     ...clientQuotesQueryOptions({
       status: "REQUESTED",
       search: debouncedSearch,
@@ -50,9 +52,12 @@ export default function RequestedQuotes() {
   });
 
   // Delete single quotation
-  const { mutate: deletedSingleQuotation } = useMutation(
-    deleteClientSingleQuoteMutationOptions(),
-  );
+  const { mutate: deletedSingleQuotation } = useMutation({
+    ...deleteClientSingleQuoteMutationOptions(String(userData?.id)),
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -104,7 +109,7 @@ export default function RequestedQuotes() {
                 }}
                 style={({ pressed }) => [
                   {
-                    opacity: pressed ? 0.7 : 1, 
+                    opacity: pressed ? 0.7 : 1,
                   },
                 ]}
               >
