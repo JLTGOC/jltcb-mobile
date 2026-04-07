@@ -23,9 +23,9 @@ export default function JobOrderCardTemplate({
   dateCreated,
   quotationSource,
   assignedTo,
-  assignedColor = "#2F80ED",
+  assignedColor,
   leftActionLabel = "VIEW JO",
-  rightActionLabel = "REASSIGN",
+  rightActionLabel,
   onPressLeftAction,
   onPressRightAction,
 }: Props) {
