@@ -5,13 +5,26 @@ import {
   CardTitle,
 } from "@/src/components/job-order-section/Card";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import ConfirmModal from "@/src/components/ui/ConfirmModal";
+import SuccesModal from "@/src/components/ui/SuccessModal";
 import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
+import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
+import { makeJobOrderSchema } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { transformToApiPayload } from "@/src/utils/jobOrderForm";
+import { showToast } from "@/src/utils/showToast";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { format, formatDistance } from "date-fns";
-import { ReactNode } from "react";
+import { useRouter } from "expo-router";
+import { ReactNode, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button, Portal, Text } from "react-native-paper";
 
 const COLOR = "#4E6174";
 
@@ -27,9 +40,13 @@ interface SummaryCardData {
 }
 
 export default function Summary() {
+  const router = useRouter();
   const jobOrderFormData = useStore((state) => state.jobOrderFormData);
   const quotationReference = useStore((state) => state.quotationReference);
-  const { data, isPending } = useJobOrderEnums(quotationReference);
+  const { data } = useJobOrderEnums(quotationReference);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
 
   const containerSize = data?.autofill_details?.container_size;
   const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
@@ -159,7 +176,43 @@ export default function Summary() {
     },
   ];
 
-  const handleSubmit = () => {};
+  const handleConfirm = () => {
+    setModalVisible(true);
+  };
+
+  const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
+    createJobOrderMutationOptions,
+  );
+
+  const handleCreateJobOrder = async () => {
+    if (!quotationReference) return;
+
+    const { success, data, error } =
+      makeJobOrderSchema.safeParse(jobOrderFormData);
+
+    if (!success) {
+      console.error("Form data validation failed:", error);
+      return;
+    }
+
+    const payload = transformToApiPayload({
+      data,
+      jobType: "SHIPMENT",
+      quotationReference,
+    });
+
+    try {
+      await mutateAsync(payload);
+
+      setSuccessModalVisible(true);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        showToast(err.response?.data.message || "Failed to create job order");
+      }
+    } finally {
+      setModalVisible(false);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -238,12 +291,36 @@ export default function Summary() {
             theme={{ colors: { primary: "#1C213B" } }}
             mode="contained"
             style={styles.button}
-            onPress={handleSubmit}
+            onPress={handleConfirm}
           >
             SUBMIT
           </Button>
         }
       />
+
+      <Portal>
+        <ConfirmModal
+          icon={<AntDesign name="warning" size={100} color="red" />}
+          confirmButtonText="Yes"
+          cancelButtonText="Cancel"
+          loading={isCreatingJobOrder}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+          onConfirm={handleCreateJobOrder}
+          title="Send Job Order?"
+          description="You're about to sent this Job Order to Operations. Please review all details carefully. Changes after sending will require a revised Job Order."
+        />
+
+        <SuccesModal
+          onConfirm={() => {
+            setSuccessModalVisible(false);
+            router.dismissTo("/dashboard");
+          }}
+          visible={successModalVisible}
+          title="SUCCESSFULLY SENT!"
+          description="The generated Job Order is successfully sent to Operations. They will receive a notification of the created Job Order."
+        />
+      </Portal>
     </View>
   );
 }
