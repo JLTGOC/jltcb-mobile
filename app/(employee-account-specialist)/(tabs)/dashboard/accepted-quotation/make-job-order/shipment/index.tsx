@@ -10,7 +10,7 @@ import {
 } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
   ScrollView,
@@ -31,10 +31,7 @@ export default function Step1Form() {
   const router = useRouter();
   const setJobOrderFormData = useStore((state) => state.setJobOrderFormData);
 
-  const { quotationId, quotationReference } = useLocalSearchParams<{
-    quotationId: string;
-    quotationReference: string;
-  }>();
+  const quotationReference = useStore((state) => state.quotationReference);
   const { data, isPending } = useJobOrderEnums(quotationReference);
 
   const {
@@ -63,11 +60,9 @@ export default function Step1Form() {
 
   const onSubmit = handleSubmit((data) => {
     setJobOrderFormData(data);
-    router.push({
-      pathname:
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment/step2",
-      params: { quotationId, quotationReference },
-    });
+    router.push(
+      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment/step2",
+    );
   });
 
   return (

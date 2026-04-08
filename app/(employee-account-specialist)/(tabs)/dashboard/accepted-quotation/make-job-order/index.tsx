@@ -1,17 +1,13 @@
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { useStore } from "@/src/stores/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 
 export default function MakeJobOrder() {
   const router = useRouter();
   const reset = useStore((state) => state.reset);
-  const { quotationId, quotationReference } = useLocalSearchParams<{
-    quotationId: string;
-    quotationReference: string;
-  }>();
 
   return (
     <ScrollView>
@@ -35,11 +31,9 @@ export default function MakeJobOrder() {
         <Card
           onPress={() => {
             reset();
-            router.push({
-              pathname:
-                "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment",
-              params: { quotationId, quotationReference },
-            });
+            router.push(
+              "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment",
+            );
           }}
           style={styles.card}
         >

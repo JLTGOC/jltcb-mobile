@@ -4,10 +4,12 @@ import type { StateCreator } from "zustand";
 
 interface JobOrderFormState {
   jobOrderFormData: Partial<JobOrderFormSchema>;
+  quotationReference?: string;
 }
 
 interface JobOrderFormActions {
   setJobOrderFormData: (jobOrderFormData: Partial<JobOrderFormSchema>) => void;
+  setQuotationReference: (quotationReference: string) => void;
   reset: () => void;
 }
 
@@ -24,6 +26,12 @@ export const createJobOrderFormSlice: StateCreator<
     set((state) => ({
       jobOrderFormData: { ...state.jobOrderFormData, ...jobOrderFormData },
     })),
+
+  setQuotationReference: (quotationReference) =>
+    set({
+      quotationReference,
+    }),
+
   reset: () => {
     set(store.getInitialState());
   },
