@@ -22,6 +22,7 @@ import {
   View,
 } from "react-native";
 import { Button, HelperText } from "react-native-paper";
+import { useShallow } from "zustand/react/shallow";
 
 export const TEXT_COLOR = "#666666";
 export const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {
@@ -31,7 +32,9 @@ export const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {
 
 export default function Step1Form() {
   const router = useRouter();
-  const setJobOrderFormData = useStore((state) => state.setJobOrderFormData);
+  const [jobOrderFormData, setJobOrderFormData] = useStore(
+    useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
+  );
 
   const quotationReference = useStore((state) => state.quotationReference);
   const { data, isPending } = useJobOrderEnums(quotationReference);
@@ -45,15 +48,15 @@ export default function Step1Form() {
   } = useForm<Step1Fields>({
     resolver: zodResolver(step1Schema),
     defaultValues: {
-      subject: "",
-      email_body: "",
-      client_type: undefined,
-      accredited: undefined,
-      remarks: "",
-      service_level: undefined,
-      bl_no: "",
-      eta: "",
-      etd: "",
+      subject: jobOrderFormData.subject ?? "",
+      email_body: jobOrderFormData.email_body ?? "",
+      client_type: jobOrderFormData.client_type,
+      accredited: jobOrderFormData.accredited,
+      remarks: jobOrderFormData.remarks ?? "",
+      service_level: jobOrderFormData.service_level,
+      bl_no: jobOrderFormData.bl_no ?? "",
+      eta: jobOrderFormData.eta,
+      etd: jobOrderFormData.etd,
     },
   });
 
@@ -248,8 +251,8 @@ export default function Step1Form() {
                 <FloatingLabelDatePicker
                   label="ESTIMATED TIME OF ARRIVAL"
                   value={value}
-                  onValueChange={(dateString) => {
-                    onChange(dateString);
+                  onValueChange={(date) => {
+                    onChange(date);
                     if (etdValue) trigger(["eta", "etd"]);
                   }}
                   formatString="P"
@@ -270,8 +273,8 @@ export default function Step1Form() {
                 <FloatingLabelDatePicker
                   label="ESTIMATED TIME OF DEPARTURE"
                   value={value}
-                  onValueChange={(dateString) => {
-                    onChange(dateString);
+                  onValueChange={(date) => {
+                    onChange(date);
                     if (etaValue) trigger(["eta", "etd"]);
                   }}
                   formatString="P"

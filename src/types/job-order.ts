@@ -1,3 +1,8 @@
+import { AccreditedType, ClientType } from "./jobOrderEnums";
+
+export const JOB_TYPES = ["SHIPMENT", "ACCREDITATION"] as const;
+export type JobType = (typeof JOB_TYPES)[number];
+
 export type JobOrder = {
   id: number;
   reference_number: string;
@@ -12,3 +17,39 @@ export type JobOrderResponse = {
   message: string;
   data: JobOrder[];
 };
+
+export interface CreateJobOrderRequestBody {
+  quotation_reference_number: string;
+  job_type: JobType;
+  subject: {
+    subject: string;
+    email_body: string;
+  };
+  client: {
+    client_type: ClientType;
+    accredited: AccreditedType;
+    remarks: string;
+  };
+  service: {
+    service_level: string;
+    bl_no: string;
+    eta: string;
+    etd: string;
+  };
+  shipment: {
+    hs_code: string;
+    rod: string;
+    permits: string;
+    special_remarks: string;
+  };
+  target: {
+    delivery_date: string;
+    completion_date: string;
+    special_remarks: string;
+  };
+  billing: {
+    terms_of_payment: string;
+    billing_date: string;
+    shall_be_billed: string;
+  };
+}

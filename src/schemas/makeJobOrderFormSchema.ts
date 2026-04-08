@@ -6,7 +6,7 @@ import {
   SERVICE_LEVEL_TYPES,
 } from "../types/jobOrderEnums";
 
-const makeJobOrderSchema = z.object({
+export const makeJobOrderSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required."),
   email_body: z.string().trim().min(1, "Message is required."),
 
@@ -18,8 +18,8 @@ const makeJobOrderSchema = z.object({
   // Service Information
   service_level: z.enum(SERVICE_LEVEL_TYPES, "Service level is required."),
   bl_no: z.string().trim().min(1, "BL No. is required."),
-  eta: z.iso.datetime("Estimated time of arrival is required."),
-  etd: z.iso.datetime("Estimated time of departure is required."),
+  eta: z.date("Estimated time of arrival is required."),
+  etd: z.date("Estimated time of departure is required."),
 
   // Shipment Information
   hs_code: z.string().trim(),
@@ -29,17 +29,14 @@ const makeJobOrderSchema = z.object({
   shipment_special_remarks: z.string().trim(),
 
   // Commitment Information
-  delivery_date: z.iso.datetime("Target delivery is required."),
-  // completion_date: z.iso
-  // 	.datetime("Target completion period is required.")
-  // 	.optional(),
-  completion_date: z.string().trim(),
+  delivery_date: z.date("Target delivery is required."),
+  completion_date: z.date("Target completion period is required.").optional(),
   target_special_remarks: z.string().trim(),
 
   // Billing Information
   terms_of_payment: z.string().trim().min(1, "Terms of payment is required."),
-  // billing_date: z.iso.datetime("When to bill is required.").optional(),
-  billing_date: z.string().trim(),
+  billing_date: z.date("When to bill is required.").optional(),
+  // billing_date: z.string().trim(),
   shall_be_billed: z.enum(BILLING_TYPES, "Shall be billed is required."),
 });
 export type JobOrderFormSchema = z.infer<typeof makeJobOrderSchema>;

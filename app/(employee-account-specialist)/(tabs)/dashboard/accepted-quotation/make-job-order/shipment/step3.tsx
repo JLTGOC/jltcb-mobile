@@ -41,12 +41,12 @@ export default function Step3Form() {
   } = useForm<Step3Fields>({
     resolver: zodResolver(step3Schema),
     defaultValues: {
-      delivery_date: jobOrderFormData.delivery_date ?? "",
-      completion_date: jobOrderFormData.completion_date ?? "",
+      delivery_date: jobOrderFormData.delivery_date,
+      completion_date: jobOrderFormData.completion_date,
       target_special_remarks: jobOrderFormData.target_special_remarks ?? "",
 
       terms_of_payment: jobOrderFormData.terms_of_payment ?? "",
-      billing_date: jobOrderFormData.billing_date ?? "",
+      billing_date: jobOrderFormData.billing_date,
       shall_be_billed: jobOrderFormData.shall_be_billed ?? undefined,
     },
   });
@@ -56,7 +56,6 @@ export default function Step3Form() {
     router.push(
       "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment/summary",
     );
-    console.log("All Job Order Data: ", { ...jobOrderFormData, ...data });
   });
 
   return (
