@@ -1,15 +1,5 @@
-import AutocompleteDropdown from "@/src/components/ui/AutocompleteDropdown";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import FieldLegend from "@/src/components/ui/FieldLegend";
-import FloatingLabelDatePicker from "@/src/components/ui/FloatingLabelDatePicker";
-import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
-import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
-import {
-  type Step3Fields,
-  step3Schema,
-} from "@/src/schemas/makeJobOrderFormSchema";
-import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
@@ -20,9 +10,23 @@ import {
 } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
+
+import AutocompleteDropdown from "@/src/components/ui/AutocompleteDropdown";
+import BannerHeader from "@/src/components/ui/BannerHeader";
+import FieldLegend from "@/src/components/ui/FieldLegend";
+import FloatingLabelDatePicker from "@/src/components/ui/FloatingLabelDatePicker";
+import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
+
+import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
+import {
+  type Step3Fields,
+  step3Schema,
+} from "@/src/schemas/makeJobOrderFormSchema";
+import { useStore } from "@/src/stores/store";
 import { TEXT_COLOR, TEXT_INPUT_STYLES } from ".";
 
 export default function Step3Form() {
+  const router = useRouter();
   const [jobOrderFormData, setJobOrderFormData] = useStore(
     useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
   );
@@ -49,6 +53,9 @@ export default function Step3Form() {
 
   const onSubmit = handleSubmit((data) => {
     setJobOrderFormData(data);
+    router.push(
+      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment/summary",
+    );
     console.log("All Job Order Data: ", { ...jobOrderFormData, ...data });
   });
 
