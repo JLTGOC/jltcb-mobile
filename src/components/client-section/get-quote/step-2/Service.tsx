@@ -3,10 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { Checkbox, Text } from "react-native-paper";
 
-import {
-  QuoteForm,
-} from "../../../../types/client-type";
-
+import { QuoteForm } from "../../../../types/client-quotation";
 
 import {
   options,
@@ -94,76 +91,82 @@ export default function Service({ formData, setFormData }: Props) {
           <Text>UNDER CONSTRUCTION</Text>
         )}
 
-        {formData.service?.type !== "BUSINESS SOLUTION" && selectedMode === "SEA" && (
-          <>
-            {/* SELECT ALL SECTION */}
-            <View style={styles.optionRow}>
-              <Checkbox.Android
-                status={
-                  formData.service?.options?.includes("ALL IN")
-                    ? "checked"
-                    : "unchecked"
-                }
-                onPress={() => {
-                  setFormData((prev) => {
-                    const isCurrentlyAllIn =
-                      prev.service?.options?.includes("ALL IN");
-                    return {
-                      ...prev,
-                      service: {
-                        ...prev.service,
-                        // If it was ALL IN, clear everything.
-                        // If it wasn't, set array to ONLY ["ALL IN"] to disable others.
-                        options: isCurrentlyAllIn ? [] : ["ALL IN"],
-                      },
-                    };
-                  });
+        {formData.service?.type !== "BUSINESS SOLUTION" &&
+          selectedMode === "SEA" && (
+            <>
+              {/* SELECT ALL SECTION */}
+              <View style={styles.optionRow}>
+                <Checkbox.Android
+                  status={
+                    formData.service?.options?.includes("ALL IN")
+                      ? "checked"
+                      : "unchecked"
+                  }
+                  onPress={() => {
+                    setFormData((prev) => {
+                      const isCurrentlyAllIn =
+                        prev.service?.options?.includes("ALL IN");
+                      return {
+                        ...prev,
+                        service: {
+                          ...prev.service,
+                          // If it was ALL IN, clear everything.
+                          // If it wasn't, set array to ONLY ["ALL IN"] to disable others.
+                          options: isCurrentlyAllIn ? [] : ["ALL IN"],
+                        },
+                      };
+                    });
+                  }}
+                />
+                <Text style={{ fontWeight: "bold" }}>ALL IN</Text>
+              </View>
+
+              <FlatList
+                data={options}
+                scrollEnabled={false}
+                renderItem={({ item }) => {
+                  const isAllIn = formData.service?.options?.includes("ALL IN");
+                  const isChecked = formData.service?.options?.includes(item);
+
+                  return (
+                    <View
+                      style={[styles.optionRow, isAllIn && { opacity: 0.5 }]}
+                    >
+                      <Checkbox.Android
+                        // If ALL IN is selected, these appear unchecked and cannot be pressed
+                        status={isChecked && !isAllIn ? "checked" : "unchecked"}
+                        disabled={isAllIn}
+                        onPress={() => {
+                          setFormData((prev) => {
+                            const currentOptions = prev.service?.options || [];
+                            const updatedOptions = currentOptions.includes(item)
+                              ? currentOptions.filter((opt) => opt !== item)
+                              : [...currentOptions, item];
+
+                            return {
+                              ...prev,
+                              service: {
+                                ...prev.service,
+                                options: updatedOptions,
+                              },
+                            };
+                          });
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: isAllIn ? "#aaa" : "#000",
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </View>
+                  );
                 }}
               />
-              <Text style={{ fontWeight: "bold" }}>ALL IN</Text>
-            </View>
-
-            <FlatList
-              data={options}
-              scrollEnabled={false}
-              renderItem={({ item }) => {
-                const isAllIn = formData.service?.options?.includes("ALL IN");
-                const isChecked = formData.service?.options?.includes(item);
-
-                return (
-                  <View style={[styles.optionRow, isAllIn && { opacity: 0.5 }]}>
-                    <Checkbox.Android
-                      // If ALL IN is selected, these appear unchecked and cannot be pressed
-                      status={isChecked && !isAllIn ? "checked" : "unchecked"}
-                      disabled={isAllIn}
-                      onPress={() => {
-                        setFormData((prev) => {
-                          const currentOptions = prev.service?.options || [];
-                          const updatedOptions = currentOptions.includes(item)
-                            ? currentOptions.filter((opt) => opt !== item)
-                            : [...currentOptions, item];
-
-                          return {
-                            ...prev,
-                            service: {
-                              ...prev.service,
-                              options: updatedOptions,
-                            },
-                          };
-                        });
-                      }}
-                    />
-                    <Text
-                      style={{ fontSize: 13, color: isAllIn ? "#aaa" : "#000" }}
-                    >
-                      {item}
-                    </Text>
-                  </View>
-                );
-              }}
-            />
-          </>
-        )}
+            </>
+          )}
         {selectedMode === "AIR" && <Text>UNDER CONSTRUCTION</Text>}
       </View>
     </View>

@@ -1,6 +1,6 @@
 import { clientQuotationKeys } from "@/src/query-key-factories/clientQuotations";
 import { fetchClientQuotes } from "@/src/services/clientQuotation";
-import type { QuotesParams } from "@/src/types/client-type";
+import type { QuotesParams } from "@/src/types/client-quotation";
 import { queryOptions } from "@tanstack/react-query";
 
 export const clientQuotesQueryOptions = (params: QuotesParams) =>

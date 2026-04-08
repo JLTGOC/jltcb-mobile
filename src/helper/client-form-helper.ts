@@ -1,4 +1,4 @@
-import { QuoteForm } from "../types/client-type";
+import { QuoteForm } from "../types/client-quotation";
 
 export function appendObjectToFormData(
   data: FormData,

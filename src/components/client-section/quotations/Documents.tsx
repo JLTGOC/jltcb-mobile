@@ -1,7 +1,10 @@
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
-import { fetchClientQuote, updateClientQuote } from "@/src/services/clientQuotation";
+import {
+  fetchClientQuote,
+  updateClientQuote,
+} from "@/src/services/clientQuotation";
 import { updateFileName } from "@/src/services/quotations";
-import { ClientFile, QuoteForm } from "@/src/types/client-type";
+import { ClientFile, QuoteForm } from "@/src/types/client-quotation";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
@@ -90,12 +93,14 @@ export default function Details({ quotationId }: Props) {
         return;
       }
 
-      const selectedDocuments: ClientFile[] = result.assets.map((asset, index) => ({
-        id: Date.now() + index,
-        file_name: asset.name,
-        file_url: asset.uri,
-        mimeType: asset.mimeType || "application/octet-stream",
-      }));
+      const selectedDocuments: ClientFile[] = result.assets.map(
+        (asset, index) => ({
+          id: Date.now() + index,
+          file_name: asset.name,
+          file_url: asset.uri,
+          mimeType: asset.mimeType || "application/octet-stream",
+        }),
+      );
 
       await addDocumentsMutation.mutateAsync(selectedDocuments);
     } catch (pickerError) {

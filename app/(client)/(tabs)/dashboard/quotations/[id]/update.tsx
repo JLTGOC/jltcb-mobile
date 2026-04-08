@@ -14,11 +14,10 @@ import Step_3 from "@/src/components/client-section/get-quote/Step_3";
 
 import {
   fetchClientQuote,
-  postClientQuote,
-  updateClientQuote,
+  updateClientQuote
 } from "@/src/services/clientQuotation";
 
-import { FieldConfig, QuoteForm } from "@/src/types/client-type";
+import { FieldConfig, QuoteForm } from "@/src/types/client-quotation";
 
 import { initialQuoteForm } from "@/src/constants/client-const";
 
@@ -113,9 +112,7 @@ export default function CreateUpdateQuote() {
 
   const quoteMutation = useMutation({
     mutationFn: async (formData: QuoteForm) => {
-  
-        return await updateClientQuote(quotationId, formData);
-     
+      return await updateClientQuote(quotationId, formData);
     },
     onSuccess: async () => {
       if (hasValidQuotationId) {

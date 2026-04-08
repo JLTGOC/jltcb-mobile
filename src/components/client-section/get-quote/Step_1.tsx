@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { HelperText, Surface, Text, TextInput } from "react-native-paper";
 import { z } from "zod";
-import { Field, QuoteForm } from "../../../types/client-type";
+import { Field, QuoteForm } from "../../../types/client-quotation";
 
 type Props = {
   formData: QuoteForm;
