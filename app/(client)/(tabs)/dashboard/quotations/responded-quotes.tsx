@@ -22,7 +22,7 @@ import { useSendQuotationCardMutation } from "@/src/hooks/useSendQuotationCardMu
 import { acceptClientQuotationMutationOptions } from "@/src/mutation-options/client-quotations/acceptClientQuotationMutationOptions";
 import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
 import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
-import { QuotesListItem } from "@/src/types/client-type";
+import { QuotesListItem } from "@/src/types/client-quotation";
 
 const tableHeaders = ["reference", "date", "shipment details", "status", ""];
 

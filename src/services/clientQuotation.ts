@@ -9,7 +9,7 @@ import {
   QuoteForm,
   QuotesListItem,
   QuotesParams,
-} from "../types/client-type";
+} from "../types/client-quotation";
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
 const getUploadableFiles = (documents: QuoteForm["documents"] | undefined) =>
@@ -44,7 +44,6 @@ const postMultipart = async <T>(
   token: string,
   body: FormData,
 ): Promise<ApiResponse<T>> => {
-  
   const response = await fetch(toAbsoluteApiUrl(path), {
     method: "POST",
     headers: {
@@ -113,8 +112,8 @@ export async function postClientQuote(formData: QuoteForm) {
   appendObjectToFormData(data, formData.commodity, "commodity");
   appendObjectToFormData(data, formData.shipment, "shipment");
   if (formData.remarks !== undefined && formData.remarks !== null) {
-  data.append("remarks", formData.remarks);
-}
+    data.append("remarks", formData.remarks);
+  }
 
   return (await postMultipart("quotations", token, data)).data;
 }
@@ -171,9 +170,9 @@ export async function updateClientQuote(
   appendObjectToFormData(data, formData.commodity, "commodity");
   appendObjectToFormData(data, formData.shipment, "shipment");
 
-if (formData.remarks !== undefined && formData.remarks !== null) {
-  data.append("remarks", formData.remarks);
-}
+  if (formData.remarks !== undefined && formData.remarks !== null) {
+    data.append("remarks", formData.remarks);
+  }
 
   if (removedDocumentIds.length) {
     removedDocumentIds.forEach((removedDocumentId) =>
@@ -191,10 +190,7 @@ if (formData.remarks !== undefined && formData.remarks !== null) {
 }
 
 // Fetch Quotes
-export async function fetchClientQuotes({
-  status,
-  search,
-}: QuotesParams) {
+export async function fetchClientQuotes({ status, search }: QuotesParams) {
   const params = {
     "filter[status]": status,
     search: search || undefined,

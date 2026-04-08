@@ -2,21 +2,15 @@ import { Dispatch, SetStateAction } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Card, Checkbox, Text, TextInput } from "react-native-paper";
 
-import {
-  QuoteForm,
-} from "../../../../types/client-type";
+import { QuoteForm } from "../../../../types/client-quotation";
 
-import {
-  cargo_type,
-  container_size,
-} from "../../../../constants/client-const";
+import { cargo_type, container_size } from "../../../../constants/client-const";
 
 type Props = {
   formData: QuoteForm;
   setFormData: Dispatch<SetStateAction<QuoteForm>>;
 };
 export default function Commodity({ formData, setFormData }: Props) {
-
   return (
     <View>
       {/* Dropdown */}
