@@ -8,7 +8,7 @@ import {
 } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
@@ -26,10 +26,7 @@ export default function Step2Form() {
     useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
   );
 
-  const { quotationId, quotationReference } = useLocalSearchParams<{
-    quotationId: string;
-    quotationReference: string;
-  }>();
+  const quotationReference = useStore((state) => state.quotationReference);
   const { data, isPending } = useJobOrderEnums(quotationReference);
 
   const containerSize = data?.autofill_details?.container_size;

@@ -10,7 +10,6 @@ import {
 } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
   KeyboardAvoidingView,
@@ -28,10 +27,7 @@ export default function Step3Form() {
     useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
   );
 
-  const { quotationId, quotationReference } = useLocalSearchParams<{
-    quotationId: string;
-    quotationReference: string;
-  }>();
+  const quotationReference = useStore((state) => state.quotationReference);
   const { data, isPending } = useJobOrderEnums(quotationReference);
 
   const {
@@ -90,12 +86,11 @@ export default function Step3Form() {
             <Controller
               control={control}
               name="completion_date"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FloatingLabelInput
+              render={({ field: { onChange, value } }) => (
+                <FloatingLabelDatePicker
                   label="TARGET COMPLETION PERIOD"
                   value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
+                  onValueChange={onChange}
                 />
               )}
             />

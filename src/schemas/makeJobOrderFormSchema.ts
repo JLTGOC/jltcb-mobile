@@ -37,8 +37,9 @@ const makeJobOrderSchema = z.object({
   target_special_remarks: z.string().trim(),
 
   // Billing Information
-  terms_of_payment: z.string().trim(),
-  billing_date: z.iso.datetime("When to bill is required.").optional(),
+  terms_of_payment: z.string().trim().min(1, "Terms of payment is required."),
+  // billing_date: z.iso.datetime("When to bill is required.").optional(),
+  billing_date: z.string().trim(),
   shall_be_billed: z.enum(BILLING_TYPES, "Shall be billed is required."),
 });
 export type JobOrderFormSchema = z.infer<typeof makeJobOrderSchema>;

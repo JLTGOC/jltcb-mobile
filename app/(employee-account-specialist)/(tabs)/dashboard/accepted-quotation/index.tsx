@@ -1,6 +1,7 @@
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
+import { useStore } from "@/src/stores/store";
 import type { MenuOption, TableHeader } from "@/src/types";
 import { showToast } from "@/src/utils/showToast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -38,6 +39,10 @@ type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 export default function AcceptedQuotation() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const setQuotationReference = useStore(
+    (state) => state.setQuotationReference,
+  );
+
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
   const { data, isPending, error } = useQuery(
@@ -82,11 +87,10 @@ export default function AcceptedQuotation() {
     quotationReference: string;
   }) => {
     if (title === "Make Job Order") {
-      router.push({
-        pathname:
-          "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order",
-        params: { quotationId, quotationReference },
-      });
+      setQuotationReference(quotationReference);
+      router.push(
+        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order",
+      );
       setVisibleMenuId(null);
       return;
     }
