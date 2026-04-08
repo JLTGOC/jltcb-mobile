@@ -10,7 +10,7 @@ import {
 } from "react-native-paper";
 
 import { fetchClientQuote } from "@/src/services/clientQuotation";
-import { QuoteForm } from "@/src/types/client-type";
+import { QuoteForm } from "@/src/types/client-quotation";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
 import { useRouter } from "expo-router";
 

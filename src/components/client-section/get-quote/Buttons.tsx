@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
-import { FieldConfig, QuoteForm } from "../../../types/client-type";
+import { FieldConfig, QuoteForm } from "../../../types/client-quotation";
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
 const COMPANY_EMAIL_REGEX =

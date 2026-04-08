@@ -1,24 +1,21 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
 import { Check } from "lucide-react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
-import { useFocusEffect } from "@react-navigation/native";
 
 import Success from "@/src/components/client-section/get-quote/Success";
-
+import CheckboxServices from "@/src/components/client-section/get-quote/CheckboxServices";
 import Buttons from "@/src/components/client-section/get-quote/Buttons";
 import Step_1 from "@/src/components/client-section/get-quote/Step_1";
 import Step_2 from "@/src/components/client-section/get-quote/Step_2";
 import Step_3 from "@/src/components/client-section/get-quote/Step_3";
 
 import {
-  fetchClientQuote,
-  postClientQuote,
+  postClientQuote
 } from "@/src/services/clientQuotation";
 
-import { FieldConfig, QuoteForm } from "@/src/types/client-type";
+import { FieldConfig, QuoteForm } from "@/src/types/client-quotation";
 
 import { initialQuoteForm } from "@/src/constants/client-const";
 
@@ -63,43 +60,6 @@ export default function CreateUpdateQuote() {
     };
   };
 
-  const { id, mode } = useLocalSearchParams<{
-    id: string;
-    title: string;
-    mode: string;
-  }>();
-
-  const quotationId = Number(id);
-  const hasValidQuotationId = Number.isFinite(quotationId) && quotationId > 0;
-  const isEditMode = mode === "EDIT" && hasValidQuotationId;
-
-  // Data Fetching for updating
-  const { data, refetch } = useQuery<QuoteForm>({
-    queryKey: ["client-quote", quotationId],
-    queryFn: () => fetchClientQuote(quotationId),
-    enabled: isEditMode,
-  });
-
-  useEffect(() => {
-    if (!isEditMode) {
-      setFormData(initialQuoteForm);
-      setCurrentPosition(0);
-      return;
-    }
-
-    if (data) {
-      setFormData(normalizeQuoteForm(data));
-    }
-  }, [data, isEditMode]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (isEditMode) {
-        refetch();
-      }
-    }, [isEditMode, refetch]),
-  );
-
   const stepConfigs: Record<
     number,
     { fields: FieldConfig[]; section: keyof QuoteForm }
@@ -129,13 +89,7 @@ export default function CreateUpdateQuote() {
       return await postClientQuote(formData);
     },
     onSuccess: async () => {
-      if (isEditMode) {
-        const { data: updatedData } = await refetch();
-
-        if (updatedData) {
-          setFormData(normalizeQuoteForm(updatedData));
-        }
-      }
+      setFormData(formData);
 
       setCurrentPosition(3);
     },
@@ -177,6 +131,7 @@ export default function CreateUpdateQuote() {
           <>
             <BannerHeader title={"Get Quote"} variant="dark" />
             <View style={{ padding: 20, flex: 1 }}>
+              <CheckboxServices formData={formData} setFormData={setFormData} />
               <StepIndicator
                 customStyles={stepIndicatorStyles}
                 currentPosition={currentPosition}

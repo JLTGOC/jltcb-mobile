@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
   detailsContainer: {
     marginTop: 4,
     gap: 3,
+    flex: 1,
   },
   infoRow: {
     flexDirection: "row",
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     width: 92,
-    fontSize: 8,
+    fontSize: 10,
     color: "#8E8E8E",
   },
   connectorWrap: {
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   infoValue: {
     flex: 1,
     textAlign: "left",
-    fontSize: 8,
+    fontSize: 10,
     color: "#8E8E8E",
     textTransform: "uppercase",
   },
