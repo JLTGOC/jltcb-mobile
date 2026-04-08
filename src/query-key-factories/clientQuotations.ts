@@ -1,4 +1,4 @@
-import type { QuotesParams } from "@/src/types/client-type";
+import type { QuotesParams } from "@/src/types/client-quotation";
 
 export const clientQuotationKeys = {
   all: () => ["quotes"] as const,

@@ -4,7 +4,7 @@ import { FileUp, X } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
-import { ClientFile, QuoteForm } from "../../../types/client-type";
+import { ClientFile, QuoteForm } from "../../../types/client-quotation";
 
 type Props = {
   formData: QuoteForm;

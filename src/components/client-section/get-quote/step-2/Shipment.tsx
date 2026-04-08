@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 
-import { QuoteForm } from "@/src/types/client-type";
+import { QuoteForm } from "@/src/types/client-quotation";
 
 type Props = {
   formData: QuoteForm;
