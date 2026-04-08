@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   type StyleProp,
   StyleSheet,
@@ -66,225 +68,233 @@ export default function Step1Form() {
   });
 
   return (
-    <ScrollView>
-      <BannerHeader title="Shipment" variant="light" />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={120}
+    >
+      <ScrollView>
+        <BannerHeader title="Shipment" variant="light" />
 
-      <View style={styles.content}>
-        {/* Subject */}
-        <View>
-          <Controller
-            control={control}
-            name="subject"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <FloatingLabelInput
-                label="SUBJECT"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
+        <View style={styles.content}>
+          {/* Subject */}
+          <View>
+            <Controller
+              control={control}
+              name="subject"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <FloatingLabelInput
+                  label="SUBJECT"
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              )}
+            />
+            {errors.subject && (
+              <HelperText type="error">{errors.subject.message}</HelperText>
             )}
-          />
-          {errors.subject && (
-            <HelperText type="error">{errors.subject.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <View>
-          <Controller
-            control={control}
-            name="email_body"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <FloatingLabelInput
-                label="MESSAGE"
-                multiline
-                numberOfLines={3}
-                style={{ minHeight: 75 }}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="email_body"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <FloatingLabelInput
+                  label="MESSAGE"
+                  multiline
+                  numberOfLines={3}
+                  style={{ minHeight: 75 }}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+            />
+            {errors.email_body && (
+              <HelperText type="error">{errors.email_body.message}</HelperText>
             )}
-          />
-          {errors.email_body && (
-            <HelperText type="error">{errors.email_body.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <FieldLegend>CLIENT INFORMATION</FieldLegend>
-        <FloatingLabelInput
-          label="CONSIGNEE"
-          editable={false}
-          value={data?.autofill_details?.company_name.toUpperCase()}
-        />
-        <View>
-          <Controller
-            control={control}
-            name="client_type"
-            render={({ field: { onChange, value } }) => (
-              <AutocompleteDropdown
-                textInputProps={{
-                  placeholder: "CLIENT TYPE",
-                  style: TEXT_INPUT_STYLES,
-                }}
-                suggestionsListTextStyle={{ color: TEXT_COLOR }}
-                dataSet={data?.client_types ?? null}
-                loading={isPending}
-                onSelectItem={(item) => onChange(item?.id)}
-                initialValue={value}
-              />
+          <FieldLegend>CLIENT INFORMATION</FieldLegend>
+          <FloatingLabelInput
+            label="CONSIGNEE"
+            editable={false}
+            value={data?.autofill_details?.company_name.toUpperCase()}
+          />
+          <View>
+            <Controller
+              control={control}
+              name="client_type"
+              render={({ field: { onChange, value } }) => (
+                <AutocompleteDropdown
+                  textInputProps={{
+                    placeholder: "CLIENT TYPE",
+                    style: TEXT_INPUT_STYLES,
+                  }}
+                  suggestionsListTextStyle={{ color: TEXT_COLOR }}
+                  dataSet={data?.client_types ?? null}
+                  loading={isPending}
+                  onSelectItem={(item) => onChange(item?.id)}
+                  initialValue={value}
+                />
+              )}
+            />
+            {errors.client_type && (
+              <HelperText type="error">{errors.client_type.message}</HelperText>
             )}
-          />
-          {errors.client_type && (
-            <HelperText type="error">{errors.client_type.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <View>
-          <Controller
-            control={control}
-            name="accredited"
-            render={({ field: { onChange, value } }) => (
-              <AutocompleteDropdown
-                textInputProps={{
-                  placeholder: "ACCREDITED",
-                  style: TEXT_INPUT_STYLES,
-                }}
-                suggestionsListTextStyle={{ color: TEXT_COLOR }}
-                dataSet={data?.accredited ?? null}
-                loading={isPending}
-                onSelectItem={(item) => onChange(item?.id)}
-                initialValue={value}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="accredited"
+              render={({ field: { onChange, value } }) => (
+                <AutocompleteDropdown
+                  textInputProps={{
+                    placeholder: "ACCREDITED",
+                    style: TEXT_INPUT_STYLES,
+                  }}
+                  suggestionsListTextStyle={{ color: TEXT_COLOR }}
+                  dataSet={data?.accredited ?? null}
+                  loading={isPending}
+                  onSelectItem={(item) => onChange(item?.id)}
+                  initialValue={value}
+                />
+              )}
+            />
+            {errors.accredited && (
+              <HelperText type="error">{errors.accredited.message}</HelperText>
             )}
+          </View>
+          <FloatingLabelInput
+            label="SHIPPER"
+            editable={false}
+            value={data?.autofill_details?.full_name.toUpperCase()}
           />
-          {errors.accredited && (
-            <HelperText type="error">{errors.accredited.message}</HelperText>
-          )}
-        </View>
-        <FloatingLabelInput
-          label="SHIPPER"
-          editable={false}
-          value={data?.autofill_details?.full_name.toUpperCase()}
-        />
 
-        <View>
-          <Controller
-            control={control}
-            name="remarks"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <FloatingLabelInput
-                label="REMARKS ON HANDLING CLIENT"
-                multiline
-                numberOfLines={3}
-                style={{ minHeight: 75 }}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="remarks"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <FloatingLabelInput
+                  label="REMARKS ON HANDLING CLIENT"
+                  multiline
+                  numberOfLines={3}
+                  style={{ minHeight: 75 }}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+            />
+            {errors.remarks && (
+              <HelperText type="error">{errors.remarks.message}</HelperText>
             )}
-          />
-          {errors.remarks && (
-            <HelperText type="error">{errors.remarks.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <FieldLegend>SERVICE INFORMATION</FieldLegend>
+          <FieldLegend>SERVICE INFORMATION</FieldLegend>
 
-        <View>
-          <Controller
-            control={control}
-            name="service_level"
-            render={({ field: { onChange, value } }) => (
-              <AutocompleteDropdown
-                textInputProps={{
-                  placeholder: "SERVICE LEVEL",
-                  style: TEXT_INPUT_STYLES,
-                }}
-                suggestionsListTextStyle={{ color: TEXT_COLOR }}
-                dataSet={data?.service_levels ?? null}
-                loading={isPending}
-                onSelectItem={(item) => onChange(item?.id)}
-                initialValue={value}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="service_level"
+              render={({ field: { onChange, value } }) => (
+                <AutocompleteDropdown
+                  textInputProps={{
+                    placeholder: "SERVICE LEVEL",
+                    style: TEXT_INPUT_STYLES,
+                  }}
+                  suggestionsListTextStyle={{ color: TEXT_COLOR }}
+                  dataSet={data?.service_levels ?? null}
+                  loading={isPending}
+                  onSelectItem={(item) => onChange(item?.id)}
+                  initialValue={value}
+                />
+              )}
+            />
+            {errors.service_level && (
+              <HelperText type="error">
+                {errors.service_level.message}
+              </HelperText>
             )}
-          />
-          {errors.service_level && (
-            <HelperText type="error">{errors.service_level.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <View>
-          <Controller
-            control={control}
-            name="bl_no"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <FloatingLabelInput
-                label="BL NO"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="bl_no"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <FloatingLabelInput
+                  label="BL NO"
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              )}
+            />
+            {errors.bl_no && (
+              <HelperText type="error">{errors.bl_no.message}</HelperText>
             )}
-          />
-          {errors.bl_no && (
-            <HelperText type="error">{errors.bl_no.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <View>
-          <Controller
-            control={control}
-            name="eta"
-            render={({ field: { onChange, value } }) => (
-              <FloatingLabelDatePicker
-                label="ESTIMATED TIME OF ARRIVAL"
-                value={value}
-                onValueChange={(dateString) => {
-                  onChange(dateString);
-                  if (etdValue) trigger(["eta", "etd"]);
-                }}
-                formatString="P"
-                maximumDate={etdValue ? new Date(etdValue) : undefined}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="eta"
+              render={({ field: { onChange, value } }) => (
+                <FloatingLabelDatePicker
+                  label="ESTIMATED TIME OF ARRIVAL"
+                  value={value}
+                  onValueChange={(dateString) => {
+                    onChange(dateString);
+                    if (etdValue) trigger(["eta", "etd"]);
+                  }}
+                  formatString="P"
+                  maximumDate={etdValue ? new Date(etdValue) : undefined}
+                />
+              )}
+            />
+            {errors.eta && (
+              <HelperText type="error">{errors.eta.message}</HelperText>
             )}
-          />
-          {errors.eta && (
-            <HelperText type="error">{errors.eta.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <View>
-          <Controller
-            control={control}
-            name="etd"
-            render={({ field: { onChange, value } }) => (
-              <FloatingLabelDatePicker
-                label="ESTIMATED TIME OF DEPARTURE"
-                value={value}
-                onValueChange={(dateString) => {
-                  onChange(dateString);
-                  if (etaValue) trigger(["eta", "etd"]);
-                }}
-                formatString="P"
-                minimumDate={etaValue ? new Date(etaValue) : undefined}
-              />
+          <View>
+            <Controller
+              control={control}
+              name="etd"
+              render={({ field: { onChange, value } }) => (
+                <FloatingLabelDatePicker
+                  label="ESTIMATED TIME OF DEPARTURE"
+                  value={value}
+                  onValueChange={(dateString) => {
+                    onChange(dateString);
+                    if (etaValue) trigger(["eta", "etd"]);
+                  }}
+                  formatString="P"
+                  minimumDate={etaValue ? new Date(etaValue) : undefined}
+                />
+              )}
+            />
+            {errors.etd && (
+              <HelperText type="error">{errors.etd.message}</HelperText>
             )}
-          />
-          {errors.etd && (
-            <HelperText type="error">{errors.etd.message}</HelperText>
-          )}
-        </View>
+          </View>
 
-        <Button
-          theme={{ colors: { primary: "#1C213B" } }}
-          mode="contained"
-          style={styles.button}
-          onPress={onSubmit}
-        >
-          NEXT
-        </Button>
-      </View>
-    </ScrollView>
+          <Button
+            theme={{ colors: { primary: "#1C213B" } }}
+            mode="contained"
+            style={styles.button}
+            onPress={onSubmit}
+          >
+            NEXT
+          </Button>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
