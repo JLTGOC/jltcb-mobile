@@ -23,7 +23,7 @@ const TABLE_HEADERS: TableHeader[] = [
   { title: "Shipment Details" },
   {
     title: "",
-    style: { maxWidth: 20 },
+    style: { maxWidth: 40 },
   },
 ];
 
@@ -146,10 +146,7 @@ export default function AcceptedQuotation() {
                       </DataTable.Cell>
                     );
                   })}
-                  <DataTable.Cell
-                    numeric
-                    style={[styles.cell, TABLE_HEADERS[3].style]}
-                  >
+                  <DataTable.Cell style={[styles.cell, TABLE_HEADERS[3].style]}>
                     <Menu
                       anchor={
                         <IconButton
