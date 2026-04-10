@@ -18,9 +18,9 @@ export type JobOrderResponse = {
   data: JobOrder[];
 };
 
-export interface CreateJobOrderRequestBody {
+interface CreateJobOrderBaseRequestBody<T extends JobType = JobType> {
   quotation_reference_number: string;
-  job_type: JobType;
+  job_type: T;
   subject: {
     subject: string;
     email_body: string;
@@ -30,6 +30,9 @@ export interface CreateJobOrderRequestBody {
     accredited: AccreditedType;
     remarks: string;
   };
+}
+
+export interface CreateLogisticsJobOrderRequestBody extends CreateJobOrderBaseRequestBody<"LOGISTICS"> {
   service: {
     service_level: string;
     bl_no: string;
@@ -53,3 +56,13 @@ export interface CreateJobOrderRequestBody {
     shall_be_billed: string;
   };
 }
+
+export interface CreateRegulatoryJobOrderRequestBody extends CreateJobOrderBaseRequestBody<"REGULATORY"> {
+  service: {
+    service: string;
+  };
+}
+
+export type CreateJobOrderRequestBody =
+  | CreateLogisticsJobOrderRequestBody
+  | CreateRegulatoryJobOrderRequestBody;

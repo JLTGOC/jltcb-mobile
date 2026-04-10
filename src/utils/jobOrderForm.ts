@@ -1,14 +1,13 @@
 import { JobOrderFormSchema } from "@/src/schemas/makeJobOrderFormSchema";
-import { CreateJobOrderRequestBody, JobType } from "@/src/types/job-order";
+import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 import { format, formatDistance, isSameDay } from "date-fns";
+import { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
 
 export const transformToApiPayload = ({
   data,
-  jobType,
   quotationReference,
 }: {
   data: JobOrderFormSchema;
-  jobType: JobType;
   quotationReference: string;
 }): CreateJobOrderRequestBody => {
   const formatDate = (date?: Date) =>
@@ -16,7 +15,7 @@ export const transformToApiPayload = ({
 
   return {
     quotation_reference_number: quotationReference,
-    job_type: jobType,
+    job_type: "LOGISTICS",
     subject: {
       subject: data.subject,
       email_body: data.email_body,
@@ -47,6 +46,31 @@ export const transformToApiPayload = ({
       terms_of_payment: data.terms_of_payment,
       billing_date: formatDate(data.billing_date),
       shall_be_billed: data.shall_be_billed,
+    },
+  };
+};
+
+export const transformToApiPayloadForRegulatoryJobOrder = ({
+  data,
+  quotationReference,
+}: {
+  data: RegulatoryServiceFormSchema;
+  quotationReference: string;
+}): CreateJobOrderRequestBody => {
+  return {
+    quotation_reference_number: quotationReference,
+    job_type: "REGULATORY",
+    subject: {
+      subject: data.subject,
+      email_body: data.email_body,
+    },
+    client: {
+      client_type: data.client_type,
+      accredited: data.accredited,
+      remarks: data.remarks,
+    },
+    service: {
+      service: data.service,
     },
   };
 };
