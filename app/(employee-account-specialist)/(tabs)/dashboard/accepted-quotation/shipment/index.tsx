@@ -10,6 +10,7 @@ import {
 } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -255,7 +256,7 @@ export default function Step1Form() {
                     onChange(date);
                     if (etdValue) trigger(["eta", "etd"]);
                   }}
-                  formatString="P"
+                  formatFunction={(date) => format(date, "P")}
                   maximumDate={etdValue ? new Date(etdValue) : undefined}
                 />
               )}
@@ -277,7 +278,7 @@ export default function Step1Form() {
                     onChange(date);
                     if (etaValue) trigger(["eta", "etd"]);
                   }}
-                  formatString="P"
+                  // formatFunction={(date) => format(date, "P")}
                   minimumDate={etaValue ? new Date(etaValue) : undefined}
                 />
               )}

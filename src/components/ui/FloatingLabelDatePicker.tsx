@@ -18,7 +18,7 @@ interface Props extends Omit<DateTimePickerProps, "value" | "onValueChange"> {
   value?: string | Date;
   onValueChange: (date: Date) => void;
   containerStyle?: StyleProp<ViewStyle>;
-  formatString?: string;
+  formatFunction?: (date: Date) => string;
 }
 
 export default function FloatingLabelDatePicker({
@@ -26,7 +26,7 @@ export default function FloatingLabelDatePicker({
   value,
   onValueChange,
   containerStyle,
-  formatString = "MMMM d, yyyy",
+  formatFunction = (date) => format(date, "MMMM d, yyyy"),
   ...props
 }: Props) {
   const [show, setShow] = useState(false);
@@ -35,7 +35,7 @@ export default function FloatingLabelDatePicker({
   const isValidDate =
     dateValue instanceof Date && !Number.isNaN(dateValue.getTime());
 
-  const displayValue = isValidDate ? format(dateValue, formatString) : "";
+  const displayValue = isValidDate ? formatFunction(dateValue) : "";
 
   const hasValue = displayValue.length > 0;
 

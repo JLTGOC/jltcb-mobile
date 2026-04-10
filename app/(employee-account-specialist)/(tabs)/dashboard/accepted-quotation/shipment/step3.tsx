@@ -23,6 +23,7 @@ import {
   step3Schema,
 } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
+import { formatTargetDeliveryDate } from "@/src/utils/jobOrderForm";
 import { TEXT_COLOR, TEXT_INPUT_STYLES } from ".";
 
 export default function Step3Form() {
@@ -78,6 +79,13 @@ export default function Step3Form() {
                   label="TARGET DELIVERY"
                   value={value}
                   onValueChange={onChange}
+                  formatFunction={(date) =>
+                    formatTargetDeliveryDate(
+                      date,
+                      new Date(jobOrderFormData.eta!),
+                    )
+                  }
+                  minimumDate={jobOrderFormData.eta}
                 />
               )}
             />
