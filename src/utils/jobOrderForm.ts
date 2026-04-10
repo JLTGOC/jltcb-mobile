@@ -1,6 +1,6 @@
 import { JobOrderFormSchema } from "@/src/schemas/makeJobOrderFormSchema";
 import { CreateJobOrderRequestBody, JobType } from "@/src/types/job-order";
-import { format } from "date-fns";
+import { format, formatDistance, isSameDay } from "date-fns";
 
 export const transformToApiPayload = ({
   data,
@@ -49,4 +49,12 @@ export const transformToApiPayload = ({
       shall_be_billed: data.shall_be_billed,
     },
   };
+};
+
+export const formatTargetDeliveryDate = (date: Date, arrivalDate: Date) => {
+  if (isSameDay(date, arrivalDate)) {
+    return "On arrival date";
+  }
+
+  return `${formatDistance(date, arrivalDate)} after arrival`;
 };

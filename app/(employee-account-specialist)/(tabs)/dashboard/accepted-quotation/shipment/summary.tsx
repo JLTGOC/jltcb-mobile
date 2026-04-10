@@ -11,7 +11,10 @@ import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
 import { makeJobOrderSchema } from "@/src/schemas/makeJobOrderFormSchema";
 import { useStore } from "@/src/stores/store";
-import { transformToApiPayload } from "@/src/utils/jobOrderForm";
+import {
+  formatTargetDeliveryDate,
+  transformToApiPayload,
+} from "@/src/utils/jobOrderForm";
 import { showToast } from "@/src/utils/showToast";
 import {
   AntDesign,
@@ -20,7 +23,7 @@ import {
 } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { format, formatDistance } from "date-fns";
+import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { ReactNode, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
@@ -132,10 +135,10 @@ export default function Summary() {
       content: [
         {
           label: "Target Delivery",
-          value: `${formatDistance(
-            jobOrderFormData.delivery_date ?? "",
-            jobOrderFormData.eta ?? "",
-          )} after arrival`,
+          value: formatTargetDeliveryDate(
+            jobOrderFormData.delivery_date!,
+            jobOrderFormData.eta!,
+          ),
         },
         {
           label: "Target Completion Period",
