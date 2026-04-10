@@ -200,7 +200,6 @@ export default function Summary() {
 
     const payload = transformToApiPayload({
       data,
-      jobType: "LOGISTICS",
       quotationReference,
     });
 
