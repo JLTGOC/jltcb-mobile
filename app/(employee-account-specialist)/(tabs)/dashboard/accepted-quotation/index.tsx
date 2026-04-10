@@ -102,7 +102,9 @@ export default function AcceptedQuotation() {
         "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment",
       );
     } else if (quotation.service === "REGULATORY") {
-      // TODO: navigate to regulatory job order creation when feature is available
+      router.push(
+        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/regulatory-services",
+      );
     }
     setVisibleMenuId(null);
   };
