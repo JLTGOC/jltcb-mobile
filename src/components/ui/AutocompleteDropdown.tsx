@@ -2,23 +2,25 @@ import type { IAutocompleteDropdownProps } from "react-native-autocomplete-dropd
 import { AutocompleteDropdown as BaseAutocompleteDropdown } from "react-native-autocomplete-dropdown";
 
 export default function AutocompleteDropdown({
-	...props
+  ...props
 }: IAutocompleteDropdownProps) {
-	return (
-		<BaseAutocompleteDropdown
-			textInputProps={{
-				style: {
-					color: "black",
-				},
-			}}
-			inputContainerStyle={{
-				backgroundColor: "white",
-			}}
-			suggestionsListTextStyle={{ color: "black" }}
-			suggestionsListContainerStyle={{
-				backgroundColor: "white",
-			}}
-			{...props}
-		/>
-	);
+  return (
+    <BaseAutocompleteDropdown
+      textInputProps={{
+        style: {
+          color: "black",
+        },
+      }}
+      inputContainerStyle={{
+        backgroundColor: "white",
+        borderColor: "#E5E5E5",
+        borderWidth: 1,
+      }}
+      suggestionsListTextStyle={{ color: "black" }}
+      suggestionsListContainerStyle={{
+        backgroundColor: "white",
+      }}
+      {...props}
+    />
+  );
 }
