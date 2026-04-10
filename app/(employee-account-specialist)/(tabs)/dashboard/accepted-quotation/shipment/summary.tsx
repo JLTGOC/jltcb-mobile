@@ -197,7 +197,7 @@ export default function Summary() {
 
     const payload = transformToApiPayload({
       data,
-      jobType: "SHIPMENT",
+      jobType: "LOGISTICS",
       quotationReference,
     });
 
@@ -214,9 +214,15 @@ export default function Summary() {
     }
   };
 
+  const bannerHeaderTitle = modalVisible
+    ? "Confirmation of Job Order"
+    : successModalVisible
+      ? "Job Order to Operations"
+      : "Logistics Services";
+
   return (
     <View style={{ flex: 1 }}>
-      <BannerHeader title="Shipment" variant="light" />
+      <BannerHeader title={bannerHeaderTitle} variant="light" />
 
       <FlatList
         data={summaryCardsData}

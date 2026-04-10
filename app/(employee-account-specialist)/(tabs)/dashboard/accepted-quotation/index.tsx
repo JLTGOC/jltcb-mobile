@@ -3,6 +3,7 @@ import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/
 import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
 import { useStore } from "@/src/stores/store";
 import type { MenuOption, TableHeader } from "@/src/types";
+import { ASAcceptedQuotation } from "@/src/types/quotations";
 import { showToast } from "@/src/utils/showToast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
@@ -39,6 +40,7 @@ type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 export default function AcceptedQuotation() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const reset = useStore((state) => state.reset);
   const setQuotationReference = useStore(
     (state) => state.setQuotationReference,
   );
@@ -79,27 +81,30 @@ export default function AcceptedQuotation() {
 
   const handleMenuAction = async ({
     title,
-    quotationId,
-    quotationReference,
+    quotation,
   }: {
     title: MenuTitle;
-    quotationId: string;
-    quotationReference: string;
+    quotation: ASAcceptedQuotation;
   }) => {
-    if (title === "Make Job Order") {
-      setQuotationReference(quotationReference);
-      router.push(
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order",
-      );
-      setVisibleMenuId(null);
+    if (title !== "Make Job Order") {
+      const fileUrl = await getQuotationFile(quotation.id.toString());
+      if (!fileUrl) return;
+
+      if (title === "Download") Linking.openURL(fileUrl);
+      else if (title === "Print") handlePrint(fileUrl);
       return;
     }
 
-    const fileUrl = await getQuotationFile(quotationId);
-    if (!fileUrl) return;
-
-    if (title === "Download") Linking.openURL(fileUrl);
-    else if (title === "Print") handlePrint(fileUrl);
+    reset();
+    setQuotationReference(quotation.reference_number);
+    if (quotation.service === "LOGISTICS") {
+      router.push(
+        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment",
+      );
+    } else if (quotation.service === "REGULATORY") {
+      // TODO: navigate to regulatory job order creation when feature is available
+    }
+    setVisibleMenuId(null);
   };
 
   return (
@@ -172,8 +177,7 @@ export default function AcceptedQuotation() {
                           onPress={() =>
                             handleMenuAction({
                               title: menu.title,
-                              quotationId: String(quotation.id),
-                              quotationReference: quotation.reference_number,
+                              quotation,
                             })
                           }
                         />

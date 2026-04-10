@@ -1,6 +1,6 @@
 import { AccreditedType, ClientType } from "./jobOrderEnums";
 
-export const JOB_TYPES = ["SHIPMENT", "ACCREDITATION"] as const;
+export const JOB_TYPES = ["LOGISTICS", "REGULATORY"] as const;
 export type JobType = (typeof JOB_TYPES)[number];
 
 export type JobOrder = {
