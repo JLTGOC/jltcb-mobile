@@ -50,7 +50,7 @@ export default function Step2Form() {
   const onSubmit = handleSubmit((data) => {
     setJobOrderFormData(data);
     router.push(
-      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment/step3",
+      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/step3",
     );
   });
 
@@ -61,7 +61,7 @@ export default function Step2Form() {
       keyboardVerticalOffset={120}
     >
       <ScrollView>
-        <BannerHeader title="Shipment" variant="light" />
+        <BannerHeader title="Logistics Services" variant="light" />
 
         <View style={styles.content}>
           <FieldLegend>SHIPMENT INFORMATION</FieldLegend>
