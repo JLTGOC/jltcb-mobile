@@ -1,30 +1,36 @@
-import type { JobOrderFormSchema } from "@/src/schemas/makeJobOrderFormSchema";
+import type { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
 import type { Store } from "@/src/types/store";
 import type { StateCreator } from "zustand";
 
-interface JobOrderFormState {
-  jobOrderFormData: Partial<JobOrderFormSchema>;
+interface LogisticsServiceFormState {
+  logisticsServiceFormData: Partial<LogisticsServiceFormSchema>;
   quotationReference?: string;
 }
 
-interface JobOrderFormActions {
-  setJobOrderFormData: (jobOrderFormData: Partial<JobOrderFormSchema>) => void;
+interface LogisticsServiceFormActions {
+  setLogisticsServiceFormData: (
+    logisticsServiceFormData: Partial<LogisticsServiceFormSchema>,
+  ) => void;
   setQuotationReference: (quotationReference: string) => void;
   reset: () => void;
 }
 
-export type JobOrderFormSlice = JobOrderFormState & JobOrderFormActions;
+export type LogisticsServiceFormSlice = LogisticsServiceFormState &
+  LogisticsServiceFormActions;
 
-export const createJobOrderFormSlice: StateCreator<
+export const createLogisticsServiceFormSlice: StateCreator<
   Store,
   [],
   [],
-  JobOrderFormSlice
+  LogisticsServiceFormSlice
 > = (set, _get, store) => ({
-  jobOrderFormData: {},
-  setJobOrderFormData: (jobOrderFormData) =>
+  logisticsServiceFormData: {},
+  setLogisticsServiceFormData: (logisticsServiceFormData) =>
     set((state) => ({
-      jobOrderFormData: { ...state.jobOrderFormData, ...jobOrderFormData },
+      logisticsServiceFormData: {
+        ...state.logisticsServiceFormData,
+        ...logisticsServiceFormData,
+      },
     })),
 
   setQuotationReference: (quotationReference) =>

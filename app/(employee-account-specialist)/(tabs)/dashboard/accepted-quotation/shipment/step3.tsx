@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays, compareAsc, formatDistance } from "date-fns";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -20,17 +21,23 @@ import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
 import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import {
   type Step3Fields,
-  step3Schema,
-} from "@/src/schemas/makeJobOrderFormSchema";
+  createStep3Schema,
+} from "@/src/schemas/job-order/logistics-service-form-schema";
 import { useStore } from "@/src/stores/store";
 import { formatTargetDeliveryDate } from "@/src/utils/jobOrderForm";
 import { TEXT_COLOR, TEXT_INPUT_STYLES } from ".";
 
 export default function Step3Form() {
   const router = useRouter();
-  const [jobOrderFormData, setJobOrderFormData] = useStore(
-    useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
+  const [logisticsServiceFormData, setLogisticsServiceFormData] = useStore(
+    useShallow((state) => [
+      state.logisticsServiceFormData,
+      state.setLogisticsServiceFormData,
+    ]),
   );
+
+  const eta = logisticsServiceFormData.eta;
+  const minimumDeliveryDate = eta ? addDays(new Date(eta), 1) : undefined;
 
   const quotationReference = useStore((state) => state.quotationReference);
   const { data, isPending } = useJobOrderEnums(quotationReference);
@@ -38,22 +45,24 @@ export default function Step3Form() {
   const {
     control,
     handleSubmit,
+    trigger,
     formState: { errors },
   } = useForm<Step3Fields>({
-    resolver: zodResolver(step3Schema),
+    resolver: zodResolver(createStep3Schema(eta)),
     defaultValues: {
-      delivery_date: jobOrderFormData.delivery_date,
-      completion_date: jobOrderFormData.completion_date,
-      target_special_remarks: jobOrderFormData.target_special_remarks ?? "",
+      delivery_date: logisticsServiceFormData.delivery_date,
+      completion_date: logisticsServiceFormData.completion_date,
+      target_special_remarks:
+        logisticsServiceFormData.target_special_remarks ?? "",
 
-      terms_of_payment: jobOrderFormData.terms_of_payment ?? "",
-      billing_date: jobOrderFormData.billing_date,
-      shall_be_billed: jobOrderFormData.shall_be_billed ?? undefined,
+      terms_of_payment: logisticsServiceFormData.terms_of_payment ?? "",
+      billing_date: logisticsServiceFormData.billing_date,
+      shall_be_billed: logisticsServiceFormData.shall_be_billed ?? undefined,
     },
   });
 
   const onSubmit = handleSubmit((data) => {
-    setJobOrderFormData(data);
+    setLogisticsServiceFormData(data);
     router.push(
       "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/summary",
     );
@@ -78,14 +87,19 @@ export default function Step3Form() {
                 <FloatingLabelDatePicker
                   label="TARGET DELIVERY"
                   value={value}
-                  onValueChange={onChange}
-                  formatFunction={(date) =>
-                    formatTargetDeliveryDate(
-                      date,
-                      new Date(jobOrderFormData.eta!),
-                    )
-                  }
-                  minimumDate={jobOrderFormData.eta}
+                  onValueChange={(date) => {
+                    onChange(date);
+                    trigger("delivery_date");
+                  }}
+                  formatFunction={(date) => {
+                    if (compareAsc(date, new Date(eta!)) !== 1) {
+                      return formatDistance(date, new Date(eta!), {
+                        addSuffix: true,
+                      });
+                    }
+                    return formatTargetDeliveryDate(date, new Date(eta!));
+                  }}
+                  minimumDate={minimumDeliveryDate}
                 />
               )}
             />

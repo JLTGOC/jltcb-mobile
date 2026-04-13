@@ -11,7 +11,7 @@ import {
   RegulatoryServiceFormSchema,
 } from "@/src/schemas/job-order/regulatory-service-form-schema";
 import { useStore } from "@/src/stores/store";
-import { transformToApiPayloadForRegulatoryJobOrder } from "@/src/utils/jobOrderForm";
+import { transformToRegulatoryJobOrderPayload } from "@/src/utils/jobOrderForm";
 import { showToast } from "@/src/utils/showToast";
 import { AntDesign } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -67,7 +67,7 @@ export default function RegulatoryServices() {
   ) => {
     if (!quotationReference) return;
 
-    const payload = transformToApiPayloadForRegulatoryJobOrder({
+    const payload = transformToRegulatoryJobOrderPayload({
       data,
       quotationReference,
     });

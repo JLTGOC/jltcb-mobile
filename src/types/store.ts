@@ -1,3 +1,3 @@
-import type { JobOrderFormSlice } from "@/src/stores/slices/job-order-form-slice";
+import type { LogisticsServiceFormSlice } from "@/src/stores/slices/job-order-form-slice";
 
-export type Store = JobOrderFormSlice;
+export type Store = LogisticsServiceFormSlice;
