@@ -89,6 +89,12 @@ export default function RegulatoryServices() {
     handleCreateRegulatoryJobOrder,
   );
 
+  const bannerHeaderTitle = modalVisible
+    ? "Confirmation of Job Order"
+    : successModalVisible
+      ? "Job Order to Operations"
+      : "Regulatory Services";
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -96,7 +102,7 @@ export default function RegulatoryServices() {
       keyboardVerticalOffset={120}
     >
       <ScrollView>
-        <BannerHeader title="Regulatory Services" variant="light" />
+        <BannerHeader title={bannerHeaderTitle} variant="light" />
 
         <View style={styles.content}>
           {/* Subject */}
