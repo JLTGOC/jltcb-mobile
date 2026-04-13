@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
 
@@ -12,7 +12,14 @@ type Props = {
 export default function CheckboxServices({ formData, setFormData }: Props) {
   const Services = ["LOGISTICS", "REGULATORY"];
 
-  console.log("khate", formData)
+  useEffect(() => {
+    if (!formData.service?.transport_mode) {
+      setFormData((prev) => ({
+        ...prev,
+        service: { ...prev.service, transport_mode: "LOGISTICS" },
+      }));
+    }
+  }, [formData.service?.transport_mode, setFormData]);
 
   return (
     <View style={{ gap: 10, marginBottom: 20 }}>
