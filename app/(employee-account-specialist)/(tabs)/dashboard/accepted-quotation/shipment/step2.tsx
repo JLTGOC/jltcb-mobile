@@ -5,7 +5,7 @@ import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import {
   type Step2Fields,
   step2Schema,
-} from "@/src/schemas/makeJobOrderFormSchema";
+} from "@/src/schemas/job-order/logistics-service-form-schema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
@@ -22,8 +22,11 @@ import { useShallow } from "zustand/react/shallow";
 
 export default function Step2Form() {
   const router = useRouter();
-  const [jobOrderFormData, setJobOrderFormData] = useStore(
-    useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
+  const [logisticsServiceFormData, setLogisticsServiceFormData] = useStore(
+    useShallow((state) => [
+      state.logisticsServiceFormData,
+      state.setLogisticsServiceFormData,
+    ]),
   );
 
   const quotationReference = useStore((state) => state.quotationReference);
@@ -39,16 +42,17 @@ export default function Step2Form() {
   } = useForm<Step2Fields>({
     resolver: zodResolver(step2Schema),
     defaultValues: {
-      hs_code: jobOrderFormData.hs_code ?? "",
-      rod: jobOrderFormData.rod ?? "",
-      permits: jobOrderFormData.permits ?? "",
-      if_coordinated: jobOrderFormData.if_coordinated ?? "",
-      shipment_special_remarks: jobOrderFormData.shipment_special_remarks ?? "",
+      hs_code: logisticsServiceFormData.hs_code ?? "",
+      rod: logisticsServiceFormData.rod ?? "",
+      permits: logisticsServiceFormData.permits ?? "",
+      if_coordinated: logisticsServiceFormData.if_coordinated ?? "",
+      shipment_special_remarks:
+        logisticsServiceFormData.shipment_special_remarks ?? "",
     },
   });
 
   const onSubmit = handleSubmit((data) => {
-    setJobOrderFormData(data);
+    setLogisticsServiceFormData(data);
     router.push(
       "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/step3",
     );

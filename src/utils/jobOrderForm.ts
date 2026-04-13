@@ -1,13 +1,13 @@
-import { JobOrderFormSchema } from "@/src/schemas/makeJobOrderFormSchema";
+import { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
 import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 import { format, formatDistance, isSameDay } from "date-fns";
 import { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
 
-export const transformToApiPayload = ({
+export const transformToLogisticsJobOrderPayload = ({
   data,
   quotationReference,
 }: {
-  data: JobOrderFormSchema;
+  data: LogisticsServiceFormSchema;
   quotationReference: string;
 }): CreateJobOrderRequestBody => {
   const formatDate = (date?: Date) =>
@@ -50,7 +50,7 @@ export const transformToApiPayload = ({
   };
 };
 
-export const transformToApiPayloadForRegulatoryJobOrder = ({
+export const transformToRegulatoryJobOrderPayload = ({
   data,
   quotationReference,
 }: {

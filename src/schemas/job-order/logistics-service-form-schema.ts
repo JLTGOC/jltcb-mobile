@@ -1,12 +1,12 @@
-import * as z from "zod";
 import {
   ACCREDITED_TYPES,
   BILLING_TYPES,
   CLIENT_TYPES,
   SERVICE_LEVEL_TYPES,
-} from "../types/jobOrderEnums";
+} from "@/src/types/jobOrderEnums";
+import * as z from "zod";
 
-export const makeJobOrderSchema = z.object({
+export const logisticsServiceFormSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required."),
   email_body: z.string().trim().min(1, "Message is required."),
 
@@ -39,10 +39,12 @@ export const makeJobOrderSchema = z.object({
   // billing_date: z.string().trim(),
   shall_be_billed: z.enum(BILLING_TYPES, "Shall be billed is required."),
 });
-export type JobOrderFormSchema = z.infer<typeof makeJobOrderSchema>;
+export type LogisticsServiceFormSchema = z.infer<
+  typeof logisticsServiceFormSchema
+>;
 
 export const step1Schema = z.intersection(
-  makeJobOrderSchema.pick({
+  logisticsServiceFormSchema.pick({
     subject: true,
     email_body: true,
     client_type: true,
@@ -51,7 +53,7 @@ export const step1Schema = z.intersection(
     service_level: true,
     bl_no: true,
   }),
-  makeJobOrderSchema
+  logisticsServiceFormSchema
     .pick({
       eta: true,
       etd: true,
@@ -76,7 +78,7 @@ export const step1Schema = z.intersection(
 );
 export type Step1Fields = z.infer<typeof step1Schema>;
 
-export const step2Schema = makeJobOrderSchema.pick({
+export const step2Schema = logisticsServiceFormSchema.pick({
   hs_code: true,
   rod: true,
   permits: true,
@@ -85,7 +87,7 @@ export const step2Schema = makeJobOrderSchema.pick({
 });
 export type Step2Fields = z.infer<typeof step2Schema>;
 
-export const step3Schema = makeJobOrderSchema.pick({
+const step3BaseSchema = logisticsServiceFormSchema.pick({
   delivery_date: true,
   completion_date: true,
   target_special_remarks: true,
@@ -93,4 +95,32 @@ export const step3Schema = makeJobOrderSchema.pick({
   billing_date: true,
   shall_be_billed: true,
 });
-export type Step3Fields = z.infer<typeof step3Schema>;
+
+export const step3Schema = step3BaseSchema;
+
+const makeStep3EtaValidationSchema = (eta?: Date) =>
+  z
+    .object({
+      delivery_date: logisticsServiceFormSchema.shape.delivery_date.optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!eta || !data.delivery_date) {
+        return;
+      }
+
+      const etaDate = new Date(eta);
+      const deliveryDate = new Date(data.delivery_date);
+
+      if (deliveryDate <= etaDate) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Target delivery must be after ETA.",
+          path: ["delivery_date"],
+        });
+      }
+    });
+
+export const createStep3Schema = (eta?: Date) =>
+  z.intersection(step3BaseSchema, makeStep3EtaValidationSchema(eta));
+
+export type Step3Fields = z.infer<typeof step3BaseSchema>;

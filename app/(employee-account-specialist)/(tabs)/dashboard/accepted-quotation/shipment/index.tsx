@@ -7,7 +7,7 @@ import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import {
   type Step1Fields,
   step1Schema,
-} from "@/src/schemas/makeJobOrderFormSchema";
+} from "@/src/schemas/job-order/logistics-service-form-schema";
 import { useStore } from "@/src/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -33,8 +33,11 @@ export const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {
 
 export default function Step1Form() {
   const router = useRouter();
-  const [jobOrderFormData, setJobOrderFormData] = useStore(
-    useShallow((state) => [state.jobOrderFormData, state.setJobOrderFormData]),
+  const [logisticsServiceFormData, setLogisticsServiceFormData] = useStore(
+    useShallow((state) => [
+      state.logisticsServiceFormData,
+      state.setLogisticsServiceFormData,
+    ]),
   );
 
   const quotationReference = useStore((state) => state.quotationReference);
@@ -49,15 +52,15 @@ export default function Step1Form() {
   } = useForm<Step1Fields>({
     resolver: zodResolver(step1Schema),
     defaultValues: {
-      subject: jobOrderFormData.subject ?? "",
-      email_body: jobOrderFormData.email_body ?? "",
-      client_type: jobOrderFormData.client_type,
-      accredited: jobOrderFormData.accredited,
-      remarks: jobOrderFormData.remarks ?? "",
-      service_level: jobOrderFormData.service_level,
-      bl_no: jobOrderFormData.bl_no ?? "",
-      eta: jobOrderFormData.eta,
-      etd: jobOrderFormData.etd,
+      subject: logisticsServiceFormData.subject ?? "",
+      email_body: logisticsServiceFormData.email_body ?? "",
+      client_type: logisticsServiceFormData.client_type,
+      accredited: logisticsServiceFormData.accredited,
+      remarks: logisticsServiceFormData.remarks ?? "",
+      service_level: logisticsServiceFormData.service_level,
+      bl_no: logisticsServiceFormData.bl_no ?? "",
+      eta: logisticsServiceFormData.eta,
+      etd: logisticsServiceFormData.etd,
     },
   });
 
@@ -65,7 +68,7 @@ export default function Step1Form() {
   const etdValue = watch("etd");
 
   const onSubmit = handleSubmit((data) => {
-    setJobOrderFormData(data);
+    setLogisticsServiceFormData(data);
     router.push(
       "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/step2",
     );
@@ -278,7 +281,7 @@ export default function Step1Form() {
                     onChange(date);
                     if (etaValue) trigger(["eta", "etd"]);
                   }}
-                  // formatFunction={(date) => format(date, "P")}
+                  formatFunction={(date) => format(date, "P")}
                   minimumDate={etaValue ? new Date(etaValue) : undefined}
                 />
               )}

@@ -9,11 +9,11 @@ import ConfirmModal from "@/src/components/ui/ConfirmModal";
 import SuccesModal from "@/src/components/ui/SuccessModal";
 import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
-import { makeJobOrderSchema } from "@/src/schemas/makeJobOrderFormSchema";
+import { logisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
 import { useStore } from "@/src/stores/store";
 import {
   formatTargetDeliveryDate,
-  transformToApiPayload,
+  transformToLogisticsJobOrderPayload,
 } from "@/src/utils/jobOrderForm";
 import { showToast } from "@/src/utils/showToast";
 import {
@@ -44,7 +44,9 @@ interface SummaryCardData {
 
 export default function Summary() {
   const router = useRouter();
-  const jobOrderFormData = useStore((state) => state.jobOrderFormData);
+  const logisticsServiceFormData = useStore(
+    (state) => state.logisticsServiceFormData,
+  );
   const quotationReference = useStore((state) => state.quotationReference);
   const { data } = useJobOrderEnums(quotationReference);
 
@@ -67,11 +69,11 @@ export default function Summary() {
         },
         {
           label: "Client Type",
-          value: jobOrderFormData.client_type,
+          value: logisticsServiceFormData.client_type,
         },
         {
           label: "Accredited",
-          value: jobOrderFormData.accredited,
+          value: logisticsServiceFormData.accredited,
         },
         {
           label: "Shipper",
@@ -79,7 +81,7 @@ export default function Summary() {
         },
         {
           label: "Remarks On Handling Client",
-          value: jobOrderFormData.remarks,
+          value: logisticsServiceFormData.remarks,
         },
       ],
     },
@@ -93,10 +95,19 @@ export default function Summary() {
         />
       ),
       content: [
-        { label: "Service Level", value: jobOrderFormData.service_level },
-        { label: "BL NO", value: jobOrderFormData.bl_no },
-        { label: "ETA", value: format(jobOrderFormData.eta ?? "", "P") },
-        { label: "ETD", value: format(jobOrderFormData.etd ?? "", "P") },
+        {
+          label: "Service Level",
+          value: logisticsServiceFormData.service_level,
+        },
+        { label: "BL NO", value: logisticsServiceFormData.bl_no },
+        {
+          label: "ETA",
+          value: format(logisticsServiceFormData.eta ?? "", "P"),
+        },
+        {
+          label: "ETD",
+          value: format(logisticsServiceFormData.etd ?? "", "P"),
+        },
       ],
     },
     {
@@ -116,14 +127,17 @@ export default function Summary() {
         { label: "Volume/Dimension", value: volumeDimension },
         {
           label: "Hs Code, As Verified By TWG:",
-          value: jobOrderFormData.hs_code,
+          value: logisticsServiceFormData.hs_code,
         },
-        { label: "ROD", value: jobOrderFormData.rod },
-        { label: "Permits Needed", value: jobOrderFormData.permits },
-        { label: "If Coordinated:", value: jobOrderFormData.if_coordinated },
+        { label: "ROD", value: logisticsServiceFormData.rod },
+        { label: "Permits Needed", value: logisticsServiceFormData.permits },
+        {
+          label: "If Coordinated:",
+          value: logisticsServiceFormData.if_coordinated,
+        },
         {
           label: "Special Remarks",
-          value: jobOrderFormData.shipment_special_remarks,
+          value: logisticsServiceFormData.shipment_special_remarks,
         },
       ],
     },
@@ -136,19 +150,19 @@ export default function Summary() {
         {
           label: "Target Delivery",
           value: formatTargetDeliveryDate(
-            jobOrderFormData.delivery_date!,
-            jobOrderFormData.eta!,
+            logisticsServiceFormData.delivery_date!,
+            logisticsServiceFormData.eta!,
           ),
         },
         {
           label: "Target Completion Period",
-          value: jobOrderFormData.completion_date
-            ? format(jobOrderFormData.completion_date ?? "", "P")
+          value: logisticsServiceFormData.completion_date
+            ? format(logisticsServiceFormData.completion_date ?? "", "P")
             : "",
         },
         {
           label: "Special Remarks",
-          value: jobOrderFormData.target_special_remarks,
+          value: logisticsServiceFormData.target_special_remarks,
         },
       ],
     },
@@ -164,13 +178,17 @@ export default function Summary() {
       content: [
         {
           label: "Terms of Payment",
-          value: jobOrderFormData.terms_of_payment,
+          value: logisticsServiceFormData.terms_of_payment,
         },
         {
           label: "When To Bill",
-          value: jobOrderFormData.billing_date
-            ? format(jobOrderFormData.billing_date ?? "", "P")
+          value: logisticsServiceFormData.billing_date
+            ? format(logisticsServiceFormData.billing_date ?? "", "P")
             : "",
+        },
+        {
+          label: "Shall Be Billed",
+          value: logisticsServiceFormData.shall_be_billed,
         },
         {
           label: "Availbale Docs Attached",
@@ -190,15 +208,16 @@ export default function Summary() {
   const handleCreateJobOrder = async () => {
     if (!quotationReference) return;
 
-    const { success, data, error } =
-      makeJobOrderSchema.safeParse(jobOrderFormData);
+    const { success, data, error } = logisticsServiceFormSchema.safeParse(
+      logisticsServiceFormData,
+    );
 
     if (!success) {
       console.error("Form data validation failed:", error);
       return;
     }
 
-    const payload = transformToApiPayload({
+    const payload = transformToLogisticsJobOrderPayload({
       data,
       quotationReference,
     });
@@ -257,11 +276,13 @@ export default function Summary() {
                   </CardTitle>
                 </View>
                 <CardTitle style={styles.flexContent}>
-                  {jobOrderFormData.subject}
+                  {logisticsServiceFormData.subject}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Text variant="bodySmall">{jobOrderFormData.email_body}</Text>
+                <Text variant="bodySmall">
+                  {logisticsServiceFormData.email_body}
+                </Text>
               </CardContent>
             </Card>
           </>
