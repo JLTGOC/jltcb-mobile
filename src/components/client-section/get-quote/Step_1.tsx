@@ -1,13 +1,20 @@
 import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 import { HelperText, Surface, Text, TextInput } from "react-native-paper";
+
 import { z } from "zod";
-import { Field, QuoteForm } from "../../../types/client-quotation";
+import {
+  FieldConfig,
+  QuoteEnums,
+  QuoteForm,
+} from "../../../types/client-quotation";
 
 type Props = {
   formData: QuoteForm;
   setFormData: Dispatch<SetStateAction<QuoteForm>>;
-  fields: Field[];
+  fields: FieldConfig[];
+  enums: QuoteEnums;
 };
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
@@ -15,12 +22,10 @@ const COMPANY_EMAIL_REGEX =
   /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/i;
 
 const companySchema = z.object({
-  name: z
+  company_name: z
     .string()
     .min(1, "Company name is required")
     .max(100, "Name is too long"),
-  address: z.string().min(1, "Address is required"),
-  contact_person: z.string().min(1, "Contact person name is required"),
   contact_number: z
     .string()
     .regex(
@@ -34,7 +39,16 @@ const companySchema = z.object({
       "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
     ),
 });
-export default function Step_1({ setFormData, formData, fields }: Props) {
+
+export default function Step_1({
+  setFormData,
+  formData,
+  fields,
+  enums,
+}: Props) {
+  const isPhoneField = (key: string) =>
+    key === "contact_number" || key === "cp_contact_number";
+
   const validationResult = useMemo(() => {
     return companySchema.safeParse(formData.company);
   }, [formData.company]);
@@ -48,7 +62,7 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
   const handleInputChange = useCallback(
     (key: string, text: string) => {
       let cleanedText = text;
-      if (key === "contact_number") {
+      if (isPhoneField(key)) {
         cleanedText = text.replace(/[^0-9]/g, "");
       }
 
@@ -60,12 +74,44 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
     [setFormData],
   );
 
+  // console.log("khate-step_1", enums);
+
   return (
     <ScrollView
       style={styles.container}
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={styles.contentContainer}
     >
+      {formData?.service?.transport_mode === "REGULATORY" && (
+        <View style={{ marginBottom: 20 }}>
+          <Text allowFontScaling={false} style={styles.customLabel}>
+            BUSINESS TYPE
+            <Text style={{ color: "red" }}>*</Text>
+          </Text>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={(enums?.business_types ?? []).map((type) => ({
+              label: type,
+              value: type,
+            }))}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="BUSINESS TYPE"
+            value={formData.company?.business_type}
+            onChange={(item: { label: string; value: string }) => {
+              setFormData((prev) => ({
+                ...prev,
+                company: { ...prev.company, business_type: item.value },
+              }));
+            }}
+          />
+        </View>
+      )}
       {fields.map((field) => {
         const value =
           formData.company?.[field.key as keyof typeof formData.company] ?? "";
@@ -75,40 +121,43 @@ export default function Step_1({ setFormData, formData, fields }: Props) {
         const hasError = !!errorMsg && value.length > 0;
 
         return (
-          <View key={field.key} style={styles.fieldWrapper}>
-            <Text allowFontScaling={false} style={styles.customLabel}>
-              {field.label} <Text style={{ color: "red" }}>*</Text>
-            </Text>
+          <View style={styles.container} key={field.key}>
+            <View style={styles.fieldWrapper}>
+              <Text allowFontScaling={false} style={styles.customLabel}>
+                {field.label}{" "}
+                {field.required && <Text style={{ color: "red" }}>*</Text>}
+              </Text>
 
-            <Surface style={styles.inputSurface}>
-              <TextInput
-                value={
-                  formData.company?.[
-                    field.key as keyof typeof formData.company
-                  ] ?? ""
-                }
-                error={hasError}
-                underlineColor="transparent"
-                activeUnderlineColor="transparent"
-                selectionColor="blue"
-                numberOfLines={3}
-                mode="flat"
-                maxLength={field.key === "contact_number" ? 11 : undefined}
-                style={styles.input}
-                keyboardType={
-                  field.key === "contact_number"
-                    ? "numeric"
-                    : field.key === "email"
-                      ? "email-address"
-                      : "default"
-                }
-                onChangeText={(text) => handleInputChange(field.key, text)}
-              />
-            </Surface>
+              <Surface style={styles.inputSurface}>
+                <TextInput
+                  value={
+                    formData.company?.[
+                      field.key as keyof typeof formData.company
+                    ] ?? ""
+                  }
+                  error={hasError}
+                  underlineColor="transparent"
+                  activeUnderlineColor="transparent"
+                  selectionColor="blue"
+                  numberOfLines={3}
+                  mode="flat"
+                  maxLength={isPhoneField(field.key) ? 11 : undefined}
+                  style={styles.input}
+                  keyboardType={
+                    isPhoneField(field.key)
+                      ? "numeric"
+                      : field.key === "email"
+                        ? "email-address"
+                        : "default"
+                  }
+                  onChangeText={(text) => handleInputChange(field.key, text)}
+                />
+              </Surface>
 
-            <HelperText type="error" visible={hasError}>
-              {errorMsg}
-            </HelperText>
+              <HelperText type="error" visible={hasError}>
+                {errorMsg}
+              </HelperText>
+            </View>
           </View>
         );
       })}
@@ -123,4 +172,46 @@ const styles = StyleSheet.create({
   customLabel: { fontSize: 12, marginBottom: 4, color: "#666" },
   inputSurface: { elevation: 2, borderRadius: 10, backgroundColor: "#fff" },
   input: { borderRadius: 10, height: 45, backgroundColor: "transparent" },
+  dropdown: {
+    height: 50,
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  item: {
+    padding: 17,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: "#999",
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 });

@@ -1,87 +1,54 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
+import { Checkbox, Text } from "react-native-paper";
 import StepIndicator from "react-native-step-indicator";
 
-import Success from "@/src/components/client-section/get-quote/Success";
-import CheckboxServices from "@/src/components/client-section/get-quote/CheckboxServices";
 import Buttons from "@/src/components/client-section/get-quote/Buttons";
+import CheckboxServices from "@/src/components/client-section/get-quote/CheckboxServices";
 import Step_1 from "@/src/components/client-section/get-quote/Step_1";
 import Step_2 from "@/src/components/client-section/get-quote/Step_2";
 import Step_3 from "@/src/components/client-section/get-quote/Step_3";
-
-import {
-  postClientQuote
-} from "@/src/services/clientQuotation";
-
-import { FieldConfig, QuoteForm } from "@/src/types/client-quotation";
-
-import { initialQuoteForm } from "@/src/constants/client-const";
-
+import Success from "@/src/components/client-section/get-quote/Success";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
-export default function CreateUpdateQuote() {
+import { getStepConfigs, initialQuoteForm } from "@/src/constants/client-const";
+import { clientQuoteEnumsQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
+import { postClientQuote } from "@/src/services/clientQuotation";
+import { QuoteForm } from "@/src/types/client-quotation";
+
+export default function CreateQuote() {
   const [currentPosition, setCurrentPosition] = useState(0);
+  const [isAutoFillChecked, setIsAutoFillChecked] = useState(false);
   const [formData, setFormData] = useState<QuoteForm>(initialQuoteForm);
+  const stepConfigs = getStepConfigs(formData);
 
-  const normalizeQuoteForm = (quote: QuoteForm): QuoteForm => {
-    const documentsSource = Array.isArray(quote.documents)
-      ? quote.documents
-      : Array.isArray(quote.quotation_file)
-        ? quote.quotation_file
-        : [];
+  const { data: quoteEnums = {} } = useQuery(clientQuoteEnumsQueryOptions());
 
-    const normalizedDocuments = documentsSource
-      .filter(
-        (document): document is NonNullable<typeof document> =>
-          !!document &&
-          typeof document.file_name === "string" &&
-          document.file_name.trim().length > 0 &&
-          typeof document.file_url === "string" &&
-          document.file_url.trim().length > 0,
-      )
-      .map((document, index) => ({
-        ...document,
-        id: typeof document.id === "number" ? document.id : Date.now() + index,
-        mimeType:
-          "mimeType" in document && typeof document.mimeType === "string"
-            ? document.mimeType
-            : "application/octet-stream",
-      }));
+  const handleAutoFillToggle = () => {
+    const nextChecked = !isAutoFillChecked;
+    setIsAutoFillChecked(nextChecked);
 
-    return {
-      ...initialQuoteForm,
-      ...quote,
-      documents: normalizedDocuments,
-      removed_documents: Array.isArray(quote.removed_documents)
-        ? quote.removed_documents
-        : [],
-    };
-  };
+    if (!nextChecked) return;
 
-  const stepConfigs: Record<
-    number,
-    { fields: FieldConfig[]; section: keyof QuoteForm }
-  > = {
-    0: {
-      section: "company",
-      fields: [
-        { label: "CONSIGNEE", key: "name", required: true },
-        { label: "COMPANY ADDRESS", key: "address", required: true },
-        { label: "CONTACT PERSON", key: "contact_person", required: true },
-        { label: "CONTACT NUMBER", key: "contact_number", required: true },
-        { label: "EMAIL", key: "email", required: true },
-      ],
-    },
-    1: {
-      section: "service",
-      fields: [],
-    },
-    2: {
-      section: "commodity",
-      fields: [],
-    },
+    const autofillDetails = quoteEnums?.autofill_details;
+    if (!autofillDetails) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      company: {
+        ...prev.company,
+        full_name: autofillDetails.full_name ?? prev.company?.full_name ?? "",
+        company_address:
+          autofillDetails.company?.address ?? prev.company?.company_address ?? "",
+        contact_number:
+          autofillDetails.company?.contact_number ??
+          prev.company?.contact_number ??
+          "",
+        email: autofillDetails.company?.email ?? prev.company?.email ?? "",
+      },
+    }));
   };
 
   const quoteMutation = useMutation({
@@ -90,7 +57,6 @@ export default function CreateUpdateQuote() {
     },
     onSuccess: async () => {
       setFormData(formData);
-
       setCurrentPosition(3);
     },
     onError: (error: any) => {
@@ -113,6 +79,7 @@ export default function CreateUpdateQuote() {
 
   const handleAddAnotherQuotation = () => {
     setFormData(initialQuoteForm);
+    setIsAutoFillChecked(false);
     setCurrentPosition(0);
     quoteMutation.reset();
   };
@@ -131,7 +98,13 @@ export default function CreateUpdateQuote() {
           <>
             <BannerHeader title={"Get Quote"} variant="dark" />
             <View style={{ padding: 20, flex: 1 }}>
-              <CheckboxServices formData={formData} setFormData={setFormData} />
+              {currentPosition === 0 && (
+                <CheckboxServices
+                  formData={formData}
+                  setFormData={setFormData}
+                />
+              )}
+
               <StepIndicator
                 customStyles={stepIndicatorStyles}
                 currentPosition={currentPosition}
@@ -145,11 +118,31 @@ export default function CreateUpdateQuote() {
 
               <View style={{ flex: 1, marginTop: 20 }}>
                 {currentPosition === 0 && (
-                  <Step_1
-                    formData={formData}
-                    setFormData={setFormData}
-                    fields={stepConfigs[0].fields}
-                  />
+                  <>
+                    {formData?.service?.transport_mode === "REGULATORY" && (
+                      <View
+                        style={{
+                          alignItems: "center",
+                          flexDirection: "row",
+                          marginHorizontal: 10,
+                        }}
+                      >
+                        <Checkbox.Android
+                          color="#00960A"
+                          status={isAutoFillChecked ? "checked" : "unchecked"}
+                          onPress={handleAutoFillToggle}
+                        />
+                        <Text>AUTO FILL</Text>
+                      </View>
+                    )}
+
+                    <Step_1
+                      formData={formData}
+                      setFormData={setFormData}
+                      fields={stepConfigs[0].fields}
+                      enums={quoteEnums}
+                    />
+                  </>
                 )}
                 {currentPosition === 1 && (
                   <Step_2 formData={formData} setFormData={setFormData} />
