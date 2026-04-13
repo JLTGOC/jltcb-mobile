@@ -6,6 +6,7 @@ import {
 import type { ApiResponse } from "../types/api";
 import {
   ClientQuoteResponse,
+  QuoteEnums,
   QuoteForm,
   QuotesListItem,
   QuotesParams,
@@ -83,6 +84,11 @@ const postMultipart = async <T>(
 
   return parsedResponse as ApiResponse<T>;
 };
+
+// Get Enums
+export async function fetchGetQuoteEnums(): Promise<QuoteEnums> {
+  return (await apiGet<QuoteEnums>(`quotations/enum-options`)).data;
+}
 
 // Post Quote
 export async function postClientQuote(formData: QuoteForm) {

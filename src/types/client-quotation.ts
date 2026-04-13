@@ -48,11 +48,15 @@ export type QuoteParam = {
 };
 
 export type StringKeys =
-  | "name"
-  | "address"
+  | "company_name"
+  | "company_address"
   | "contact_person"
+  | "cp_contact_number"
+  | "email"
+  | "full_name"
+  | "position"
   | "contact_number"
-  | "email";
+  | "business_type";
 
 export type Field = {
   label: string;
@@ -74,11 +78,15 @@ export type ClientFile = {
 };
 
 export type CompanyData = {
-  name?: string;
-  address?: string;
+  company_name?: string;
+  company_address?: string;
   contact_person?: string;
-  contact_number?: string;
+  cp_contact_number?: string;
   email?: string;
+  full_name?: string;
+  position?: string;
+  contact_number?: string;
+  business_type?: string;
 };
 
 export type ServiceData = {
@@ -102,7 +110,7 @@ export type Shipment = {
 export type FieldConfig = {
   label: string;
   key: keyof CompanyData;
-  required: true;
+  required: boolean;
 };
 
 export type ConsigneeDetails = {
@@ -135,4 +143,23 @@ export type ClientQuoteResponse = {
   consignee_details: ConsigneeDetails;
   general_info: GeneralInfo;
   shipment_details: ShipmentDetails;
+};
+
+export type QuoteEnums = {
+  autofill_details?: {
+    full_name?: string;
+    company?: {
+      address?: string;
+      contact_number?: string;
+      email?: string;
+    };
+  };
+  autofill_names?: string[];
+  business_types?: string[];
+  regulatory_assistance_types?: string[];
+  service_types?: string[];
+  transport_modes?: string[];
+  service_options?: string[];
+  cargo_type?: string[];
+  container_size?: string[];
 };

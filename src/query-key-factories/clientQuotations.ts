@@ -2,6 +2,7 @@ import type { QuotesParams } from "@/src/types/client-quotation";
 
 export const clientQuotationKeys = {
   all: () => ["quotes"] as const,
+  getEnums: () => [...clientQuotationKeys.all(), "enums"] as const,
   getQuotes: (params: QuotesParams) =>
     [...clientQuotationKeys.all(), "list", { params }] as const,
   getQuote: (quotationId: number) =>
