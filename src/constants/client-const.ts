@@ -1,17 +1,26 @@
 import Container20 from "../assets/get_quote/container20.png";
 import Container40 from "../assets/get_quote/container40.png";
-
-import { QuoteForm } from "../types/client-quotation";
+import { FieldConfig, QuoteForm } from "../types/client-quotation";
 
 // Initial Form - used for populating the form
 export const initialQuoteForm: QuoteForm = {
+  id: [],
   account_specialist: "",
+  removed_documents: [],
+  reference_number: "",
+  status: "",
+  remarks: "",
+  services: "",
   company: {
-    name: "",
-    address: "",
+    company_name: "",
+    company_address: "",
     contact_person: "",
-    contact_number: "",
+    cp_contact_number: "",
     email: "",
+    full_name: "",
+    position: "",
+    contact_number: "",
+    business_type: "",
   },
   service: {
     type: "",
@@ -29,6 +38,55 @@ export const initialQuoteForm: QuoteForm = {
     destination: "",
   },
   documents: [],
+};
+
+type StepConfig = {
+  section: keyof QuoteForm;
+  fields: FieldConfig[];
+};
+
+const regulatoryCompanyFields: FieldConfig[] = [
+  { label: "FULL NAME", key: "full_name", required: true },
+  { label: "COMPANY NAME", key: "company_name", required: true },
+  { label: "COMPANY ADDRESS", key: "company_address", required: true },
+  { label: "POSITION", key: "position", required: true },
+  { label: "CONTACT NUMBER", key: "contact_number", required: true },
+  { label: "EMAIL", key: "email", required: true },
+  { label: "CONTACT PERSON", key: "contact_person", required: false },
+  {
+    label: "CONTACT PERSON's CONTACT NUMBER",
+    key: "cp_contact_number",
+    required: false,
+  },
+];
+
+const logisticsCompanyFields: FieldConfig[] = [
+  { label: "CONSIGNEE", key: "company_name", required: true },
+  { label: "COMPANY ADDRESS", key: "company_address", required: true },
+  { label: "CONTACT PERSON", key: "contact_person", required: true },
+  { label: "CONTACT NUMBER", key: "cp_contact_number", required: true },
+  { label: "EMAIL", key: "email", required: true },
+];
+
+export const getStepConfigs = (
+  formData: QuoteForm,
+): Record<number, StepConfig> => {
+  const isRegulatory = formData.service?.transport_mode === "REGULATORY";
+
+  return {
+    0: {
+      section: "company",
+      fields: isRegulatory ? regulatoryCompanyFields : logisticsCompanyFields,
+    },
+    1: {
+      section: "service",
+      fields: [],
+    },
+    2: {
+      section: "commodity",
+      fields: [],
+    },
+  };
 };
 
 // Constants
