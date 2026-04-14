@@ -189,6 +189,18 @@ export const AS_DB_FOLDER_SECTIONS: DashboardFolderSection<AccountSpecialistDash
       ],
     },
     {
+      title: "Job Order",
+      sectionKey: "job_orders",
+      data: [
+        {
+          title: "Created",
+          countKey: "created_count",
+          icon: "ongoing",
+          href: "/(employee-account-specialist)/(tabs)/dashboard/created-job-order",
+        },
+      ],
+    },
+    {
       title: "Accounts",
       sectionKey: "accounts",
       data: [
@@ -200,18 +212,6 @@ export const AS_DB_FOLDER_SECTIONS: DashboardFolderSection<AccountSpecialistDash
             aspectRatio: 23 / 28,
             height: 26,
           },
-          href: "/(employee-account-specialist)/(tabs)/dashboard",
-        },
-      ],
-    },
-    {
-      title: "Job Order",
-      sectionKey: "job_orders", //total of job order created
-      data: [
-        {
-          title: "Created",
-          countKey: "ongoing_count",
-          icon: "ongoing",
           href: "/(employee-account-specialist)/(tabs)/dashboard",
         },
       ],
