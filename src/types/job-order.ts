@@ -1,17 +1,29 @@
 import { AccreditedType, ClientType } from "./jobOrderEnums";
 
+export const INDEX_JOB_TYPES = [
+  "Logistics Services",
+  "Regulatory Services",
+] as const;
+export type IndexJobType = (typeof INDEX_JOB_TYPES)[number];
+
 export const JOB_TYPES = ["LOGISTICS", "REGULATORY"] as const;
 export type JobType = (typeof JOB_TYPES)[number];
 
 export type JobOrder = {
   id: number;
   reference_number: string;
-  service: string;
+  service: IndexJobType;
   client: string;
   date_created: string;
   quotation_id: number;
-  assigned_to: string;
+  quotation_reference_number: string;
+  assigned_to: "Available" | (string & {});
 };
+
+export interface IndexJobOrders {
+  job_orders: JobOrder[];
+  my_job_orders: JobOrder[] | null;
+}
 
 export type JobOrderResponse = {
   message: string;

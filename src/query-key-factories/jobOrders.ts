@@ -1,6 +1,7 @@
 export const jobOrderKeys = {
   all: () => ["jobOrder"] as const,
   lists: () => [...jobOrderKeys.all(), "list"] as const,
+  list: (search: string) => [...jobOrderKeys.lists(), { search }] as const,
   getEnums: (quotationReference?: string) =>
     [...jobOrderKeys.all(), "enums", quotationReference] as const,
 };
