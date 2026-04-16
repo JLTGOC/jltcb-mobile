@@ -2,17 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
-import { ActivityIndicator, DataTable } from "react-native-paper";
+import { ScrollView } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import DataTable from "@/src/components/ui/DataTable";
 import Search from "@/src/components/ui/Search";
+
 import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
+import type { TableHeader } from "@/src/types";
 import type { QuotationFilter } from "@/src/types/quotations";
 
-const TABLE_HEADERS = [
-	{ title: "Date", style: { flex: 2 } },
-	{ title: "Name", style: { flex: 5 } },
-	{ title: "Request", numeric: true, style: { flex: 2 } },
+const TABLE_HEADERS: TableHeader[] = [
+	{ title: "Date" },
+	{ title: "Name", style: { flex: 1.875 } },
+	{
+		title: "No of Request",
+		style: { flexDirection: "row", justifyContent: "center" },
+		cellTextStyle: { color: "#FF9933" },
+	},
 ];
 
 export default function NewRequest() {
@@ -51,92 +59,33 @@ export default function NewRequest() {
 			{isPending && <ActivityIndicator style={{ marginTop: 20 }} />}
 
 			{data && (
-				<DataTable>
-					<DataTable.Header style={styles.tableHeader}>
-						{TABLE_HEADERS.map((header) => (
-							<DataTable.Title
-								style={[styles.headerTitle, header.style]}
-								textStyle={styles.uppercase}
-								numeric={header?.numeric}
-								key={header.title}
-								numberOfLines={2}
-							>
-								{header.title}
-							</DataTable.Title>
-						))}
-					</DataTable.Header>
-					{data.data.map((userRow) => {
+				<DataTable
+					headers={TABLE_HEADERS}
+					data={data.data}
+					keyExtractor={(item) => item.name}
+					extractCells={(item) => {
 						const formattedDate = format(
 							parse(
-								userRow.quotations.at(-1)?.date ?? "",
+								item.quotations.at(-1)?.date ?? "",
 								"yyyy/MM/dd",
 								new Date(),
 							),
 							"MM/dd/yyyy",
 						);
-						return (
-							<Pressable
-								key={userRow.name}
-								onPress={() => {
-									router.push({
-										pathname: "/dashboard/request-quotation/request-list",
-										params: {
-											quotations: JSON.stringify(userRow.quotations),
-											clientName: userRow.name,
-										},
-									});
-								}}
-								style={({ pressed }) => [
-									{
-										opacity: pressed ? 0.7 : 1,
-									},
-								]}
-							>
-								<DataTable.Row>
-									<DataTable.Cell style={styles.flexLow}>
-										{formattedDate}
-									</DataTable.Cell>
-									<DataTable.Cell
-										textStyle={[styles.uppercase, { flex: 1 }]}
-										style={styles.flexHigh}
-									>
-										{userRow.name}
-									</DataTable.Cell>
-									<DataTable.Cell
-										textStyle={styles.requestCountText}
-										style={styles.flexLow}
-										numeric
-									>
-										{userRow.request_count}
-									</DataTable.Cell>
-								</DataTable.Row>
-							</Pressable>
-						);
-					})}
-				</DataTable>
+
+						return [formattedDate, item.name, item.request_count];
+					}}
+					onRowPress={(item) => {
+						router.push({
+							pathname: "/dashboard/request-quotation/request-list",
+							params: {
+								quotations: JSON.stringify(item.quotations),
+								clientName: item.name,
+							},
+						});
+					}}
+				/>
 			)}
 		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	tableHeader: {
-		backgroundColor: "#E5E5E5",
-	},
-	headerTitle: {
-		paddingVertical: 4,
-	},
-	uppercase: {
-		textTransform: "uppercase",
-	},
-	requestCountText: {
-		color: "#FF9933",
-		fontWeight: "semibold",
-	},
-	flexLow: {
-		flex: 2,
-	},
-	flexHigh: {
-		flex: 5,
-	},
-});
