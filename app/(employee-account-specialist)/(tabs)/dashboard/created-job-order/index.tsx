@@ -2,12 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 import * as z from "zod";
 
 import JobOrderCard from "@/src/components/job-order-section/JobOrderCard";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import PageList from "@/src/components/ui/PageList";
 import Search from "@/src/components/ui/Search";
 
 import { THEMES } from "@/src/constants/themes";
@@ -18,95 +19,84 @@ import { apiGet } from "@/src/services/axiosInstance";
 import type { IndexJobOrders } from "@/src/types/job-order";
 
 const searchSchema = z.object({
-	search: z.string().trim(),
+  search: z.string().trim(),
 });
 
 export default function JobOrderList() {
-	const [submittedSearch, setSubmittedSearch] = useState("");
+  const [submittedSearch, setSubmittedSearch] = useState("");
 
-	const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
-		resolver: zodResolver(searchSchema),
-	});
+  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
+    resolver: zodResolver(searchSchema),
+  });
 
-	const onSubmit = handleSubmit(({ search }) => {
-		setSubmittedSearch(search);
-	});
+  const onSubmit = handleSubmit(({ search }) => {
+    setSubmittedSearch(search);
+  });
 
-	const { data, isPending, refetch } = useQuery({
-		queryKey: jobOrderKeys.list(submittedSearch),
-		queryFn: () =>
-			apiGet<IndexJobOrders>("job-orders", {
-				...(submittedSearch ? { params: { search: submittedSearch } } : {}),
-			}),
-	});
+  const { data, isPending, refetch } = useQuery({
+    queryKey: jobOrderKeys.list(submittedSearch),
+    queryFn: () =>
+      apiGet<IndexJobOrders>("job-orders", {
+        ...(submittedSearch ? { params: { search: submittedSearch } } : {}),
+      }),
+  });
 
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
-	useRefreshOnFocus(refetch);
+  const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
 
-	return (
-		<View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-			<FlatList
-				keyboardShouldPersistTaps="handled"
-				data={data?.data.job_orders}
-				overScrollMode="never"
-				bounces={false}
-				ListHeaderComponent={
-					<View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-						<BannerHeader variant="light" title="List of Job Order" />
-						<Controller
-							control={control}
-							name="search"
-							render={({ field: { onChange, onBlur, value } }) => (
-								<Search
-									value={value}
-									onChangeText={onChange}
-									onBlur={onBlur}
-									onSearch={onSubmit}
-								/>
-							)}
-						/>
-					</View>
-				}
-				stickyHeaderIndices={[0]}
-				refreshControl={
-					<RefreshControl
-						refreshing={isRefetchingByUser}
-						onRefresh={refetchByUser}
-					/>
-				}
-				renderItem={({ item }) => (
-					<View style={styles.itemContainer}>
-						<JobOrderCard
-							jobOrder={item}
-							actions={[{ label: "View Details", onPress: () => {} }]}
-							onViewJo={() => {}}
-						/>
-					</View>
-				)}
-				ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-				contentContainerStyle={styles.listContentContainer}
-				ListEmptyComponent={
-					isPending ? (
-						<ActivityIndicator style={{ marginTop: 20 }} />
-					) : (
-						<Text style={{ textAlign: "center" }}>No results found</Text>
-					)
-				}
-			/>
-		</View>
-	);
+  return (
+    <PageList
+      data={data?.data.job_orders}
+      ListHeaderComponent={
+        <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
+          <BannerHeader variant="light" title="List of Job Order" />
+          <Controller
+            control={control}
+            name="search"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Search
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                onSearch={onSubmit}
+              />
+            )}
+          />
+        </View>
+      }
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
+      renderItem={({ item }) => (
+        <View style={styles.itemContainer}>
+          <JobOrderCard
+            jobOrder={item}
+            actions={[{ label: "View Details", onPress: () => {} }]}
+            onViewJo={() => {}}
+          />
+        </View>
+      )}
+      ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+      ListEmptyComponent={
+        isPending ? (
+          <ActivityIndicator style={{ marginTop: 20 }} />
+        ) : (
+          <Text style={{ textAlign: "center" }}>No results found</Text>
+        )
+      }
+    />
+  );
 }
 
 const styles = StyleSheet.create({
-	listContentContainer: {
-		paddingBottom: 20,
-		backgroundColor: THEMES.pageBackgroundColor,
-	},
-	itemContainer: {
-		marginHorizontal: 20,
-		marginVertical: 5,
-	},
-	itemSeparator: {
-		height: 10,
-	},
+  itemContainer: {
+    marginHorizontal: 20,
+    marginVertical: 5,
+  },
+  itemSeparator: {
+    height: 10,
+  },
 });
