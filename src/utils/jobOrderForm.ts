@@ -1,7 +1,7 @@
-import { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
+import type { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
 import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 import { format, formatDistance, isSameDay } from "date-fns";
-import { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
+import type { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
 
 export const transformToLogisticsJobOrderPayload = ({
   data,
@@ -35,6 +35,7 @@ export const transformToLogisticsJobOrderPayload = ({
       hs_code: data.hs_code,
       rod: data.rod,
       permits: data.permits,
+      if_coordinated: data.if_coordinated,
       special_remarks: data.shipment_special_remarks,
     },
     target: {
@@ -68,9 +69,7 @@ export const transformToRegulatoryJobOrderPayload = ({
       client_type: data.client_type,
       accredited: data.accredited,
       remarks: data.remarks,
-    },
-    service: {
-      service: data.service,
+      service_type: data.service,
     },
   };
 };

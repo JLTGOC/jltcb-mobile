@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
 import ArrowLine from "@/src/components/job-order-section/ArrowLine";
-import type { JobOrder } from "@/src/types/job-order";
+import type { JobOrderSummary } from "@/src/types/job-order";
 
 const BADGE_COLORS = {
 	"Regulatory Services": "#767676",
@@ -16,7 +16,7 @@ interface JobOrderAction {
 }
 
 interface JobOrderCardProps {
-	jobOrder: JobOrder;
+	jobOrder: JobOrderSummary;
 	onViewJo?: () => void;
 	actions?: JobOrderAction[];
 }

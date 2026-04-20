@@ -1,22 +1,4 @@
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/job-order-section/Card";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import ConfirmModal from "@/src/components/ui/ConfirmModal";
-import SuccesModal from "@/src/components/ui/SuccessModal";
-import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
-import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
-import { logisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
-import { useStore } from "@/src/stores/store";
-import {
-  formatTargetDeliveryDate,
-  transformToLogisticsJobOrderPayload,
-} from "@/src/utils/jobOrderForm";
-import { showToast } from "@/src/utils/showToast";
-import {
   AntDesign,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -25,25 +7,34 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Portal, Text } from "react-native-paper";
 
+import BannerHeader from "@/src/components/ui/BannerHeader";
+import ConfirmModal from "@/src/components/ui/ConfirmModal";
+import SubjectCard from "@/src/components/ui/SubjectCard";
+import SuccesModal from "@/src/components/ui/SuccessModal";
+
+import SummaryCard from "@/src/components/ui/SummaryCard";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
+import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
+import { logisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
+import { useStore } from "@/src/stores/store";
+import type { SummaryCardData } from "@/src/types/job-order";
+import {
+  formatTargetDeliveryDate,
+  transformToLogisticsJobOrderPayload,
+} from "@/src/utils/jobOrderForm";
+import { showToast } from "@/src/utils/showToast";
+import { buildSummaryItems } from "@/src/utils/summaryItems";
+
 const COLOR = "#4E6174";
-
-interface SummaryCardContent {
-  label: string;
-  value?: string;
-}
-
-interface SummaryCardData {
-  title: string;
-  renderIcon: () => ReactNode;
-  content: SummaryCardContent[];
-}
 
 export default function Summary() {
   const router = useRouter();
+  const { userData } = useAuth();
   const logisticsServiceFormData = useStore(
     (state) => state.logisticsServiceFormData,
   );
@@ -197,12 +188,14 @@ export default function Summary() {
     },
   ];
 
+  const listData = buildSummaryItems(summaryCardsData);
+
   const handleConfirm = () => {
     setModalVisible(true);
   };
 
   const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
-    createJobOrderMutationOptions,
+    createJobOrderMutationOptions(String(userData?.id)),
   );
 
   const handleCreateJobOrder = async () => {
@@ -246,75 +239,26 @@ export default function Summary() {
       <BannerHeader title={bannerHeaderTitle} variant="light" />
 
       <FlatList
-        data={summaryCardsData}
+        data={listData}
+        keyExtractor={(item) => item.key}
         contentContainerStyle={styles.content}
         ListHeaderComponent={
-          <>
-            <Text variant="titleMedium" style={styles.title}>
-              Summary
-            </Text>
-
-            <Card>
-              <CardHeader>
-                <View
-                  style={[
-                    {
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 8,
-                    },
-                    styles.flexLabel,
-                  ]}
-                >
-                  <MaterialCommunityIcons
-                    name="sticker-text-outline"
-                    size={20}
-                    color="#4E6174"
-                  />
-                  <CardTitle variant="labelSmall" style={styles.upper}>
-                    Subject
-                  </CardTitle>
-                </View>
-                <CardTitle style={styles.flexContent}>
-                  {logisticsServiceFormData.subject}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Text variant="bodySmall">
-                  {logisticsServiceFormData.email_body}
-                </Text>
-              </CardContent>
-            </Card>
-          </>
+          <Text variant="titleMedium" style={styles.title}>
+            Summary
+          </Text>
         }
-        renderItem={({ item }) => (
-          <Card>
-            <CardHeader>
-              {item.renderIcon()}
-              <CardTitle variant="labelSmall" style={styles.upper}>
-                {item.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {item.content.map((contentItem) => (
-                <View
-                  key={`${item.title}-${contentItem.label}`}
-                  style={{ flexDirection: "row", gap: 4 }}
-                >
-                  <Text
-                    variant="bodySmall"
-                    style={[styles.contentLabel, styles.flexLabel]}
-                  >
-                    {contentItem.label}
-                  </Text>
-                  <Text variant="bodySmall" style={styles.flexContent}>
-                    {contentItem.value}
-                  </Text>
-                </View>
-              ))}
-            </CardContent>
-          </Card>
-        )}
+        renderItem={({ item }) => {
+          if (item.type === "subject") {
+            return (
+              <SubjectCard
+                subject={logisticsServiceFormData.subject ?? ""}
+                body={logisticsServiceFormData.email_body ?? ""}
+              />
+            );
+          }
+
+          return <SummaryCard item={item.item} />;
+        }}
         ListFooterComponent={
           <Button
             theme={{ colors: { primary: "#1C213B" } }}
@@ -344,6 +288,7 @@ export default function Summary() {
           onConfirm={() => {
             setSuccessModalVisible(false);
             router.dismissTo("/dashboard");
+            router.push("/dashboard/created-job-order");
           }}
           visible={successModalVisible}
           title="SUCCESSFULLY SENT!"
