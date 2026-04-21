@@ -1,64 +1,65 @@
 import type { DocumentPickerAsset } from "expo-document-picker";
+
+import { apiGet, apiPost, apiPut } from "@/src/services/axiosInstance";
 import type {
 	ASAcceptedQuotation,
-	ASRequestedQuotation,
+	ASRequestedQuotationSummary,
 	ASRespondedQuotation,
-	QuotationDetails,
+	Quotation,
 	QuotationFilter,
 	QuotationStatus,
-} from "../types/quotations";
-import { apiGet, apiPost, apiPut } from "./axiosInstance";
+} from "@/src/types/quotations";
 
 interface QuotationResponseMap {
-  REQUESTED: ASRequestedQuotation;
-  RESPONDED: ASRespondedQuotation;
-  ACCEPTED: ASAcceptedQuotation;
-  DISCARDED: unknown;
+	REQUESTED: ASRequestedQuotationSummary;
+	RESPONDED: ASRespondedQuotation;
+	ACCEPTED: ASAcceptedQuotation;
+	DISCARDED: unknown;
 }
 
 export const fetchQuotations = <T extends QuotationStatus>({
-  filter,
-  search,
+	filter,
+	search,
 }: QuotationFilter<T>) =>
-  apiGet<QuotationResponseMap[T][]>("quotations", {
-    params: { "filter[status]": filter, search },
-  });
+	apiGet<QuotationResponseMap[T][]>("quotations", {
+		params: { "filter[status]": filter, search },
+	});
 
 export const fetchQuotation = (quotationId: string) =>
-  apiGet<QuotationDetails>(`quotations/${quotationId}`);
+	apiGet<Quotation>(`quotations/${quotationId}`);
 
 export const uploadQuotationFile = (
-  quotationId: string,
-  file: DocumentPickerAsset,
+	quotationId: string,
+	file: DocumentPickerAsset,
 ) => {
-  const formData = new FormData();
-  formData.append("file", {
-    uri: file.uri,
-    name: file.name,
-    type: file.mimeType ?? "application/octet-stream",
-  } as unknown as Blob);
-  return apiPost(`/quotations/${quotationId}/upload`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+	const formData = new FormData();
+	formData.append("file", {
+		uri: file.uri,
+		name: file.name,
+		type: file.mimeType ?? "application/octet-stream",
+	} as unknown as Blob);
+	return apiPost(`/quotations/${quotationId}/upload`, formData, {
+		headers: {
+			"Content-Type": "multipart/form-data",
+		},
+	});
 };
 
 export const updateFileName = (
-  quotationId: number,
-  documentId: number,
-  fileName: string,
+	quotationId: number,
+	documentId: number,
+	fileName: string,
 ) => {
-  const body = { file_name: fileName };
+	const body = { file_name: fileName };
 
-  return apiPut(`/quotations/${quotationId}/files/${documentId}`, body);
+	return apiPut(`/quotations/${quotationId}/files/${documentId}`, body);
 };
 
 export const updateAsQuotation = async (quotationId: number, asId: number) => {
-  return apiPut(`quotations/${quotationId}/reassign-specialist`, {
-    as_id: asId,
-  });
+	return apiPut(`quotations/${quotationId}/reassign-specialist`, {
+		as_id: asId,
+	});
 };
 
 export const acceptQuotation = (quotationId: number) =>
-  apiPut<QuotationDetails>(`quotations/${quotationId}/accept`);
+	apiPut<Quotation>(`quotations/${quotationId}/accept`);

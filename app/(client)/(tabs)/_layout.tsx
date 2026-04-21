@@ -8,8 +8,10 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import HeaderBackground from "@/src/components/header-nav-bar-section/HeaderBackground";
 import HeaderRight from "@/src/components/header-nav-bar-section/HeaderRight";
+
 import { THEMES } from "@/src/constants/themes";
 import { CLIENT_HEADER_MENUS } from "@/src/constants/user-navigation";
 
@@ -51,7 +53,7 @@ export default function ClientTabsLayout() {
 				headerBackground: () => (
 					<HeaderBackground
 						containerStyle={styles.headerBackgroundContainer}
-						colors={["#FF9034", THEMES.darkAccentColor]}
+						colors={["#FF9034", THEMES.darkVariantColor]}
 					/>
 				),
 			}}
@@ -106,10 +108,10 @@ const styles = StyleSheet.create({
 		height: 50,
 	},
 	headerBackgroundContainer: {
-		backgroundColor: THEMES.darkAccentColor,
+		backgroundColor: THEMES.darkVariantColor,
 	},
 	menu: {
-		backgroundColor: THEMES.darkAccentColor,
+		backgroundColor: THEMES.darkVariantColor,
 	},
 	link: {
 		color: "white",

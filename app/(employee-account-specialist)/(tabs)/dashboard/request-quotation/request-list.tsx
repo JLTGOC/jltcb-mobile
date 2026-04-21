@@ -8,11 +8,13 @@ import ASDropdown from "@/src/components/lead-as-section/ASDropdown";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import DataTable from "@/src/components/ui/DataTable";
 
+import { THEMES } from "@/src/constants/themes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { updateAsMutationOptions } from "@/src/mutation-options/asLead-quotations/updateAsMutationOptions";
+import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import { asQueryOptions } from "@/src/query-options/users/asQueryOptions";
 import type { TableHeader } from "@/src/types";
-import type { Quotation, UpdateAsArgs } from "@/src/types/quotations";
+import type { UpdateAsArgs } from "@/src/types/quotations";
 import { showToast } from "@/src/utils/showToast";
 
 const TABLE_HEADERS: TableHeader[] = [
@@ -31,12 +33,12 @@ const TABLE_HEADERS: TableHeader[] = [
 export default function RequestList() {
 	const { role } = useAuth();
 	const router = useRouter();
-	const { quotations: quotationsString, clientName } = useLocalSearchParams<{
-		quotations: string;
-		clientName: string;
-	}>();
+
+	const { clientId } = useLocalSearchParams<{ clientId: string }>();
+
 	const isLeadAS = role === "Lead Account Specialist";
-	const { data: asUsers, isPending } = useQuery({
+
+	const { data: asUsers, isPending: isAsUsersPending } = useQuery({
 		...asQueryOptions,
 		select: (data) => {
 			const formattedNames = data.data.map((user) => ({
@@ -47,6 +49,13 @@ export default function RequestList() {
 		},
 		enabled: isLeadAS,
 	});
+
+	const {
+		data: quotationsData,
+		isPending,
+		error,
+	} = useQuery(asQuotationsQueryOptions({ filter: "REQUESTED" }));
+
 	const { mutateAsync } = useMutation(updateAsMutationOptions);
 	const [updatingId, setUpdatingId] = useState<number | null>(null);
 
@@ -71,12 +80,13 @@ export default function RequestList() {
 		});
 	};
 
-	const quotations: Quotation[] = quotationsString
-		? JSON.parse(quotationsString)
-		: [];
+	const userQuotations = quotationsData?.data.find(
+		(q) => q.client_id === Number(clientId),
+	);
+	const quotations = userQuotations?.quotations ?? [];
 
 	return (
-		<ScrollView style={{ backgroundColor: "#F5F5F5" }}>
+		<ScrollView style={styles.container}>
 			<BannerHeader variant="light" title="List of Request for Quotation" />
 
 			<View style={styles.table}>
@@ -89,25 +99,45 @@ export default function RequestList() {
 							parse(quotation.date, "yyyy/MM/dd", new Date()),
 							"MM/dd/yyyy",
 						);
+
+						const commodity =
+							quotation.service === "LOGISTICS"
+								? quotation.logistics_service.commodity
+								: quotation.regulatory_service.application_type;
+
+						const personInCharge =
+							quotation.assignment_status === "AVAILABLE"
+								? "Available"
+								: quotation.as_full_name;
+
+						const disabled =
+							quotation.assignment_status !== "REASSIGNMENT REQUESTED";
+
 						return [
 							formattedDate,
-							quotation.commodity,
+							commodity,
 							isLeadAS ? (
 								<ASDropdown
 									key={quotation.id}
 									quotationId={quotation.id}
-									personInChargeName={quotation.person_in_charge}
-									asUsers={asUsers?.data}
-									loading={isPending || updatingId === quotation.id}
+									personInChargeName={personInCharge}
+									dataSet={asUsers?.data ?? null}
+									loading={isAsUsersPending || updatingId === quotation.id}
 									handleChangeAs={handleChangeAs}
+									disabled={disabled}
+									editable={!disabled}
+									showChevron={!disabled}
 								/>
 							) : (
-								quotation.person_in_charge
+								personInCharge
 							),
 						];
 					}}
 					onRowPress={(quotation) =>
-						navigateToQuotation(quotation.id, clientName)
+						navigateToQuotation(
+							quotation.id,
+							userQuotations?.client_full_name ?? "",
+						)
 					}
 				/>
 			</View>
@@ -116,6 +146,9 @@ export default function RequestList() {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: THEMES.pageBackgroundColor,
+	},
 	table: {
 		marginTop: 20,
 	},

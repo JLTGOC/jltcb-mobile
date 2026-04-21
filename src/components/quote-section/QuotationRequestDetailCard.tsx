@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
+
 import type { QuotationDetailsSection } from "@/src/types/quotations";
 
 interface QuotationRequestDetailCardProps {
@@ -10,9 +11,13 @@ export default function QuotationRequestDetailCard({
 	section,
 }: QuotationRequestDetailCardProps) {
 	return (
-		<Card>
+		<Card
+			mode="contained"
+			style={styles.card}
+			theme={{ colors: { surfaceVariant: "white" } }}
+		>
 			<Card.Title
-				style={{ minHeight: 50 }}
+				style={styles.title}
 				title={section.title}
 				titleVariant="titleMedium"
 				titleStyle={{ textTransform: "uppercase", textAlignVertical: "center" }}
@@ -36,8 +41,19 @@ export default function QuotationRequestDetailCard({
 }
 
 const styles = StyleSheet.create({
+	card: {
+		borderRadius: 5,
+	},
+	title: {
+		minHeight: "auto",
+		paddingVertical: 4,
+		borderBottomWidth: 2,
+		borderColor: "#F5F5F5",
+	},
 	content: {
 		gap: 7,
+		paddingTop: 8,
+		paddingBottom: 10,
 	},
 	detail: {
 		flexDirection: "row",

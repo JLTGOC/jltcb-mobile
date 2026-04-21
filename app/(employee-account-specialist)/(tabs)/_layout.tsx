@@ -8,8 +8,10 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import HeaderBackground from "@/src/components/header-nav-bar-section/HeaderBackground";
 import HeaderRight from "@/src/components/header-nav-bar-section/HeaderRight";
+
 import { THEMES } from "@/src/constants/themes";
 import { AS_HEADER_MENUS } from "@/src/constants/user-navigation";
 
@@ -48,7 +50,7 @@ export default function ASTabsLayout() {
 				),
 				headerBackground: () => (
 					<HeaderBackground
-						colors={[THEMES.lightTextColor, THEMES.lightAccentColor]}
+						colors={[THEMES.darkAccentColor, THEMES.lightVariantColor]}
 						containerStyle={styles.headerBackgroundContainer}
 					/>
 				),
@@ -87,13 +89,13 @@ const styles = StyleSheet.create({
 		height: 50,
 	},
 	headerBackgroundContainer: {
-		backgroundColor: THEMES.lightAccentColor,
+		backgroundColor: THEMES.lightVariantColor,
 	},
 	menu: {
-		backgroundColor: THEMES.lightAccentColor,
+		backgroundColor: THEMES.lightVariantColor,
 	},
 	link: {
-		color: THEMES.lightTextColor,
+		color: THEMES.darkAccentColor,
 	},
 	tabBarIcon: {
 		marginTop: 10,

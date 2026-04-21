@@ -6,7 +6,9 @@ import { ActivityIndicator } from "react-native-paper";
 
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import PageList from "@/src/components/ui/PageList";
+import SubjectCard from "@/src/components/ui/SubjectCard";
 import SummaryCard from "@/src/components/ui/SummaryCard";
+
 import { THEMES } from "@/src/constants/themes";
 import { jobOrderQueryOptions } from "@/src/query-options/job-orders/jobOrderQueryOptions";
 import type {
@@ -14,7 +16,6 @@ import type {
   SummaryCardData,
 } from "@/src/types/job-order";
 import { buildSummaryItems } from "@/src/utils/summaryItems";
-import SubjectCard from "../ui/SubjectCard";
 
 const COLOR = "#4E6174";
 

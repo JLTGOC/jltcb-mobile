@@ -1,52 +1,52 @@
-import { useRef } from "react";
+import AutocompleteDropdown, {
+  type AutocompleteDropdownProps,
+} from "@/src/components/ui/AutocompleteDropdown";
 import type { UpdateAsArgs } from "@/src/types/quotations";
-import AutocompleteDropdown from "../ui/AutocompleteDropdown";
+import { useRef } from "react";
 
-interface ASDropdownProps {
-	quotationId: number;
-	personInChargeName: string;
-	asUsers: { id: string; title: string }[] | undefined;
-	loading: boolean;
-	handleChangeAs: (data: UpdateAsArgs) => Promise<void>;
+interface ASDropdownProps extends AutocompleteDropdownProps {
+  quotationId: number;
+  personInChargeName: string;
+  handleChangeAs: (data: UpdateAsArgs) => Promise<void>;
 }
 
 export default function ASDropdown({
-	quotationId,
-	personInChargeName,
-	asUsers,
-	loading,
-	handleChangeAs,
+  quotationId,
+  personInChargeName,
+  dataSet,
+  containerStyle,
+  handleChangeAs,
+  ...props
 }: ASDropdownProps) {
-	const initialPerson = asUsers?.find(
-		(user) => user.title === personInChargeName.split(" ")[0],
-	);
+  const initialPerson = dataSet?.find(
+    (user) => user.title === personInChargeName?.split(" ")[0],
+  );
+  const selectedValueRef = useRef<string | undefined>(initialPerson?.id);
 
-	const selectedValueRef = useRef<string | undefined>(initialPerson?.id);
+  return (
+    <AutocompleteDropdown
+      key={`dropdown-${quotationId}-${initialPerson?.id || "none"}`}
+      onSelectItem={(item) => {
+        if (item) {
+          const lastSelectedId = selectedValueRef.current ?? initialPerson?.id;
 
-	return (
-		<AutocompleteDropdown
-			key={`dropdown-${quotationId}-${initialPerson?.id || "none"}`}
-			loading={loading}
-			onSelectItem={(item) => {
-				if (item) {
-					const lastSelectedId = selectedValueRef.current ?? initialPerson?.id;
+          if (lastSelectedId === item.id) {
+            return;
+          }
 
-					if (lastSelectedId === item.id) {
-						return;
-					}
+          selectedValueRef.current = String(item.id);
 
-					selectedValueRef.current = String(item.id);
-
-					handleChangeAs({
-						quotationId,
-						asId: Number(item.id),
-					});
-				}
-			}}
-			initialValue={initialPerson}
-			showClear={false}
-			containerStyle={{ flex: 1 }}
-			dataSet={asUsers ?? null}
-		/>
-	);
+          handleChangeAs({
+            quotationId,
+            asId: Number(item.id),
+          });
+        }
+      }}
+      initialValue={initialPerson}
+      showClear={false}
+      containerStyle={[{ flex: 1 }, containerStyle]}
+      dataSet={dataSet}
+      {...props}
+    />
+  );
 }
