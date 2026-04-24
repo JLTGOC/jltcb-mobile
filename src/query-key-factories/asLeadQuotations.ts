@@ -1,4 +1,4 @@
-import type { QuotationFilter } from "../types/quotations";
+import type { QuotationFilter } from "@/src/types/quotations";
 
 export const quotationKeys = {
 	all: () => ["quotations"] as const,

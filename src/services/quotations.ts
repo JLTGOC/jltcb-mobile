@@ -57,6 +57,7 @@ export const updateFileName = (
 
 export const updateAsQuotation = async (quotationId: number, asId: number) => {
 	return apiPut(`quotations/${quotationId}/reassign-specialist`, {
+		status: "APPROVED",
 		as_id: asId,
 	});
 };

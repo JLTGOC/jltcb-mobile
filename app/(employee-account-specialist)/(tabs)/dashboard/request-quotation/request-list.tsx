@@ -41,7 +41,7 @@ export default function RequestList() {
 	const { data: asUsers, isPending: isAsUsersPending } = useQuery({
 		...asQueryOptions,
 		select: (data) => {
-			const formattedNames = data.data.map((user) => ({
+			const formattedNames = data.data.account_specialists.map((user) => ({
 				id: String(user.id),
 				title: user.full_name.split(" ")[0],
 			}));

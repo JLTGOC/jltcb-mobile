@@ -22,5 +22,6 @@ export interface User {
 
 export interface UserAs {
 	id: number;
+	username: string;
 	full_name: string;
 }
