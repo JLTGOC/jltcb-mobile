@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Pressable, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Button, HelperText, Portal, Text } from "react-native-paper";
 
 type Props = {
@@ -136,7 +136,7 @@ export default function Upload({
         <SuccesModal
           onConfirm={() => {
             setSuccessModalVisible(false);
-            router.dismissAll();
+            router.dismissTo("/dashboard");
             router.navigate(routes.AS_QUOTE_RESPONDED);
           }}
           visible={successModalVisible}

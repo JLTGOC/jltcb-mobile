@@ -10,6 +10,7 @@ import {
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { type ReactElement, useCallback, useRef } from "react";
 import {
+	BackHandler,
 	Dimensions,
 	FlatList,
 	KeyboardAvoidingView,
@@ -19,10 +20,15 @@ import {
 	type ViewToken,
 } from "react-native";
 import { ActivityIndicator, Avatar, Text } from "react-native-paper";
+
+import ChatFileCard from "@/src/components/chats-section/ChatFileCard";
+import ChatImageCard from "@/src/components/chats-section/ChatImageCard";
 import ChatMessageInput from "@/src/components/chats-section/ChatMessageInput";
 import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard";
+import ChatShipmentCard from "@/src/components/chats-section/ChatShipmentCard";
 import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+
 import {
 	ChatPendingIdsProvider,
 	useChatPendingIdsContext,
@@ -40,9 +46,6 @@ import type {
 	MessagesApiResponse,
 } from "@/src/types/chats";
 import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
-import ChatFileCard from "../chats-section/ChatFileCard";
-import ChatImageCard from "../chats-section/ChatImageCard";
-import ChatShipmentCard from "../chats-section/ChatShipmentCard";
 
 const MAX_WIDTH = Dimensions.get("window").width * 0.65;
 
@@ -66,6 +69,18 @@ function SharedChatContent({ variant }: Props) {
 	const flatListRef = useRef<FlatList>(null);
 	const hasMarkedRead = useRef(false);
 	const { pendingClientIds } = useChatPendingIdsContext();
+
+	useFocusEffect(
+		useCallback(() => {
+			const onBack = () => {
+				router.dismissTo("/messages");
+				return true;
+			};
+
+			const sub = BackHandler.addEventListener("hardwareBackPress", onBack);
+			return () => sub.remove();
+		}, [router]),
+	);
 
 	const {
 		data,

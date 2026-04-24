@@ -1,27 +1,21 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
-import { Building, Package } from "lucide-react-native";
 import { useState } from "react";
-import {
-	FlatList,
-	Pressable,
-	RefreshControl,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { RefreshControl, StyleSheet, Text, View } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 
+import ClientCard from "@/src/components/quote-section/ClientCard";
 import QuotationRequestDetailCard from "@/src/components/quote-section/QuotationRequestDetailCard";
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
+import TabBar from "@/src/components/tabs-ui/TabBar";
 import BannerHeader from "@/src/components/ui/BannerHeader";
+import PageList from "@/src/components/ui/PageList";
 
-import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
-import { updateFileName } from "@/src/services/quotations";
-import type { Document, QuotationDetailsSection } from "@/src/types/quotations";
+import { useQuotationData } from "@/src/hooks/useQuotationData";
+import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
+import { userQueryOptions } from "@/src/query-options/users/userQueryOptions";
 
 const TABS = ["Details", "Documents"] as const;
-
 type TabType = (typeof TABS)[number];
 
 export default function Quotation() {
@@ -29,245 +23,143 @@ export default function Quotation() {
 		id: string;
 		clientName: string;
 	}>();
-	const queryClient = useQueryClient();
-	const [activeTab, setActiveTab] = useState<TabType>(TABS[0]);
+	const [activeTab, setActiveTab] = useState<TabType>("Details");
+	const { query, renameFileMutation } = useQuotationData(id);
+	const { data, isPending, isRefetching, refetch } = query;
 
-	const renameFileMutation = useMutation({
-		mutationFn: async ({
-			documentId,
-			fileName,
-		}: {
-			documentId: number;
-			fileName: string;
-		}) => {
-			const quotationId = Number(id);
+	useRefreshOnFocus(refetch);
 
-			if (!quotationId || Number.isNaN(quotationId)) {
-				throw new Error("Missing quotation id.");
-			}
+	const ListHeaderComponent = (
+		<>
+			<BannerHeader variant="light" title={clientName} />
+			<TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+		</>
+	);
 
-			return updateFileName(quotationId, documentId, fileName);
-		},
-		onSuccess: async () => {
-			await queryClient.invalidateQueries({
-				queryKey: quotationQueryOptions(id).queryKey,
-			});
-		},
-	});
+	const { data: clientData, isPending: isClientDataPending } = useQuery(
+		userQueryOptions(data?.clientId.toString() ?? ""),
+	);
 
-	const { data, isPending, error, isRefetching, refetch } = useQuery({
-		...quotationQueryOptions(id),
-		select: ({ data }) => {
-			const {
-				company,
-				service,
-				commodity,
-				shipment,
-				account_specialist,
-				documents,
-				remarks,
-				regulatory_service,
-			} = data;
+	const detailsData =
+		data && clientData
+			? [
+					{
+						type: "userCard" as const,
+						data: {
+							fullName: clientData.data.full_name,
+							userImage: clientData.data.image_path,
+							companyName: clientData.data.company_name,
+							contactNumber: clientData.data.contact_number,
+							email: clientData.data.email,
+							conversationId: data.conversationId,
+						},
+					},
+					...data.sections.map((section) => ({
+						data: section,
+						type: "details" as const,
+					})),
+				]
+			: [];
 
-			const consigneeDetails = {
-				icon: Building,
-				title: "Consignee Details",
-				details: [
-					["Company Name", company.name],
-					["Company Address", company.address],
-					["Contact Person", company.contact_person],
-					["Contact Number", company.contact_number],
-					["Email", company.email],
-				],
-			};
+	const handleRename = (documentId: number, fileName: string) =>
+		renameFileMutation.mutateAsync({ documentId, fileName });
 
-			const personInCharge = {
-				icon: Package,
-				title: "Person in Charge",
-				details: [["Account Specialist", account_specialist]],
-			};
-
-			return {
-				sections: [
-					consigneeDetails,
-					...(!regulatory_service
-						? [
-								{
-									icon: Package,
-									title: "Shipment Details",
-									details: [
-										["Service Type", service.type],
-										["Freight Transport Mode", service.transport_mode],
-										["Service", service.options.join(", ")],
-										["Commodity", commodity.commodity],
-										[
-											"Volume (Dimension)",
-											`${commodity.cargo_type} ${commodity.container_size ?? ""}`,
-										],
-										...Object.entries(shipment).map(([key, value]) => [
-											key.replace(/_/g, " "),
-											value,
-										]),
-										["Details", remarks ?? ""],
-									],
-								},
-							]
-						: []),
-					personInCharge,
-				],
-				documents: Array.isArray(documents) ? documents : [],
-			};
-		},
-	});
-
-	console.log(JSON.stringify(data, null, 2));
-
-	const isTabActive = (tab: TabType) => activeTab === tab;
-
-	const renderItem = ({
-		item,
-	}: {
-		item: QuotationDetailsSection | Document;
-	}) => {
-		if (isTabActive("Details")) {
+	switch (activeTab) {
+		case "Details": {
 			return (
-				<View style={{ paddingHorizontal: 20 }}>
-					<QuotationRequestDetailCard
-						section={item as QuotationDetailsSection}
-					/>
-				</View>
+				<PageList
+					refreshControl={
+						<RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+					}
+					ListHeaderComponent={ListHeaderComponent}
+					contentContainerStyle={{ gap: 8 }}
+					data={detailsData}
+					keyExtractor={(item) => {
+						switch (item.type) {
+							case "details":
+								return item.data.title;
+							case "userCard":
+								return item.data.fullName;
+						}
+					}}
+					renderItem={({ item }) => (
+						<View style={styles.container}>
+							{item.type === "details" ? (
+								<QuotationRequestDetailCard section={item.data} />
+							) : (
+								<ClientCard {...item.data} />
+							)}
+						</View>
+					)}
+					ListEmptyComponent={() => {
+						if (isPending || isClientDataPending)
+							return <ActivityIndicator style={styles.loader} />;
+					}}
+					ListFooterComponent={() => {
+						if (data && clientData)
+							return (
+								<Link
+									asChild
+									href={{
+										pathname: "/dashboard/request-quotation/[id]/upload",
+										params: { id, clientName },
+									}}
+									style={[styles.button, styles.container]}
+								>
+									<Button mode="contained" labelStyle={styles.buttonLabel}>
+										Upload Quotation
+									</Button>
+								</Link>
+							);
+					}}
+				/>
 			);
 		}
 
-		return (
-			<View style={{ paddingHorizontal: 20 }}>
-				<QuotationRequestDocumentCard
-					document={item as Document}
-					onRename={(newFileName) =>
-						renameFileMutation.mutateAsync({
-							documentId: (item as Document).id,
-							fileName: newFileName,
-						})
+		case "Documents": {
+			return (
+				<PageList
+					refreshControl={
+						<RefreshControl refreshing={isRefetching} onRefresh={refetch} />
 					}
+					ListHeaderComponent={ListHeaderComponent}
+					contentContainerStyle={{ gap: 8 }}
+					data={data?.documents}
+					keyExtractor={(item) => item.id.toString()}
+					renderItem={({ item }) => (
+						<View style={styles.container}>
+							<QuotationRequestDocumentCard
+								document={item}
+								onRename={(fileName) => handleRename(item.id, fileName)}
+							/>
+						</View>
+					)}
+					ListEmptyComponent={() => {
+						if (isPending) return <ActivityIndicator style={styles.loader} />;
+
+						if (!data) return <Text>No documents available.</Text>;
+					}}
 				/>
-			</View>
-		);
-	};
-
-	return (
-		<View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
-			<BannerHeader variant="light" title={clientName} />
-
-			<View
-				style={[styles.tabs, styles.container, { backgroundColor: "#F5F5F5" }]}
-			>
-				{TABS.map((tab) => (
-					<Pressable
-						onPress={() => setActiveTab(tab)}
-						key={tab}
-						style={({ pressed }) => [
-							styles.tabButton,
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-					>
-						<Text
-							numberOfLines={1}
-							style={[
-								styles.tabText,
-								{ color: isTabActive(tab) ? "#3B3B3B" : "#9D9D9D" },
-							]}
-						>
-							{tab}
-						</Text>
-						{isTabActive(tab) && <View style={styles.underline} />}
-					</Pressable>
-				))}
-			</View>
-
-			<FlatList
-				showsVerticalScrollIndicator={false}
-				refreshControl={
-					<RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-				}
-				data={
-					(isTabActive("Details") ? data?.sections : data?.documents) as (
-						| QuotationDetailsSection
-						| Document
-					)[]
-				}
-				renderItem={renderItem}
-				contentContainerStyle={{ gap: 8, paddingBottom: 20 }}
-				keyExtractor={(item) =>
-					isTabActive("Details")
-						? (item as QuotationDetailsSection).title
-						: String((item as Document).id)
-				}
-				ListEmptyComponent={
-					isPending ? (
-						<ActivityIndicator color="black" style={{ marginTop: 20 }} />
-					) : (
-						<Text style={{ marginHorizontal: 20 }}>
-							No {isTabActive("Details") ? "details" : "documents"} available.
-						</Text>
-					)
-				}
-				ListFooterComponent={
-					!isPending && !error && isTabActive("Details") ? (
-						<Link
-							asChild
-							href={{
-								pathname: "/dashboard/request-quotation/[id]/upload",
-								params: { id, clientName },
-							}}
-							style={[styles.button, styles.container]}
-						>
-							<Button
-								mode="contained"
-								labelStyle={{ textTransform: "uppercase" }}
-							>
-								Upload Quotation
-							</Button>
-						</Link>
-					) : null
-				}
-			/>
-		</View>
-	);
+			);
+		}
+	}
 }
 
 const styles = StyleSheet.create({
 	container: {
 		marginHorizontal: 20,
 	},
-	tabs: {
-		flexDirection: "row",
-		borderBottomWidth: 2,
-		borderColor: "#ACACAC",
-		marginBottom: 10,
-	},
-	tabButton: {
-		paddingVertical: 2,
-		minWidth: 72,
-		paddingHorizontal: 8,
-	},
-	tabText: {
-		textAlign: "center",
-		textTransform: "uppercase",
-	},
-	underline: {
-		height: 2,
-		backgroundColor: "#FF9933",
-		position: "absolute",
-		left: 0,
-		right: 0,
-		bottom: -2,
-	},
 	button: {
-		marginTop: 12,
+		marginTop: 16,
 		borderRadius: 6,
 		backgroundColor: "#1C213B",
+	},
+	buttonLabel: {
 		paddingVertical: 5,
+		textTransform: "uppercase",
+	},
+	loader: {
+		alignItems: "center",
+		flex: 1,
 	},
 });
