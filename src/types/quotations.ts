@@ -171,12 +171,17 @@ export interface Document {
   file_name: string;
   file_url: string;
   file_type: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface QuotationFile {
   id: number;
   file_name: string;
   file_url: string;
+  file_type: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type QuotationStatus =

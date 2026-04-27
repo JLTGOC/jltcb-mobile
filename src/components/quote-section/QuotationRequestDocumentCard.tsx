@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import * as Print from "expo-print";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -99,7 +100,6 @@ export default function QuotationRequestDocumentCard({
   };
 
   const menuItems = [
-    { leadingIcon: "pencil", title: "Rename", onPress: openRenameDialog },
     {
       leadingIcon: "eye",
       title: "View",
@@ -112,13 +112,19 @@ export default function QuotationRequestDocumentCard({
       onPress: handlePrintPress,
       disabled: !document.file_url,
     },
+    { leadingIcon: "pencil", title: "Rename", onPress: openRenameDialog },
   ];
+
+  const date = document.updated_at ?? document.created_at;
+
+  const formattedDate = date ? format(date, "PPP") : null;
 
   return (
     <View style={styles.container}>
-      <View style={styles.icon} />
+      {/* <View style={styles.icon} /> */}
       <View style={styles.textContainer}>
         <Text style={styles.title}>{document.file_name}</Text>
+        <Text style={styles.subtitle}>{formattedDate}</Text>
       </View>
 
       {showRemoveButton ? (
@@ -201,10 +207,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
+    paddingLeft: 16,
+    borderRadius: 5,
+    paddingVertical: 4,
   },
   icon: { width: 50 },
   textContainer: { flex: 1 },
   title: { color: "black" },
+  subtitle: { color: "#767676", fontSize: 12 },
   renameErrorText: {
     marginTop: 8,
     color: "#B00020",
