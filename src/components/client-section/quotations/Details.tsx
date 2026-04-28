@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { Building2 } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import {
@@ -12,7 +13,6 @@ import {
 import { fetchClientQuote } from "@/src/services/clientQuotation";
 import { QuoteForm } from "@/src/types/client-quotation";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
-import { useRouter } from "expo-router";
 
 type Props = {
   quotationId?: string;
@@ -32,7 +32,7 @@ export default function Details({ quotationId }: Props) {
   const handleActionPress = async (status: string, url?: string) => {
     if (status === "REQUESTED") {
       router.push({
-        pathname: "/(client)/(tabs)/dashboard/quotations/[id]/update",
+        pathname: "/(client)/(tabs)/dashboard/request-quotation/[id]/edit",
         params: { id: String(quotationId), mode: "EDIT" },
       });
     } else if (status === "RESPONDED" && url) {
@@ -72,7 +72,7 @@ export default function Details({ quotationId }: Props) {
         { label: "COMMODITY", info: data?.commodity?.commodity },
         {
           label: "VOLUME (DIMENSION)",
-          info: `${data?.commodity?.cargo_type} - ${data?.commodity?.container_size}`,
+          info: `${data?.commodity?.cargo_type ?? ""}${data?.commodity?.container_size ? ` - ${data?.commodity?.container_size}` : ""}`,
         },
         { label: "ORIGIN", info: data?.shipment?.origin },
       ],

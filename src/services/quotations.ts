@@ -74,4 +74,4 @@ export const updateAsQuotation = async (quotationId: number, asId: number) => {
 };
 
 export const acceptQuotation = (quotationId: number) =>
-  apiPut<Quotation>(`quotations/${quotationId}/accept`);
+  apiPut<Quotation>(`quotations/${quotationId}/accept-proposal`);

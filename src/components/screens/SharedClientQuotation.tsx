@@ -1,7 +1,3 @@
-import Details from "@/src/components/client-section/quotations/Details";
-import Documents from "@/src/components/client-section/quotations/Documents";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
@@ -13,7 +9,11 @@ import {
   View,
 } from "react-native";
 
-export default function QuoteDetails() {
+import Details from "@/src/components/client-section/quotations/Details";
+import Documents from "@/src/components/client-section/quotations/Documents";
+import BannerHeader from "@/src/components/ui/BannerHeader";
+
+export default function SharedClientQuotation() {
   const { id, title, status } = useLocalSearchParams<{
     id: string;
     title: string;
@@ -48,7 +48,11 @@ export default function QuoteDetails() {
       contentContainerStyle={styles.listContent}
       renderItem={({}) => (
         <View style={styles.screenContent}>
-          <BannerHeader title={title} variant="dark" />
+          <BannerHeader
+            title={title}
+            variant="dark"
+            titleProps={{ numberOfLines: 2 }}
+          />
 
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (

@@ -78,12 +78,10 @@ export type ClientFile = {
 };
 
 export type CompanyData = {
-  company_name?: string;
-  company_address?: string;
+  name?: string;
+  address?: string;
   contact_person?: string;
-  cp_contact_number?: string;
   email?: string;
-  full_name?: string;
   position?: string;
   contact_number?: string;
   business_type?: string;

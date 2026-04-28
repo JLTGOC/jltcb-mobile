@@ -5,25 +5,21 @@ import React, { useEffect, useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, View } from "react-native";
 import StepIndicator from "react-native-step-indicator";
 
-import Success from "@/src/components/client-section/get-quote/Success";
-
 import Buttons from "@/src/components/client-section/get-quote/Buttons";
 import Step_1 from "@/src/components/client-section/get-quote/Step_1";
 import Step_2 from "@/src/components/client-section/get-quote/Step_2";
 import Step_3 from "@/src/components/client-section/get-quote/Step_3";
-
-import {
-  fetchClientQuote,
-  updateClientQuote
-} from "@/src/services/clientQuotation";
-
-import { FieldConfig, QuoteForm } from "@/src/types/client-quotation";
-
-import { initialQuoteForm } from "@/src/constants/client-const";
-
+import Success from "@/src/components/client-section/get-quote/Success";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
-export default function CreateUpdateQuote() {
+import { initialQuoteForm } from "@/src/constants/client-const";
+import {
+  fetchClientQuote,
+  updateClientQuote,
+} from "@/src/services/clientQuotation";
+import { FieldConfig, QuoteForm } from "@/src/types/client-quotation";
+
+export default function SharedEditClientQuotation() {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [formData, setFormData] = useState<QuoteForm>(initialQuoteForm);
 

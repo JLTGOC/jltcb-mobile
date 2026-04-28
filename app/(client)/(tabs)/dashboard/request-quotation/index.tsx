@@ -13,7 +13,8 @@ import {
 
 import Search from "@/src/components/client-section/shipment/Search";
 import BannerHeader from "@/src/components/ui/BannerHeader";
-import { routes } from "@/src/constants/routes";
+
+import { THEMES } from "@/src/constants/themes";
 import { useAuth } from "@/src/hooks/useAuth";
 import useDebounce from "@/src/hooks/useDebounce";
 import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
@@ -34,7 +35,7 @@ const menuItems = [
   { iconName: "delete-outline", title: "DELETE", color: "red" },
 ];
 
-export default function RequestedQuotes() {
+export default function RequestQuotes() {
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const { userData } = useAuth();
@@ -62,11 +63,9 @@ export default function RequestedQuotes() {
   const quotes = (data as unknown as TableItem[]) || [];
 
   return (
-    <View
+    <ScrollView
       style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        justifyContent: "center",
+        backgroundColor: THEMES.pageBackgroundColor,
       }}
     >
       <BannerHeader title="REQUESTED QUOTATION" variant="dark" />
@@ -99,7 +98,8 @@ export default function RequestedQuotes() {
                 key={item.id}
                 onPress={() => {
                   router.push({
-                    pathname: routes.CLIENT_QUOTE_DETAILS,
+                    pathname:
+                      "/(client)/(tabs)/dashboard/responded-quotation/[id]",
                     params: {
                       id: item.id,
                       title: item.commodity,
@@ -142,9 +142,9 @@ export default function RequestedQuotes() {
                           key={index}
                           onPress={() => {
                             if (menu.title === "EDIT") {
-                              router.push({
+                              router.navigate({
                                 pathname:
-                                  "/(client)/(tabs)/dashboard/quotations/[id]/update",
+                                  "/(client)/(tabs)/dashboard/request-quotation/[id]/edit",
                                 params: {
                                   id: item.id,
                                   mode: menu.title,
@@ -175,7 +175,7 @@ export default function RequestedQuotes() {
           </ScrollView>
         )}
       </DataTable>
-    </View>
+    </ScrollView>
   );
 }
 

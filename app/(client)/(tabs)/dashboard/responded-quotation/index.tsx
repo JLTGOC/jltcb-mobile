@@ -15,9 +15,10 @@ import {
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import ConfirmModal from "@/src/components/ui/ConfirmModal";
 import SuccesModal from "@/src/components/ui/SuccessModal";
+
 import { routes } from "@/src/constants/routes";
+import { THEMES } from "@/src/constants/themes";
 import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
 import { useSendQuotationCardMutation } from "@/src/hooks/useSendQuotationCardMutation";
 import { acceptClientQuotationMutationOptions } from "@/src/mutation-options/client-quotations/acceptClientQuotationMutationOptions";
 import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
@@ -35,7 +36,6 @@ const menuItems = [
 export default function RespondedQuotes() {
   const { userData } = useAuth();
   const router = useRouter();
-  const { navigate } = useNavigate();
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -107,7 +107,7 @@ export default function RespondedQuotes() {
   const quotes = data || [];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: THEMES.pageBackgroundColor }}>
       <BannerHeader title="QUOTATIONS" variant="dark" />
 
       <DataTable>
@@ -134,8 +134,9 @@ export default function RespondedQuotes() {
               <Pressable
                 key={item.id}
                 onPress={() => {
-                  navigate({
-                    pathname: routes.CLIENT_QUOTE_DETAILS,
+                  router.navigate({
+                    pathname:
+                      "/(client)/(tabs)/dashboard/responded-quotation/[id]/edit",
                     params: { id: item.id, title: item.commodity },
                   });
                 }}

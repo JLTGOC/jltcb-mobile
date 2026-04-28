@@ -4,7 +4,7 @@ import type {
   DashboardFolderSection,
   FinanceDashboard,
   OperationsDashboard,
-} from "../types/dashboard";
+} from "@/src/types/dashboard";
 
 export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[] =
   [
@@ -34,13 +34,13 @@ export const CLIENT_DB_FOLDER_SECTIONS: DashboardFolderSection<ClientDashboard>[
           title: "Requested",
           countKey: "requested_count",
           icon: "request-quotation",
-          href: "/(client)/(tabs)/dashboard/quotations/requested-quotes",
+          href: "/(client)/(tabs)/dashboard/request-quotation",
         },
         {
           title: "Responded",
           countKey: "responded_count",
           icon: "quotations",
-          href: "/(client)/(tabs)/dashboard/quotations/responded-quotes",
+          href: "/(client)/(tabs)/dashboard/responded-quotation",
         },
       ],
     },
