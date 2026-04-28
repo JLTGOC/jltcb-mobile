@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useLocalSearchParams } from "expo-router";
+import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 
 import ClientCard from "@/src/components/quote-section/ClientCard";
 import QuotationRequestDetailCard from "@/src/components/quote-section/QuotationRequestDetailCard";
@@ -12,17 +12,14 @@ import { userQueryOptions } from "@/src/query-options/users/userQueryOptions";
 interface SharedQuotationDetailsProps {
   quotationData?: SelectedQuotationData;
   isPending: boolean;
+  footer?: ReactNode;
 }
 
 export default function SharedQuotationDetails({
   quotationData,
   isPending,
+  footer,
 }: SharedQuotationDetailsProps) {
-  const { id, clientName } = useLocalSearchParams<{
-    id: string;
-    clientName: string;
-  }>();
-
   const { data: clientData, isPending: isClientDataPending } = useQuery(
     userQueryOptions(quotationData?.clientId.toString() ?? ""),
   );
@@ -56,18 +53,7 @@ export default function SharedQuotationDetails({
         </View>
       ))}
 
-      <Link
-        asChild
-        href={{
-          pathname: "/dashboard/request-quotation/[id]/upload",
-          params: { id, clientName },
-        }}
-        style={[styles.button, styles.container]}
-      >
-        <Button mode="contained" labelStyle={styles.buttonLabel}>
-          Upload Quotation
-        </Button>
-      </Link>
+      {footer}
     </View>
   );
 }
@@ -79,15 +65,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     gap: 8,
     flexGrow: 1,
-  },
-  button: {
-    marginTop: 16,
-    borderRadius: 6,
-    backgroundColor: "#1C213B",
-  },
-  buttonLabel: {
-    paddingVertical: 5,
-    textTransform: "uppercase",
   },
   loader: {
     marginTop: 24,

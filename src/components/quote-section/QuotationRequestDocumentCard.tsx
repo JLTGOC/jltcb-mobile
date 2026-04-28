@@ -124,7 +124,7 @@ export default function QuotationRequestDocumentCard({
       {/* <View style={styles.icon} /> */}
       <View style={styles.textContainer}>
         <Text style={styles.title}>{document.file_name}</Text>
-        <Text style={styles.subtitle}>{formattedDate}</Text>
+        {formattedDate && <Text style={styles.subtitle}>{formattedDate}</Text>}
       </View>
 
       {showRemoveButton ? (

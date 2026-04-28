@@ -1,4 +1,5 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Pressable } from "react-native-gesture-handler";
 
 import { THEMES } from "@/src/constants/themes";
 
@@ -20,12 +21,12 @@ export default function TabBar<T extends string>({
       horizontal
       showsHorizontalScrollIndicator={false}
       data={tabs}
+      nestedScrollEnabled
       renderItem={({ item: tab }) => {
         const isActive = tab === activeTab;
 
         return (
           <Pressable
-            key={tab}
             onPress={() => onTabChange(tab)}
             style={({ pressed }) => [
               styles.tabButton,
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
   tabs: {
     backgroundColor: THEMES.pageBackgroundColor,
     paddingHorizontal: 20,
-    marginBottom: 10,
   },
   tabsContentContainer: {
     borderBottomWidth: 2,

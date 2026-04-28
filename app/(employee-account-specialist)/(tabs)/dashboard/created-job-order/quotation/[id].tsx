@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 
 import SharedQuotationDetails from "@/src/components/quote-section/SharedQuotationDetails";
 import SharedQuotationDocuments from "@/src/components/quote-section/SharedQuotationDocuments";
@@ -12,18 +12,18 @@ import { useQuotationQuery } from "@/src/hooks/useQuotationQuery";
 import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
 import { quotationKeys } from "@/src/query-key-factories/quotations";
-import { Button } from "react-native-paper";
 
-const TABS = ["Details", "Documents"] as const;
+const TABS = ["Details", "Documents", "Billing"] as const;
 type TabType = (typeof TABS)[number];
 
-export default function Quotation() {
+export default function JobOrderQuotation() {
   const queryClient = useQueryClient();
 
   const { id, clientName } = useLocalSearchParams<{
     id: string;
     clientName: string;
   }>();
+
   const [activeTab, setActiveTab] = useState<TabType>("Details");
 
   const { data, isPending, refetch } = useQuotationQuery(id);
@@ -68,42 +68,16 @@ export default function Quotation() {
       </View>
 
       {activeTab === "Details" ? (
-        <SharedQuotationDetails
-          quotationData={data}
-          isPending={isPending}
-          footer={
-            <Link
-              asChild
-              href={{
-                pathname: "/dashboard/request-quotation/[id]/upload",
-                params: { id, clientName },
-              }}
-              style={[styles.button, styles.container]}
-            >
-              <Button mode="contained" labelStyle={styles.buttonLabel}>
-                Upload Quotation
-              </Button>
-            </Link>
-          }
-        />
+        <SharedQuotationDetails quotationData={data} isPending={isPending} />
       ) : activeTab === "Documents" ? (
         <SharedQuotationDocuments />
+      ) : activeTab === "Billing" ? (
+        <View>
+          <Text style={{ textAlign: "center" }}>
+            Billing information will be displayed here.
+          </Text>
+        </View>
       ) : null}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    marginTop: 16,
-    borderRadius: 6,
-    backgroundColor: "#1C213B",
-  },
-  buttonLabel: {
-    paddingVertical: 5,
-    textTransform: "uppercase",
-  },
-  container: {
-    marginHorizontal: 20,
-  },
-});

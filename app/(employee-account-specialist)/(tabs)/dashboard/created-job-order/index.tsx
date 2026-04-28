@@ -77,9 +77,23 @@ export default function JobOrderList() {
         <View style={styles.itemContainer}>
           <JobOrderCard
             jobOrder={item}
-            actions={[{ label: "View Details", onPress: () => {} }]}
+            actions={[
+              {
+                label: "View Details",
+                onPress: () => {
+                  router.push({
+                    pathname:
+                      "/(employee-account-specialist)/(tabs)/dashboard/created-job-order/quotation/[id]",
+                    params: {
+                      id: item.quotation_id,
+                      clientName: item.client,
+                    },
+                  });
+                },
+              },
+            ]}
             onViewJo={() =>
-              router.push({
+              router.navigate({
                 pathname:
                   "/(employee-account-specialist)/(tabs)/dashboard/created-job-order/[id]",
                 params: {

@@ -114,8 +114,10 @@ export interface JobOrderSummary {
   service: JobTypeSummary;
   client: string;
   date_created: string;
+  quotation_id: number;
   quotation_reference_number: string;
   assigned_to: "Available" | (string & {});
+  reassignment_request_id: number | null;
 }
 
 export interface JobOrderResponse {
