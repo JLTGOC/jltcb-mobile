@@ -10,11 +10,14 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { THEMES } from "@/src/constants/themes";
+
 type Props = {
   onSearch: (event: GestureResponderEvent) => void;
   containerStyle?: StyleProp<ViewStyle>;
   searchButtonStyle?: StyleProp<ViewStyle>;
   searchButtonDisabled?: boolean;
+  variant: "dark" | "light";
 };
 
 export default function Search({
@@ -23,6 +26,7 @@ export default function Search({
   style,
   searchButtonStyle,
   searchButtonDisabled,
+  variant,
   ...props
 }: TextInputProps & Props) {
   return (
@@ -32,6 +36,12 @@ export default function Search({
         onPress={onSearch}
         style={({ pressed }) => [
           styles.searchButton,
+          {
+            backgroundColor:
+              variant === "dark"
+                ? THEMES.darkAccentColor
+                : THEMES.lightAccentColor,
+          },
           searchButtonStyle,
           searchButtonDisabled && styles.disabledSearchButton,
           {
@@ -69,7 +79,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 999,
     borderBottomRightRadius: 999,
     justifyContent: "center",
-    backgroundColor: "#1C213B",
   },
   disabledSearchButton: {
     opacity: 0.4,

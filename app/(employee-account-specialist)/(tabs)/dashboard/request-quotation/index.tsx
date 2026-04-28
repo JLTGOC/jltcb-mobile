@@ -9,6 +9,7 @@ import BannerHeader from "@/src/components/ui/BannerHeader";
 import DataTable from "@/src/components/ui/DataTable";
 import Search from "@/src/components/ui/Search";
 
+import { THEMES } from "@/src/constants/themes";
 import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import type { TableHeader } from "@/src/types";
 import type { QuotationFilter } from "@/src/types/quotations";
@@ -40,12 +41,13 @@ export default function NewRequest() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: "#F5F5F5" }}
+      style={{ backgroundColor: THEMES.pageBackgroundColor }}
       keyboardShouldPersistTaps="handled"
     >
       <BannerHeader variant="light" title="New Request" />
 
       <Search
+        variant="dark"
         onSearch={handleSearch}
         onChangeText={setSearch}
         value={search}

@@ -1,14 +1,15 @@
-import { createdJobOrdersQueryOptions } from "@/src/query-options/operations/jobOrder";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { FlatList, View, Pressable } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { FlatList, Pressable, View } from "react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 
+import JobOrderListCardTemplate from "@/src/components/operations-section/JobOrderListCardTemplate";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import Search from "@/src/components/ui/Search";
 import SwitchToggle from "@/src/components/ui/SwitchToggle";
-import JobOrderListCardTemplate from "@/src/components/operations-section/JobOrderListCardTemplate";
+
+import { createdJobOrdersQueryOptions } from "@/src/query-options/operations/jobOrder";
 
 export default function ListOfCreatedJO() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function ListOfCreatedJO() {
       <BannerHeader variant="light" title="List of Pending Job Orders" />
 
       <Search
+        variant="dark"
         onSearch={handleSearch}
         onChangeText={setSearch}
         value={search}
@@ -81,9 +83,13 @@ export default function ListOfCreatedJO() {
           data={data ?? []}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Pressable onPress={() => router.push(
-              "/(employee-operations)/(tabs)/dashboard/jobOrder/[id]/details"
-            )}>
+            <Pressable
+              onPress={() =>
+                router.push(
+                  "/(employee-operations)/(tabs)/dashboard/jobOrder/[id]/details",
+                )
+              }
+            >
               <JobOrderListCardTemplate
                 referenceNumber={item.reference_number}
                 serviceType={item.service}
