@@ -1,3 +1,5 @@
-import type { LogisticsServiceFormSlice } from "@/src/stores/slices/job-order-form-slice";
+import type { LogisticsFormSlice } from "@/src/stores/slices/job-order-form-slices/createLogisticsFormSlice";
+import type { QuotationReferenceSlice } from "@/src/stores/slices/job-order-form-slices/createQuotationReferenceSlice";
 
-export type Store = LogisticsServiceFormSlice;
+export type JobOrderFormStore = LogisticsFormSlice &
+  QuotationReferenceSlice & { reset: () => void };

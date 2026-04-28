@@ -1,36 +1,34 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, View } from "react-native";
+import { Button, HelperText } from "react-native-paper";
+import { useShallow } from "zustand/react/shallow";
+
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import FieldLegend from "@/src/components/ui/FieldLegend";
 import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
+import KeyboardAwareScrollView from "@/src/components/ui/KeyboardAwareScrollView";
+
 import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import {
   type Step2Fields,
   step2Schema,
 } from "@/src/schemas/job-order/logistics-service-form-schema";
-import { useStore } from "@/src/stores/store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
-import { Button, HelperText } from "react-native-paper";
-import { useShallow } from "zustand/react/shallow";
+import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
 
 export default function Step2Form() {
   const router = useRouter();
-  const [logisticsServiceFormData, setLogisticsServiceFormData] = useStore(
-    useShallow((state) => [
-      state.logisticsServiceFormData,
-      state.setLogisticsServiceFormData,
-    ]),
-  );
+  const { quotationReference, logisticsFormData, setLogisticsFormData } =
+    useJobOrderFormStore(
+      useShallow((state) => ({
+        quotationReference: state.quotationReference,
+        logisticsFormData: state.logisticsFormData,
+        setLogisticsFormData: state.setLogisticsFormData,
+      })),
+    );
 
-  const quotationReference = useStore((state) => state.quotationReference);
-  const { data, isPending } = useJobOrderEnums(quotationReference);
+  const { data, isPending } = useJobOrderEnums(quotationReference ?? "");
 
   const containerSize = data?.autofill_details?.container_size;
   const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
@@ -42,140 +40,135 @@ export default function Step2Form() {
   } = useForm<Step2Fields>({
     resolver: zodResolver(step2Schema),
     defaultValues: {
-      hs_code: logisticsServiceFormData.hs_code ?? "",
-      rod: logisticsServiceFormData.rod ?? "",
-      permits: logisticsServiceFormData.permits ?? "",
-      if_coordinated: logisticsServiceFormData.if_coordinated ?? "",
+      hs_code: logisticsFormData.hs_code ?? "",
+      rod: logisticsFormData.rod ?? "",
+      permits: logisticsFormData.permits ?? "",
+      if_coordinated: logisticsFormData.if_coordinated ?? "",
       shipment_special_remarks:
-        logisticsServiceFormData.shipment_special_remarks ?? "",
+        logisticsFormData.shipment_special_remarks ?? "",
     },
   });
 
   const onSubmit = handleSubmit((data) => {
-    setLogisticsServiceFormData(data);
+    setLogisticsFormData(data);
     router.push(
       "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/step3",
     );
   });
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={120}
-    >
-      <ScrollView>
-        <BannerHeader title="Logistics Services" variant="light" />
+    <KeyboardAwareScrollView>
+      <BannerHeader title="Logistics Services" variant="light" />
 
-        <View style={styles.content}>
-          <FieldLegend>SHIPMENT INFORMATION</FieldLegend>
+      <View style={styles.content}>
+        <FieldLegend>SHIPMENT INFORMATION</FieldLegend>
 
-          <FloatingLabelInput
-            label="COMMODITY"
-            editable={false}
-            value={data?.autofill_details?.commodity ?? ""}
-            style={styles.bold}
+        <FloatingLabelInput
+          label="COMMODITY"
+          editable={false}
+          value={data?.autofill_details?.commodity ?? ""}
+          style={styles.bold}
+        />
+        <FloatingLabelInput
+          label="VOLUME / DIMENSION"
+          editable={false}
+          value={volumeDimension}
+          style={styles.bold}
+        />
+
+        <View>
+          <Controller
+            control={control}
+            name="hs_code"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="HS CODE/CLASSIFICATION"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
           />
-          <FloatingLabelInput
-            label="VOLUME / DIMENSION"
-            editable={false}
-            value={volumeDimension}
-            style={styles.bold}
-          />
-
-          <View>
-            <Controller
-              control={control}
-              name="hs_code"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FloatingLabelInput
-                  label="HS CODE/CLASSIFICATION"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                />
-              )}
-            />
-            {errors.hs_code && (
-              <HelperText type="error">{errors.hs_code.message}</HelperText>
-            )}
-          </View>
-
-          <View>
-            <Controller
-              control={control}
-              name="rod"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FloatingLabelInput
-                  label="ROD"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                />
-              )}
-            />
-            {errors.rod && (
-              <HelperText type="error">{errors.rod.message}</HelperText>
-            )}
-          </View>
-
-          <View>
-            <Controller
-              control={control}
-              name="if_coordinated"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FloatingLabelInput
-                  label="IF COORDINATED: "
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  multiline
-                  numberOfLines={2}
-                  style={{ minHeight: 55 }}
-                />
-              )}
-            />
-            {errors.if_coordinated && (
-              <HelperText type="error">
-                {errors.if_coordinated.message}
-              </HelperText>
-            )}
-          </View>
-
-          <View>
-            <Controller
-              control={control}
-              name="shipment_special_remarks"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <FloatingLabelInput
-                  label="SPECIAL REMARKS"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  multiline
-                  numberOfLines={2}
-                  style={{ minHeight: 55 }}
-                />
-              )}
-            />
-            {errors.shipment_special_remarks && (
-              <HelperText type="error">
-                {errors.shipment_special_remarks.message}
-              </HelperText>
-            )}
-          </View>
-
-          <Button
-            theme={{ colors: { primary: "#1C213B" } }}
-            mode="contained"
-            style={styles.button}
-            onPress={onSubmit}
-          >
-            NEXT
-          </Button>
+          {errors.hs_code && (
+            <HelperText type="error">{errors.hs_code.message}</HelperText>
+          )}
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+        <View>
+          <Controller
+            control={control}
+            name="rod"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="ROD"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.rod && (
+            <HelperText type="error">{errors.rod.message}</HelperText>
+          )}
+        </View>
+
+        <View>
+          <Controller
+            control={control}
+            name="if_coordinated"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="IF COORDINATED: "
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                multiline
+                numberOfLines={2}
+                style={{ minHeight: 55 }}
+              />
+            )}
+          />
+          {errors.if_coordinated && (
+            <HelperText type="error">
+              {errors.if_coordinated.message}
+            </HelperText>
+          )}
+        </View>
+
+        <View>
+          <Controller
+            control={control}
+            name="shipment_special_remarks"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="SPECIAL REMARKS"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                multiline
+                numberOfLines={2}
+                style={{ minHeight: 55 }}
+              />
+            )}
+          />
+          {errors.shipment_special_remarks && (
+            <HelperText type="error">
+              {errors.shipment_special_remarks.message}
+            </HelperText>
+          )}
+        </View>
+
+        <Button
+          theme={{ colors: { primary: "#1C213B" } }}
+          mode="contained"
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          onPress={onSubmit}
+        >
+          NEXT
+        </Button>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -190,6 +183,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 6,
+  },
+  buttonLabel: {
     paddingVertical: 4,
   },
 });

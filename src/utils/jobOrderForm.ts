@@ -1,13 +1,14 @@
-import type { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
-import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 import { format, formatDistance, isSameDay } from "date-fns";
-import type { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
+
+import type { LogisticsJobOrderFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
+import type { RegulatoryServiceFormSchema } from "@/src/schemas/job-order/regulatory-service-form-schema";
+import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 
 export const transformToLogisticsJobOrderPayload = ({
   data,
   quotationReference,
 }: {
-  data: LogisticsServiceFormSchema;
+  data: LogisticsJobOrderFormSchema;
   quotationReference: string;
 }): CreateJobOrderRequestBody => {
   const formatDate = (date?: Date) =>

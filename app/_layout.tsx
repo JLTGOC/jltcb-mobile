@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { type AppStateStatus, Platform } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 
 import StartupScreen from "@/src/components/screens/StartupScreen";
@@ -31,12 +32,14 @@ export default function RootLayout() {
       <AuthProvider>
         <AutocompleteDropdownContextProvider>
           <GestureHandlerRootView>
-            <PaperProvider theme={theme}>
-              <RootNavigator />
-              {!animationDone && (
-                <StartupScreen onFinish={() => setAnimationDone(true)} />
-              )}
-            </PaperProvider>
+            <KeyboardProvider>
+              <PaperProvider theme={theme}>
+                <RootNavigator />
+                {!animationDone && (
+                  <StartupScreen onFinish={() => setAnimationDone(true)} />
+                )}
+              </PaperProvider>
+            </KeyboardProvider>
           </GestureHandlerRootView>
         </AutocompleteDropdownContextProvider>
       </AuthProvider>

@@ -1,13 +1,12 @@
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import { useStore } from "@/src/stores/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 
+import BannerHeader from "@/src/components/ui/BannerHeader";
+
 export default function MakeJobOrder() {
   const router = useRouter();
-  const reset = useStore((state) => state.reset);
 
   return (
     <ScrollView>
@@ -28,15 +27,7 @@ export default function MakeJobOrder() {
           </Card.Content>
         </Card>
 
-        <Card
-          onPress={() => {
-            reset();
-            router.push(
-              "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/make-job-order/shipment",
-            );
-          }}
-          style={styles.card}
-        >
+        <Card onPress={() => {}} style={styles.card}>
           <Card.Content style={styles.cardContent}>
             <MaterialCommunityIcons name="license" size={24} />
             <Text style={styles.cardTextContent}>

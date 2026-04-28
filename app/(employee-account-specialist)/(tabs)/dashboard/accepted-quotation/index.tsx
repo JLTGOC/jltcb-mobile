@@ -6,13 +6,14 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import { ActivityIndicator, IconButton, Menu } from "react-native-paper";
+import { useShallow } from "zustand/react/shallow";
 
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import DataTable from "@/src/components/ui/DataTable";
 
 import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
-import { useStore } from "@/src/stores/store";
+import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
 import type { MenuOption, TableHeader } from "@/src/types";
 import type { ASAcceptedQuotation } from "@/src/types/quotations";
 import { showToast } from "@/src/utils/showToast";
@@ -41,9 +42,11 @@ type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 export default function AcceptedQuotation() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const reset = useStore((state) => state.reset);
-	const setQuotationReference = useStore(
-		(state) => state.setQuotationReference,
+	const { setQuotationReference, reset } = useJobOrderFormStore(
+		useShallow((state) => ({
+			setQuotationReference: state.setQuotationReference,
+			reset: state.reset,
+		})),
 	);
 
 	const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);

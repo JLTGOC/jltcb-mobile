@@ -1,7 +1,7 @@
 import {
-  AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons,
+	AntDesign,
+	MaterialCommunityIcons,
+	MaterialIcons,
 } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -10,22 +10,23 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Button, Portal, Text } from "react-native-paper";
+import { useShallow } from "zustand/react/shallow";
 
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import ConfirmModal from "@/src/components/ui/ConfirmModal";
 import SubjectCard from "@/src/components/ui/SubjectCard";
 import SuccesModal from "@/src/components/ui/SuccessModal";
-
 import SummaryCard from "@/src/components/ui/SummaryCard";
+
 import { useAuth } from "@/src/hooks/useAuth";
 import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
 import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
-import { logisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
-import { useStore } from "@/src/stores/store";
+import { logisticsJobOrderFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
+import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
 import type { SummaryCardData } from "@/src/types/job-order";
 import {
-  formatTargetDeliveryDate,
-  transformToLogisticsJobOrderPayload,
+	formatTargetDeliveryDate,
+	transformToLogisticsJobOrderPayload,
 } from "@/src/utils/jobOrderForm";
 import { showToast } from "@/src/utils/showToast";
 import { buildSummaryItems } from "@/src/utils/summaryItems";
@@ -33,296 +34,301 @@ import { buildSummaryItems } from "@/src/utils/summaryItems";
 const COLOR = "#4E6174";
 
 export default function Summary() {
-  const router = useRouter();
-  const { userData } = useAuth();
-  const logisticsServiceFormData = useStore(
-    (state) => state.logisticsServiceFormData,
-  );
-  const quotationReference = useStore((state) => state.quotationReference);
-  const { data } = useJobOrderEnums(quotationReference);
+	const router = useRouter();
+	const { userData } = useAuth();
+	const { quotationReference, logisticsFormData, reset } = useJobOrderFormStore(
+		useShallow((state) => ({
+			quotationReference: state.quotationReference,
+			logisticsFormData: state.logisticsFormData,
+			reset: state.reset,
+		})),
+	);
+	const { data } = useJobOrderEnums(quotationReference ?? "");
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [successModalVisible, setSuccessModalVisible] = useState(false);
 
-  const containerSize = data?.autofill_details?.container_size;
-  const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
+	const containerSize = data?.autofill_details?.container_size;
+	const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
 
-  const summaryCardsData: SummaryCardData[] = [
-    {
-      title: "Client Information",
-      renderIcon: () => (
-        <MaterialIcons name="person-outline" size={20} color={COLOR} />
-      ),
-      content: [
-        {
-          label: "Consignee",
-          value: data?.autofill_details?.company_name.toUpperCase(),
-        },
-        {
-          label: "Client Type",
-          value: logisticsServiceFormData.client_type,
-        },
-        {
-          label: "Accredited",
-          value: logisticsServiceFormData.accredited,
-        },
-        {
-          label: "Shipper",
-          value: data?.autofill_details?.full_name.toUpperCase(),
-        },
-        {
-          label: "Remarks On Handling Client",
-          value: logisticsServiceFormData.remarks,
-        },
-      ],
-    },
-    {
-      title: "Service Information",
-      renderIcon: () => (
-        <MaterialCommunityIcons
-          name="briefcase-variant-outline"
-          size={20}
-          color={COLOR}
-        />
-      ),
-      content: [
-        {
-          label: "Service Level",
-          value: logisticsServiceFormData.service_level,
-        },
-        { label: "BL NO", value: logisticsServiceFormData.bl_no },
-        {
-          label: "ETA",
-          value: format(logisticsServiceFormData.eta ?? "", "P"),
-        },
-        {
-          label: "ETD",
-          value: format(logisticsServiceFormData.etd ?? "", "P"),
-        },
-      ],
-    },
-    {
-      title: "Shipment Information",
-      renderIcon: () => (
-        <MaterialCommunityIcons
-          name="package-variant-closed"
-          size={20}
-          color={COLOR}
-        />
-      ),
-      content: [
-        {
-          label: "Commodity",
-          value: data?.autofill_details?.commodity?.toUpperCase(),
-        },
-        { label: "Volume/Dimension", value: volumeDimension },
-        {
-          label: "Hs Code, As Verified By TWG:",
-          value: logisticsServiceFormData.hs_code,
-        },
-        { label: "ROD", value: logisticsServiceFormData.rod },
-        { label: "Permits Needed", value: logisticsServiceFormData.permits },
-        {
-          label: "If Coordinated:",
-          value: logisticsServiceFormData.if_coordinated,
-        },
-        {
-          label: "Special Remarks",
-          value: logisticsServiceFormData.shipment_special_remarks,
-        },
-      ],
-    },
-    {
-      title: "Commitment Information",
-      renderIcon: () => (
-        <MaterialIcons name="linear-scale" size={20} color={COLOR} />
-      ),
-      content: [
-        {
-          label: "Target Delivery",
-          value: formatTargetDeliveryDate(
-            logisticsServiceFormData.delivery_date!,
-            logisticsServiceFormData.eta!,
-          ),
-        },
-        {
-          label: "Target Completion Period",
-          value: logisticsServiceFormData.completion_date
-            ? format(logisticsServiceFormData.completion_date ?? "", "P")
-            : "",
-        },
-        {
-          label: "Special Remarks",
-          value: logisticsServiceFormData.target_special_remarks,
-        },
-      ],
-    },
-    {
-      title: "Billing Information",
-      renderIcon: () => (
-        <MaterialCommunityIcons
-          name="receipt-text-outline"
-          size={20}
-          color={COLOR}
-        />
-      ),
-      content: [
-        {
-          label: "Terms of Payment",
-          value: logisticsServiceFormData.terms_of_payment,
-        },
-        {
-          label: "When To Bill",
-          value: logisticsServiceFormData.billing_date
-            ? format(logisticsServiceFormData.billing_date ?? "", "P")
-            : "",
-        },
-        {
-          label: "Shall Be Billed",
-          value: logisticsServiceFormData.shall_be_billed,
-        },
-        {
-          label: "Availbale Docs Attached",
-        },
-      ],
-    },
-  ];
+	const summaryCardsData: SummaryCardData[] = [
+		{
+			title: "Client Information",
+			renderIcon: () => (
+				<MaterialIcons name="person-outline" size={20} color={COLOR} />
+			),
+			content: [
+				{
+					label: "Consignee",
+					value: data?.autofill_details?.company_name.toUpperCase(),
+				},
+				{
+					label: "Client Type",
+					value: logisticsFormData.client_type,
+				},
+				{
+					label: "Accredited",
+					value: logisticsFormData.accredited,
+				},
+				{
+					label: "Shipper",
+					value: data?.autofill_details?.full_name.toUpperCase(),
+				},
+				{
+					label: "Remarks On Handling Client",
+					value: logisticsFormData.remarks,
+				},
+			],
+		},
+		{
+			title: "Service Information",
+			renderIcon: () => (
+				<MaterialCommunityIcons
+					name="briefcase-variant-outline"
+					size={20}
+					color={COLOR}
+				/>
+			),
+			content: [
+				{
+					label: "Service Level",
+					value: logisticsFormData.service_level,
+				},
+				{ label: "BL NO", value: logisticsFormData.bl_no },
+				{
+					label: "ETA",
+					value: format(logisticsFormData.eta ?? "", "P"),
+				},
+				{
+					label: "ETD",
+					value: format(logisticsFormData.etd ?? "", "P"),
+				},
+			],
+		},
+		{
+			title: "Shipment Information",
+			renderIcon: () => (
+				<MaterialCommunityIcons
+					name="package-variant-closed"
+					size={20}
+					color={COLOR}
+				/>
+			),
+			content: [
+				{
+					label: "Commodity",
+					value: data?.autofill_details?.commodity?.toUpperCase(),
+				},
+				{ label: "Volume/Dimension", value: volumeDimension },
+				{
+					label: "Hs Code, As Verified By TWG:",
+					value: logisticsFormData.hs_code,
+				},
+				{ label: "ROD", value: logisticsFormData.rod },
+				{ label: "Permits Needed", value: logisticsFormData.permits },
+				{
+					label: "If Coordinated:",
+					value: logisticsFormData.if_coordinated,
+				},
+				{
+					label: "Special Remarks",
+					value: logisticsFormData.shipment_special_remarks,
+				},
+			],
+		},
+		{
+			title: "Commitment Information",
+			renderIcon: () => (
+				<MaterialIcons name="linear-scale" size={20} color={COLOR} />
+			),
+			content: [
+				{
+					label: "Target Delivery",
+					value: formatTargetDeliveryDate(
+						logisticsFormData.delivery_date!,
+						logisticsFormData.eta!,
+					),
+				},
+				{
+					label: "Target Completion Period",
+					value: logisticsFormData.completion_date
+						? format(logisticsFormData.completion_date ?? "", "P")
+						: "",
+				},
+				{
+					label: "Special Remarks",
+					value: logisticsFormData.target_special_remarks,
+				},
+			],
+		},
+		{
+			title: "Billing Information",
+			renderIcon: () => (
+				<MaterialCommunityIcons
+					name="receipt-text-outline"
+					size={20}
+					color={COLOR}
+				/>
+			),
+			content: [
+				{
+					label: "Terms of Payment",
+					value: logisticsFormData.terms_of_payment,
+				},
+				{
+					label: "When To Bill",
+					value: logisticsFormData.billing_date
+						? format(logisticsFormData.billing_date ?? "", "P")
+						: "",
+				},
+				{
+					label: "Shall Be Billed",
+					value: logisticsFormData.shall_be_billed,
+				},
+				{
+					label: "Availbale Docs Attached",
+				},
+			],
+		},
+	];
 
-  const listData = buildSummaryItems(summaryCardsData);
+	const listData = buildSummaryItems(summaryCardsData);
 
-  const handleConfirm = () => {
-    setModalVisible(true);
-  };
+	const handleConfirm = () => {
+		setModalVisible(true);
+	};
 
-  const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
-    createJobOrderMutationOptions(String(userData?.id)),
-  );
+	const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
+		createJobOrderMutationOptions(String(userData?.id)),
+	);
 
-  const handleCreateJobOrder = async () => {
-    if (!quotationReference) return;
+	const handleCreateJobOrder = async () => {
+		if (!quotationReference) return;
 
-    const { success, data, error } = logisticsServiceFormSchema.safeParse(
-      logisticsServiceFormData,
-    );
+		const { success, data, error } =
+			logisticsJobOrderFormSchema.safeParse(logisticsFormData);
 
-    if (!success) {
-      console.error("Form data validation failed:", error);
-      return;
-    }
+		if (!success) {
+			console.error("Form data validation failed:", error);
+			return;
+		}
 
-    const payload = transformToLogisticsJobOrderPayload({
-      data,
-      quotationReference,
-    });
+		const payload = transformToLogisticsJobOrderPayload({
+			data,
+			quotationReference,
+		});
 
-    try {
-      await mutateAsync(payload);
+		try {
+			await mutateAsync(payload);
+			reset();
+			setSuccessModalVisible(true);
+		} catch (err) {
+			if (err instanceof AxiosError) {
+				showToast(err.response?.data.message || "Failed to create job order");
+			}
+		} finally {
+			setModalVisible(false);
+		}
+	};
 
-      setSuccessModalVisible(true);
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        showToast(err.response?.data.message || "Failed to create job order");
-      }
-    } finally {
-      setModalVisible(false);
-    }
-  };
+	const bannerHeaderTitle = modalVisible
+		? "Confirmation of Job Order"
+		: successModalVisible
+			? "Job Order to Operations"
+			: "Logistics Services";
 
-  const bannerHeaderTitle = modalVisible
-    ? "Confirmation of Job Order"
-    : successModalVisible
-      ? "Job Order to Operations"
-      : "Logistics Services";
+	return (
+		<View style={{ flex: 1 }}>
+			<BannerHeader title={bannerHeaderTitle} variant="light" />
 
-  return (
-    <View style={{ flex: 1 }}>
-      <BannerHeader title={bannerHeaderTitle} variant="light" />
+			<FlatList
+				data={listData}
+				keyExtractor={(item) => item.key}
+				contentContainerStyle={styles.content}
+				ListHeaderComponent={
+					<Text variant="titleMedium" style={styles.title}>
+						Summary
+					</Text>
+				}
+				renderItem={({ item }) => {
+					if (item.type === "subject") {
+						return (
+							<SubjectCard
+								subject={logisticsFormData.subject ?? ""}
+								body={logisticsFormData.email_body ?? ""}
+							/>
+						);
+					}
 
-      <FlatList
-        data={listData}
-        keyExtractor={(item) => item.key}
-        contentContainerStyle={styles.content}
-        ListHeaderComponent={
-          <Text variant="titleMedium" style={styles.title}>
-            Summary
-          </Text>
-        }
-        renderItem={({ item }) => {
-          if (item.type === "subject") {
-            return (
-              <SubjectCard
-                subject={logisticsServiceFormData.subject ?? ""}
-                body={logisticsServiceFormData.email_body ?? ""}
-              />
-            );
-          }
+					return <SummaryCard item={item.item} />;
+				}}
+				ListFooterComponent={
+					<Button
+						theme={{ colors: { primary: "#1C213B" } }}
+						mode="contained"
+						style={styles.button}
+						labelStyle={styles.buttonLabel}
+						onPress={handleConfirm}
+					>
+						SUBMIT
+					</Button>
+				}
+			/>
 
-          return <SummaryCard item={item.item} />;
-        }}
-        ListFooterComponent={
-          <Button
-            theme={{ colors: { primary: "#1C213B" } }}
-            mode="contained"
-            style={styles.button}
-            onPress={handleConfirm}
-          >
-            SUBMIT
-          </Button>
-        }
-      />
+			<Portal>
+				<ConfirmModal
+					icon={<AntDesign name="warning" size={100} color="red" />}
+					confirmButtonText="Yes"
+					cancelButtonText="Cancel"
+					loading={isCreatingJobOrder}
+					visible={modalVisible}
+					onDismiss={() => setModalVisible(false)}
+					onConfirm={handleCreateJobOrder}
+					title="Send Job Order?"
+					description="You're about to sent this Job Order to Operations. Please review all details carefully. Changes after sending will require a revised Job Order."
+				/>
 
-      <Portal>
-        <ConfirmModal
-          icon={<AntDesign name="warning" size={100} color="red" />}
-          confirmButtonText="Yes"
-          cancelButtonText="Cancel"
-          loading={isCreatingJobOrder}
-          visible={modalVisible}
-          onDismiss={() => setModalVisible(false)}
-          onConfirm={handleCreateJobOrder}
-          title="Send Job Order?"
-          description="You're about to sent this Job Order to Operations. Please review all details carefully. Changes after sending will require a revised Job Order."
-        />
-
-        <SuccesModal
-          onConfirm={() => {
-            setSuccessModalVisible(false);
-            router.dismissTo("/dashboard");
-            router.push("/dashboard/created-job-order");
-          }}
-          visible={successModalVisible}
-          title="SUCCESSFULLY SENT!"
-          description="The generated Job Order is successfully sent to Operations. They will receive a notification of the created Job Order."
-        />
-      </Portal>
-    </View>
-  );
+				<SuccesModal
+					onConfirm={() => {
+						setSuccessModalVisible(false);
+						router.dismissTo("/dashboard");
+						router.push("/dashboard/created-job-order");
+					}}
+					visible={successModalVisible}
+					title="SUCCESSFULLY SENT!"
+					description="The generated Job Order is successfully sent to Operations. They will receive a notification of the created Job Order."
+				/>
+			</Portal>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  content: {
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-    gap: 12,
-  },
-  upper: {
-    textTransform: "uppercase",
-  },
-  title: {
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  contentLabel: {
-    color: "#979797",
-  },
-  flexLabel: {
-    width: "40%",
-  },
-  flexContent: {
-    flex: 1,
-  },
-  button: {
-    borderRadius: 6,
-    paddingVertical: 4,
-  },
+	content: {
+		paddingHorizontal: 24,
+		paddingBottom: 20,
+		gap: 12,
+	},
+	upper: {
+		textTransform: "uppercase",
+	},
+	title: {
+		textAlign: "center",
+		textTransform: "uppercase",
+	},
+	contentLabel: {
+		color: "#979797",
+	},
+	flexLabel: {
+		width: "40%",
+	},
+	flexContent: {
+		flex: 1,
+	},
+	button: {
+		borderRadius: 6,
+	},
+	buttonLabel: {
+		paddingVertical: 4,
+	},
 });
