@@ -243,6 +243,7 @@ export default function RegulatoryServices() {
           theme={{ colors: { primary: "#1C213B" } }}
           mode="contained"
           style={styles.button}
+          labelStyle={styles.buttonLabel}
           onPress={onSubmit}
         >
           GENERATE SHIPMENT
@@ -303,6 +304,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 6,
+  },
+  buttonLabel: {
     paddingVertical: 4,
   },
 });
