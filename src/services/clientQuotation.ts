@@ -1,220 +1,242 @@
 import * as SecureStore from "expo-secure-store";
 import {
-  appendFilesToFormData,
-  appendObjectToFormData,
+	appendFilesToFormData,
+	appendObjectToFormData,
 } from "../helper/client-form-helper";
 import type { ApiResponse } from "../types/api";
-import {
-  ClientQuoteResponse,
-  QuoteEnums,
-  QuoteForm,
-  QuotesListItem,
-  QuotesParams,
+import type {
+	ClientQuoteResponse,
+	LogisticsQuoteEnums,
+	QuoteForm,
+	QuotesListItem,
+	QuotesParams,
+	RegulatoryQuoteEnums,
 } from "../types/client-quotation";
+import type { JobType } from "../types/job-order";
+import type { LogisticsServiceLevel } from "../types/quotations";
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
 const getUploadableFiles = (documents: QuoteForm["documents"] | undefined) =>
-  Array.isArray(documents)
-    ? documents.filter(
-        (doc) =>
-          !!doc &&
-          typeof doc.file_url === "string" &&
-          doc.file_url.length > 0 &&
-          (doc.file_url.startsWith("file://") ||
-            doc.file_url.startsWith("content://")),
-      )
-    : [];
+	Array.isArray(documents)
+		? documents.filter(
+				(doc) =>
+					!!doc &&
+					typeof doc.file_url === "string" &&
+					doc.file_url.length > 0 &&
+					(doc.file_url.startsWith("file://") ||
+						doc.file_url.startsWith("content://")),
+			)
+		: [];
 
 const getApiBaseUrl = () => {
-  const apiBaseUrl = (process.env.EXPO_PUBLIC_API_URL ?? "").trim();
+	const apiBaseUrl = (process.env.EXPO_PUBLIC_API_URL ?? "").trim();
 
-  if (!apiBaseUrl) {
-    throw new Error("Missing EXPO_PUBLIC_API_URL");
-  }
+	if (!apiBaseUrl) {
+		throw new Error("Missing EXPO_PUBLIC_API_URL");
+	}
 
-  return apiBaseUrl.endsWith("/") ? apiBaseUrl : `${apiBaseUrl}/`;
+	return apiBaseUrl.endsWith("/") ? apiBaseUrl : `${apiBaseUrl}/`;
 };
 
 const toAbsoluteApiUrl = (path: string) => {
-  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${getApiBaseUrl()}${normalizedPath}`;
+	const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+	return `${getApiBaseUrl()}${normalizedPath}`;
 };
 
 const postMultipart = async <T>(
-  path: string,
-  token: string,
-  body: FormData,
+	path: string,
+	token: string,
+	body: FormData,
 ): Promise<ApiResponse<T>> => {
-  const response = await fetch(toAbsoluteApiUrl(path), {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body,
-  });
+	const response = await fetch(toAbsoluteApiUrl(path), {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+		body,
+	});
 
-  const rawResponse = await response.text();
-  let parsedResponse: unknown = rawResponse;
+	const rawResponse = await response.text();
+	let parsedResponse: unknown = rawResponse;
 
-  try {
-    parsedResponse = rawResponse ? JSON.parse(rawResponse) : null;
-  } catch {
-    parsedResponse = rawResponse;
-  }
+	try {
+		parsedResponse = rawResponse ? JSON.parse(rawResponse) : null;
+	} catch {
+		parsedResponse = rawResponse;
+	}
 
-  if (!response.ok) {
-    const error = new Error(
-      (parsedResponse as { message?: string } | null)?.message ??
-        `HTTP ${response.status}`,
-    ) as Error & {
-      response?: {
-        status: number;
-        data: unknown;
-      };
-    };
+	if (!response.ok) {
+		const error = new Error(
+			(parsedResponse as { message?: string } | null)?.message ??
+				`HTTP ${response.status}`,
+		) as Error & {
+			response?: {
+				status: number;
+				data: unknown;
+			};
+		};
 
-    error.response = {
-      status: response.status,
-      data: parsedResponse,
-    };
+		error.response = {
+			status: response.status,
+			data: parsedResponse,
+		};
 
-    throw error;
-  }
+		throw error;
+	}
 
-  return parsedResponse as ApiResponse<T>;
+	return parsedResponse as ApiResponse<T>;
 };
 
+export type FetchQuoteParamsByService<T extends JobType> = T extends "LOGISTICS"
+	? {
+			service: "LOGISTICS";
+			service_type?: LogisticsServiceLevel;
+		}
+	: T extends "REGULATORY"
+		? {
+				service: "REGULATORY";
+				service_type: "BUSINESS SOLUTION";
+			}
+		: never;
+
+interface QuoteEnumsMap {
+	LOGISTICS: LogisticsQuoteEnums;
+	REGULATORY: RegulatoryQuoteEnums;
+}
+
 // Get Enums
-export async function fetchGetQuoteEnums(): Promise<QuoteEnums> {
-  return (await apiGet<QuoteEnums>(`quotations/enum-options`)).data;
+export async function fetchGetQuoteEnums<T extends JobType>(
+	params: FetchQuoteParamsByService<T>,
+) {
+	return await apiGet<QuoteEnumsMap[T]>(`quotations/enum-options`, { params });
 }
 
 // Post Quote
 export async function postClientQuote(formData: QuoteForm) {
-  const token = await SecureStore.getItemAsync("token");
-  if (!token) throw new Error("No authentication token found");
+	const token = await SecureStore.getItemAsync("token");
+	if (!token) throw new Error("No authentication token found");
 
-  const newFiles = getUploadableFiles(formData.documents);
+	const newFiles = getUploadableFiles(formData.documents);
 
-  if (!newFiles.length) {
-    return (
-      await apiPost(`quotations`, {
-        account_specialist: formData.account_specialist || null,
-        company: formData.company,
-        service: formData.service,
-        commodity: formData.commodity,
-        shipment: formData.shipment,
-        remarks: formData.remarks || "",
-      })
-    ).data;
-  }
+	if (!newFiles.length) {
+		return (
+			await apiPost(`quotations`, {
+				account_specialist: formData.account_specialist || null,
+				company: formData.company,
+				service: formData.service,
+				commodity: formData.commodity,
+				shipment: formData.shipment,
+				remarks: formData.remarks || "",
+			})
+		).data;
+	}
 
-  const data = new FormData();
+	const data = new FormData();
 
-  appendFilesToFormData(data, newFiles);
-  appendObjectToFormData(data, formData.company, "company");
-  appendObjectToFormData(data, formData.service, "service");
-  appendObjectToFormData(data, formData.commodity, "commodity");
-  appendObjectToFormData(data, formData.shipment, "shipment");
-  if (formData.remarks !== undefined && formData.remarks !== null) {
-    data.append("remarks", formData.remarks);
-  }
+	appendFilesToFormData(data, newFiles);
+	appendObjectToFormData(data, formData.company, "company");
+	appendObjectToFormData(data, formData.service, "service");
+	appendObjectToFormData(data, formData.commodity, "commodity");
+	appendObjectToFormData(data, formData.shipment, "shipment");
+	if (formData.remarks !== undefined && formData.remarks !== null) {
+		data.append("remarks", formData.remarks);
+	}
 
-  return (await postMultipart("quotations", token, data)).data;
+	return (await postMultipart("quotations", token, data)).data;
 }
 
 // Update Quote
 export async function updateClientQuote(
-  quotationId: number,
-  formData: QuoteForm,
+	quotationId: number,
+	formData: QuoteForm,
 ): Promise<ClientQuoteResponse> {
-  const token = await SecureStore.getItemAsync("token");
-  if (!token) throw new Error("No authentication token found");
+	const token = await SecureStore.getItemAsync("token");
+	if (!token) throw new Error("No authentication token found");
 
-  const newFiles = getUploadableFiles(formData.documents);
-  const removedDocumentIds = Array.isArray(formData.removed_documents)
-    ? [
-        ...new Set(
-          formData.removed_documents
-            .map((value) =>
-              typeof value === "number"
-                ? value
-                : Number.parseInt(String(value), 10),
-            )
-            .filter((value) => Number.isInteger(value) && value > 0),
-        ),
-      ]
-    : [];
+	const newFiles = getUploadableFiles(formData.documents);
+	const removedDocumentIds = Array.isArray(formData.removed_documents)
+		? [
+				...new Set(
+					formData.removed_documents
+						.map((value) =>
+							typeof value === "number"
+								? value
+								: Number.parseInt(String(value), 10),
+						)
+						.filter((value) => Number.isInteger(value) && value > 0),
+				),
+			]
+		: [];
 
-  if (!newFiles.length) {
-    return (
-      await apiPost<ClientQuoteResponse>(`quotations/${quotationId}`, {
-        account_specialist: formData.account_specialist || null,
-        company: formData.company,
-        service: formData.service,
-        commodity: formData.commodity,
-        shipment: formData.shipment,
-        remarks: formData.remarks || "",
-        ...(removedDocumentIds?.length
-          ? { removed_documents: removedDocumentIds }
-          : {}),
-      })
-    ).data;
-  }
+	if (!newFiles.length) {
+		return (
+			await apiPost<ClientQuoteResponse>(`quotations/${quotationId}`, {
+				account_specialist: formData.account_specialist || null,
+				company: formData.company,
+				service: formData.service,
+				commodity: formData.commodity,
+				shipment: formData.shipment,
+				remarks: formData.remarks || "",
+				...(removedDocumentIds?.length
+					? { removed_documents: removedDocumentIds }
+					: {}),
+			})
+		).data;
+	}
 
-  const data = new FormData();
+	const data = new FormData();
 
-  appendFilesToFormData(data, newFiles);
+	appendFilesToFormData(data, newFiles);
 
-  if (formData.account_specialist) {
-    data.append("account_specialist", formData.account_specialist);
-  }
+	if (formData.account_specialist) {
+		data.append("account_specialist", formData.account_specialist);
+	}
 
-  appendObjectToFormData(data, formData.company, "company");
-  appendObjectToFormData(data, formData.service, "service");
-  appendObjectToFormData(data, formData.commodity, "commodity");
-  appendObjectToFormData(data, formData.shipment, "shipment");
+	appendObjectToFormData(data, formData.company, "company");
+	appendObjectToFormData(data, formData.service, "service");
+	appendObjectToFormData(data, formData.commodity, "commodity");
+	appendObjectToFormData(data, formData.shipment, "shipment");
 
-  if (formData.remarks !== undefined && formData.remarks !== null) {
-    data.append("remarks", formData.remarks);
-  }
+	if (formData.remarks !== undefined && formData.remarks !== null) {
+		data.append("remarks", formData.remarks);
+	}
 
-  if (removedDocumentIds.length) {
-    removedDocumentIds.forEach((removedDocumentId) =>
-      data.append("removed_documents[]", removedDocumentId.toString()),
-    );
-  }
+	if (removedDocumentIds.length) {
+		removedDocumentIds.forEach((removedDocumentId) =>
+			data.append("removed_documents[]", removedDocumentId.toString()),
+		);
+	}
 
-  return (
-    await postMultipart<ClientQuoteResponse>(
-      `quotations/${quotationId}`,
-      token,
-      data,
-    )
-  ).data;
+	return (
+		await postMultipart<ClientQuoteResponse>(
+			`quotations/${quotationId}`,
+			token,
+			data,
+		)
+	).data;
 }
 
 // Fetch Quotes
 export async function fetchClientQuotes({ status, search }: QuotesParams) {
-  const params = {
-    "filter[status]": status,
-    search: search || undefined,
-  };
-  const response = await apiGet<QuotesListItem[]>(`quotations`, {
-    params,
-  });
-  return response.data;
+	const params = {
+		"filter[status]": status,
+		search: search || undefined,
+	};
+	const response = await apiGet<QuotesListItem[]>(`quotations`, {
+		params,
+	});
+	return response.data;
 }
 
 // Get Single Quote
 export async function fetchClientQuote(
-  quotationId: number,
+	quotationId: number,
 ): Promise<QuoteForm> {
-  return (await apiGet<QuoteForm>(`quotations/${quotationId}`)).data;
+	return (await apiGet<QuoteForm>(`quotations/${quotationId}`)).data;
 }
 
 // Delete Single Quotation
 export async function deleteClientSingleQuote(quotationId: number) {
-  return (await apiDelete(`quotations/${quotationId}`)).data;
+	return (await apiDelete(`quotations/${quotationId}`)).data;
 }

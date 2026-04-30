@@ -6,4 +6,5 @@ export const THEMES = {
   darkVariantColor: "#161F3C",
   darkAccentColor: "#1C213B",
   lightAccentColor: "#FF9933",
+  checkboxColor: "#00960A",
 };

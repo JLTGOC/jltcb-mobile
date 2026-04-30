@@ -1,45 +1,16 @@
-import { StyleSheet, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import StepScrollView from "@/src/components/client-section/get-quote/StepScrollView";
+import LogisticsForm from "@/src/components/client-section/get-quote/step-1/LogisticsForm";
+import RegulatoryForm from "@/src/components/client-section/get-quote/step-1/RegulatoryForm";
 
-import ServicesCheckboxes from "@/src/components/client-section/get-quote/ServicesCheckboxes";
-import StepIndicator from "@/src/components/client-section/get-quote/StepIndicator";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-
-import { THEMES } from "@/src/constants/themes";
+import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
 
 export default function Step1Form() {
+  const service = useClientQuotationFormStore((state) => state.service);
+
   return (
-    <KeyboardAwareScrollView
-      stickyHeaderIndices={[0]}
-      showsVerticalScrollIndicator={false}
-      bounces={false}
-      overScrollMode="never"
-      style={{ backgroundColor: THEMES.pageBackgroundColor }}
-    >
-      <BannerHeader title="Get Quote" variant="dark" />
-
-      <View style={styles.container}>
-        <ServicesCheckboxes />
-
-        <StepIndicator />
-
-        {/* {service === "LOGISTICS" ? (
-          <ClientLogisticsQuotationStep1Form />
-        ) : (
-          <ClientRegulatoryQuotationStep1Form />
-        )} */}
-      </View>
-    </KeyboardAwareScrollView>
+    <StepScrollView keyboardShouldPersistTaps="never">
+      {service === "LOGISTICS" && <LogisticsForm />}
+      {service === "REGULATORY" && <RegulatoryForm />}
+    </StepScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    gap: 10,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: "#666666",
-  },
-});

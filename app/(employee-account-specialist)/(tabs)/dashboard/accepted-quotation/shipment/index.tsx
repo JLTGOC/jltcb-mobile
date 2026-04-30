@@ -72,7 +72,7 @@ export default function Step1Form() {
   });
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView stickyHeaderIndices={[0]}>
       <BannerHeader title="Logistics Services" variant="light" />
 
       <View style={styles.content}>

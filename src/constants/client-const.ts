@@ -1,3 +1,4 @@
+import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
 import Container20 from "../assets/get_quote/container20.png";
 import Container40 from "../assets/get_quote/container40.png";
 import type { FieldConfig, QuoteForm } from "../types/client-quotation";
@@ -106,7 +107,14 @@ export const options = [
 ] as const;
 export const commodities = ["CASTABLE 16 REFRACTOR"];
 export const cargo_type = ["CONTAINERIZED", "LCL"];
-export const container_size = [
-	{ image: Container20, size: "1x20" },
-	{ image: Container40, size: "1x40" },
-];
+
+export type ContainerSize = "1x20" | "1x40";
+export interface ContainerSizeOption {
+	image: ImageSourcePropType;
+	size: ContainerSize;
+	style?: StyleProp<ViewStyle>;
+}
+export const container_sizes: ContainerSizeOption[] = [
+	{ image: Container20, size: "1x20", style: { width: 48, height: 48 } },
+	{ image: Container40, size: "1x40", style: { width: 72, height: 53 } },
+] as const;

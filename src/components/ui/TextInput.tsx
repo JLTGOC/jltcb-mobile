@@ -22,6 +22,7 @@ export default function TextInput({ invalid, style, ...props }: Props) {
 
 const styles = StyleSheet.create({
   input: {
+    textAlignVertical: "top",
     borderRadius: 6,
     paddingVertical: 10,
     paddingHorizontal: 14,

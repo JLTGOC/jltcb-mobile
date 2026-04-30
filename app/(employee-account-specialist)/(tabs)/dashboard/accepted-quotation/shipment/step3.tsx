@@ -64,7 +64,7 @@ export default function Step3Form() {
   });
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView stickyHeaderIndices={[0]}>
       <BannerHeader title="Logistics Services" variant="light" />
 
       <View style={styles.content}>

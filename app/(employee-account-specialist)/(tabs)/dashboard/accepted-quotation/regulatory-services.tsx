@@ -97,7 +97,7 @@ export default function RegulatoryServices() {
       : "Regulatory Services";
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView stickyHeaderIndices={[0]}>
       <BannerHeader title={bannerHeaderTitle} variant="light" />
 
       <View style={styles.content}>
