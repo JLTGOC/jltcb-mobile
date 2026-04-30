@@ -136,7 +136,7 @@ export default function RespondedQuotes() {
                 onPress={() => {
                   router.navigate({
                     pathname:
-                      "/(client)/(tabs)/dashboard/responded-quotation/[id]/edit",
+                      "/(client)/(tabs)/dashboard/responded-quotation/[id]",
                     params: { id: item.id, title: item.commodity },
                   });
                 }}
