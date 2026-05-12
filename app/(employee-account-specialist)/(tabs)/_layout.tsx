@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import HeaderBackground from "@/src/components/header-nav-bar-section/HeaderBackground";
 import HeaderRight from "@/src/components/header-nav-bar-section/HeaderRight";
+import TabBarButton from "@/src/components/tabs-ui/TabBarButton";
 
 import { THEMES } from "@/src/constants/themes";
 import { AS_HEADER_MENUS } from "@/src/constants/user-navigation";
@@ -25,7 +26,7 @@ export default function ASTabsLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: THEMES.tabBarActiveTintColor,
+				tabBarActiveTintColor: THEMES.darkAccentColor,
 				tabBarInactiveTintColor: THEMES.tabBarInactiveTintColor,
 				tabBarShowLabel: false,
 				tabBarStyle,
@@ -53,6 +54,9 @@ export default function ASTabsLayout() {
 						colors={[THEMES.darkAccentColor, THEMES.lightVariantColor]}
 						containerStyle={styles.headerBackgroundContainer}
 					/>
+				),
+				tabBarButton: (props) => (
+					<TabBarButton activeStyle={styles.activeTab} {...props} />
 				),
 			}}
 		>
@@ -99,5 +103,8 @@ const styles = StyleSheet.create({
 	},
 	tabBarIcon: {
 		marginTop: 10,
+	},
+	activeTab: {
+		borderBottomColor: THEMES.darkAccentColor,
 	},
 });

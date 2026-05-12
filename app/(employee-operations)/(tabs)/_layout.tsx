@@ -1,17 +1,18 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import {
 	type Animated,
+	Pressable,
 	type StyleProp,
 	StyleSheet,
 	type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import HeaderBackground from "@/src/components/header-nav-bar-section/HeaderBackground";
 import HeaderRight from "@/src/components/header-nav-bar-section/HeaderRight";
-
+import TabBarButton from "@/src/components/tabs-ui/TabBarButton";
 import { THEMES } from "@/src/constants/themes";
 import { OPS_HEADER_MENUS } from "@/src/constants/user-navigation";
 
@@ -26,7 +27,7 @@ export default function OperationsTabsLayout() {
 		<Tabs
 			initialRouteName="dashboard"
 			screenOptions={{
-				tabBarActiveTintColor: THEMES.tabBarActiveTintColor,
+				tabBarActiveTintColor: THEMES.darkAccentColor,
 				tabBarInactiveTintColor: THEMES.tabBarInactiveTintColor,
 				tabBarShowLabel: false,
 				tabBarStyle,
@@ -55,6 +56,9 @@ export default function OperationsTabsLayout() {
 						containerStyle={styles.headerBackgroundContainer}
 					/>
 				),
+				tabBarButton: (props) => (
+					<TabBarButton activeStyle={styles.activeTab} {...props} />
+				),
 			}}
 		>
 			<Tabs.Screen
@@ -67,9 +71,12 @@ export default function OperationsTabsLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="messages/index"
+				name="messages"
 				options={{
-					tabBarItemStyle: { marginLeft: "auto", maxWidth: "25%" },
+					tabBarItemStyle: {
+						marginLeft: "auto",
+						maxWidth: "25%",
+					},
 					tabBarIcon: (props) => (
 						<MaterialCommunityIcons name="forum-outline" {...props} />
 					),
@@ -100,5 +107,8 @@ const styles = StyleSheet.create({
 	},
 	tabBarIcon: {
 		marginTop: 10,
+	},
+	activeTab: {
+		borderBottomColor: THEMES.darkAccentColor,
 	},
 });
