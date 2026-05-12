@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+
 import { useAuth } from "@/src/hooks/useAuth";
 import type { ImageMessage } from "@/src/types/chats";
 
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export default function ChatImageCard({ image }: Props) {
-	const { userData } = useAuth();
+	const { userData, token } = useAuth();
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 
@@ -45,7 +46,10 @@ export default function ChatImageCard({ image }: Props) {
 			]}
 		>
 			<Image
-				source={image.file_url}
+				source={{
+					uri: image.file_url,
+					headers: { Authorization: `Bearer ${token}` },
+				}}
 				alt={image.file_name}
 				transition={IMAGE_TRANSITION_MS}
 				style={styles.image}
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
 		borderRadius: IMAGE_BORDER_RADIUS,
 	},
 	loader: {
-		...StyleSheet.absoluteFillObject,
+		...StyleSheet.absoluteFill,
 		justifyContent: "center",
 		alignItems: "center",
 	},
