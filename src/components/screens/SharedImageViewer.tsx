@@ -24,6 +24,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
+
+import { useAuth } from "@/src/hooks/useAuth";
 import { showToast } from "@/src/utils/showToast";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -35,6 +37,7 @@ export default function SharedImageViewer() {
 		url: string;
 		fileName?: string;
 	}>();
+	const { token } = useAuth();
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
 
@@ -105,7 +108,9 @@ export default function SharedImageViewer() {
 			}
 			destination.create();
 
-			const downloaded = await File.downloadFileAsync(url, destination);
+			const downloaded = await File.downloadFileAsync(url, destination, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
 
 			// Android 13+ (API 33) doesn't require permissions to save to media store.
 			// iOS always needs write permission. Older Android needs it too.
@@ -182,7 +187,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	backdrop: {
-		...StyleSheet.absoluteFillObject,
+		...StyleSheet.absoluteFill,
 		backgroundColor: "#000",
 	},
 	container: {
