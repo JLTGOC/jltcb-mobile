@@ -56,6 +56,21 @@ export const AS_HEADER_MENUS: HeaderMenu[] = [
 	},
 ];
 
+export const OPS_HEADER_MENUS: HeaderMenu[] = [
+	{
+		text: "Calculator",
+		link: routes.UNDERCONSTRUCTION,
+	},
+	{
+		text: "AHTN Checker",
+		link: routes.AHTN_CHECKER,
+	},
+	{
+		text: "Account Settings",
+		link: routes.ACCOUNT_SETTINGS,
+	},
+];
+
 export const userNavigation: UserNavigation[] = [
 	{
 		role: "Client",
