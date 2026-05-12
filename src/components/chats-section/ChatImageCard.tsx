@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
 		maxHeight: MAX_IMAGE_HEIGHT,
 		borderWidth: 1,
 		borderColor: "transparent",
+		borderRadius: IMAGE_BORDER_RADIUS,
 	},
 	image: {
 		width: "100%",
