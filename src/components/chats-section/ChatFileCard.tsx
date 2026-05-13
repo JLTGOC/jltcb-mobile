@@ -4,6 +4,7 @@ import { Avatar, Card, Text } from "react-native-paper";
 import { useAuth } from "@/src/hooks/useAuth";
 import type { FileMessage } from "@/src/types/chats";
 import { handleSaveFile } from "@/src/utils/handleFileDownload";
+import { showToast } from "@/src/utils/showToast";
 
 type Props = {
 	file: FileMessage;
@@ -14,7 +15,17 @@ export default function ChatFileCard({ file }: Props) {
 	const isUserMessage = userData?.id === file.sender.id;
 
 	const handlePress = async () => {
-		await handleSaveFile(file.file_url, token!);
+		try {
+			await handleSaveFile({
+				url: file.file_url,
+				token: token!,
+				cacheDir: "files",
+				fileName: file.file_name,
+			});
+		} catch (err) {
+			showToast("Failed to download file.");
+			console.error(err);
+		}
 	};
 
 	return (

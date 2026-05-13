@@ -26,6 +26,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
 
 import { useAuth } from "@/src/hooks/useAuth";
+import { downloadFile } from "@/src/utils/handleFileDownload";
 import { showToast } from "@/src/utils/showToast";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -35,7 +36,7 @@ const SWIPE_VELOCITY_THRESHOLD = 500;
 export default function SharedImageViewer() {
 	const { url, fileName } = useLocalSearchParams<{
 		url: string;
-		fileName?: string;
+		fileName: string;
 	}>();
 	const { token } = useAuth();
 	const router = useRouter();
@@ -102,14 +103,11 @@ export default function SharedImageViewer() {
 		setIsSaving(true);
 		setSaveStatus("idle");
 		try {
-			const destination = new Directory(Paths.cache, "images");
-			if (destination.exists) {
-				destination.delete();
-			}
-			destination.create();
-
-			const downloaded = await File.downloadFileAsync(url, destination, {
-				headers: { Authorization: `Bearer ${token}` },
+			const downloaded = await downloadFile({
+				fileName,
+				url,
+				cacheDir: "images",
+				token: token!,
 			});
 
 			// Android 13+ (API 33) doesn't require permissions to save to media store.
