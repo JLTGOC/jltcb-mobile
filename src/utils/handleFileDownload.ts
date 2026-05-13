@@ -7,71 +7,104 @@ import { showToast } from "./showToast";
 
 const { StorageAccessFramework } = FileSystem;
 
-const downloadFile = async ({
-	url,
-	destination,
-	token,
-}: {
+type DownloadOptions = {
 	url: string;
-	destination: Directory;
+	fileName: string;
 	token?: string;
-}) =>
-	await File.downloadFileAsync(url, destination, {
-		headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+	cacheDir?: string;
+};
+
+const createCacheFile = async ({
+	fileName,
+	cacheDir = "downloads",
+}: {
+	fileName: string;
+	cacheDir?: string;
+}) => {
+	const directory = new Directory(Paths.cache, cacheDir);
+
+	if (directory.exists) {
+		directory.delete();
+	}
+
+	directory.create();
+
+	return new File(directory, fileName);
+};
+
+export const downloadFile = async ({
+	url,
+	fileName,
+	token,
+	cacheDir,
+}: DownloadOptions) => {
+	const file = await createCacheFile({
+		fileName,
+		cacheDir,
 	});
 
-const androidSave = async (file: File) => {
+	return await File.downloadFileAsync(url, file, {
+		headers: token
+			? {
+					Authorization: `Bearer ${token}`,
+				}
+			: undefined,
+	});
+};
+
+const saveAndroid = async (file: File) => {
 	const permissions =
 		await StorageAccessFramework.requestDirectoryPermissionsAsync();
+
 	if (!permissions.granted) {
 		showToast("Storage permission is required.");
 		return;
 	}
 
-	const base64 = await FileSystem.readAsStringAsync(file.uri, {
-		encoding: FileSystem.EncodingType.Base64,
-	});
-	const fileName = file.uri.split("/").pop();
 	try {
+		const base64 = await FileSystem.readAsStringAsync(file.uri, {
+			encoding: FileSystem.EncodingType.Base64,
+		});
+
 		const uri = await StorageAccessFramework.createFileAsync(
 			permissions.directoryUri,
-			fileName!,
-			file.type,
+			file.name,
+			file.type ?? "application/octet-stream",
 		);
+
 		await FileSystem.writeAsStringAsync(uri, base64, {
 			encoding: FileSystem.EncodingType.Base64,
 		});
-		showToast(`${fileName} has been saved.`);
-	} catch (err) {
+
+		showToast(`${file.name} has been saved.`);
+	} catch (error) {
+		console.error(error);
 		showToast("Unable to save the file.");
-		console.error(err);
 	}
 };
 
-const save = async (file: File) => {
-	if (Platform.OS !== "android") {
-		await Sharing.shareAsync(file.uri, { mimeType: file.type });
-		return;
+export const saveFile = async (file: File) => {
+	if (Platform.OS === "android") {
+		return saveAndroid(file);
 	}
 
-	androidSave(file);
+	return Sharing.shareAsync(file.uri, {
+		mimeType: file.type,
+	});
 };
 
-export const handleSaveFile = async (url?: string, token?: string) => {
-	if (!url) return;
+export const handleSaveFile = async ({
+	url,
+	fileName,
+	token,
+	cacheDir,
+}: DownloadOptions) => {
+	const file = await downloadFile({
+		url,
+		fileName,
+		token,
+		cacheDir,
+	});
 
-	const destination = new Directory(Paths.cache, "files");
-	try {
-		if (destination.exists) {
-			destination.delete();
-		}
-		destination.create();
-
-		const res = await downloadFile({ url, destination, token });
-
-		await save(res);
-	} catch (err) {
-		showToast("Unable to download the file.");
-		console.error(err);
-	}
+	await saveFile(file);
 };
