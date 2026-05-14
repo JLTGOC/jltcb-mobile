@@ -1,7 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
-import * as Linking from "expo-linking";
-import * as Print from "expo-print";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native";
@@ -11,11 +9,14 @@ import { useShallow } from "zustand/react/shallow";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import DataTable from "@/src/components/ui/DataTable";
 
+import { useAuth } from "@/src/hooks/useAuth";
 import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
 import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
 import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
 import type { MenuOption, TableHeader } from "@/src/types";
 import type { ASAcceptedQuotation } from "@/src/types/quotations";
+import { downloadFile, saveFile } from "@/src/utils/handleFileDownload";
+import { print } from "@/src/utils/print";
 import { showToast } from "@/src/utils/showToast";
 
 const TABLE_HEADERS: TableHeader[] = [
@@ -32,14 +33,15 @@ const TABLE_HEADERS: TableHeader[] = [
 ];
 
 const MENU_OPTIONS = [
-  { title: "Print", icon: "printer" },
-  { title: "Download", icon: "download" },
-  { title: "Make Job Order", icon: "truck-fast-outline" },
+  { title: "PRINT", icon: "printer-outline" },
+  { title: "DOWNLOAD", icon: "download" },
+  { title: "MAKE JOB ORDER", icon: "truck-fast-outline" },
 ] as const satisfies MenuOption[];
 
 type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 
 export default function AcceptedQuotation() {
+  const { token } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { setQuotationReference, reset } = useJobOrderFormStore(
@@ -55,11 +57,9 @@ export default function AcceptedQuotation() {
     asQuotationsQueryOptions({ filter: "ACCEPTED" }),
   );
 
-  const handlePrint = async (fileUrl: string) => {
+  const handlePrint = async (uri: string) => {
     try {
-      await Print.printAsync({
-        uri: fileUrl,
-      });
+      await print({ uri });
     } catch (error) {
       console.error("Print error:", error);
     }
@@ -75,12 +75,25 @@ export default function AcceptedQuotation() {
       return null;
     }
 
-    return data.quotation_file[0].file_url;
+    try {
+      const res = await downloadFile({
+        url: data.quotation_file[0].file_url,
+        fileName: data.quotation_file[0].file_name,
+        token: token!,
+        cacheDir: "accepted-quotations",
+      });
+
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleRowPress = async (quotationId: string) => {
-    const fileUrl = await getQuotationFile(quotationId);
-    if (fileUrl) Linking.openURL(fileUrl);
+    router.navigate({
+      pathname: "/dashboard/accepted-quotation/pdf",
+      params: { quotationId },
+    });
   };
 
   const handleMenuAction = async ({
@@ -90,12 +103,12 @@ export default function AcceptedQuotation() {
     title: MenuTitle;
     quotation: ASAcceptedQuotation;
   }) => {
-    if (title !== "Make Job Order") {
-      const fileUrl = await getQuotationFile(quotation.id.toString());
-      if (!fileUrl) return;
+    if (title !== "MAKE JOB ORDER") {
+      const file = await getQuotationFile(quotation.id.toString());
+      if (!file) return;
 
-      if (title === "Download") Linking.openURL(fileUrl);
-      else if (title === "Print") handlePrint(fileUrl);
+      if (title === "DOWNLOAD") saveFile(file);
+      else if (title === "PRINT") await handlePrint(file.uri);
       return;
     }
 

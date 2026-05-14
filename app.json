@@ -70,8 +70,12 @@
 			"expo-sqlite",
 			[
 				"expo-file-system",
-				{ "supportsOpeningDocumentsInPlace": true, "enableFileSharing": true }
-			]
+				{
+					"supportsOpeningDocumentsInPlace": true,
+					"enableFileSharing": true
+				}
+			],
+			"expo-image"
 		],
 		"experiments": {
 			"typedRoutes": true,
