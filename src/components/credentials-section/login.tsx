@@ -6,15 +6,15 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import { HelperText } from "react-native-paper";
 
-import Button from "@/src/components/ui/Button";
-import KeyboardAwareScrollView from "@/src/components/ui/KeyboardAwareScrollView";
-import TextInput from "@/src/components/ui/TextInput";
+import Button from "@/components/ui/Button";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
+import TextInput from "@/components/ui/TextInput";
 
-import { useAuth } from "@/src/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import {
 	type LoginFormSchema,
 	loginFormSchema,
-} from "@/src/schemas/loginFormSchema";
+} from "@/schemas/loginFormSchema";
 
 export default function Login() {
 	const { loginContext } = useAuth();
@@ -59,7 +59,7 @@ export default function Login() {
 	return (
 		<KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
 			<ImageBackground
-				source={require("@/src/assets/banners/large.png")}
+				source={require("@/assets/banners/large.png")}
 				style={styles.imageBackground}
 				contentFit="cover"
 			>

@@ -5,17 +5,17 @@ import { StyleSheet, View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import FieldLegend from "@/src/components/ui/FieldLegend";
-import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
-import KeyboardAwareScrollView from "@/src/components/ui/KeyboardAwareScrollView";
+import BannerHeader from "@/components/ui/BannerHeader";
+import FieldLegend from "@/components/ui/FieldLegend";
+import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 
-import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
+import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
 import {
   type Step2Fields,
   step2Schema,
-} from "@/src/schemas/job-order/logistics-service-form-schema";
-import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
+} from "@/schemas/job-order/logistics-service-form-schema";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 
 export default function Step2Form() {
   const router = useRouter();

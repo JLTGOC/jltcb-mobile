@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { userKeys } from "@/src/query-key-factories/users";
-import { fetchUser } from "@/src/services/users";
+import { userKeys } from "@/query-key-factories/users";
+import { fetchUser } from "@/services/users";
 
 export const userQueryOptions = (userId: string) =>
 	queryOptions({

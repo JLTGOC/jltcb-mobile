@@ -1,33 +1,33 @@
 import type { StateCreator } from "zustand";
 
-import type { JobType } from "@/src/types/job-order";
-import type { ClientQuotationFormStore } from "@/src/types/store";
+import type { JobType } from "@/types/job-order";
+import type { ClientQuotationFormStore } from "@/types/store";
 
 const initialState: QuotationFormHeaderState = {
-  service: "LOGISTICS",
-  step: 0,
+	service: "LOGISTICS",
+	step: 0,
 };
 
 interface QuotationFormHeaderState {
-  service: JobType;
-  step: number;
+	service: JobType;
+	step: number;
 }
 
 interface QuotationFormHeaderActions {
-  setService: (service: JobType) => void;
-  setStep: (step: number) => void;
+	setService: (service: JobType) => void;
+	setStep: (step: number) => void;
 }
 
 export type QuotationFormHeaderSlice = QuotationFormHeaderState &
-  QuotationFormHeaderActions;
+	QuotationFormHeaderActions;
 
 export const createQuotationFormHeaderSlice: StateCreator<
-  ClientQuotationFormStore,
-  [],
-  [],
-  QuotationFormHeaderSlice
+	ClientQuotationFormStore,
+	[],
+	[],
+	QuotationFormHeaderSlice
 > = (set) => ({
-  ...initialState,
-  setService: (service) => set({ service }),
-  setStep: (step) => set({ step }),
+	...initialState,
+	setService: (service) => set({ service }),
+	setStep: (step) => set({ step }),
 });

@@ -1,8 +1,8 @@
 import { mutationOptions } from "@tanstack/react-query";
 
-import { dashboardKeys } from "@/src/query-key-factories/dashboard";
-import { createQuotation } from "@/src/services/quotations";
-import type { CreateQuotationRequestBody } from "@/src/types/quotations";
+import { dashboardKeys } from "@/query-key-factories/dashboard";
+import { createQuotation } from "@/services/quotations";
+import type { CreateQuotationRequestBody } from "@/types/quotations";
 
 export const createQuotationMutationOptions = (userId: string) =>
 	mutationOptions({

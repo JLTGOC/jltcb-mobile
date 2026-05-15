@@ -1,5 +1,5 @@
-import { apiGet } from "@/src/services/axiosInstance";
-import type { User, UserAs } from "@/src/types/users";
+import { apiGet } from "@/services/axiosInstance";
+import type { User, UserAs } from "@/types/users";
 
 export const fetchUser = async (userId: string) =>
 	apiGet<User>(`users/${userId}`);

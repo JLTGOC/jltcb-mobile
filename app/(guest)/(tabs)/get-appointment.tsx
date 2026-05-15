@@ -1,66 +1,67 @@
-import Form from "@/src/components/appointment-section/Form";
-import TimeDate from "@/src/components/appointment-section/TimeDate";
 import { ImageBackground } from "expo-image";
 import { useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
+import Form from "@/components/appointment-section/Form";
+import TimeDate from "@/components/appointment-section/TimeDate";
+
 export default function GetAppointment() {
-  const [appointmentResetKey, setAppointmentResetKey] = useState(0);
+	const [appointmentResetKey, setAppointmentResetKey] = useState(0);
 
-  return (
-    <FlatList
-      data={[1]} // dummy item
-      keyExtractor={(item) => item.toString()}
-      renderItem={() => null}
-      ListHeaderComponent={() => (
-        <View>
-          <ImageBackground
-            source={require("@/src/assets/banners/large.png")}
-            style={{
-              padding: 20,
-              aspectRatio: 2,
-            }}
-            contentFit="cover"
-          >
-            <Text
-              style={{
-                color: "#EE9034",
-                fontSize: 20,
-                fontWeight: "500",
-                marginBottom: 5,
-              }}
-              allowFontScaling={false}
-            >
-              BOOK YOUR APPOINTMENT NOW
-            </Text>
+	return (
+		<FlatList
+			data={[1]} // dummy item
+			keyExtractor={(item) => item.toString()}
+			renderItem={() => null}
+			ListHeaderComponent={() => (
+				<View>
+					<ImageBackground
+						source={require("@/assets/banners/large.png")}
+						style={{
+							padding: 20,
+							aspectRatio: 2,
+						}}
+						contentFit="cover"
+					>
+						<Text
+							style={{
+								color: "#EE9034",
+								fontSize: 20,
+								fontWeight: "500",
+								marginBottom: 5,
+							}}
+							allowFontScaling={false}
+						>
+							BOOK YOUR APPOINTMENT NOW
+						</Text>
 
-            <View
-              style={{
-                borderLeftWidth: 4,
-                borderLeftColor: "#EE9034",
-                margin: 5,
-                paddingHorizontal: 5,
-                height: 55,
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{ fontSize: 12, color: "white" }}
-                allowFontScaling={false}
-              >
-                At Jill L. Tolentino Customs Brokerage, we simplify imports and
-                exports for businesses nationwide...
-              </Text>
-            </View>
-          </ImageBackground>
-          <TimeDate resetKey={appointmentResetKey} />
-          <Form
-            onSubmitted={() =>
-              setAppointmentResetKey((prevResetKey) => prevResetKey + 1)
-            }
-          />
-        </View>
-      )}
-    />
-  );
+						<View
+							style={{
+								borderLeftWidth: 4,
+								borderLeftColor: "#EE9034",
+								margin: 5,
+								paddingHorizontal: 5,
+								height: 55,
+								justifyContent: "center",
+							}}
+						>
+							<Text
+								style={{ fontSize: 12, color: "white" }}
+								allowFontScaling={false}
+							>
+								At Jill L. Tolentino Customs Brokerage, we simplify imports and
+								exports for businesses nationwide...
+							</Text>
+						</View>
+					</ImageBackground>
+					<TimeDate resetKey={appointmentResetKey} />
+					<Form
+						onSubmitted={() =>
+							setAppointmentResetKey((prevResetKey) => prevResetKey + 1)
+						}
+					/>
+				</View>
+			)}
+		/>
+	);
 }

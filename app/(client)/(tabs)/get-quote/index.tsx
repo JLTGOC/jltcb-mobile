@@ -1,8 +1,8 @@
-import StepScrollView from "@/src/components/client-section/get-quote/StepScrollView";
-import LogisticsForm from "@/src/components/client-section/get-quote/step-1/LogisticsForm";
-import RegulatoryForm from "@/src/components/client-section/get-quote/step-1/RegulatoryForm";
+import StepScrollView from "@/components/client-section/get-quote/StepScrollView";
+import LogisticsForm from "@/components/client-section/get-quote/step-1/LogisticsForm";
+import RegulatoryForm from "@/components/client-section/get-quote/step-1/RegulatoryForm";
 
-import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
+import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
 
 export default function Step1Form() {
   const service = useClientQuotationFormStore((state) => state.service);

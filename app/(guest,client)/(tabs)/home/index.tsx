@@ -1,4 +1,4 @@
-import SharedHome from "@/src/components/screens/SharedHome";
+import SharedHome from "@/components/screens/SharedHome";
 
 export default function Home() {
   return <SharedHome />;

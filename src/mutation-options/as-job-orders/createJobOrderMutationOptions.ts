@@ -1,11 +1,12 @@
 import { mutationOptions } from "@tanstack/react-query";
-import { dashboardKeys } from "@/src/query-key-factories/dashboard";
+
+import { dashboardKeys } from "@/query-key-factories/dashboard";
 import {
 	jobOrderKeys,
 	jobOrderListKeys,
-} from "@/src/query-key-factories/jobOrders";
-import { createJobOrder } from "@/src/services/jobOrder";
-import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
+} from "@/query-key-factories/jobOrders";
+import { createJobOrder } from "@/services/jobOrder";
+import type { CreateJobOrderRequestBody } from "@/types/job-order";
 
 export const createJobOrderMutationOptions = (userId: string) =>
 	mutationOptions({

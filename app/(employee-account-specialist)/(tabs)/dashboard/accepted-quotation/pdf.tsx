@@ -8,16 +8,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useShallow } from "zustand/react/shallow";
 
-import SharedPdfScreen from "@/src/components/screens/SharedPdf";
-import Button from "@/src/components/ui/Button";
+import SharedPdfScreen from "@/components/screens/SharedPdf";
+import Button from "@/components/ui/Button";
 
-import { THEMES } from "@/src/constants/themes";
-import { useAuth } from "@/src/hooks/useAuth";
-import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
-import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
-import { downloadFile, handleSaveFile } from "@/src/utils/handleFileDownload";
-import { print } from "@/src/utils/print";
-import { showToast } from "@/src/utils/showToast";
+import { THEMES } from "@/constants/themes";
+import { useAuth } from "@/hooks/useAuth";
+import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
+import { downloadFile, handleSaveFile } from "@/utils/handleFileDownload";
+import { print } from "@/utils/print";
+import { showToast } from "@/utils/showToast";
 
 export default function PdfScreen() {
   const { quotationId } = useLocalSearchParams<{ quotationId: string }>();

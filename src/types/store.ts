@@ -1,9 +1,9 @@
-import type { LogisticsQuotationFormSlice } from "@/src/stores/slices/client-quotation-form-slices/createLogisticsFormSlice";
-import type { QuotationFormHeaderSlice } from "@/src/stores/slices/client-quotation-form-slices/createQuotationFormHeaderSlice";
-import type { RegulatoryQuotationFormSlice } from "@/src/stores/slices/client-quotation-form-slices/createRegulatoryFormSlice";
-import type { SharedQuotationFormSlice } from "@/src/stores/slices/client-quotation-form-slices/createSharedQuotationFormSlice";
-import type { LogisticsFormSlice } from "@/src/stores/slices/job-order-form-slices/createLogisticsFormSlice";
-import type { QuotationReferenceSlice } from "@/src/stores/slices/job-order-form-slices/createQuotationReferenceSlice";
+import type { LogisticsQuotationFormSlice } from "@/stores/slices/client-quotation-form-slices/createLogisticsFormSlice";
+import type { QuotationFormHeaderSlice } from "@/stores/slices/client-quotation-form-slices/createQuotationFormHeaderSlice";
+import type { RegulatoryQuotationFormSlice } from "@/stores/slices/client-quotation-form-slices/createRegulatoryFormSlice";
+import type { SharedQuotationFormSlice } from "@/stores/slices/client-quotation-form-slices/createSharedQuotationFormSlice";
+import type { LogisticsFormSlice } from "@/stores/slices/job-order-form-slices/createLogisticsFormSlice";
+import type { QuotationReferenceSlice } from "@/stores/slices/job-order-form-slices/createQuotationReferenceSlice";
 
 type ResetStore = {
 	reset: () => void;

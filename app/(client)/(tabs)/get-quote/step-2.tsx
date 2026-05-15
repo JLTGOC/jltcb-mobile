@@ -1,16 +1,16 @@
-import StepScrollView from "@/src/components/client-section/get-quote/StepScrollView";
-import LogisticsForm from "@/src/components/client-section/get-quote/step-2/LogisticsForm";
-import RegulatoryForm from "@/src/components/client-section/get-quote/step-2/RegulatoryForm";
+import StepScrollView from "@/components/client-section/get-quote/StepScrollView";
+import LogisticsForm from "@/components/client-section/get-quote/step-2/LogisticsForm";
+import RegulatoryForm from "@/components/client-section/get-quote/step-2/RegulatoryForm";
 
-import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
+import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
 
 export default function Step2() {
-	const service = useClientQuotationFormStore((state) => state.service);
+  const service = useClientQuotationFormStore((state) => state.service);
 
-	return (
-		<StepScrollView>
-			{service === "LOGISTICS" && <LogisticsForm />}
-			{service === "REGULATORY" && <RegulatoryForm />}
-		</StepScrollView>
-	);
+  return (
+    <StepScrollView>
+      {service === "LOGISTICS" && <LogisticsForm />}
+      {service === "REGULATORY" && <RegulatoryForm />}
+    </StepScrollView>
+  );
 }

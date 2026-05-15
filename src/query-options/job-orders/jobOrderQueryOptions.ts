@@ -1,8 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { jobOrderKeys } from "@/src/query-key-factories/jobOrders";
-import { fetchJobOrder } from "@/src/services/jobOrder";
-import type { JobOrder } from "@/src/types/job-order";
+import { jobOrderKeys } from "@/query-key-factories/jobOrders";
+import { fetchJobOrder } from "@/services/jobOrder";
+import type { JobOrder } from "@/types/job-order";
 
 export const jobOrderQueryOptions = <T extends JobOrder>(id: number) =>
 	queryOptions({

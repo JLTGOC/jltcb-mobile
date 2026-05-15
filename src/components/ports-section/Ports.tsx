@@ -8,10 +8,11 @@ import {
 	Text,
 	View,
 } from "react-native";
-import PortAccordion from "@/src/components/ports-section/PortAccordion";
-import PortRegionButtons from "@/src/components/ports-section/PortRegionButtons";
-import ports, { REGIONS } from "@/src/constants/ports-catered";
-import type { Region } from "@/src/types/ports";
+
+import PortAccordion from "@/components/ports-section/PortAccordion";
+import PortRegionButtons from "@/components/ports-section/PortRegionButtons";
+import ports, { REGIONS } from "@/constants/ports-catered";
+import type { Region } from "@/types/ports";
 
 type ExpandedPorts = Record<Region, string | null>;
 
@@ -38,7 +39,7 @@ export default function Ports() {
 
 	const screenWidth = Dimensions.get("window").width;
 
-	const mapImage = require("../../../src/assets/ports_catered/map.png");
+	const mapImage = require("@/assets/ports_catered/map.png");
 	const { width, height } = Image.resolveAssetSource(mapImage);
 	const scaledHeight = (screenWidth * height) / width;
 
@@ -50,7 +51,7 @@ export default function Ports() {
 			ListHeaderComponent={
 				<>
 					<ImageBackground
-						source={require("../../../src/assets/banners/small.png")}
+						source={require("@/assets/banners/small.png")}
 						style={{
 							aspectRatio: 3,
 							paddingVertical: 30,

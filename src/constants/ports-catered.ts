@@ -1,4 +1,4 @@
-import type { PortItem } from "../types/ports";
+import type { PortItem } from "@/types/ports";
 
 export const REGIONS = ["Luzon", "Visayas", "Mindanao"] as const;
 

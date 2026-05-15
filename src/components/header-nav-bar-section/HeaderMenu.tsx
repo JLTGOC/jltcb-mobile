@@ -12,9 +12,10 @@ import {
 } from "react-native";
 import { Portal, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { HeaderMenu as THeaderMenu } from "@/src/constants/user-navigation";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
+
+import type { HeaderMenu as THeaderMenu } from "@/constants/user-navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "@/hooks/useNavigate";
 import ClientHeaderMenuLink from "./client-navbar/ClientNavBarLink";
 
 const TAB_HEADER_HEIGHT = 64;

@@ -1,7 +1,8 @@
 import { Image, ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import { routes } from "@/src/constants/routes";
+
+import { routes } from "@/constants/routes";
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -12,7 +13,7 @@ export default function LandingPage() {
 				<View style={styles.logoContainer}>
 					<Image
 						style={styles.logo}
-						source={require("@/src/assets/black_logos/logo.png")}
+						source={require("@/assets/black_logos/logo.png")}
 						contentFit="contain"
 					/>
 					<Text style={styles.title} allowFontScaling={false}>
@@ -32,7 +33,7 @@ export default function LandingPage() {
 					>
 						<Image
 							style={[styles.image, { marginLeft: 4 }]}
-							source={require("@/src/assets/landing-page/customs-brokerage.png")}
+							source={require("@/assets/landing-page/customs-brokerage.png")}
 							contentFit="contain"
 						/>
 						<Text style={styles.solutionText} allowFontScaling={false}>
@@ -50,7 +51,7 @@ export default function LandingPage() {
 					>
 						<Image
 							style={styles.image}
-							source={require("@/src/assets/landing-page/global-trade.png")}
+							source={require("@/assets/landing-page/global-trade.png")}
 							contentFit="contain"
 						/>
 						<Text style={styles.solutionText} allowFontScaling={false}>
@@ -68,7 +69,7 @@ export default function LandingPage() {
 					>
 						<Image
 							style={styles.image}
-							source={require("@/src/assets/landing-page/world-wide-logistics.png")}
+							source={require("@/assets/landing-page/world-wide-logistics.png")}
 							contentFit="contain"
 						/>
 						<Text style={styles.solutionText} allowFontScaling={false}>
@@ -80,7 +81,7 @@ export default function LandingPage() {
 
 			<ImageBackground
 				style={styles.bottomBanner}
-				source={require("@/src/assets/banners/large.png")}
+				source={require("@/assets/banners/large.png")}
 				contentFit="fill"
 			/>
 		</View>

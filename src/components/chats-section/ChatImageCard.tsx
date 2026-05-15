@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
-import { useAuth } from "@/src/hooks/useAuth";
-import type { ImageMessage } from "@/src/types/chats";
+import { useAuth } from "@/hooks/useAuth";
+import type { ImageMessage } from "@/types/chats";
 
 const MAX_IMAGE_HEIGHT = 250;
 const IMAGE_BORDER_RADIUS = 15;

@@ -1,7 +1,5 @@
-import { Text } from "react-native-paper"
+import { Text } from "react-native-paper";
 
-export default function Billing (){
-    return (
-        <Text>Billing On-going</Text> 
-    )
+export default function Billing() {
+	return <Text>Billing On-going</Text>;
 }

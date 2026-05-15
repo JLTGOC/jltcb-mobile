@@ -12,8 +12,8 @@ import {
 	TextInput,
 } from "react-native-paper";
 
-import type { Document } from "@/src/types/quotations";
-import { handleFileOpen } from "@/src/utils/handleFileOpen";
+import type { Document } from "@/types/quotations";
+import { handleFileOpen } from "@/utils/handleFileOpen";
 
 interface QuotationRequestDocumentCardProps {
 	document: Partial<Document> & { file_name: string; file_url?: string };

@@ -1,4 +1,4 @@
-import type { DashboardFolderSection, DashboardUser } from "../types/dashboard";
+import type { DashboardFolderSection, DashboardUser } from "@/types/dashboard";
 
 export const mapDashboardData = <T extends { user: DashboardUser }>(
 	apiData: T,

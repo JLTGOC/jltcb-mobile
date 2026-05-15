@@ -7,17 +7,17 @@ import { RefreshControl, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 import * as z from "zod";
 
-import JobOrderCard from "@/src/components/job-order-section/JobOrderCard";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import PageList from "@/src/components/ui/PageList";
-import Search from "@/src/components/ui/Search";
+import JobOrderCard from "@/components/job-order-section/JobOrderCard";
+import BannerHeader from "@/components/ui/BannerHeader";
+import PageList from "@/components/ui/PageList";
+import Search from "@/components/ui/Search";
 
-import { THEMES } from "@/src/constants/themes";
-import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
-import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
-import { jobOrderKeys } from "@/src/query-key-factories/jobOrders";
-import { apiGet } from "@/src/services/axiosInstance";
-import type { JobOrderResponse } from "@/src/types/job-order";
+import { THEMES } from "@/constants/themes";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { jobOrderKeys } from "@/query-key-factories/jobOrders";
+import { apiGet } from "@/services/axiosInstance";
+import type { JobOrderResponse } from "@/types/job-order";
 
 const searchSchema = z.object({
   search: z.string().trim(),

@@ -7,18 +7,18 @@ import { StyleSheet, View } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
-import AutocompleteDropdown from "@/src/components/ui/AutocompleteDropdown";
-import Button from "@/src/components/ui/Button";
-import { Field, FieldError, FieldLabel } from "@/src/components/ui/Field";
-import TextInput from "@/src/components/ui/TextInput";
+import AutocompleteDropdown from "@/components/ui/AutocompleteDropdown";
+import Button from "@/components/ui/Button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
+import TextInput from "@/components/ui/TextInput";
 
-import { THEMES } from "@/src/constants/themes";
-import { clientQuoteEnumsQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
+import { THEMES } from "@/constants/themes";
+import { clientQuoteEnumsQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
 import {
   type RegulatoryStep1FormData,
   regulatoryStep1FormSchema,
-} from "@/src/schemas/client-quotation-form/regulatory-quotation-form-schema";
-import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
+} from "@/schemas/client-quotation-form/regulatory-quotation-form-schema";
+import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
 
 export default function RegulatoryForm() {
   const router = useRouter();

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Card, Divider, Text } from "react-native-paper";
-import { Image } from "expo-image";
 
-import { fetchShipmentDetails } from "@/src/services/shipment";
-import type { ShipmentDetails } from "@/src/types/shipment-type";
+import { fetchShipmentDetails } from "@/services/shipment";
+import type { ShipmentDetails } from "@/types/shipment-type";
 
 type RowItem = {
   label: string;
@@ -47,8 +47,8 @@ function BasicCard({ title, rows, middleBadge }: BasicCardData) {
               <Image
                 source={
                   middleBadge.toLowerCase() === "1x20"
-                    ? require("@/src/assets/get_quote/container20.png")
-                    : require("@/src/assets/get_quote/container40.png")
+                    ? require("@/assets/get_quote/container20.png")
+                    : require("@/assets/get_quote/container40.png")
                 }
                 style={styles.badgeImage}
                 contentFit="contain"
@@ -82,8 +82,7 @@ function StatusCard({ title, status, rows }: StatusCardData) {
   );
 }
 
-
-type Props = {shipment: number};
+type Props = { shipment: number };
 export default function Details({ shipment }: Props) {
   const hasValidShipmentId = Number.isFinite(shipment) && shipment > 0;
 
@@ -95,8 +94,7 @@ export default function Details({ shipment }: Props) {
   });
 
   const isNotFoundError =
-    isError &&
-    /record not found|not found/i.test(error?.message || "");
+    isError && /record not found|not found/i.test(error?.message || "");
 
   if (!hasValidShipmentId) {
     return (

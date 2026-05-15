@@ -1,8 +1,9 @@
-import GuestHeader from "@/src/components/header-nav-bar-section/GuestHeader";
-import GuestTabs from "@/src/components/tabs-ui/GuestTabs";
-import { routes } from "@/src/constants/routes";
 import { TabList, Tabs, TabSlot, TabTrigger } from "expo-router/ui";
 import { StyleSheet } from "react-native";
+
+import GuestHeader from "@/components/header-nav-bar-section/GuestHeader";
+import GuestTabs from "@/components/tabs-ui/GuestTabs";
+import { routes } from "@/constants/routes";
 
 export default function GuestLayout() {
   return (

@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { quotationKeys } from "@/src/query-key-factories/quotations";
-import { fetchQuotation } from "@/src/services/quotations";
+import { quotationKeys } from "@/query-key-factories/quotations";
+import { fetchQuotation } from "@/services/quotations";
 
 export const quotationQueryOptions = (quotationId: string) =>
   queryOptions({

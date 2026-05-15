@@ -1,7 +1,8 @@
 import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
-import Container20 from "../assets/get_quote/container20.png";
-import Container40 from "../assets/get_quote/container40.png";
-import type { FieldConfig, QuoteForm } from "../types/client-quotation";
+
+import Container20 from "@/assets/get_quote/container20.png";
+import Container40 from "@/assets/get_quote/container40.png";
+import type { FieldConfig, QuoteForm } from "@/types/client-quotation";
 
 // Initial Form - used for populating the form
 export const initialQuoteForm: QuoteForm = {

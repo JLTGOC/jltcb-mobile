@@ -1,4 +1,4 @@
-import type { REGIONS } from "../constants/ports-catered";
+import type { REGIONS } from "@/constants/ports-catered";
 
 export type Region = (typeof REGIONS)[number];
 

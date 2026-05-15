@@ -1,7 +1,8 @@
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import type { BaseFolderSection } from "@/src/types/dashboard";
+
+import type { BaseFolderSection } from "@/types/dashboard";
 import FolderButton from "./FolderButton";
 
 type FolderSectionProps = {

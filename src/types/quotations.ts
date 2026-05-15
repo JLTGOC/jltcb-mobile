@@ -1,7 +1,8 @@
 import type { ElementType } from "react";
 
-import type { ContainerSize, options } from "@/src/constants/client-const";
-import type { ClientType } from "@/src/types/jobOrderEnums";
+import type { ContainerSize, options } from "@/constants/client-const";
+import type { ClientType } from "@/types/jobOrderEnums";
+
 import type { File } from ".";
 import type { CargoType } from "./job-order";
 

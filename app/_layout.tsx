@@ -7,14 +7,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 
-import StartupScreen from "@/src/components/screens/StartupScreen";
+import StartupScreen from "@/components/screens/StartupScreen";
 
-import { AuthProvider } from "@/src/contexts/AuthContext";
-import { useAppState } from "@/src/hooks/useAppState";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useOnlineManager } from "@/src/hooks/useOnlineManager";
-import { initPusher } from "@/src/lib/pusher";
-import { queryClient } from "@/src/lib/queryClient";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { useAppState } from "@/hooks/useAppState";
+import { useAuth } from "@/hooks/useAuth";
+import { useOnlineManager } from "@/hooks/useOnlineManager";
+import { initPusher } from "@/lib/pusher";
+import { queryClient } from "@/lib/queryClient";
 
 const theme = {
   ...MD3LightTheme,

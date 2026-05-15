@@ -4,18 +4,14 @@ import { useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TextInput, View } from "react-native";
 import type { TextInputProps } from "react-native-paper";
-import { useSendMessageMutation } from "@/src/hooks/useSendMessageMutation";
-import {
-	type MessageForm,
-	messageFormSchema,
-} from "@/src/schemas/messageSchema";
+
+import { useSendMessageMutation } from "@/hooks/useSendMessageMutation";
+import { type MessageForm, messageFormSchema } from "@/schemas/messageSchema";
 import ChatFilePicker from "./ChatFilePicker";
 import ChatImagePicker from "./ChatImagePicker";
 import ChatSendButton from "./ChatSendButton";
 
-interface Props extends TextInputProps {}
-
-export default function ChatMessageInput({ style, ...props }: Props) {
+export default function ChatMessageInput({ style, ...props }: TextInputProps) {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { control, handleSubmit, reset } = useForm<MessageForm>({
 		resolver: zodResolver(messageFormSchema),

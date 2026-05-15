@@ -3,8 +3,8 @@ import type { StateCreator } from "zustand";
 import type {
 	ExtendedRegulatoryQuotationFormData,
 	RegulatoryStep1FormData,
-} from "@/src/schemas/client-quotation-form/regulatory-quotation-form-schema";
-import type { ClientQuotationFormStore } from "@/src/types/store";
+} from "@/schemas/client-quotation-form/regulatory-quotation-form-schema";
+import type { ClientQuotationFormStore } from "@/types/store";
 
 const initialState: RegulatoryQuotationFormState = {
 	autofill: false,

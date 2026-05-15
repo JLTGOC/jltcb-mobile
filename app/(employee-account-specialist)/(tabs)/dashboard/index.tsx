@@ -10,16 +10,16 @@ import {
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
-import FolderSection from "@/src/components/dashboard-section/FolderSection";
-import UserHeader from "@/src/components/dashboard-section/UserHeader";
+import FolderSection from "@/components/dashboard-section/FolderSection";
+import UserHeader from "@/components/dashboard-section/UserHeader";
 
-import { AS_DB_FOLDER_SECTIONS } from "@/src/constants/user-dashboards";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
-import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
-import { dashboardQueryOptions } from "@/src/query-options/dashboard/dashboardQueryOptions";
-import type { AccountSpecialistDashboard } from "@/src/types/dashboard";
-import { mapDashboardData } from "@/src/utils/mapDashboardData";
+import { AS_DB_FOLDER_SECTIONS } from "@/constants/user-dashboards";
+import { useAuth } from "@/hooks/useAuth";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { dashboardQueryOptions } from "@/query-options/dashboard/dashboardQueryOptions";
+import type { AccountSpecialistDashboard } from "@/types/dashboard";
+import { mapDashboardData } from "@/utils/mapDashboardData";
 
 export default function Index() {
   const { userData } = useAuth();
@@ -59,7 +59,7 @@ export default function Index() {
               <Image
                 style={styles.toolsIcon}
                 contentFit="contain"
-                source={require("@/src/assets/icons/tools.svg")}
+                source={require("@/assets/icons/tools.svg")}
               />
             </Pressable>
           </Link>

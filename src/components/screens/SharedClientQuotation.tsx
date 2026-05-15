@@ -9,9 +9,9 @@ import {
 	View,
 } from "react-native";
 
-import Details from "@/src/components/client-section/quotations/Details";
-import Documents from "@/src/components/client-section/quotations/Documents";
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import Details from "@/components/client-section/quotations/Details";
+import Documents from "@/components/client-section/quotations/Documents";
+import BannerHeader from "@/components/ui/BannerHeader";
 
 export default function SharedClientQuotation() {
 	const { id, title, status } = useLocalSearchParams<{

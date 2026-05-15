@@ -5,25 +5,25 @@ import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
 
-import StepScrollView from "@/src/components/client-section/get-quote/StepScrollView";
-import DocumentList from "@/src/components/quote-section/DocumentList";
-import DocumentUploadButton from "@/src/components/quote-section/DocumentUploadButton";
-import Button from "@/src/components/ui/Button";
-import { Field, FieldError, FieldLabel } from "@/src/components/ui/Field";
-import TextInput from "@/src/components/ui/TextInput";
+import StepScrollView from "@/components/client-section/get-quote/StepScrollView";
+import DocumentList from "@/components/quote-section/DocumentList";
+import DocumentUploadButton from "@/components/quote-section/DocumentUploadButton";
+import Button from "@/components/ui/Button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
+import TextInput from "@/components/ui/TextInput";
 
-import { useCreateQuotationMutation } from "@/src/hooks/useCreateQuotationMutation";
-import { logisticsQuotationFormSchema } from "@/src/schemas/client-quotation-form/logistics-quotation-form-schema";
-import { regulatoryQuotationFormSchema } from "@/src/schemas/client-quotation-form/regulatory-quotation-form-schema";
+import { useCreateQuotationMutation } from "@/hooks/useCreateQuotationMutation";
+import { logisticsQuotationFormSchema } from "@/schemas/client-quotation-form/logistics-quotation-form-schema";
+import { regulatoryQuotationFormSchema } from "@/schemas/client-quotation-form/regulatory-quotation-form-schema";
 import {
   type Step3FormData,
   step3FormSchema,
-} from "@/src/schemas/client-quotation-form/shared-form-schema";
-import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
+} from "@/schemas/client-quotation-form/shared-form-schema";
+import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
 import {
   transformToLogisticsQuotePayload,
   transformToRegulatoryQuotePayload,
-} from "@/src/utils/quotationForm";
+} from "@/utils/quotationForm";
 
 export default function Step3() {
   const router = useRouter();

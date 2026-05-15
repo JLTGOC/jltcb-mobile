@@ -2,9 +2,7 @@ import type { PropsWithChildren } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
-export interface Props extends PropsWithChildren {}
-
-export default function FieldLegend({ children }: Props) {
+export default function FieldLegend({ children }: PropsWithChildren) {
 	return (
 		<View style={styles.container}>
 			<Text variant="titleSmall" style={styles.text}>

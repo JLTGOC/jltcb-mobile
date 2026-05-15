@@ -55,11 +55,7 @@ function SubjectCard({
 	);
 }
 
-function DetailCard({
-	title,
-	rows,
-	icon = "account-outline",
-}: DetailCardItem) {
+function DetailCard({ title, rows, icon = "account-outline" }: DetailCardItem) {
 	return (
 		<Card style={styles.card} mode="elevated" elevation={1}>
 			<Card.Content style={styles.content}>

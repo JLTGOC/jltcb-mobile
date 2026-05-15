@@ -1,4 +1,4 @@
-import Upload from "@/src/components/as-quotation/Upload";
+import Upload from "@/components/as-quotation/Upload";
 
 export default function UploadQuotation() {
   return (

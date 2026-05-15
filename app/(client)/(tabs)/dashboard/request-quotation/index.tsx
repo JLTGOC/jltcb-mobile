@@ -11,14 +11,14 @@ import {
   Text,
 } from "react-native-paper";
 
-import Search from "@/src/components/client-section/shipment/Search";
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import Search from "@/components/client-section/shipment/Search";
+import BannerHeader from "@/components/ui/BannerHeader";
 
-import { THEMES } from "@/src/constants/themes";
-import { useAuth } from "@/src/hooks/useAuth";
-import useDebounce from "@/src/hooks/useDebounce";
-import { deleteClientSingleQuoteMutationOptions } from "@/src/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
-import { clientQuotesQueryOptions } from "@/src/query-options/client-quotations/clientQuotesQueryOptions";
+import { THEMES } from "@/constants/themes";
+import { useAuth } from "@/hooks/useAuth";
+import useDebounce from "@/hooks/useDebounce";
+import { deleteClientSingleQuoteMutationOptions } from "@/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
+import { clientQuotesQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
 
 type TableItem = {
   id: number;

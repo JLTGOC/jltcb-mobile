@@ -5,14 +5,14 @@ import { useState } from "react";
 import { ScrollView } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import DataTable from "@/src/components/ui/DataTable";
-import Search from "@/src/components/ui/Search";
+import BannerHeader from "@/components/ui/BannerHeader";
+import DataTable from "@/components/ui/DataTable";
+import Search from "@/components/ui/Search";
 
-import { THEMES } from "@/src/constants/themes";
-import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
-import type { TableHeader } from "@/src/types";
-import type { QuotationFilter } from "@/src/types/quotations";
+import { THEMES } from "@/constants/themes";
+import { asQuotationsQueryOptions } from "@/query-options/asLead-quotations/asQuotationsQueryOptions";
+import type { TableHeader } from "@/types";
+import type { QuotationFilter } from "@/types/quotations";
 
 const TABLE_HEADERS: TableHeader[] = [
   { title: "Date" },

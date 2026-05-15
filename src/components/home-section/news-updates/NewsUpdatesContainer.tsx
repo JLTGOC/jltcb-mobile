@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+
 import NewsTabButtons from "./NewsTabButtons";
 
 export default function NewsUpdatesContainer() {

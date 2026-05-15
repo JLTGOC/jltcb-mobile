@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { fileSchema } from "../fileSchema";
+import { fileSchema } from "@/schemas/fileSchema";
 
 export const contactNumberSchema = z
 	.string()

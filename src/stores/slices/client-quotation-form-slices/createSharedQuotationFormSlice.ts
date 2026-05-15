@@ -1,40 +1,40 @@
 import type { StateCreator } from "zustand";
 
-import type { SharedStep1FormData } from "@/src/schemas/client-quotation-form/shared-form-schema";
-import type { ClientQuotationFormStore } from "@/src/types/store";
+import type { SharedStep1FormData } from "@/schemas/client-quotation-form/shared-form-schema";
+import type { ClientQuotationFormStore } from "@/types/store";
 
 const initialState: SharedQuotationFormState = {
-  sharedFormData: {
-    companyName: "",
-    companyAddress: "",
-    companyContactNumber: "09",
-    companyEmail: "",
-  },
+	sharedFormData: {
+		companyName: "",
+		companyAddress: "",
+		companyContactNumber: "09",
+		companyEmail: "",
+	},
 };
 
 interface SharedQuotationFormState {
-  sharedFormData: Partial<SharedStep1FormData>;
+	sharedFormData: Partial<SharedStep1FormData>;
 }
 
 interface SharedQuotationFormActions {
-  setSharedFormData: (data: Partial<SharedStep1FormData>) => void;
+	setSharedFormData: (data: Partial<SharedStep1FormData>) => void;
 }
 
 export type SharedQuotationFormSlice = SharedQuotationFormState &
-  SharedQuotationFormActions;
+	SharedQuotationFormActions;
 
 export const createSharedQuotationFormSlice: StateCreator<
-  ClientQuotationFormStore,
-  [],
-  [],
-  SharedQuotationFormSlice
+	ClientQuotationFormStore,
+	[],
+	[],
+	SharedQuotationFormSlice
 > = (set) => ({
-  ...initialState,
-  setSharedFormData: (data) =>
-    set((state) => ({
-      sharedFormData: {
-        ...state.sharedFormData,
-        ...data,
-      },
-    })),
+	...initialState,
+	setSharedFormData: (data) =>
+		set((state) => ({
+			sharedFormData: {
+				...state.sharedFormData,
+				...data,
+			},
+		})),
 });

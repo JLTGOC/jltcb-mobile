@@ -5,7 +5,7 @@ import {
   BILLING_TYPES,
   CLIENT_TYPES,
   SERVICE_LEVEL_TYPES,
-} from "@/src/types/jobOrderEnums";
+} from "@/types/jobOrderEnums";
 
 export const logisticsJobOrderFormSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required."),

@@ -1,45 +1,45 @@
-import { QuoteForm } from "../types/client-quotation";
+import type { QuoteForm } from "@/types/client-quotation";
 
 export function appendObjectToFormData(
-  data: FormData,
-  obj: Record<string, any> | undefined,
-  prefix: string,
+	data: FormData,
+	obj: Record<string, any> | undefined,
+	prefix: string,
 ) {
-  if (!obj) return;
+	if (!obj) return;
 
-  Object.entries(obj).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      value.forEach((item) => data.append(`${prefix}[${key}][]`, item));
-    } else {
-      data.append(`${prefix}[${key}]`, value?.toString() || "");
-    }
-  });
+	Object.entries(obj).forEach(([key, value]) => {
+		if (Array.isArray(value)) {
+			value.forEach((item) => data.append(`${prefix}[${key}][]`, item));
+		} else {
+			data.append(`${prefix}[${key}]`, value?.toString() || "");
+		}
+	});
 }
 
 export function appendFilesToFormData(
-  data: FormData,
-  files: QuoteForm["documents"] | undefined,
-  fieldName = "documents[]",
+	data: FormData,
+	files: QuoteForm["documents"] | undefined,
+	fieldName = "documents[]",
 ) {
-  if (!Array.isArray(files) || !files.length) return;
+	if (!Array.isArray(files) || !files.length) return;
 
-  files.forEach((file, index) => {
-    if (
-      !file ||
-      typeof file.file_url !== "string" ||
-      !file.file_url ||
-      !(
-        file.file_url.startsWith("file://") ||
-        file.file_url.startsWith("content://")
-      )
-    ) {
-      return;
-    }
+	files.forEach((file, index) => {
+		if (
+			!file ||
+			typeof file.file_url !== "string" ||
+			!file.file_url ||
+			!(
+				file.file_url.startsWith("file://") ||
+				file.file_url.startsWith("content://")
+			)
+		) {
+			return;
+		}
 
-    data.append(fieldName, {
-      uri: file.file_url,
-      name: file.file_name || `file_${index}`,
-      type: file.mimeType || "application/octet-stream",
-    } as any);
-  });
+		data.append(fieldName, {
+			uri: file.file_url,
+			name: file.file_name || `file_${index}`,
+			type: file.mimeType || "application/octet-stream",
+		} as any);
+	});
 }

@@ -8,24 +8,24 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { Button, Checkbox, HelperText, Portal } from "react-native-paper";
 
-import AutocompleteDropdown from "@/src/components/ui/AutocompleteDropdown";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import ConfirmModal from "@/src/components/ui/ConfirmModal";
-import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
-import FormTextInput from "@/src/components/ui/FormTextInput";
-import KeyboardAwareScrollView from "@/src/components/ui/KeyboardAwareScrollView";
-import SuccesModal from "@/src/components/ui/SuccessModal";
+import AutocompleteDropdown from "@/components/ui/AutocompleteDropdown";
+import BannerHeader from "@/components/ui/BannerHeader";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
+import FormTextInput from "@/components/ui/FormTextInput";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
+import SuccesModal from "@/components/ui/SuccessModal";
 
-import { useAuth } from "@/src/hooks/useAuth";
-import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
-import { createJobOrderMutationOptions } from "@/src/mutation-options/as-job-orders/createJobOrderMutationOptions";
+import { useAuth } from "@/hooks/useAuth";
+import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
+import { createJobOrderMutationOptions } from "@/mutation-options/as-job-orders/createJobOrderMutationOptions";
 import {
   type RegulatoryServiceFormSchema,
   regulatoryServiceFormSchema,
-} from "@/src/schemas/job-order/regulatory-service-form-schema";
-import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
-import { transformToRegulatoryJobOrderPayload } from "@/src/utils/jobOrderForm";
-import { showToast } from "@/src/utils/showToast";
+} from "@/schemas/job-order/regulatory-service-form-schema";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
+import { transformToRegulatoryJobOrderPayload } from "@/utils/jobOrderForm";
+import { showToast } from "@/utils/showToast";
 
 export default function RegulatoryServices() {
   const router = useRouter();

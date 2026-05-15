@@ -1,8 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 import { FlatList, Text, View } from "react-native";
 import { Button } from "react-native-paper";
-import { REGIONS } from "@/src/constants/ports-catered";
-import type { Region } from "@/src/types/ports";
+
+import { REGIONS } from "@/constants/ports-catered";
+import type { Region } from "@/types/ports";
 
 type PortRegionButtonsProps = {
 	selectedRegion: Region;

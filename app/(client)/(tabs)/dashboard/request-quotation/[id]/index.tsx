@@ -1,4 +1,4 @@
-import SharedClientQuotation from "@/src/components/screens/SharedClientQuotation";
+import SharedClientQuotation from "@/components/screens/SharedClientQuotation";
 
 export default function RequestedQuotation() {
   return <SharedClientQuotation />;

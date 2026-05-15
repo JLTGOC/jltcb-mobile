@@ -1,11 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Card, Checkbox, Text, TextInput } from "react-native-paper";
-import {
-	cargo_type,
-	container_sizes,
-} from "../../../../constants/client-const";
-import type { QuoteForm } from "../../../../types/client-quotation";
+
+import { cargo_type, container_sizes } from "@/constants/client-const";
+import type { QuoteForm } from "@/types/client-quotation";
 
 type Props = {
 	formData: QuoteForm;

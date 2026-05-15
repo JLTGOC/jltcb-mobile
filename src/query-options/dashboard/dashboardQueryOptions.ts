@@ -1,6 +1,7 @@
-import { dashboardKeys } from "@/src/query-key-factories/dashboard";
-import { fetchDashboardData } from "@/src/services/dashboard";
 import { queryOptions } from "@tanstack/react-query";
+
+import { dashboardKeys } from "@/query-key-factories/dashboard";
+import { fetchDashboardData } from "@/services/dashboard";
 
 export const dashboardQueryOptions = <T>(userId: string) =>
 	queryOptions({

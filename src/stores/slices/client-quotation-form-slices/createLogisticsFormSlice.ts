@@ -1,7 +1,7 @@
 import type { StateCreator } from "zustand";
 
-import type { ExtendedLogisticsQuotationFormData } from "@/src/schemas/client-quotation-form/logistics-quotation-form-schema";
-import type { ClientQuotationFormStore } from "@/src/types/store";
+import type { ExtendedLogisticsQuotationFormData } from "@/schemas/client-quotation-form/logistics-quotation-form-schema";
+import type { ClientQuotationFormStore } from "@/types/store";
 
 const initialState: LogisticsQuotationFormState = {
 	logisticsFormData: {

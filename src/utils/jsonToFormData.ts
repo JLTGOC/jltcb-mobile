@@ -1,4 +1,4 @@
-import type { File } from "../types";
+import type { File } from "@/types";
 
 const isReactNativeFile = (value: unknown): value is File =>
 	typeof value === "object" &&

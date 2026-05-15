@@ -1,13 +1,13 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { clientQuotationKeys } from "@/src/query-key-factories/clientQuotations";
+import { clientQuotationKeys } from "@/query-key-factories/clientQuotations";
 import {
 	type FetchQuoteParamsByService,
 	fetchClientQuotes,
 	fetchGetQuoteEnums,
-} from "@/src/services/clientQuotation";
-import type { QuotesParams } from "@/src/types/client-quotation";
-import type { JobType } from "@/src/types/job-order";
+} from "@/services/clientQuotation";
+import type { QuotesParams } from "@/types/client-quotation";
+import type { JobType } from "@/types/job-order";
 
 export const clientQuotesQueryOptions = (params: QuotesParams) =>
 	queryOptions({

@@ -3,10 +3,10 @@ import { TouchableOpacity } from "react-native";
 
 interface Props {
 	onPress: () => void;
-	disabled?: boolean;
+	disabled: boolean;
 }
 
-export default function ChatSendButton({ onPress, disabled = false }: Props) {
+export default function ChatSendButton({ onPress, disabled }: Props) {
 	return (
 		<TouchableOpacity
 			style={{ opacity: disabled ? 0.3 : undefined }}

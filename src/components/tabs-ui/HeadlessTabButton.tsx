@@ -1,88 +1,89 @@
-import { THEMES } from "@/src/constants/themes";
 import type { TabTriggerSlotProps } from "expo-router/ui";
 import type { PropsWithChildren, ReactNode, Ref } from "react";
 import {
-  Pressable,
-  type PressableStateCallbackType,
-  type StyleProp,
-  Text,
-  type TextStyle,
-  type View,
-  type ViewStyle,
+	Pressable,
+	type PressableStateCallbackType,
+	type StyleProp,
+	Text,
+	type TextStyle,
+	type View,
+	type ViewStyle,
 } from "react-native";
 
+import { THEMES } from "@/constants/themes";
+
 type HeadlessTabButtonProps = {
-  label?: string;
-  labelStyle?: StyleProp<TextStyle>;
-  showOutline?: boolean;
-  tabBarIcon?: (props: {
-    focused: boolean;
-    color: string;
-    size: number;
-  }) => ReactNode;
-  tabBarInactiveColor?: string;
-  tabBarActiveColor?: string;
-  ref?: Ref<View>;
+	label?: string;
+	labelStyle?: StyleProp<TextStyle>;
+	showOutline?: boolean;
+	tabBarIcon?: (props: {
+		focused: boolean;
+		color: string;
+		size: number;
+	}) => ReactNode;
+	tabBarInactiveColor?: string;
+	tabBarActiveColor?: string;
+	ref?: Ref<View>;
 };
 
 export default function HeadlessTabButton({
-  label,
-  labelStyle,
-  isFocused,
-  showOutline = false,
-  tabBarIcon,
-  tabBarActiveColor = THEMES.tabBarActiveTintColor,
-  tabBarInactiveColor = THEMES.tabBarInactiveTintColor,
-  style,
-  ref,
-  ...props
+	label,
+	labelStyle,
+	isFocused,
+	showOutline = false,
+	tabBarIcon,
+	tabBarActiveColor = THEMES.tabBarActiveTintColor,
+	tabBarInactiveColor = THEMES.tabBarInactiveTintColor,
+	style,
+	ref,
+	...props
 }: HeadlessTabButtonProps & PropsWithChildren & TabTriggerSlotProps) {
-  const baseStyle: ViewStyle = {
-    flex: 1,
-    minWidth: 80,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 20,
-    paddingBottom: 8,
-    paddingHorizontal: 16,
-    borderBottomWidth: 3,
-    borderBottomColor: "transparent",
-  };
+	const baseStyle: ViewStyle = {
+		flex: 1,
+		minWidth: 80,
+		alignItems: "center",
+		justifyContent: "center",
+		paddingTop: 20,
+		paddingBottom: 8,
+		paddingHorizontal: 16,
+		borderBottomWidth: 3,
+		borderBottomColor: "transparent",
+	};
 
-  const pressableStyle = (
-    state: PressableStateCallbackType,
-  ): StyleProp<ViewStyle> => {
-    const interactionStyle: ViewStyle = {
-      borderBottomColor:
-        isFocused && showOutline ? tabBarActiveColor : "transparent",
-    };
+	const pressableStyle = (
+		state: PressableStateCallbackType,
+	): StyleProp<ViewStyle> => {
+		const interactionStyle: ViewStyle = {
+			borderBottomColor:
+				isFocused && showOutline ? tabBarActiveColor : "transparent",
+		};
 
-    const resolvedUserStyle =
-      typeof style === "function" ? style(state) : style;
+		const resolvedUserStyle =
+			typeof style === "function" ? style(state) : style;
 
-    return [baseStyle, interactionStyle, resolvedUserStyle];
-  };
+		return [baseStyle, interactionStyle, resolvedUserStyle];
+	};
 
-  return (
-    <Pressable ref={ref} {...props} style={pressableStyle}>
-      {tabBarIcon?.({
-        color: isFocused ? tabBarActiveColor : tabBarInactiveColor,
-        size: 24,
-        focused: isFocused ?? false,
-      })}
-      {label && (
-        <Text
-          style={[
-            {
-              fontWeight: 600,
-              color: isFocused ? tabBarActiveColor : tabBarInactiveColor,
-            },
-            labelStyle,
-          ]}
-        >
-          {label}
-        </Text>
-      )}
-    </Pressable>
-  );
+	return (
+		<Pressable ref={ref} {...props} style={pressableStyle}>
+			{tabBarIcon?.({
+				color: isFocused ? tabBarActiveColor : tabBarInactiveColor,
+				size: 24,
+				focused: isFocused ?? false,
+			})}
+			{label && (
+				<Text
+					style={[
+						{
+							fontWeight: 600,
+							color: isFocused ? tabBarActiveColor : tabBarInactiveColor,
+						},
+						labelStyle,
+					]}
+				>
+					{label}
+				</Text>
+			)}
+		</Pressable>
+	);
 }

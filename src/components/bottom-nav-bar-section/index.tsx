@@ -1,5 +1,5 @@
-import { userNavigation } from "@/src/constants/user-navigation";
-import { useAuth } from "@/src/hooks/useAuth";
+import { userNavigation } from "@/constants/user-navigation";
+import { useAuth } from "@/hooks/useAuth";
 import GuestNavBar from "./GuestNavBar";
 
 export default function Index() {

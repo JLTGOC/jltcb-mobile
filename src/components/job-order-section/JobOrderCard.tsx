@@ -2,8 +2,8 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
-import ArrowLine from "@/src/components/job-order-section/ArrowLine";
-import type { JobOrderSummary } from "@/src/types/job-order";
+import ArrowLine from "@/components/job-order-section/ArrowLine";
+import type { JobOrderSummary } from "@/types/job-order";
 
 const BADGE_COLORS = {
 	"Regulatory Services": "#767676",

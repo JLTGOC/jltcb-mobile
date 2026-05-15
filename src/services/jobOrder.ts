@@ -2,7 +2,8 @@ import type {
 	CreateJobOrderRequestBody,
 	JobOrder,
 	JobOrderResponse,
-} from "@/src/types/job-order";
+} from "@/types/job-order";
+
 import { apiGet, apiPost } from "./axiosInstance";
 
 export async function fetchJobOrders() {

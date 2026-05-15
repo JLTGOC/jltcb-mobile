@@ -1,10 +1,11 @@
 import * as z from "zod";
 
-import { CARGO_TYPES } from "@/src/types/job-order";
+import { CARGO_TYPES } from "@/types/job-order";
 import {
 	LOGISTICS_SERVICE_LEVELS,
 	LOGISTICS_TRANSPORT_MODES,
-} from "@/src/types/quotations";
+} from "@/types/quotations";
+
 import { sharedStep1FormSchema, step3FormSchema } from "./shared-form-schema";
 
 export const extendedLogisticsQuotationFormSchema = z

@@ -5,14 +5,15 @@ import * as Linking from "expo-linking";
 import { Link, useRouter } from "expo-router";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import { routes } from "@/src/constants/routes";
+
+import { routes } from "@/constants/routes";
 
 export default function CustomsBrokerageLanding() {
 	const router = useRouter();
 
 	return (
 		<ImageBackground
-			source={require("@/src/assets/landingPage.png")}
+			source={require("@/assets/landingPage.png")}
 			style={styles.image}
 		>
 			<View style={styles.whiteOverlay} />
@@ -29,7 +30,7 @@ export default function CustomsBrokerageLanding() {
 					]}
 				>
 					<Image
-						source={require("@/src/assets/customs-brokerage/customs-brokerage.png")}
+						source={require("@/assets/customs-brokerage/customs-brokerage.png")}
 						style={styles.logoImage}
 						contentFit="contain"
 					/>
@@ -81,7 +82,7 @@ export default function CustomsBrokerageLanding() {
 
 			<ImageBackground
 				style={styles.bottomBanner}
-				source={require("@/src/assets/banners/large.png")}
+				source={require("@/assets/banners/large.png")}
 				contentFit="fill"
 			>
 				<SocialLogos />
@@ -108,7 +109,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/facebook.png")}
+					source={require("@/assets/social_logos/facebook.png")}
 				/>
 			</Pressable>
 			<Pressable
@@ -124,7 +125,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/instagram.png")}
+					source={require("@/assets/social_logos/instagram.png")}
 				/>
 			</Pressable>
 			<Pressable
@@ -140,7 +141,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/youtube.png")}
+					source={require("@/assets/social_logos/youtube.png")}
 				/>
 			</Pressable>
 			<Pressable
@@ -154,7 +155,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/tiktok.png")}
+					source={require("@/assets/social_logos/tiktok.png")}
 				/>
 			</Pressable>
 			<Pressable
@@ -170,7 +171,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/linkedIn.png")}
+					source={require("@/assets/social_logos/linkedIn.png")}
 				/>
 			</Pressable>
 			<Pressable
@@ -184,7 +185,7 @@ function SocialLogos() {
 			>
 				<Image
 					style={styles.socialIcon}
-					source={require("@/src/assets/social_logos/twitter.png")}
+					source={require("@/assets/social_logos/twitter.png")}
 				/>
 			</Pressable>
 		</View>

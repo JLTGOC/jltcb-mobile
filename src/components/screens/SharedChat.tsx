@@ -21,31 +21,31 @@ import {
 } from "react-native";
 import { ActivityIndicator, Avatar, Text } from "react-native-paper";
 
-import ChatFileCard from "@/src/components/chats-section/ChatFileCard";
-import ChatImageCard from "@/src/components/chats-section/ChatImageCard";
-import ChatMessageInput from "@/src/components/chats-section/ChatMessageInput";
-import ChatQuotationCard from "@/src/components/chats-section/ChatQuotationCard";
-import ChatShipmentCard from "@/src/components/chats-section/ChatShipmentCard";
-import ChatTextBubble from "@/src/components/chats-section/ChatTextBubble";
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import ChatFileCard from "@/components/chats-section/ChatFileCard";
+import ChatImageCard from "@/components/chats-section/ChatImageCard";
+import ChatMessageInput from "@/components/chats-section/ChatMessageInput";
+import ChatQuotationCard from "@/components/chats-section/ChatQuotationCard";
+import ChatShipmentCard from "@/components/chats-section/ChatShipmentCard";
+import ChatTextBubble from "@/components/chats-section/ChatTextBubble";
+import BannerHeader from "@/components/ui/BannerHeader";
 
 import {
   ChatPendingIdsProvider,
   useChatPendingIdsContext,
-} from "@/src/contexts/ChatPendingIdsContext";
-import { useAuth } from "@/src/hooks/useAuth";
-import { pusher } from "@/src/lib/pusher";
-import { chatKeys } from "@/src/query-key-factories/chats";
-import { chatMessagesInfiniteQueryOptions } from "@/src/query-options/chats/chatMessagesInfiniteQueryOptions";
-import { chatQueryOptions } from "@/src/query-options/chats/chatQueryOptions";
-import { markAsRead } from "@/src/services/chats";
+} from "@/contexts/ChatPendingIdsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { pusher } from "@/lib/pusher";
+import { chatKeys } from "@/query-key-factories/chats";
+import { chatMessagesInfiniteQueryOptions } from "@/query-options/chats/chatMessagesInfiniteQueryOptions";
+import { chatQueryOptions } from "@/query-options/chats/chatQueryOptions";
+import { markAsRead } from "@/services/chats";
 import type {
   ChatEvent,
   Message,
   MessageSentEvent,
   MessagesApiResponse,
-} from "@/src/types/chats";
-import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
+} from "@/types/chats";
+import { parseEventData, subscribeToChat } from "@/utils/pusher";
 
 const MAX_WIDTH = Dimensions.get("window").width * 0.65;
 

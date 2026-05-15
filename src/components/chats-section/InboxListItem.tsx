@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
-import type { Inbox } from "@/src/types/chats";
-import { formatInboxItemTime } from "@/src/utils/chatTimeFormatter";
+
+import type { Inbox } from "@/types/chats";
+import { formatInboxItemTime } from "@/utils/chatTimeFormatter";
 
 export default function InboxListItem({
 	image_path,

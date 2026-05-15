@@ -1,9 +1,9 @@
-import type { LogisticsQuotationFormData } from "@/src/schemas/client-quotation-form/logistics-quotation-form-schema";
-import type { RegulatoryQuotationFormData } from "../schemas/client-quotation-form/regulatory-quotation-form-schema";
+import type { LogisticsQuotationFormData } from "@/schemas/client-quotation-form/logistics-quotation-form-schema";
+import type { RegulatoryQuotationFormData } from "@/schemas/client-quotation-form/regulatory-quotation-form-schema";
 import type {
 	CreateLogisticsQuotationRequestBody,
 	CreateRegulatoryQuotationRequestBody,
-} from "../types/quotations";
+} from "@/types/quotations";
 
 export const transformToLogisticsQuotePayload = (
 	data: LogisticsQuotationFormData,

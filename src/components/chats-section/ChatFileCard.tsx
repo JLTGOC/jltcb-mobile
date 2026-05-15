@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
 import { Avatar, Card, Text } from "react-native-paper";
 
-import { useAuth } from "@/src/hooks/useAuth";
-import type { FileMessage } from "@/src/types/chats";
-import { handleSaveFile } from "@/src/utils/handleFileDownload";
-import { showToast } from "@/src/utils/showToast";
+import { useAuth } from "@/hooks/useAuth";
+import type { FileMessage } from "@/types/chats";
+import { handleSaveFile } from "@/utils/handleFileDownload";
+import { showToast } from "@/utils/showToast";
 
 type Props = {
   file: FileMessage;

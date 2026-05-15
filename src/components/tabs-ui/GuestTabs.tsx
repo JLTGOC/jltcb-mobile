@@ -8,9 +8,10 @@ import {
 	type SafeAreaViewProps,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import HeadlessTabButton from "@/src/components/tabs-ui/HeadlessTabButton";
-import TabsBackground from "@/src/components/tabs-ui/TabsBackground";
-import type { NavLink } from "@/src/constants/user-navigation";
+
+import HeadlessTabButton from "@/components/tabs-ui/HeadlessTabButton";
+import TabsBackground from "@/components/tabs-ui/TabsBackground";
+import type { NavLink } from "@/constants/user-navigation";
 
 const leftMenuLinks: NavLink[] = [
 	{ name: "about-us", title: "About Us" },

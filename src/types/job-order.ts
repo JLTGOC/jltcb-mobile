@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
+
 import type {
 	AccreditedType,
 	BillingType,
 	ClientType,
 	ServiceLevelType,
-} from "@/src/types/jobOrderEnums";
+} from "@/types/jobOrderEnums";
 
 export const JOB_TYPES_SUMMARY = [
 	"Logistics Services",

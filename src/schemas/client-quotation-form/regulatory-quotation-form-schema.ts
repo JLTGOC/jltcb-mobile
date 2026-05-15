@@ -1,5 +1,7 @@
 import * as z from "zod";
-import { CLIENT_TYPES } from "@/src/types/jobOrderEnums";
+
+import { CLIENT_TYPES } from "@/types/jobOrderEnums";
+
 import {
 	contactNumberSchema,
 	sharedStep1FormSchema,

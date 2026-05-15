@@ -1,6 +1,7 @@
 import type { ImageStyle } from "expo-image";
 import type { Href } from "expo-router";
 import type { StyleProp } from "react-native";
+
 import type { User } from "./auth";
 
 type ExtractCountKeys<T> = {
@@ -55,8 +56,8 @@ export type AccountSpecialistDashboard = {
 		clients_count: number;
 	};
 	job_orders: {
-		created_count: number
-	}
+		created_count: number;
+	};
 };
 
 export type OperationsDashboard = {
@@ -66,8 +67,8 @@ export type OperationsDashboard = {
 		delivered_count: number;
 	};
 	job_orders: {
-		created_count: number
-	}
+		created_count: number;
+	};
 };
 
 export type FinanceDashboard = {
@@ -77,8 +78,8 @@ export type FinanceDashboard = {
 		delivered_count: number;
 	};
 	job_orders: {
-		created_count: number
-	}
+		created_count: number;
+	};
 };
 
 export type ClientDashboard = {
@@ -91,5 +92,4 @@ export type ClientDashboard = {
 		requested_count: number;
 		responded_count: number;
 	};
-	
 };

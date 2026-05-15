@@ -1,11 +1,14 @@
 import type { FC } from "react";
-import ClientTabs from "@/src/components/bottom-nav-bar-section/ClientNavBar";
-import LeadASTabs from "@/src/components/bottom-nav-bar-section/Employee/LeadASNavBar";
-import MarketingTabs from "@/src/components/bottom-nav-bar-section/Employee/MarketingNavBar";
-import OperationsTabs from "@/src/components/bottom-nav-bar-section/Employee/OperationsNavBar";
-import DarkHeader from "@/src/components/header-nav-bar-section/DarkHeader";
-import LightHeader from "@/src/components/header-nav-bar-section/LightHeader";
-import type { UserRole } from "../types/auth";
+
+import ClientTabs from "@/components/bottom-nav-bar-section/ClientNavBar";
+import LeadASTabs from "@/components/bottom-nav-bar-section/Employee/LeadASNavBar";
+import MarketingTabs from "@/components/bottom-nav-bar-section/Employee/MarketingNavBar";
+import OperationsTabs from "@/components/bottom-nav-bar-section/Employee/OperationsNavBar";
+import DarkHeader from "@/components/header-nav-bar-section/DarkHeader";
+import LightHeader from "@/components/header-nav-bar-section/LightHeader";
+
+import type { UserRole } from "@/types/auth";
+
 import { routes } from "./routes";
 
 export type NavLink = { name: string; title: string };

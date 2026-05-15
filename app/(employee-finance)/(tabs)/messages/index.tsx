@@ -1,4 +1,4 @@
-import SharedMessages from "@/src/components/screens/SharedMessages";
+import SharedMessages from "@/components/screens/SharedMessages";
 
 export default function Index() {
   return <SharedMessages variant="light" />;

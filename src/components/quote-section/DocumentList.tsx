@@ -1,7 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { File } from "@/src/types";
+import type { File } from "@/types";
 
 interface Props {
 	documents: File[];

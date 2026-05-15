@@ -1,6 +1,6 @@
 import { FlatList, type FlatListProps, StyleSheet } from "react-native";
 
-import { THEMES } from "@/src/constants/themes";
+import { THEMES } from "@/constants/themes";
 
 export default function PageList<T>({
 	style,

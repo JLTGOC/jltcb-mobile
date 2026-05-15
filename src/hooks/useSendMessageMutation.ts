@@ -3,15 +3,16 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { useAuth } from "@/src/hooks/useAuth";
-import { chatKeys } from "@/src/query-key-factories/chats";
-import { sendMessage } from "@/src/services/chats";
+
+import { useChatPendingIdsContext } from "@/contexts/ChatPendingIdsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { chatKeys } from "@/query-key-factories/chats";
+import { sendMessage } from "@/services/chats";
 import type {
 	Message,
 	MessagesApiResponse,
 	SendMessageBody,
-} from "@/src/types/chats";
-import { useChatPendingIdsContext } from "../contexts/ChatPendingIdsContext";
+} from "@/types/chats";
 
 export function useSendMessageMutation(conversationId: string) {
 	const { userData } = useAuth();

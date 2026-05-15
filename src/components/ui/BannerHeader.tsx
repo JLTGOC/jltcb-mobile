@@ -5,8 +5,8 @@ import type { PropsWithChildren } from "react";
 import { Pressable, StyleSheet, type TextStyle, View } from "react-native";
 import { Text, type TextProps } from "react-native-paper";
 
-import { BANNERS } from "@/src/constants/banners";
-import { THEMES } from "@/src/constants/themes";
+import { BANNERS } from "@/constants/banners";
+import { THEMES } from "@/constants/themes";
 
 interface BannerHeaderProps {
 	back?: boolean;

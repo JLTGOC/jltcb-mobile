@@ -4,12 +4,12 @@ import { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 
-import JobOrderListCardTemplate from "@/src/components/operations-section/JobOrderListCardTemplate";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import Search from "@/src/components/ui/Search";
-import SwitchToggle from "@/src/components/ui/SwitchToggle";
+import JobOrderListCardTemplate from "@/components/operations-section/JobOrderListCardTemplate";
+import BannerHeader from "@/components/ui/BannerHeader";
+import Search from "@/components/ui/Search";
+import SwitchToggle from "@/components/ui/SwitchToggle";
 
-import { createdJobOrdersQueryOptions } from "@/src/query-options/operations/jobOrder";
+import { createdJobOrdersQueryOptions } from "@/query-options/operations/jobOrder";
 
 export default function ListOfCreatedJO() {
   const router = useRouter();

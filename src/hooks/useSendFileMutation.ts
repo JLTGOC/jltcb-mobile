@@ -3,10 +3,12 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { useChatPendingIdsContext } from "../contexts/ChatPendingIdsContext";
-import { sendFileMutationOptions } from "../mutation-options/asLead-quotations/sendFileMutationOptions";
-import { chatKeys } from "../query-key-factories/chats";
-import type { Message, MessagesApiResponse } from "../types/chats";
+
+import { useChatPendingIdsContext } from "@/contexts/ChatPendingIdsContext";
+import { sendFileMutationOptions } from "@/mutation-options/asLead-quotations/sendFileMutationOptions";
+import { chatKeys } from "@/query-key-factories/chats";
+import type { Message, MessagesApiResponse } from "@/types/chats";
+
 import { useAuth } from "./useAuth";
 
 export function useSendFileMutation(conversationId: string) {

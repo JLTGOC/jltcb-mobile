@@ -1,6 +1,7 @@
-import { articleKeys } from "@/src/query-key-factories/articles";
-import { fetchArticle } from "@/src/services/articles";
 import { queryOptions } from "@tanstack/react-query";
+
+import { articleKeys } from "@/query-key-factories/articles";
+import { fetchArticle } from "@/services/articles";
 
 export const articleQueryOptions = (articleId: string) =>
 	queryOptions({

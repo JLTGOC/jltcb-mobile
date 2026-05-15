@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { View } from "react-native";
 
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import BannerHeader from "@/components/ui/BannerHeader";
 
 export default function GetQuoteLayout() {
   return (

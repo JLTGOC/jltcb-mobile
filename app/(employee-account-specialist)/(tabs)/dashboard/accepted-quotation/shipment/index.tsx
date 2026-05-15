@@ -6,19 +6,19 @@ import { type StyleProp, StyleSheet, type TextStyle, View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
-import AutocompleteDropdown from "@/src/components/ui/AutocompleteDropdown";
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import FieldLegend from "@/src/components/ui/FieldLegend";
-import FloatingLabelDatePicker from "@/src/components/ui/FloatingLabelDatePicker";
-import FloatingLabelInput from "@/src/components/ui/FloatingLabelTextInput";
-import KeyboardAwareScrollView from "@/src/components/ui/KeyboardAwareScrollView";
+import AutocompleteDropdown from "@/components/ui/AutocompleteDropdown";
+import BannerHeader from "@/components/ui/BannerHeader";
+import FieldLegend from "@/components/ui/FieldLegend";
+import FloatingLabelDatePicker from "@/components/ui/FloatingLabelDatePicker";
+import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 
-import { useJobOrderEnums } from "@/src/hooks/useJobOrderEnums";
+import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
 import {
   type Step1Fields,
   step1Schema,
-} from "@/src/schemas/job-order/logistics-service-form-schema";
-import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
+} from "@/schemas/job-order/logistics-service-form-schema";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 
 export const TEXT_COLOR = "#666666";
 export const TEXT_INPUT_STYLES: StyleProp<TextStyle> = {

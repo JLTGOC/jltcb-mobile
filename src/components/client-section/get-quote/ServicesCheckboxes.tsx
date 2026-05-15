@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Checkbox } from "react-native-paper";
 
-import { THEMES } from "@/src/constants/themes";
-import { useClientQuotationFormStore } from "@/src/stores/useClientQuotationFormStore";
-import type { JobType } from "@/src/types/job-order";
+import { THEMES } from "@/constants/themes";
+import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
+import type { JobType } from "@/types/job-order";
 
 const CHECKBOXES: { label: string; value: JobType }[] = [
   { label: "LOGISTICS SERVICES (shipments)", value: "LOGISTICS" },

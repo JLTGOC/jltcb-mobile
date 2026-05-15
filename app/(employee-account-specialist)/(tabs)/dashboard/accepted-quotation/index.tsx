@@ -6,18 +6,18 @@ import { ScrollView } from "react-native";
 import { ActivityIndicator, IconButton, Menu } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
-import BannerHeader from "@/src/components/ui/BannerHeader";
-import DataTable from "@/src/components/ui/DataTable";
+import BannerHeader from "@/components/ui/BannerHeader";
+import DataTable from "@/components/ui/DataTable";
 
-import { useAuth } from "@/src/hooks/useAuth";
-import { asQuotationsQueryOptions } from "@/src/query-options/asLead-quotations/asQuotationsQueryOptions";
-import { quotationQueryOptions } from "@/src/query-options/asLead-quotations/quotationQueryOptions";
-import { useJobOrderFormStore } from "@/src/stores/useJobOrderFormStore";
-import type { MenuOption, TableHeader } from "@/src/types";
-import type { ASAcceptedQuotation } from "@/src/types/quotations";
-import { downloadFile, saveFile } from "@/src/utils/handleFileDownload";
-import { print } from "@/src/utils/print";
-import { showToast } from "@/src/utils/showToast";
+import { useAuth } from "@/hooks/useAuth";
+import { asQuotationsQueryOptions } from "@/query-options/asLead-quotations/asQuotationsQueryOptions";
+import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
+import type { MenuOption, TableHeader } from "@/types";
+import type { ASAcceptedQuotation } from "@/types/quotations";
+import { downloadFile, saveFile } from "@/utils/handleFileDownload";
+import { print } from "@/utils/print";
+import { showToast } from "@/utils/showToast";
 
 const TABLE_HEADERS: TableHeader[] = [
   { title: "Reference" },

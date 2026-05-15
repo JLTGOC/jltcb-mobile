@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import BannerHeader from "@/components/ui/BannerHeader";
 
 export default function MakeJobOrder() {
   const router = useRouter();

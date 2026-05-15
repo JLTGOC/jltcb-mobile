@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { StyleSheet } from "react-native";
 import { Card, Text } from "react-native-paper";
 
-import type { container_sizes } from "@/src/constants/client-const";
+import type { container_sizes } from "@/constants/client-const";
 
 type ContainerSize = (typeof container_sizes)[number];
 

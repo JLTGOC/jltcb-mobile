@@ -1,6 +1,6 @@
 import type { DocumentPickerAsset } from "expo-document-picker";
 
-import { apiGet, apiPost, apiPut } from "@/src/services/axiosInstance";
+import { apiGet, apiPost, apiPut } from "@/services/axiosInstance";
 import type {
 	ASAcceptedQuotation,
 	ASRequestedQuotationSummary,
@@ -10,8 +10,8 @@ import type {
 	QuotationFile,
 	QuotationFilter,
 	QuotationStatus,
-} from "@/src/types/quotations";
-import { jsonToFormData } from "../utils/jsonToFormData";
+} from "@/types/quotations";
+import { jsonToFormData } from "@/utils/jsonToFormData";
 
 interface QuotationResponseMap {
 	REQUESTED: ASRequestedQuotationSummary;

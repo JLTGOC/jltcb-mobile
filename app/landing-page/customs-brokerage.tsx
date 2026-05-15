@@ -1,4 +1,4 @@
-import CustomsBrokerageLanding from "@/src/components/landing-section/CustomsBrokerageLanding";
+import CustomsBrokerageLanding from "@/components/landing-section/CustomsBrokerageLanding";
 
 export default function CustomsBrokerage() {
   return <CustomsBrokerageLanding />;

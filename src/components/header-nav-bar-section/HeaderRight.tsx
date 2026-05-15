@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
+
 import HeaderMenu, { type HeaderMenuProps } from "./HeaderMenu";
 
 interface HeaderRightProps {

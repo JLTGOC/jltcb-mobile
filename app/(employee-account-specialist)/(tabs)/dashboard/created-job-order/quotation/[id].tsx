@@ -3,15 +3,15 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 
-import SharedQuotationDetails from "@/src/components/quote-section/SharedQuotationDetails";
-import SharedQuotationDocuments from "@/src/components/quote-section/SharedQuotationDocuments";
-import TabBar from "@/src/components/tabs-ui/TabBar";
-import BannerHeader from "@/src/components/ui/BannerHeader";
+import SharedQuotationDetails from "@/components/quote-section/SharedQuotationDetails";
+import SharedQuotationDocuments from "@/components/quote-section/SharedQuotationDocuments";
+import TabBar from "@/components/tabs-ui/TabBar";
+import BannerHeader from "@/components/ui/BannerHeader";
 
-import { useQuotationQuery } from "@/src/hooks/useQuotationQuery";
-import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
-import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
-import { quotationKeys } from "@/src/query-key-factories/quotations";
+import { useQuotationQuery } from "@/hooks/useQuotationQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { quotationKeys } from "@/query-key-factories/quotations";
 
 const TABS = ["Details", "Documents", "Billing"] as const;
 type TabType = (typeof TABS)[number];
