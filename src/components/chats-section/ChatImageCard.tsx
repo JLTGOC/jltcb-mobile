@@ -13,72 +13,73 @@ const IMAGE_TRANSITION_MS = 100;
 const LOADER_BORDER_COLOR = "#ddd";
 
 interface Props {
-	image: ImageMessage;
+  image: ImageMessage;
+  sending: boolean;
 }
 
-export default function ChatImageCard({ image }: Props) {
-	const { userData, token } = useAuth();
-	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+export default function ChatImageCard({ image, sending }: Props) {
+  const { userData, token } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-	const isUserMessage = userData?.id === image.sender.id;
-	const aspectRatio = image.width / image.height;
+  const isUserMessage = userData?.id === image.sender.id;
+  const aspectRatio = image.width / image.height;
 
-	const handlePress = () => {
-		if (loading) return;
-		router.push({
-			pathname: "/image-viewer",
-			params: {
-				url: image.file_url,
-				fileName: image.file_name,
-			},
-		});
-	};
+  const handlePress = () => {
+    if (loading || sending) return;
+    router.push({
+      pathname: "/image-viewer",
+      params: {
+        url: image.file_url,
+        fileName: image.file_name,
+      },
+    });
+  };
 
-	return (
-		<Pressable
-			onPress={handlePress}
-			style={[
-				styles.imageContainer,
-				{ aspectRatio },
-				isUserMessage && { marginInlineStart: "auto" },
-				loading && { borderColor: LOADER_BORDER_COLOR },
-			]}
-		>
-			<Image
-				source={{
-					uri: image.file_url,
-					headers: { Authorization: `Bearer ${token}` },
-				}}
-				alt={image.file_name}
-				transition={IMAGE_TRANSITION_MS}
-				style={styles.image}
-				onLoadEnd={() => setLoading(false)}
-			/>
-			{loading && (
-				<View style={styles.loader}>
-					<ActivityIndicator size="small" />
-				</View>
-			)}
-		</Pressable>
-	);
+  return (
+    <Pressable
+      onPress={handlePress}
+      style={[
+        styles.imageContainer,
+        { aspectRatio },
+        isUserMessage && { marginInlineStart: "auto" },
+        loading && { borderColor: LOADER_BORDER_COLOR },
+      ]}
+    >
+      <Image
+        source={{
+          uri: image.file_url,
+          headers: { Authorization: `Bearer ${token}` },
+        }}
+        alt={image.file_name}
+        transition={IMAGE_TRANSITION_MS}
+        style={styles.image}
+        onLoadEnd={() => setLoading(false)}
+      />
+      {loading && (
+        <View style={styles.loader}>
+          <ActivityIndicator size="small" />
+        </View>
+      )}
+    </Pressable>
+  );
 }
 
 const styles = StyleSheet.create({
-	imageContainer: {
-		maxHeight: MAX_IMAGE_HEIGHT,
-		borderWidth: 1,
-		borderColor: "transparent",
-		borderRadius: IMAGE_BORDER_RADIUS,
-	},
-	image: {
-		width: "100%",
-		flex: 1,
-		borderRadius: IMAGE_BORDER_RADIUS,
-	},
-	loader: {
-		...StyleSheet.absoluteFill,
-		justifyContent: "center",
-		alignItems: "center",
-	},
+  imageContainer: {
+    maxHeight: MAX_IMAGE_HEIGHT,
+    borderWidth: 1,
+    borderColor: "transparent",
+    borderRadius: IMAGE_BORDER_RADIUS,
+  },
+  image: {
+    width: "100%",
+    flex: 1,
+    borderRadius: IMAGE_BORDER_RADIUS,
+  },
+  loader: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
