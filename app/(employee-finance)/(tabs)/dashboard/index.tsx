@@ -1,33 +1,43 @@
-import FolderSection from "@/src/components/dashboard-section/FolderSection";
-import UserHeader from "@/src/components/dashboard-section/UserHeader";
-import { FINANCE_DB_FOLDER_SECTION } from "@/src/constants/user-dashboards";
-import { useAuth } from "@/src/hooks/useAuth";
-import { dashboardQueryOptions } from "@/src/query-options/dashboard/dashboardQueryOptions";
-import type { FinanceDashboard } from "@/src/types/dashboard";
-import { mapDashboardData } from "@/src/utils/mapDashboardData";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
   FlatList,
+  Pressable,
   RefreshControl,
   StyleSheet,
-  Pressable,
   View,
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
+import FolderSection from "@/src/components/dashboard-section/FolderSection";
+import UserHeader from "@/src/components/dashboard-section/UserHeader";
+
+import { FINANCE_DB_FOLDER_SECTION } from "@/src/constants/user-dashboards";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useRefreshByUser } from "@/src/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/src/hooks/useRefreshOnFocus";
+import { dashboardQueryOptions } from "@/src/query-options/dashboard/dashboardQueryOptions";
+import type { FinanceDashboard } from "@/src/types/dashboard";
+import { mapDashboardData } from "@/src/utils/mapDashboardData";
+
 export default function Index() {
   const { userData } = useAuth();
-  const { data, isPending, error, isRefetching, refetch } = useQuery({
+  const { data, isPending, error, refetch } = useQuery({
     ...dashboardQueryOptions<FinanceDashboard>(String(userData?.id)),
     select: ({ data }) => mapDashboardData(data, FINANCE_DB_FOLDER_SECTION),
   });
 
+  const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
+
   return (
     <FlatList
       refreshControl={
-        <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
       }
       contentContainerStyle={[
         styles.container,
