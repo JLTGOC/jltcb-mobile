@@ -8,6 +8,7 @@ import {
 	Text,
 	View,
 } from "react-native";
+import { Card } from "react-native-paper";
 
 import PortAccordion from "@/components/ports-section/PortAccordion";
 import PortRegionButtons from "@/components/ports-section/PortRegionButtons";
@@ -90,14 +91,14 @@ export default function Ports() {
 				</>
 			}
 			renderItem={({ item }) => (
-				<View style={styles.contentSpacer}>
+				<Card style={styles.contentSpacer}>
 					<PortAccordion
 						port={item}
 						toggleExpand={() => togglePort(item.port)}
 						isExpanded={expandedPorts[selectedRegion] === item.port}
 						title={item.port}
 					/>
-				</View>
+				</Card>
 			)}
 		/>
 	);
@@ -110,5 +111,6 @@ const styles = StyleSheet.create({
 	},
 	contentSpacer: {
 		paddingHorizontal: 10,
+		marginHorizontal: 16,
 	},
 });
