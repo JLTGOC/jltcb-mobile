@@ -5,146 +5,144 @@ import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { routes } from "@/constants/routes";
 
 export default function LandingPage() {
-	const router = useRouter();
+  const router = useRouter();
 
-	return (
-		<View style={styles.container}>
-			<View style={styles.main}>
-				<View style={styles.logoContainer}>
-					<Image
-						style={styles.logo}
-						source={require("@/assets/black_logos/logo.png")}
-						contentFit="contain"
-					/>
-					<Text style={styles.title} allowFontScaling={false}>
-						Jill L. Tolentino Group
-					</Text>
-				</View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.main}>
+        <View style={styles.logoContainer}>
+          <Image
+            style={styles.logo}
+            source={require("@/assets/black_logos/logo.png")}
+            contentFit="contain"
+          />
+          <Text maxFontSizeMultiplier={1.75} style={styles.title}>
+            JLT Group of Companies
+          </Text>
+        </View>
 
-				<View style={styles.solutions}>
-					<Pressable
-						onPress={() => router.push(routes.CUSTOMS_BROKERAGE_LANDING)}
-						style={({ pressed }) => [
-							styles.solution,
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-					>
-						<Image
-							style={[styles.image, { marginLeft: 4 }]}
-							source={require("@/assets/landing-page/customs-brokerage.png")}
-							contentFit="contain"
-						/>
-						<Text style={styles.solutionText} allowFontScaling={false}>
-							CUSTOMS BROKERAGE
-						</Text>
-					</Pressable>
-					<Pressable
-						style={({ pressed }) => [
-							styles.solution,
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-						onPress={() => router.push(routes.UNDERCONSTRUCTION)}
-					>
-						<Image
-							style={styles.image}
-							source={require("@/assets/landing-page/global-trade.png")}
-							contentFit="contain"
-						/>
-						<Text style={styles.solutionText} allowFontScaling={false}>
-							GLOBAL TRADE AND BUSINESS SOLUTIONS CORPORATIONS
-						</Text>
-					</Pressable>
-					<Pressable
-						style={({ pressed }) => [
-							styles.solution,
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-						onPress={() => router.push(routes.UNDERCONSTRUCTION)}
-					>
-						<Image
-							style={styles.image}
-							source={require("@/assets/landing-page/world-wide-logistics.png")}
-							contentFit="contain"
-						/>
-						<Text style={styles.solutionText} allowFontScaling={false}>
-							WORLD WIDE LOGISTICS CORPORATION
-						</Text>
-					</Pressable>
-				</View>
-			</View>
+        <View style={styles.solutions}>
+          <Pressable
+            onPress={() => router.push(routes.CUSTOMS_BROKERAGE_LANDING)}
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Image
+              style={[styles.image, { marginLeft: 4 }]}
+              source={require("@/assets/landing-page/customs-brokerage.png")}
+              contentFit="contain"
+            />
+            <Text style={styles.solutionText}>CUSTOMS BROKERAGE</Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={() => router.push(routes.UNDERCONSTRUCTION)}
+          >
+            <Image
+              style={styles.image}
+              source={require("@/assets/landing-page/global-trade.png")}
+              contentFit="contain"
+            />
+            <Text style={styles.solutionText}>
+              GLOBAL TRADE AND BUSINESS SOLUTIONS CORPORATIONS
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.solution,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={() => router.push(routes.UNDERCONSTRUCTION)}
+          >
+            <Image
+              style={styles.image}
+              source={require("@/assets/landing-page/world-wide-logistics.png")}
+              contentFit="contain"
+            />
+            <Text style={styles.solutionText}>
+              WORLD WIDE LOGISTICS CORPORATION
+            </Text>
+          </Pressable>
+        </View>
+      </View>
 
-			<ImageBackground
-				style={styles.bottomBanner}
-				source={require("@/assets/banners/large.png")}
-				contentFit="fill"
-			/>
-		</View>
-	);
+      <ImageBackground
+        style={styles.bottomBanner}
+        source={require("@/assets/banners/large.png")}
+        contentFit="fill"
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		gap: 20,
-		backgroundColor: "white",
-	},
-	main: {
-		justifyContent: "flex-end",
-		flex: 1,
-		gap: 30,
-		paddingHorizontal: 20,
-	},
-	logoContainer: {
-		gap: 20,
-		height: "50%",
-	},
-	logo: {
-		flex: 1,
-		marginLeft: "8%",
-	},
-	image: {
-		height: 100,
-	},
-	title: {
-		textTransform: "uppercase",
-		fontFamily: Platform.select({
-			android: "MartelSans_900Black",
-			ios: "MartelSans-Black",
-		}),
-		textAlign: "center",
-		fontSize: 36,
-		lineHeight: 48,
-	},
-	solutions: {
-		flexDirection: "row",
-		gap: 10,
-	},
-	solution: {
-		flex: 1,
-		boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
-		borderRadius: 10,
-		paddingVertical: 10,
-		paddingHorizontal: 2,
-	},
-	solutionText: {
-		color: "#16324A",
-		fontFamily: Platform.select({
-			android: "MartelSans_800ExtraBold",
-			ios: "MartelSans-ExtraBold",
-		}),
-		textTransform: "uppercase",
-		textAlign: "center",
-		lineHeight: 20,
-		fontSize: 10,
-	},
-	bottomBanner: {
-		aspectRatio: 2.5,
-		transform: [{ rotate: "180deg" }],
-	},
+  container: {
+    flex: 1,
+    gap: 20,
+    backgroundColor: "white",
+  },
+  main: {
+    justifyContent: "flex-end",
+    flex: 1,
+    gap: 30,
+    paddingHorizontal: 20,
+  },
+  logoContainer: {
+    gap: 20,
+    height: "50%",
+  },
+  logo: {
+    flex: 1,
+    marginLeft: "8%",
+  },
+  image: {
+    height: 100,
+  },
+  title: {
+    textTransform: "uppercase",
+    fontFamily: Platform.select({
+      android: "MartelSans_900Black",
+      ios: "MartelSans-Black",
+    }),
+    textAlign: "center",
+    fontSize: 24,
+    lineHeight: 40,
+  },
+  solutions: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  solution: {
+    flex: 1,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 2,
+  },
+  solutionText: {
+    color: "#16324A",
+    fontFamily: Platform.select({
+      android: "MartelSans_800ExtraBold",
+      ios: "MartelSans-ExtraBold",
+    }),
+    textTransform: "uppercase",
+    textAlign: "center",
+    lineHeight: 20,
+    fontSize: 10,
+  },
+  bottomBanner: {
+    aspectRatio: 2.5,
+    transform: [{ rotate: "180deg" }],
+  },
 });
