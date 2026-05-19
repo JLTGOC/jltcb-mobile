@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Image } from "expo-image";
 import { Link } from "expo-router";
 import {
   FlatList,
@@ -13,6 +12,7 @@ import { ActivityIndicator } from "react-native-paper";
 import FolderSection from "@/components/dashboard-section/FolderSection";
 import UserHeader from "@/components/dashboard-section/UserHeader";
 
+import ToolsIcon from "@/assets/icons/tools.svg";
 import { FINANCE_DB_FOLDER_SECTION } from "@/constants/user-dashboards";
 import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
@@ -56,11 +56,7 @@ export default function Index() {
                 },
               ]}
             >
-              <Image
-                style={styles.toolsIcon}
-                contentFit="contain"
-                source={require("@/assets/icons/tools.svg")}
-              />
+              <ToolsIcon width={24} height={24} />
             </Pressable>
           </Link>
         </View>
@@ -89,10 +85,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     right: 20,
-  },
-  toolsIcon: {
-    height: 24,
-    width: 24,
   },
   itemContainer: {
     paddingHorizontal: 20,
