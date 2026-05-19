@@ -7,17 +7,18 @@ import { RefreshControl, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 import * as z from "zod";
 
-import JobOrderCard from "@/components/job-order-section/JobOrderCard";
 import BannerHeader from "@/components/ui/BannerHeader";
 import PageList from "@/components/ui/PageList";
 import Search from "@/components/ui/Search";
 
+import { JobOrderCard } from "@/components/job-order-section/JobOrderCard";
 import { THEMES } from "@/constants/themes";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { jobOrderKeys } from "@/query-key-factories/jobOrders";
 import { apiGet } from "@/services/axiosInstance";
 import type { JobOrderResponse } from "@/types/job-order";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const searchSchema = z.object({
   search: z.string().trim(),
@@ -75,35 +76,70 @@ export default function JobOrderList() {
       }
       renderItem={({ item }) => (
         <View style={styles.itemContainer}>
-          <JobOrderCard
-            jobOrder={item}
-            actions={[
-              {
-                label: "View Details",
-                onPress: () => {
+          <JobOrderCard.Root>
+            <JobOrderCard.Header>
+              <MaterialCommunityIcons
+                name="clipboard-text-outline"
+                size={24}
+                color="black"
+              />
+              <JobOrderCard.HeaderTitle>
+                {item.reference_number}
+              </JobOrderCard.HeaderTitle>
+              <JobOrderCard.Badge label={item.service} />
+            </JobOrderCard.Header>
+
+            <JobOrderCard.Content>
+              <JobOrderCard.ContentTitle>
+                {item.client}
+              </JobOrderCard.ContentTitle>
+              <View style={{ gap: 4 }}>
+                <JobOrderCard.DetailRow
+                  label="Date Created"
+                  value={item.date_created}
+                />
+                <JobOrderCard.DetailRow
+                  label="Quotation Source"
+                  value={item.quotation_reference_number}
+                />
+                {item.assigned_to !== "Available" && (
+                  <JobOrderCard.DetailRow
+                    label="Assigned To"
+                    value={item.assigned_to}
+                    valueStyle={{ color: "#4A7AFF" }}
+                  />
+                )}
+              </View>
+            </JobOrderCard.Content>
+
+            <JobOrderCard.Footer>
+              <JobOrderCard.Action
+                first
+                onPress={() =>
                   router.push({
-                    pathname:
-                      "/(employee-account-specialist)/(tabs)/dashboard/created-job-order/quotation/[id]",
+                    pathname: "/dashboard/created-job-order/[id]",
                     params: {
-                      id: item.quotation_id,
-                      clientName: item.client,
+                      id: item.id,
+                      referenceNumber: item.reference_number,
+                      service: item.service,
                     },
-                  });
-                },
-              },
-            ]}
-            onViewJo={() =>
-              router.navigate({
-                pathname:
-                  "/(employee-account-specialist)/(tabs)/dashboard/created-job-order/[id]",
-                params: {
-                  referenceNumber: item.reference_number,
-                  id: item.id,
-                  service: item.service,
-                },
-              })
-            }
-          />
+                  })
+                }
+              >
+                View JO
+              </JobOrderCard.Action>
+              <JobOrderCard.Action
+                onPress={() =>
+                  router.push({
+                    pathname: "/dashboard/created-job-order/quotation/[id]",
+                    params: { id: item.quotation_id, bannerTitle: item.client },
+                  })
+                }
+              >
+                View Details
+              </JobOrderCard.Action>
+            </JobOrderCard.Footer>
+          </JobOrderCard.Root>
         </View>
       )}
       ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
