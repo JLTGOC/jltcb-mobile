@@ -1,172 +1,172 @@
 import { useState } from "react";
 import {
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text,
-	TextInput,
-	View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import { Button, Checkbox } from "react-native-paper";
 
 import { TARIFF_SCHEDULES } from "@/constants/ahtn-checker";
 
 export default function SharedAHTNChecker() {
-	const [searchValue, setSearchValue] = useState("");
-	const [selectedTariffSchedules, setSelectedTariffSchedules] = useState<
-		string[]
-	>([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedTariffSchedules, setSelectedTariffSchedules] = useState<
+    string[]
+  >([]);
 
-	const allValues = TARIFF_SCHEDULES.map((c) => c.value);
-	const isAllSelected = selectedTariffSchedules.length === allValues.length;
-	const isIndeterminate =
-		selectedTariffSchedules.length > 0 &&
-		selectedTariffSchedules.length < allValues.length;
+  const allValues = TARIFF_SCHEDULES.map((c) => c.value);
+  const isAllSelected = selectedTariffSchedules.length === allValues.length;
+  const isIndeterminate =
+    selectedTariffSchedules.length > 0 &&
+    selectedTariffSchedules.length < allValues.length;
 
-	function handleSelectAll() {
-		setSelectedTariffSchedules(isAllSelected ? [] : allValues);
-	}
+  function handleSelectAll() {
+    setSelectedTariffSchedules(isAllSelected ? [] : allValues);
+  }
 
-	function handleCheckboxValueChange(value: string) {
-		setSelectedTariffSchedules((prev) =>
-			prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-		);
-	}
+  function handleCheckboxValueChange(value: string) {
+    setSelectedTariffSchedules((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+    );
+  }
 
-	function handleSubmit() {
-		setSearchValue("");
-		setSelectedTariffSchedules([]);
-	}
+  function handleSubmit() {
+    setSearchValue("");
+    setSelectedTariffSchedules([]);
+  }
 
-	const isSubmitDisabled =
-		searchValue.trim().length === 0 && selectedTariffSchedules.length === 0;
+  const isSubmitDisabled =
+    searchValue.trim().length === 0 && selectedTariffSchedules.length === 0;
 
-	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<View style={{ gap: 10 }}>
-				<TextInput
-					value={searchValue}
-					onChangeText={setSearchValue}
-					style={styles.input}
-					placeholderTextColor="#888"
-					textAlign="center"
-					placeholder="ENTER AHTN 2022 CODE or KEYWORD(S):"
-				/>
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={{ gap: 10 }}>
+        <TextInput
+          value={searchValue}
+          onChangeText={setSearchValue}
+          style={styles.input}
+          placeholderTextColor="#888"
+          textAlign="center"
+          placeholder="ENTER AHTN 2022 CODE or KEYWORD(S):"
+        />
 
-				<Text style={styles.title} allowFontScaling={false}>
-					SELECT TARIFF SCHEDULE(S):
-				</Text>
+        <Text style={styles.title} allowFontScaling={false}>
+          SELECT TARIFF SCHEDULE(S):
+        </Text>
 
-				<View style={styles.checkboxList}>
-					<Pressable
-						style={({ pressed }) => [
-							styles.checkboxWrapper,
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-						onPress={handleSelectAll}
-					>
-						<Checkbox.Android
-							color="#161F3C"
-							status={
-								isAllSelected
-									? "checked"
-									: isIndeterminate
-										? "indeterminate"
-										: "unchecked"
-							}
-						/>
-						<Text style={styles.checkboxLabel}>Select All: </Text>
-					</Pressable>
-					{TARIFF_SCHEDULES.map((t) => (
-						<Pressable
-							style={({ pressed }) => [
-								styles.checkboxWrapper,
-								{
-									opacity: pressed ? 0.7 : 1,
-								},
-							]}
-							onPress={() => handleCheckboxValueChange(t.value)}
-							key={t.value}
-						>
-							<Checkbox.Android
-								color="#161F3C"
-								status={
-									selectedTariffSchedules.includes(t.value)
-										? "checked"
-										: "unchecked"
-								}
-							/>
-							<Text style={styles.checkboxLabel}>{t.label}</Text>
-						</Pressable>
-					))}
-				</View>
-			</View>
+        <View style={styles.checkboxList}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.checkboxWrapper,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={handleSelectAll}
+          >
+            <Checkbox.Android
+              color="#161F3C"
+              status={
+                isAllSelected
+                  ? "checked"
+                  : isIndeterminate
+                    ? "indeterminate"
+                    : "unchecked"
+              }
+            />
+            <Text style={styles.checkboxLabel}>Select All: </Text>
+          </Pressable>
+          {TARIFF_SCHEDULES.map((t) => (
+            <Pressable
+              style={({ pressed }) => [
+                styles.checkboxWrapper,
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+              onPress={() => handleCheckboxValueChange(t.value)}
+              key={t.value}
+            >
+              <Checkbox.Android
+                color="#161F3C"
+                status={
+                  selectedTariffSchedules.includes(t.value)
+                    ? "checked"
+                    : "unchecked"
+                }
+              />
+              <Text style={styles.checkboxLabel}>{t.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
 
-			<Button
-				mode="contained"
-				onPress={handleSubmit}
-				disabled={isSubmitDisabled}
-				buttonColor={isSubmitDisabled ? "#9CA3AF" : "#161F3C"}
-				textColor="#FFFFFF"
-				labelStyle={{
-					fontSize: 16,
-				}}
-				style={styles.button}
-			>
-				SEARCH
-			</Button>
-		</ScrollView>
-	);
+      <Button
+        mode="contained"
+        onPress={handleSubmit}
+        disabled={isSubmitDisabled}
+        buttonColor={isSubmitDisabled ? "#9CA3AF" : "#161F3C"}
+        textColor="#FFFFFF"
+        labelStyle={{
+          fontSize: 16,
+        }}
+        style={styles.button}
+      >
+        SEARCH
+      </Button>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: { paddingInline: 40, paddingBlock: 20, gap: 20 },
-	title: {
-		fontWeight: "bold",
-		textAlign: "center",
-		marginBlockStart: 10,
-	},
-	button: {
-		borderRadius: 10, // round corners
-		paddingBlock: 4,
-	},
-	checkboxList: {
-		gap: 6,
-	},
-	checkboxWrapper: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 10,
-		paddingRight: 44,
-	},
-	checkbox: {
-		paddingInlineStart: 0,
-		gap: 10,
-	},
-	checkboxLabel: {
-		textTransform: "uppercase",
-		fontWeight: "500",
-	},
-	label: {
-		fontSize: 12,
-	},
-	input: {
-		height: 50,
-		backgroundColor: "#fff",
-		borderRadius: 10,
-		paddingHorizontal: 15,
-		fontSize: 15,
-		color: "#000",
+  container: { paddingInline: 40, paddingBlock: 20, gap: 20 },
+  title: {
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBlockStart: 10,
+  },
+  button: {
+    borderRadius: 10, // round corners
+    paddingBlock: 4,
+  },
+  checkboxList: {
+    gap: 6,
+  },
+  checkboxWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingRight: 44,
+  },
+  checkbox: {
+    paddingInlineStart: 0,
+    gap: 10,
+  },
+  checkboxLabel: {
+    textTransform: "uppercase",
+    fontWeight: "500",
+  },
+  label: {
+    fontSize: 12,
+  },
+  input: {
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 15,
+    color: "#000",
 
-		// Shadow for iOS
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
 
-		// Elevation for Android
-		elevation: 5,
-	},
+    // Elevation for Android
+    elevation: 5,
+  },
 });

@@ -14,153 +14,153 @@ import { routes } from "./routes";
 export type NavLink = { name: string; title: string };
 
 export type HeaderMenu = {
-	text: string;
-	link: (typeof routes)[keyof typeof routes];
+  text: string;
+  link: (typeof routes)[keyof typeof routes];
 };
 
 type HeaderProps = {
-	menus: HeaderMenu[];
+  menus: HeaderMenu[];
 };
 
 type UserNavigation = {
-	role: UserRole;
-	headerComponent: FC<HeaderProps>;
-	tabsComponent: FC;
-	headerMenus: HeaderMenu[];
+  role: UserRole;
+  headerComponent: FC<HeaderProps>;
+  tabsComponent: FC;
+  headerMenus: HeaderMenu[];
 };
 
 export const CLIENT_HEADER_MENUS: HeaderMenu[] = [
-	// {
-	// 	text: "Calculator",
-	// 	link: routes.CLIENT_DB,
-	// },
-	{
-		text: "AHTN Checker",
-		link: routes.AHTN_CHECKER,
-	},
-	// {
-	// 	text: "Account Settings",
-	// 	link: routes.CLIENT_DB,
-	// },
+  // {
+  // 	text: "Calculator",
+  // 	link: routes.CLIENT_DB,
+  // },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  // {
+  // 	text: "Account Settings",
+  // 	link: routes.CLIENT_DB,
+  // },
 ];
 
 export const AS_HEADER_MENUS: HeaderMenu[] = [
-	{
-		text: "Calculator",
-		link: routes.UNDERCONSTRUCTION,
-	},
-	{
-		text: "AHTN Checker",
-		link: routes.AHTN_CHECKER,
-	},
-	{
-		text: "Account Settings",
-		link: routes.ACCOUNT_SETTINGS,
-	},
+  {
+    text: "Calculator",
+    link: routes.UNDERCONSTRUCTION,
+  },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  {
+    text: "Account Settings",
+    link: routes.ACCOUNT_SETTINGS,
+  },
 ];
 
 export const OPS_HEADER_MENUS: HeaderMenu[] = [
-	{
-		text: "Calculator",
-		link: routes.UNDERCONSTRUCTION,
-	},
-	{
-		text: "AHTN Checker",
-		link: routes.AHTN_CHECKER,
-	},
-	{
-		text: "Account Settings",
-		link: routes.ACCOUNT_SETTINGS,
-	},
+  {
+    text: "Calculator",
+    link: routes.UNDERCONSTRUCTION,
+  },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  {
+    text: "Account Settings",
+    link: routes.ACCOUNT_SETTINGS,
+  },
 ];
 
 export const userNavigation: UserNavigation[] = [
-	{
-		role: "Client",
-		headerComponent: DarkHeader,
-		tabsComponent: ClientTabs,
-		headerMenus: CLIENT_HEADER_MENUS,
-	},
-	{
-		role: "Account Specialist",
-		headerComponent: LightHeader,
-		tabsComponent: LeadASTabs,
-		headerMenus: AS_HEADER_MENUS,
-	},
-	{
-		role: "Marketing",
-		headerComponent: LightHeader,
-		tabsComponent: MarketingTabs,
-		headerMenus: [
-			{
-				text: "Calculator",
-				link: routes.CLIENT_DB,
-			},
-			{
-				text: "AHTN Checker",
-				link: routes.AHTN_CHECKER,
-			},
-			{
-				text: "Account Settings",
-				link: routes.CLIENT_DB,
-			},
-		],
-	},
-	{
-		role: "Operations",
-		headerComponent: LightHeader,
-		tabsComponent: OperationsTabs,
-		headerMenus: [
-			{
-				text: "Calculator",
-				link: routes.UNDERCONSTRUCTION,
-			},
-			{
-				text: "AHTN Checker",
-				link: routes.AHTN_CHECKER,
-			},
-			{
-				text: "Account Settings",
-				link: routes.ACCOUNT_SETTINGS,
-			},
-		],
-	},
-	{
-		role: "Finance",
-		headerComponent: LightHeader,
-		tabsComponent: OperationsTabs,
-		headerMenus: [
-			{
-				text: "Calculator",
-				link: routes.UNDERCONSTRUCTION,
-			},
-			{
-				text: "AHTN Checker",
-				link: routes.AHTN_CHECKER,
-			},
-			{
-				text: "Account Settings",
-				link: routes.ACCOUNT_SETTINGS,
-			},
-		],
-	},
-	{
-		role: "Human Resource",
-		headerComponent: LightHeader,
-		tabsComponent: ClientTabs,
-		headerMenus: [
-			{
-				text: "Calculator",
-				link: routes.CLIENT_DB,
-			},
-			{
-				text: "AHTN Checker",
-				link: routes.AHTN_CHECKER,
-			},
-			{
-				text: "Account Settings",
-				link: routes.CLIENT_DB,
-			},
-		],
-	},
+  {
+    role: "Client",
+    headerComponent: DarkHeader,
+    tabsComponent: ClientTabs,
+    headerMenus: CLIENT_HEADER_MENUS,
+  },
+  {
+    role: "Account Specialist",
+    headerComponent: LightHeader,
+    tabsComponent: LeadASTabs,
+    headerMenus: AS_HEADER_MENUS,
+  },
+  {
+    role: "Marketing",
+    headerComponent: LightHeader,
+    tabsComponent: MarketingTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.CLIENT_DB,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.CLIENT_DB,
+      },
+    ],
+  },
+  {
+    role: "Operations",
+    headerComponent: LightHeader,
+    tabsComponent: OperationsTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.UNDERCONSTRUCTION,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.ACCOUNT_SETTINGS,
+      },
+    ],
+  },
+  {
+    role: "Finance",
+    headerComponent: LightHeader,
+    tabsComponent: OperationsTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.UNDERCONSTRUCTION,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.ACCOUNT_SETTINGS,
+      },
+    ],
+  },
+  {
+    role: "Human Resource",
+    headerComponent: LightHeader,
+    tabsComponent: ClientTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.CLIENT_DB,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.CLIENT_DB,
+      },
+    ],
+  },
 ];

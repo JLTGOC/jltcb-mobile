@@ -5,7 +5,7 @@ import { fetchJobOrder } from "@/services/jobOrder";
 import type { JobOrder } from "@/types/job-order";
 
 export const jobOrderQueryOptions = <T extends JobOrder>(id: number) =>
-	queryOptions({
-		queryKey: jobOrderKeys.detail(id),
-		queryFn: () => fetchJobOrder<T>(id),
-	});
+  queryOptions({
+    queryKey: jobOrderKeys.detail(id),
+    queryFn: () => fetchJobOrder<T>(id),
+  });

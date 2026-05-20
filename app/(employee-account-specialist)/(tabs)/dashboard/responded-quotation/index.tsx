@@ -30,7 +30,7 @@ const MENUS: { icon: string; title: string; href: Href }[] = [
 ];
 
 export default function RespondedQuotation() {
-  const { data, isPending, error } = useQuery(
+  const { data, isPending } = useQuery(
     asQuotationsQueryOptions({ filter: "RESPONDED" }),
   );
   const router = useRouter();

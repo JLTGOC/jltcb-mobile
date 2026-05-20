@@ -1,12 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
-	Dimensions,
-	FlatList,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 import Billing from "@/components/client-section/shipment/Billing";
@@ -15,119 +15,113 @@ import Documents from "@/components/client-section/shipment/Documents";
 import BannerHeader from "@/components/ui/BannerHeader";
 
 export default function ShipmentDetails() {
-	const { id, reference_number } = useLocalSearchParams<{
-		id: string;
-		reference_number?: string;
-	}>();
-	const shipmentId = Number(id);
-	const referenceNumber =
-		reference_number && !Number.isNaN(Number(reference_number))
-			? Number(reference_number)
-			: undefined;
-	const headerTitle =
-		referenceNumber !== undefined
-			? String(referenceNumber)
-			: (reference_number ?? "Shipment Details");
+  const { id, reference_number } = useLocalSearchParams<{
+    id: string;
+    reference_number?: string;
+  }>();
+  const shipmentId = Number(id);
+  const referenceNumber =
+    reference_number && !Number.isNaN(Number(reference_number))
+      ? Number(reference_number)
+      : undefined;
+  const headerTitle =
+    referenceNumber !== undefined
+      ? String(referenceNumber)
+      : (reference_number ?? "Shipment Details");
 
-	const [active, setActive] = useState(0);
+  const [active, setActive] = useState(0);
 
-	const tabs = ["DETAILS", "DOCUMENTS", "BILLING", ""];
+  const tabs = ["DETAILS", "DOCUMENTS", "BILLING", ""];
 
-	const screenWidth = Dimensions.get("screen").width;
+  const screenWidth = Dimensions.get("screen").width;
 
-	const renderTabContent = () => {
-		switch (active) {
-			case 0:
-				return <Details shipment={shipmentId} />;
-			case 1:
-				return (
-					<View style={styles.placeholder}>
-						<Documents shipment={shipmentId} />
-					</View>
-				);
-			case 2:
-				return (
-					<View style={styles.placeholder}>
-						<Billing />
-					</View>
-				);
-			default:
-				return null;
-		}
-	};
+  const renderTabContent = () => {
+    switch (active) {
+      case 0:
+        return <Details shipment={shipmentId} />;
+      case 1:
+        return (
+          <View style={styles.placeholder}>
+            <Documents shipment={shipmentId} />
+          </View>
+        );
+      case 2:
+        return (
+          <View style={styles.placeholder}>
+            <Billing />
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
 
-	return (
-		<FlatList
-			data={[0]}
-			keyExtractor={(item) => item.toString()}
-			renderItem={({}) => (
-				<>
-					<BannerHeader title={headerTitle} variant="dark" />
+  return (
+    <ScrollView>
+      <BannerHeader title={headerTitle} variant="dark" />
 
-					<View style={styles.buttonContainer}>
-						{tabs.map((t, i) => (
-							<Pressable
-								key={i}
-								onPress={() => setActive(i)}
-								style={({ pressed }) => [
-									styles.button,
-									{
-										opacity: pressed ? 0.7 : 1,
-									},
-								]}
-							>
-								<Text
-									style={[
-										styles.buttonText,
-										{ fontSize: screenWidth * 0.03 },
-										active === i && styles.activeText,
-									]}
-									allowFontScaling={false}
-								>
-									{t}
-								</Text>
-								{active === i && <View style={styles.underline} />}
-							</Pressable>
-						))}
-					</View>
+      <View style={styles.buttonContainer}>
+        {tabs.map((t, i) => (
+          <Pressable
+            key={i}
+            onPress={() => setActive(i)}
+            style={({ pressed }) => [
+              styles.button,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { fontSize: screenWidth * 0.03 },
+                active === i && styles.activeText,
+              ]}
+              allowFontScaling={false}
+            >
+              {t}
+            </Text>
+            {active === i && <View style={styles.underline} />}
+          </Pressable>
+        ))}
+      </View>
 
-					{renderTabContent()}
-				</>
-			)}
-		/>
-	);
+      {renderTabContent()}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-	buttonContainer: {
-		flexDirection: "row",
-		borderBottomWidth: 3,
-		borderColor: "#9D9D9D",
-		marginBottom: 10,
-	},
-	button: {
-		flex: 1,
-		alignItems: "center",
-		paddingVertical: 5,
-		paddingTop: 10,
-	},
-	buttonText: {
-		fontSize: 10,
-		color: "#555",
-	},
-	activeText: {
-		color: "#000",
-		fontWeight: "600",
-	},
-	underline: {
-		height: 3,
-		width: "100%",
-		backgroundColor: "#EE9034",
-		position: "absolute",
-		bottom: -3,
-	},
-	placeholder: {
-		padding: 20,
-		alignItems: "center",
-	},
+  buttonContainer: {
+    flexDirection: "row",
+    borderBottomWidth: 3,
+    borderColor: "#9D9D9D",
+    marginBottom: 10,
+  },
+  button: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingTop: 10,
+  },
+  buttonText: {
+    fontSize: 10,
+    color: "#555",
+  },
+  activeText: {
+    color: "#000",
+    fontWeight: "600",
+  },
+  underline: {
+    height: 3,
+    width: "100%",
+    backgroundColor: "#EE9034",
+    position: "absolute",
+    bottom: -3,
+  },
+  placeholder: {
+    padding: 20,
+    alignItems: "center",
+  },
 });

@@ -4,73 +4,73 @@ import { Text } from "react-native-paper";
 import type { BaseFolderItem } from "@/types/dashboard";
 
 const FOLDER_BACKGROUNDS = {
-	dark: require("@/assets/folders/dark.png"),
-	light: require("@/assets/folders/light.png"),
+  dark: require("@/assets/folders/dark.png"),
+  light: require("@/assets/folders/light.png"),
 } as const;
 
 type FolderButtonProps = {
-	folder: BaseFolderItem;
-	variant: "light" | "dark";
+  folder: BaseFolderItem;
+  variant: "light" | "dark";
 };
 
 export default function FolderButton({
-	folder,
-	variant,
-	...props
+  folder,
+  variant,
+  ...props
 }: FolderButtonProps & PressableProps) {
-	return (
-		<Pressable {...props} style={styles.folderBtn}>
-			<ImageBackground
-				source={FOLDER_BACKGROUNDS[variant]}
-				style={styles.imageBackground}
-				contentFit="contain"
-			>
-				<View style={styles.folderContent}>
-					<Image
-						source={{ uri: folder.icon }}
-						style={[
-							folder.iconStyles ?? { aspectRatio: 2823 / 2013, height: 30 },
-							{
-								alignSelf: "center",
-							},
-						]}
-					/>
-					<View style={styles.folderTextWrapper}>
-						<Text style={styles.folderText} variant="labelMedium">
-							{folder.title}
-						</Text>
-						<Text style={styles.folderText} variant="labelMedium">
-							{folder.count}
-						</Text>
-					</View>
-				</View>
-			</ImageBackground>
-		</Pressable>
-	);
+  return (
+    <Pressable {...props} style={styles.folderBtn}>
+      <ImageBackground
+        source={FOLDER_BACKGROUNDS[variant]}
+        style={styles.imageBackground}
+        contentFit="contain"
+      >
+        <View style={styles.folderContent}>
+          <Image
+            source={{ uri: folder.icon }}
+            style={[
+              folder.iconStyles ?? { aspectRatio: 2823 / 2013, height: 30 },
+              {
+                alignSelf: "center",
+              },
+            ]}
+          />
+          <View style={styles.folderTextWrapper}>
+            <Text style={styles.folderText} variant="labelMedium">
+              {folder.title}
+            </Text>
+            <Text style={styles.folderText} variant="labelMedium">
+              {folder.count}
+            </Text>
+          </View>
+        </View>
+      </ImageBackground>
+    </Pressable>
+  );
 }
 
 const styles = StyleSheet.create({
-	folderBtn: {
-		width: "33.3%",
-		alignItems: "center",
-	},
-	imageBackground: {
-		width: "100%",
-		aspectRatio: 111 / 82,
-		paddingTop: "17%",
-		paddingBottom: "11%",
-		paddingHorizontal: "12%",
-		gap: 4,
-	},
-	folderText: {
-		textTransform: "uppercase",
-	},
-	folderContent: {
-		flex: 1,
-		justifyContent: "space-between",
-	},
-	folderTextWrapper: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
+  folderBtn: {
+    width: "33.3%",
+    alignItems: "center",
+  },
+  imageBackground: {
+    width: "100%",
+    aspectRatio: 111 / 82,
+    paddingTop: "17%",
+    paddingBottom: "11%",
+    paddingHorizontal: "12%",
+    gap: 4,
+  },
+  folderText: {
+    textTransform: "uppercase",
+  },
+  folderContent: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  folderTextWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });

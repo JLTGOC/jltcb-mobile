@@ -5,36 +5,36 @@ import { Pressable, Text } from "react-native";
 import { THEMES } from "@/constants/themes";
 
 type Props = {
-	icon?: (props: {
-		focused: boolean;
-		color: string;
-		size: number;
-	}) => ReactNode;
+  icon?: (props: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => ReactNode;
 };
 
 export default function TabButton({
-	icon,
-	children,
-	isFocused,
-	...props
+  icon,
+  children,
+  isFocused,
+  ...props
 }: Props & TabTriggerSlotProps) {
-	return (
-		<Pressable
-			style={({ pressed }) => [
-				{
-					opacity: pressed ? 0.7 : 1,
-				},
-			]}
-			{...props}
-		>
-			{icon?.({
-				focused: !!isFocused,
-				color: isFocused
-					? THEMES.tabBarActiveTintColor
-					: THEMES.tabBarInactiveTintColor,
-				size: 24,
-			})}
-			{children && <Text>{children}</Text>}
-		</Pressable>
-	);
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}
+      {...props}
+    >
+      {icon?.({
+        focused: !!isFocused,
+        color: isFocused
+          ? THEMES.tabBarActiveTintColor
+          : THEMES.tabBarInactiveTintColor,
+        size: 24,
+      })}
+      {children && <Text>{children}</Text>}
+    </Pressable>
+  );
 }

@@ -28,7 +28,7 @@ export default function Step2Form() {
       })),
     );
 
-  const { data, isPending } = useJobOrderEnums(quotationReference ?? "");
+  const { data } = useJobOrderEnums(quotationReference ?? "");
 
   const containerSize = data?.autofill_details?.container_size;
   const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;

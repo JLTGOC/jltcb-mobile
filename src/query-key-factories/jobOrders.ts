@@ -1,4 +1,4 @@
-import { JobOrderListQueryParams } from "@/types/job-order";
+import type { JobOrderListQueryParams } from "@/types/job-order";
 
 export const jobOrderKeys = {
   all: () => ["jobOrders"] as const,

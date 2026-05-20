@@ -5,6 +5,6 @@ import { createQuotationMutationOptions } from "@/mutation-options/client-quotat
 import { useAuth } from "./useAuth";
 
 export function useCreateQuotationMutation() {
-	const { userData } = useAuth();
-	return useMutation(createQuotationMutationOptions(String(userData?.id)));
+  const { userData } = useAuth();
+  return useMutation(createQuotationMutationOptions(String(userData?.id)));
 }

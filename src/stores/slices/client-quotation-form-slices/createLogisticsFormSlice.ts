@@ -4,46 +4,46 @@ import type { ExtendedLogisticsQuotationFormData } from "@/schemas/client-quotat
 import type { ClientQuotationFormStore } from "@/types/store";
 
 const initialState: LogisticsQuotationFormState = {
-	logisticsFormData: {
-		companyContactPerson: "",
-		serviceType: undefined,
-		serviceTransportMode: undefined,
-		serviceOptions: [],
-		commodityCommodity: "",
-		commodityCargoType: undefined,
-		commodityContainerSize: undefined,
-		shipmentOrigin: "",
-		shipmentDestination: "",
-		documents: [],
-		remarks: "",
-	},
+  logisticsFormData: {
+    companyContactPerson: "",
+    serviceType: undefined,
+    serviceTransportMode: undefined,
+    serviceOptions: [],
+    commodityCommodity: "",
+    commodityCargoType: undefined,
+    commodityContainerSize: undefined,
+    shipmentOrigin: "",
+    shipmentDestination: "",
+    documents: [],
+    remarks: "",
+  },
 };
 
 interface LogisticsQuotationFormState {
-	logisticsFormData: Partial<ExtendedLogisticsQuotationFormData>;
+  logisticsFormData: Partial<ExtendedLogisticsQuotationFormData>;
 }
 
 interface LogisticsQuotationFormActions {
-	setLogisticsFormData: (
-		data: Partial<ExtendedLogisticsQuotationFormData>,
-	) => void;
+  setLogisticsFormData: (
+    data: Partial<ExtendedLogisticsQuotationFormData>,
+  ) => void;
 }
 
 export type LogisticsQuotationFormSlice = LogisticsQuotationFormState &
-	LogisticsQuotationFormActions;
+  LogisticsQuotationFormActions;
 
 export const createLogisticsQuotationFormSlice: StateCreator<
-	ClientQuotationFormStore,
-	[],
-	[],
-	LogisticsQuotationFormSlice
+  ClientQuotationFormStore,
+  [],
+  [],
+  LogisticsQuotationFormSlice
 > = (set) => ({
-	...initialState,
-	setLogisticsFormData: (data) =>
-		set((state) => ({
-			logisticsFormData: {
-				...state.logisticsFormData,
-				...data,
-			},
-		})),
+  ...initialState,
+  setLogisticsFormData: (data) =>
+    set((state) => ({
+      logisticsFormData: {
+        ...state.logisticsFormData,
+        ...data,
+      },
+    })),
 });

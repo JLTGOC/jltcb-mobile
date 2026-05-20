@@ -53,7 +53,7 @@ export default function AcceptedQuotation() {
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
-  const { data, isPending, error } = useQuery(
+  const { data, isPending } = useQuery(
     asQuotationsQueryOptions({ filter: "ACCEPTED" }),
   );
 

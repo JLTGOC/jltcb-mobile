@@ -5,10 +5,10 @@ import { createQuotationReferenceSlice } from "@/stores/slices/job-order-form-sl
 import type { JobOrderFormStore } from "@/types/store";
 
 export const useJobOrderFormStore = create<JobOrderFormStore>()((...a) => ({
-	...createQuotationReferenceSlice(...a),
-	...createLogisticsFormSlice(...a),
-	reset: () => {
-		const [set, , store] = a;
-		set(store.getInitialState());
-	},
+  ...createQuotationReferenceSlice(...a),
+  ...createLogisticsFormSlice(...a),
+  reset: () => {
+    const [set, , store] = a;
+    set(store.getInitialState());
+  },
 }));

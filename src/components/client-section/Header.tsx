@@ -6,43 +6,43 @@ import { Text } from "react-native-paper";
 import { useNavigate } from "@/hooks/useNavigate";
 
 type Props = {
-	title: string;
-	route: string;
+  title: string;
+  route: string;
 };
 
 export default function Header({ title, route }: Props) {
-	const { replace } = useNavigate();
-	return (
-		<ImageBackground
-			source={require("@/assets/banners/small.png")}
-			contentFit="cover"
-			style={{
-				padding: 25,
-				aspectRatio: 3,
-				width: "100%",
-				marginBottom: -25,
-			}}
-		>
-			<View
-				style={{
-					alignItems: "center",
-					flexDirection: "row",
-					gap: 10,
-				}}
-			>
-				<MoveLeft color={"#EE9034"} onPress={() => replace(route)} />
-				<Text
-					style={{
-						color: "#EE9034",
-						fontSize: 20,
-						fontWeight: 500,
-						marginBottom: 4,
-					}}
-					allowFontScaling={false}
-				>
-					{title}
-				</Text>
-			</View>
-		</ImageBackground>
-	);
+  const { replace } = useNavigate();
+  return (
+    <ImageBackground
+      source={require("@/assets/banners/small.png")}
+      contentFit="cover"
+      style={{
+        padding: 25,
+        aspectRatio: 3,
+        width: "100%",
+        marginBottom: -25,
+      }}
+    >
+      <View
+        style={{
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 10,
+        }}
+      >
+        <MoveLeft color={"#EE9034"} onPress={() => replace(route)} />
+        <Text
+          style={{
+            color: "#EE9034",
+            fontSize: 20,
+            fontWeight: 500,
+            marginBottom: 4,
+          }}
+          allowFontScaling={false}
+        >
+          {title}
+        </Text>
+      </View>
+    </ImageBackground>
+  );
 }

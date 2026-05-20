@@ -154,9 +154,18 @@ export default function Details({ shipment }: Props) {
     {
       title: "CONTACT PERSON",
       rows: [
-        { label: "FULL NAME", value: data?.contact_person.full_name },
-        { label: "CONTACT NO", value: data?.contact_person.contact_number },
-        { label: "EMAIL", value: data?.contact_person.email },
+        {
+          label: "FULL NAME",
+          value: data?.general_info.person_in_charge.full_name,
+        },
+        {
+          label: "CONTACT NO",
+          value: data?.general_info.person_in_charge.contact_number,
+        },
+        {
+          label: "EMAIL",
+          value: data?.general_info.person_in_charge.email,
+        },
       ],
     },
   ];

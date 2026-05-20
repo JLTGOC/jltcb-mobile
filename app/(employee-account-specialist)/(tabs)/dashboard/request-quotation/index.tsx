@@ -33,7 +33,7 @@ export default function NewRequest() {
     filter: "REQUESTED",
     ...(submittedSearch.length && { search: submittedSearch }),
   };
-  const { data, isPending, error } = useQuery(asQuotationsQueryOptions(filter));
+  const { data, isPending } = useQuery(asQuotationsQueryOptions(filter));
 
   const handleSearch = () => {
     setSubmittedSearch(search.trim());

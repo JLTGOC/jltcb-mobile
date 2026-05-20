@@ -23,7 +23,7 @@ import { mapDashboardData } from "@/utils/mapDashboardData";
 
 export default function Index() {
   const { userData } = useAuth();
-  const { data, isPending, error, refetch } = useQuery({
+  const { data, isPending, refetch } = useQuery({
     ...dashboardQueryOptions<FinanceDashboard>(String(userData?.id)),
     select: ({ data }) => mapDashboardData(data, FINANCE_DB_FOLDER_SECTION),
   });

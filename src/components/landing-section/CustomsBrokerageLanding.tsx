@@ -9,270 +9,270 @@ import { Text } from "react-native-paper";
 import { routes } from "@/constants/routes";
 
 export default function CustomsBrokerageLanding() {
-	const router = useRouter();
+  const router = useRouter();
 
-	return (
-		<ImageBackground
-			source={require("@/assets/landingPage.png")}
-			style={styles.image}
-		>
-			<View style={styles.whiteOverlay} />
+  return (
+    <ImageBackground
+      source={require("@/assets/landingPage.png")}
+      style={styles.image}
+    >
+      <View style={styles.whiteOverlay} />
 
-			<View style={styles.main}>
-				<Pressable
-					onPress={() => {
-						router.dismissTo(routes.LANDING_PAGE);
-					}}
-					style={({ pressed }) => [
-						{
-							opacity: pressed ? 0.7 : 1,
-						},
-					]}
-				>
-					<Image
-						source={require("@/assets/customs-brokerage/customs-brokerage.png")}
-						style={styles.logoImage}
-						contentFit="contain"
-					/>
-					<Text style={styles.title} allowFontScaling={false}>
-						Customs Brokerage
-					</Text>
-				</Pressable>
+      <View style={styles.main}>
+        <Pressable
+          onPress={() => {
+            router.dismissTo(routes.LANDING_PAGE);
+          }}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
+          <Image
+            source={require("@/assets/customs-brokerage/customs-brokerage.png")}
+            style={styles.logoImage}
+            contentFit="contain"
+          />
+          <Text style={styles.title} allowFontScaling={false}>
+            Customs Brokerage
+          </Text>
+        </Pressable>
 
-				<View
-					style={{
-						justifyContent: "flex-end",
-						alignItems: "center",
-						gap: 16,
-					}}
-				>
-					<Link href={routes.GUEST_HOME} asChild>
-						<Pressable
-							style={({ pressed }) => [
-								{
-									opacity: pressed ? 0.7 : 1,
-								},
-							]}
-						>
-							<LinearGradient
-								colors={["#161F3C", "#000000"]} // BUTTON gradient fill
-								start={{ x: 0, y: 0 }}
-								end={{ x: 1, y: 0 }}
-								style={styles.innerGradient}
-							>
-								<MaterialIcons
-									name="person-outline"
-									size={22}
-									color="#EE9034"
-								/>
-								<Text style={styles.buttonText} allowFontScaling={false}>
-									Guest
-								</Text>
-							</LinearGradient>
-						</Pressable>
-					</Link>
-					<Text variant="titleMedium" allowFontScaling={false}>
-						Already have an account?{" "}
-						<Link href={routes.LOG_IN} style={{ fontWeight: "bold" }}>
-							Sign In
-						</Link>
-					</Text>
-				</View>
-			</View>
+        <View
+          style={{
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <Link href={routes.GUEST_HOME} asChild>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <LinearGradient
+                colors={["#161F3C", "#000000"]} // BUTTON gradient fill
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.innerGradient}
+              >
+                <MaterialIcons
+                  name="person-outline"
+                  size={22}
+                  color="#EE9034"
+                />
+                <Text style={styles.buttonText} allowFontScaling={false}>
+                  Guest
+                </Text>
+              </LinearGradient>
+            </Pressable>
+          </Link>
+          <Text variant="titleMedium" allowFontScaling={false}>
+            Already have an account?{" "}
+            <Link href={routes.LOG_IN} style={{ fontWeight: "bold" }}>
+              Sign In
+            </Link>
+          </Text>
+        </View>
+      </View>
 
-			<ImageBackground
-				style={styles.bottomBanner}
-				source={require("@/assets/banners/large.png")}
-				contentFit="fill"
-			>
-				<SocialLogos />
-			</ImageBackground>
-		</ImageBackground>
-	);
+      <ImageBackground
+        style={styles.bottomBanner}
+        source={require("@/assets/banners/large.png")}
+        contentFit="fill"
+      >
+        <SocialLogos />
+      </ImageBackground>
+    </ImageBackground>
+  );
 }
 
 const openLink = (url: string) => {
-	Linking.openURL(url);
+  Linking.openURL(url);
 };
 
 function SocialLogos() {
-	return (
-		<View style={styles.socialIconsContainer}>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() => openLink("https://www.facebook.com/jltcb.ph")}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/facebook.png")}
-				/>
-			</Pressable>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() =>
-					openLink("https://www.instagram.com/jltcustomsbrokerage")
-				}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/instagram.png")}
-				/>
-			</Pressable>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() =>
-					openLink("https://www.youtube.com/@jilll.tolentinocustomsbrok4791")
-				}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/youtube.png")}
-				/>
-			</Pressable>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() => openLink("https://www.tiktok.com/@jltcbph")}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/tiktok.png")}
-				/>
-			</Pressable>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() =>
-					openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")
-				}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/linkedIn.png")}
-				/>
-			</Pressable>
-			<Pressable
-				style={({ pressed }) => [
-					styles.socialLink,
-					{
-						opacity: pressed ? 0.7 : 1,
-					},
-				]}
-				onPress={() => openLink("https://x.com/jltcb_ph")}
-			>
-				<Image
-					style={styles.socialIcon}
-					source={require("@/assets/social_logos/twitter.png")}
-				/>
-			</Pressable>
-		</View>
-	);
+  return (
+    <View style={styles.socialIconsContainer}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://www.facebook.com/jltcb.ph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/facebook.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.instagram.com/jltcustomsbrokerage")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/instagram.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.youtube.com/@jilll.tolentinocustomsbrok4791")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/youtube.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://www.tiktok.com/@jltcbph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/tiktok.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/linkedIn.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://x.com/jltcb_ph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/twitter.png")}
+        />
+      </Pressable>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	//LANDING PAGE
-	main: {
-		marginTop: 100,
-		justifyContent: "center",
-		flex: 1,
-		gap: 100,
-		paddingHorizontal: 20,
-	},
+  //LANDING PAGE
+  main: {
+    marginTop: 100,
+    justifyContent: "center",
+    flex: 1,
+    gap: 100,
+    paddingHorizontal: 20,
+  },
 
-	//logo image
-	logoContainer: {
-		flex: 1,
-		alignItems: "center",
-		gap: 5,
-	},
-	outerGradient: {
-		padding: 3,
-		borderRadius: 50,
-	},
-	innerGradient: {
-		borderRadius: 10,
-		paddingVertical: 12,
-		justifyContent: "center",
-		alignItems: "center",
-		flexDirection: "row",
-		width: 350,
-	},
-	logoImage: {
-		width: 500,
-		height: 250,
-		alignSelf: "center",
-	},
-	title: {
-		fontSize: 44,
-		fontFamily: Platform.select({
-			android: "MartelSans_800ExtraBold",
-			ios: "MartelSans-ExtraBold",
-		}),
-		textTransform: "uppercase",
-		color: "#163048",
-		textAlign: "center",
-		lineHeight: 46,
-	},
-	image: {
-		flex: 1,
-		justifyContent: "space-between",
-	},
-	whiteOverlay: {
-		...StyleSheet.absoluteFillObject, // fill entire ImageBackground
-		backgroundColor: "rgba(255, 255, 255, 0.64)",
-	},
+  //logo image
+  logoContainer: {
+    flex: 1,
+    alignItems: "center",
+    gap: 5,
+  },
+  outerGradient: {
+    padding: 3,
+    borderRadius: 50,
+  },
+  innerGradient: {
+    borderRadius: 10,
+    paddingVertical: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    width: 350,
+  },
+  logoImage: {
+    width: 500,
+    height: 250,
+    alignSelf: "center",
+  },
+  title: {
+    fontSize: 44,
+    fontFamily: Platform.select({
+      android: "MartelSans_800ExtraBold",
+      ios: "MartelSans-ExtraBold",
+    }),
+    textTransform: "uppercase",
+    color: "#163048",
+    textAlign: "center",
+    lineHeight: 46,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  whiteOverlay: {
+    ...StyleSheet.absoluteFillObject, // fill entire ImageBackground
+    backgroundColor: "rgba(255, 255, 255, 0.64)",
+  },
 
-	buttonText: {
-		color: "#EE9034",
-		fontSize: 16,
-		fontWeight: "bold",
-		textTransform: "uppercase",
-	},
+  buttonText: {
+    color: "#EE9034",
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
 
-	//social icons style
-	socialIconsContainer: {
-		transform: [{ rotate: "180deg" }],
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-		paddingBottom: 20,
-		backgroundColor: "#1C213B",
-	},
+  //social icons style
+  socialIconsContainer: {
+    transform: [{ rotate: "180deg" }],
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    paddingBottom: 20,
+    backgroundColor: "#1C213B",
+  },
 
-	socialLink: {
-		height: 32,
-		width: 32,
-	},
+  socialLink: {
+    height: 32,
+    width: 32,
+  },
 
-	socialIcon: {
-		flex: 1,
-	},
+  socialIcon: {
+    flex: 1,
+  },
 
-	bottomBanner: {
-		paddingTop: 25,
-		aspectRatio: 2.5,
-		transform: [{ rotate: "180deg" }],
-	},
+  bottomBanner: {
+    paddingTop: 25,
+    aspectRatio: 2.5,
+    transform: [{ rotate: "180deg" }],
+  },
 });

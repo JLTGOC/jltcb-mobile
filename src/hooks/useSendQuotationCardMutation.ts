@@ -4,7 +4,7 @@ import { sendQuotationCardMutationOptions } from "@/mutation-options/asLead-quot
 import type { ApiResponse } from "@/types/api";
 
 export function useSendQuotationCardMutation() {
-	return useMutation<ApiResponse<{ conversation_id: string }>, Error, string>(
-		sendQuotationCardMutationOptions(),
-	);
+  return useMutation<ApiResponse<{ conversation_id: string }>, Error, string>(
+    sendQuotationCardMutationOptions(),
+  );
 }

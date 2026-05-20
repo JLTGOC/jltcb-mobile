@@ -7,26 +7,26 @@ import { uploadQuotationFile } from "@/services/quotations";
 import type { QuotationStatus } from "@/types/quotations";
 
 export const uploadQuotationFileMutationOptions = ({
-	userId,
-	status,
+  userId,
+  status,
 }: {
-	userId: string;
-	status?: QuotationStatus;
+  userId: string;
+  status?: QuotationStatus;
 }) =>
-	mutationOptions({
-		mutationFn: (variables: {
-			quotationId: string;
-			file: DocumentPickerAsset;
-		}) => uploadQuotationFile(variables.quotationId, variables.file),
-		meta: {
-			invalidatesQuery: [
-				...(status
-					? [quotationKeys.getQuotations({ filter: status })]
-					: [
-							quotationKeys.getQuotations({ filter: "REQUESTED" }),
-							quotationKeys.getQuotations({ filter: "RESPONDED" }),
-						]),
-				dashboardKeys.getDashboard(userId),
-			],
-		},
-	});
+  mutationOptions({
+    mutationFn: (variables: {
+      quotationId: string;
+      file: DocumentPickerAsset;
+    }) => uploadQuotationFile(variables.quotationId, variables.file),
+    meta: {
+      invalidatesQuery: [
+        ...(status
+          ? [quotationKeys.getQuotations({ filter: status })]
+          : [
+              quotationKeys.getQuotations({ filter: "REQUESTED" }),
+              quotationKeys.getQuotations({ filter: "RESPONDED" }),
+            ]),
+        dashboardKeys.getDashboard(userId),
+      ],
+    },
+  });

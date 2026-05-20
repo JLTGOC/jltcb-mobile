@@ -1,9 +1,8 @@
 import {
-	type AxiosError,
-	type AxiosRequestConfig,
-	create,
-	type InternalAxiosRequestConfig,
-	isAxiosError,
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  create,
 } from "axios";
 import * as SecureStore from "expo-secure-store";
 
@@ -12,98 +11,87 @@ import type { ApiResponse } from "@/types/api";
 const baseURL = (process.env.EXPO_PUBLIC_API_URL ?? "").trim();
 
 if (!baseURL) {
-	throw new Error(
-		"Missing EXPO_PUBLIC_API_URL. Please set it in .env and restart Expo.",
-	);
+  throw new Error(
+    "Missing EXPO_PUBLIC_API_URL. Please set it in .env and restart Expo.",
+  );
 }
 
 const api = create({
-	baseURL,
-	timeout: 30000,
-	headers: {
-		Accept: "application/json",
-	},
+  baseURL,
+  headers: {
+    Accept: "application/json",
+  },
 });
 
-api.interceptors.request.use(
-	async (config: InternalAxiosRequestConfig) => {
-		const token = await SecureStore.getItemAsync("token");
+api.interceptors.request.use(async (config) => {
+  const token = await SecureStore.getItemAsync("token");
 
-		if (token) {
-			config.headers = config.headers || {};
-			config.headers.Authorization = `Bearer ${token}`;
-		}
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-		console.log(token);
+  console.log(token);
 
-		return config;
-	},
-	(error) => Promise.reject(error),
-);
+  return config;
+});
 
 api.interceptors.response.use(
-	(response) => {
-		const apiMessage = (response.data as { message?: string } | undefined)
-			?.message;
-		const apiData = (response.data as { data?: unknown } | undefined)?.data;
-		const method = response.config.method?.toUpperCase() ?? "REQUEST";
-		const url = response.config.url ?? "";
+  (res) => res,
+  (error: AxiosError<{ message: string }>) => {
+    const { data, status, config } = error.response!;
 
-		return response;
-	},
-	(error: AxiosError | unknown) => {
-		let errorMessage = "Unknown API error";
-		let errorData: unknown;
-		let method = "REQUEST";
-		let url = "";
+    const method = config.method?.toUpperCase();
+    const url = config.url;
 
-		if (isAxiosError(error)) {
-			method = error.config?.method?.toUpperCase() ?? method;
-			url = error.config?.url ?? url;
-			errorData = error.response?.data;
-			errorMessage =
-				(error.response?.data as { message?: string } | undefined)?.message ??
-				error.message ??
-				errorMessage;
+    const errorMessageHeader = `[${method}] ${url} -`;
 
-			if (!error.response) {
-				errorMessage = `Network Error. Check EXPO_PUBLIC_API_URL (${baseURL}) and device network access.`;
-			}
-		}
+    switch (status) {
+      case 400:
+        console.error(data);
+        break;
 
-		console.error(`[API ${method}] ${url} - ${errorMessage}`);
-		console.error(`[API ${method}] ${url} - error data:`, errorData);
+      case 401:
+        console.error("unauthorised");
+        break;
 
-		return Promise.reject(error);
-	},
+      case 404:
+        console.error("/not-found");
+        break;
+
+      case 500:
+        console.error("/server-error");
+        break;
+
+      default:
+        console.error(errorMessageHeader, data.message);
+        console.error(errorMessageHeader, data);
+    }
+    return Promise.reject(error);
+  },
 );
 
-export async function apiGet<T>(url: string, config?: AxiosRequestConfig) {
-	const { data } = await api.get<ApiResponse<T>>(url, config);
-	return data;
-}
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-export async function apiPost<T, B = unknown>(
-	url: string,
-	body?: B,
-	config?: AxiosRequestConfig,
-) {
-	const { data } = await api.post<ApiResponse<T>>(url, body, config);
-	return data;
-}
+export const apiGet = <T = any, D = any>(
+  url: string,
+  config?: AxiosRequestConfig<D>,
+) => api.get<ApiResponse<T>>(url, config).then(responseBody);
 
-export async function apiPut<T, B = unknown>(
-	url: string,
-	body?: B,
-	config?: AxiosRequestConfig,
-) {
-	const { data } = await api.put<ApiResponse<T>>(url, body, config);
-	return data;
-}
+export const apiPost = <T = any, D = any>(
+  url: string,
+  body?: D,
+  config?: AxiosRequestConfig<D>,
+) => api.post<ApiResponse<T>>(url, body, config).then(responseBody);
 
-export async function apiDelete<T>(url: string, config?: AxiosRequestConfig) {
-	const { data } = await api.delete<ApiResponse<T>>(url, config);
-	return data;
-}
+export const apiPut = <T = any, D = any>(
+  url: string,
+  body?: D,
+  config?: AxiosRequestConfig<D>,
+) => api.put<ApiResponse<T>>(url, body, config).then(responseBody);
+
+export const apiDelete = <T = any, D = any>(
+  url: string,
+  config?: AxiosRequestConfig<D>,
+) => api.delete<ApiResponse<T>>(url, config).then(responseBody);
 
 export default api;

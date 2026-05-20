@@ -4,6 +4,6 @@ import { reelKeys } from "@/query-key-factories/reels";
 import { fetchReels } from "@/services/reels";
 
 export const reelsQueryOptions = queryOptions({
-	queryKey: reelKeys.getReels(),
-	queryFn: fetchReels,
+  queryKey: reelKeys.getReels(),
+  queryFn: fetchReels,
 });

@@ -4,134 +4,135 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function ContactDetails() {
-	const [active, setActive] = useState(0);
-	const [tab, setTab] = useState("MAIN");
+  const [active, setActive] = useState(0);
+  const [tab, setTab] = useState("MAIN");
 
-	const tabs = ["MAIN", "BATAAN", "CLARK", ""];
-	const contactDetails = [
-		{
-			icon: "location-outline",
-			description:
-				"SUITE 508, PACIFIC CENTRE, 460 QUINTIN PAREDE ST.\nBRGY. BINONDO, MANILA, PHILIPPINES 1006",
-		},
-		{
-			icon: "call-outline",
-			description: "+63 977 729 8029\n+63 998 599 5399",
-		},
-		{
-			icon: "at-outline",
-			description: "JILLTOLENTINO@JLTCB.COM\nINQUIRY@JLTCB.COM",
-		},
-		{
-			icon: "calendar-outline",
-			description: "MONDAY - FRIDAY\nINQUIRY@JLTCB.COM",
-		},
-	];
-	return (
-		<View style={styles.container}>
-			{/* tabs */}
-			<View style={styles.tabsContainer}>
-				{tabs.map((t, i) => (
-					<Pressable
-						key={i}
-						style={({ pressed }) => [
-							styles.button,
+  const tabs = ["MAIN", "BATAAN", "CLARK", ""];
+  const contactDetails = [
+    {
+      icon: "location-outline",
+      description:
+        "SUITE 508, PACIFIC CENTRE, 460 QUINTIN PAREDE ST.\nBRGY. BINONDO, MANILA, PHILIPPINES 1006",
+    },
+    {
+      icon: "call-outline",
+      description: "+63 977 729 8029\n+63 998 599 5399",
+    },
+    {
+      icon: "at-outline",
+      description: "JILLTOLENTINO@JLTCB.COM\nINQUIRY@JLTCB.COM",
+    },
+    {
+      icon: "calendar-outline",
+      description: "MONDAY - FRIDAY\nINQUIRY@JLTCB.COM",
+    },
+  ];
+  return (
+    <View style={styles.container}>
+      {/* tabs */}
+      <View style={styles.tabsContainer}>
+        {tabs.map((t, i) => (
+          <Pressable
+            key={i}
+            style={({ pressed }) => [
+              styles.button,
 
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-						onPress={() => {
-							setActive(i), setTab(t);
-						}}
-					>
-						<Text
-							style={[styles.buttonText, active === i && styles.activeText]}
-							allowFontScaling={false}
-						>
-							{t}
-						</Text>
-						{active === i && <View style={styles.underline} />}
-					</Pressable>
-				))}
-			</View>
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+            onPress={() => {
+              setActive(i);
+              setTab(t);
+            }}
+          >
+            <Text
+              style={[styles.buttonText, active === i && styles.activeText]}
+              allowFontScaling={false}
+            >
+              {t}
+            </Text>
+            {active === i && <View style={styles.underline} />}
+          </Pressable>
+        ))}
+      </View>
 
-			{/* details */}
-			<View>
-				{tab !== "MAIN" ? (
-					<Text style={{ textAlign: "center" }}>Coming Soon....</Text>
-				) : (
-					contactDetails.map((detail, i) => (
-						<View key={i} style={styles.contactContainer}>
-							<View style={styles.iconsCotainer}>
-								<Ionicons
-									name={detail.icon as any}
-									size={25}
-									color="#ffffffff"
-								/>
-							</View>
-							<Text style={{ fontSize: 12 }} allowFontScaling={false}>
-								{detail.description}
-							</Text>
-						</View>
-					))
-				)}
-			</View>
-			{tab === "MAIN" && (
-				<Image
-					source={require("@/assets/contact_us/location.png")}
-					style={{ height: 300, width: "100%" }}
-				/>
-			)}
-		</View>
-	);
+      {/* details */}
+      <View>
+        {tab !== "MAIN" ? (
+          <Text style={{ textAlign: "center" }}>Coming Soon....</Text>
+        ) : (
+          contactDetails.map((detail, i) => (
+            <View key={i} style={styles.contactContainer}>
+              <View style={styles.iconsCotainer}>
+                <Ionicons
+                  name={detail.icon as any}
+                  size={25}
+                  color="#ffffffff"
+                />
+              </View>
+              <Text style={{ fontSize: 12 }} allowFontScaling={false}>
+                {detail.description}
+              </Text>
+            </View>
+          ))
+        )}
+      </View>
+      {tab === "MAIN" && (
+        <Image
+          source={require("@/assets/contact_us/location.png")}
+          style={{ height: 300, width: "100%" }}
+        />
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		marginTop: -30,
-		marginHorizontal: 25,
-	},
-	tabsContainer: {
-		flexDirection: "row",
-		borderBottomWidth: 3,
-		borderColor: "#9D9D9D",
-		marginBottom: 10,
-	},
-	button: {
-		flex: 1,
-		alignItems: "center",
-		paddingVertical: 5,
-		paddingTop: 10,
-	},
-	buttonText: {
-		fontSize: 10,
-		color: "#555",
-	},
-	activeText: {
-		color: "#000",
-		fontWeight: "600",
-	},
-	underline: {
-		height: 3,
-		width: "100%",
-		backgroundColor: "#EE9034",
-		position: "absolute",
-		bottom: -3,
-	},
-	iconsCotainer: {
-		backgroundColor: "#1D274E",
-		borderRadius: 25,
-		height: 50,
-		width: 50,
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		marginRight: 10,
-	},
-	contactContainer: {
-		flexDirection: "row",
-		marginVertical: 2,
-		alignItems: "center",
-	},
+  container: {
+    marginTop: -30,
+    marginHorizontal: 25,
+  },
+  tabsContainer: {
+    flexDirection: "row",
+    borderBottomWidth: 3,
+    borderColor: "#9D9D9D",
+    marginBottom: 10,
+  },
+  button: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingTop: 10,
+  },
+  buttonText: {
+    fontSize: 10,
+    color: "#555",
+  },
+  activeText: {
+    color: "#000",
+    fontWeight: "600",
+  },
+  underline: {
+    height: 3,
+    width: "100%",
+    backgroundColor: "#EE9034",
+    position: "absolute",
+    bottom: -3,
+  },
+  iconsCotainer: {
+    backgroundColor: "#1D274E",
+    borderRadius: 25,
+    height: 50,
+    width: 50,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  contactContainer: {
+    flexDirection: "row",
+    marginVertical: 2,
+    alignItems: "center",
+  },
 });

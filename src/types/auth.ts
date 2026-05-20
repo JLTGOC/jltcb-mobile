@@ -1,22 +1,22 @@
 export type UserRole =
-	| "Client"
-	| "Lead Account Specialist"
-	| "Account Specialist"
-	| "Operations"
-	| "Finance"
-	| "Marketing"
-	| "Human Resource";
+  | "Client"
+  | "Lead Account Specialist"
+  | "Account Specialist"
+  | "Operations"
+  | "Finance"
+  | "Marketing"
+  | "Human Resource";
 
 export type User = {
-	id: number;
-	first_name: string;
-	last_name: string;
-	full_name: string;
-	role: UserRole;
-	email: string;
-	address: string;
-	created_at: string;
-	updated_at: string;
-	company_name: string;
-	image_path: string;
+  id: number;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  role: UserRole;
+  email: string;
+  address: string;
+  created_at: string;
+  updated_at: string;
+  company_name: string;
+  image_path: string;
 };

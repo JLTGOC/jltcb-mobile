@@ -1,27 +1,27 @@
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import {
-	Dimensions,
-	FlatList,
-	Pressable,
-	StyleSheet,
-	View,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
 } from "react-native";
 
 // --- Data ---
 const logos = [
-	{
-		logo: require("@/assets/landing-page/customs-brokerage.png"),
-		url: "",
-	},
-	{
-		logo: require("@/assets/landing-page/global-trade.png"),
-		url: "",
-	},
-	{
-		logo: require("@/assets/landing-page/world-wide-logistics.png"),
-		url: "",
-	},
+  {
+    logo: require("@/assets/landing-page/customs-brokerage.png"),
+    url: "",
+  },
+  {
+    logo: require("@/assets/landing-page/global-trade.png"),
+    url: "",
+  },
+  {
+    logo: require("@/assets/landing-page/world-wide-logistics.png"),
+    url: "",
+  },
 ];
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -29,52 +29,39 @@ const LOGO_SIZE = SCREEN_WIDTH * 0.095;
 const GAP = 30;
 
 export default function GovernmentLogosMarquee() {
-	const openLink = (url: string) => Linking.openURL(url);
+  const openLink = (url: string) => Linking.openURL(url);
 
-	return (
-		<View style={styles.container}>
-			<FlatList
-				data={logos}
-				horizontal
-				renderItem={({ item }) => (
-					<Pressable
-						onPress={() => openLink(item.url)}
-						style={({ pressed }) => [
-							{ marginRight: GAP },
-							{
-								opacity: pressed ? 0.7 : 1,
-							},
-						]}
-					>
-						<Image
-							source={item.logo}
-							style={{ height: LOGO_SIZE, width: LOGO_SIZE }}
-							contentFit="contain"
-						/>
-					</Pressable>
-				)}
-			/>
-		</View>
-	);
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={logos}
+        horizontal
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => openLink(item.url)}
+            style={({ pressed }) => [
+              { marginRight: GAP },
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Image
+              source={item.logo}
+              style={{ height: LOGO_SIZE, width: LOGO_SIZE }}
+              contentFit="contain"
+            />
+          </Pressable>
+        )}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		paddingVertical: 2,
-		backgroundColor: "#fff",
-		alignItems: "center",
-	},
-});
-
-const marqueeStyles = StyleSheet.create({
-	hidden: {
-		opacity: 0,
-		position: "absolute",
-		zIndex: -1,
-	},
-	row: {
-		flexDirection: "row",
-		alignItems: "center",
-		paddingVertical: 5,
-	},
+  container: {
+    paddingVertical: 2,
+    backgroundColor: "#fff",
+    alignItems: "center",
+  },
 });

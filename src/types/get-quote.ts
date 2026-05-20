@@ -1,13 +1,13 @@
 export type FieldKey = "full_name" | "email" | "contact_number";
 
 export type Field = {
-	label: string;
-	key: FieldKey;
+  label: string;
+  key: FieldKey;
 };
 
 export type ContactFormData = {
-	[K in FieldKey]?: string;
+  [K in FieldKey]?: string;
 } & {
-	message?: string;
-	imageUri?: string;
+  message?: string;
+  imageUri?: string;
 };

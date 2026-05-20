@@ -7,7 +7,7 @@ import { BottomNavigation } from "@/components/job-order-section/BottomNavigatio
 import SharedLogisticsJobOrder from "@/components/screens/SharedLogisticsJobOrder";
 import SharedRegulatoryJobOrder from "@/components/screens/SharedRegulatoryJobOrder";
 
-import { JobTypeSummary } from "@/types/job-order";
+import type { JobTypeSummary } from "@/types/job-order";
 
 export default function JobOrder() {
   const { service } = useLocalSearchParams<{

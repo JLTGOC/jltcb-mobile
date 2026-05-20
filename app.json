@@ -1,91 +1,91 @@
 {
-	"expo": {
-		"name": "JLTCB",
-		"slug": "JLTCB",
-		"version": "4.0.1",
-		"orientation": "portrait",
-		"scheme": "jltcb",
-		"userInterfaceStyle": "automatic",
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.jltcb.app",
-			"infoPlist": {
-				"ITSAppUsesNonExemptEncryption": false
-			}
-		},
-		"android": {
-			"package": "com.jltcb.app",
-			"versionCode": 5,
-			"permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
-			"blockedPermissions": [
-				"android.permission.READ_MEDIA_IMAGES",
-				"android.permission.READ_MEDIA_VIDEO"
-			],
-			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/appImage.png",
-				"backgroundColor": "#E6F4FE"
-			},
-			"predictiveBackGestureEnabled": false
-		},
-		"web": {
-			"output": "static"
-		},
-		"plugins": [
-			"expo-router",
-			"expo-video",
-			"expo-web-browser",
-			[
-				"expo-font",
-				{
-					"fonts": [
-						"node_modules/@expo-google-fonts/martel-sans/900Black/MartelSans_900Black.ttf",
-						"node_modules/@expo-google-fonts/martel-sans/800ExtraBold/MartelSans_800ExtraBold.ttf"
-					]
-				}
-			],
-			"expo-secure-store",
-			[
-				"expo-asset",
-				{
-					"assets": ["./src/assets/dashboard-folder-icons"]
-				}
-			],
-			[
-				"expo-build-properties",
-				{
-					"android": {
-						"usesCleartextTraffic": true
-					}
-				}
-			],
-			[
-				"expo-media-library",
-				{
-					"photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
-					"savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
-					"granularPermissions": ["photo"]
-				}
-			],
-			"expo-sharing",
-			"expo-sqlite",
-			[
-				"expo-file-system",
-				{
-					"supportsOpeningDocumentsInPlace": true,
-					"enableFileSharing": true
-				}
-			],
-			"expo-image"
-		],
-		"experiments": {
-			"typedRoutes": true,
-			"reactCompiler": true
-		},
-		"extra": {
-			"router": {},
-			"eas": {
-				"projectId": "9fefdb2d-73c6-4835-8885-b24480e2abe2"
-			}
-		}
-	}
+  "expo": {
+    "name": "JLTCB",
+    "slug": "JLTCB",
+    "version": "4.0.1",
+    "orientation": "portrait",
+    "scheme": "jltcb",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jltcb.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.jltcb.app",
+      "versionCode": 5,
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "blockedPermissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/appImage.png",
+        "backgroundColor": "#E6F4FE"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-video",
+      "expo-web-browser",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/martel-sans/900Black/MartelSans_900Black.ttf",
+            "node_modules/@expo-google-fonts/martel-sans/800ExtraBold/MartelSans_800ExtraBold.ttf"
+          ]
+        }
+      ],
+      "expo-secure-store",
+      [
+        "expo-asset",
+        {
+          "assets": ["./src/assets/dashboard-folder-icons"]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "granularPermissions": ["photo"]
+        }
+      ],
+      "expo-sharing",
+      "expo-sqlite",
+      [
+        "expo-file-system",
+        {
+          "supportsOpeningDocumentsInPlace": true,
+          "enableFileSharing": true
+        }
+      ],
+      "expo-image"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9fefdb2d-73c6-4835-8885-b24480e2abe2"
+      }
+    }
+  }
 }

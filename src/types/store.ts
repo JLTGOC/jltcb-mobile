@@ -6,15 +6,15 @@ import type { LogisticsFormSlice } from "@/stores/slices/job-order-form-slices/c
 import type { QuotationReferenceSlice } from "@/stores/slices/job-order-form-slices/createQuotationReferenceSlice";
 
 type ResetStore = {
-	reset: () => void;
+  reset: () => void;
 };
 
 export type JobOrderFormStore = LogisticsFormSlice &
-	QuotationReferenceSlice &
-	ResetStore;
+  QuotationReferenceSlice &
+  ResetStore;
 
 export type ClientQuotationFormStore = QuotationFormHeaderSlice &
-	SharedQuotationFormSlice &
-	LogisticsQuotationFormSlice &
-	RegulatoryQuotationFormSlice &
-	ResetStore;
+  SharedQuotationFormSlice &
+  LogisticsQuotationFormSlice &
+  RegulatoryQuotationFormSlice &
+  ResetStore;

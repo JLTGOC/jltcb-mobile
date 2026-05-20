@@ -4,6 +4,6 @@ import { userKeys } from "@/query-key-factories/users";
 import { fetchAsUsers } from "@/services/users";
 
 export const asQueryOptions = queryOptions({
-	queryFn: fetchAsUsers,
-	queryKey: userKeys.getAsUsers(),
+  queryFn: fetchAsUsers,
+  queryKey: userKeys.getAsUsers(),
 });

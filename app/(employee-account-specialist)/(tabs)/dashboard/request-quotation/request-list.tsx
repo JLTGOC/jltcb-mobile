@@ -50,11 +50,9 @@ export default function RequestList() {
     enabled: isLeadAS,
   });
 
-  const {
-    data: quotationsData,
-    isPending,
-    error,
-  } = useQuery(asQuotationsQueryOptions({ filter: "REQUESTED" }));
+  const { data: quotationsData } = useQuery(
+    asQuotationsQueryOptions({ filter: "REQUESTED" }),
+  );
 
   const { mutateAsync } = useMutation(updateAsMutationOptions);
   const [updatingId, setUpdatingId] = useState<number | null>(null);

@@ -1,34 +1,34 @@
 import {
-	Pressable,
-	type PressableProps,
-	type StyleProp,
-	StyleSheet,
-	type ViewStyle,
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  StyleSheet,
+  type ViewStyle,
 } from "react-native";
 
 type ClientHeaderMenuLinkProps = {
-	style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function ClientHeaderMenuLink({
-	style,
-	...props
+  style,
+  ...props
 }: ClientHeaderMenuLinkProps & PressableProps) {
-	return (
-		<Pressable
-			style={({ pressed }) => [
-				styles.menuLink,
-				{ opacity: pressed ? 0.7 : 1 },
-				style,
-			]}
-			{...props}
-		/>
-	);
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        styles.menuLink,
+        { opacity: pressed ? 0.7 : 1 },
+        style,
+      ]}
+      {...props}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
-	menuLink: {
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-	},
+  menuLink: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
 });

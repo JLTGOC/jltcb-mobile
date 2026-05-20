@@ -18,92 +18,92 @@ const TABS = ["Details", "Documents"] as const;
 type TabType = (typeof TABS)[number];
 
 export default function Quotation() {
-	const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-	const { id, clientName } = useLocalSearchParams<{
-		id: string;
-		clientName: string;
-	}>();
-	const [activeTab, setActiveTab] = useState<TabType>("Details");
+  const { id, clientName } = useLocalSearchParams<{
+    id: string;
+    clientName: string;
+  }>();
+  const [activeTab, setActiveTab] = useState<TabType>("Details");
 
-	const { data, isPending, refetch } = useQuotationQuery(id);
+  const { data, isPending, refetch } = useQuotationQuery(id);
 
-	useRefreshOnFocus(refetch);
+  useRefreshOnFocus(refetch);
 
-	const refreshActiveTab = async () => {
-		if (activeTab === "Documents") {
-			await Promise.all([
-				queryClient.invalidateQueries({
-					queryKey: quotationKeys.getClientQuotationDocuments(id),
-				}),
-				queryClient.invalidateQueries({
-					queryKey: quotationKeys.getCompanyQuotationDocuments(id),
-				}),
-			]);
-			return;
-		}
+  const refreshActiveTab = async () => {
+    if (activeTab === "Documents") {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: quotationKeys.getClientQuotationDocuments(id),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: quotationKeys.getCompanyQuotationDocuments(id),
+        }),
+      ]);
+      return;
+    }
 
-		await refetch();
-	};
+    await refetch();
+  };
 
-	const { isRefetchingByUser, refetchByUser } =
-		useRefreshByUser(refreshActiveTab);
+  const { isRefetchingByUser, refetchByUser } =
+    useRefreshByUser(refreshActiveTab);
 
-	return (
-		<ScrollView
-			contentContainerStyle={{ paddingBottom: 16 }}
-			bounces={false}
-			overScrollMode="never"
-			stickyHeaderIndices={[0]}
-			refreshControl={
-				<RefreshControl
-					refreshing={isRefetchingByUser}
-					onRefresh={refetchByUser}
-				/>
-			}
-		>
-			<View style={{ paddingBottom: 10 }}>
-				<BannerHeader variant="light" title={clientName} />
-				<TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
-			</View>
+  return (
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 16 }}
+      bounces={false}
+      overScrollMode="never"
+      stickyHeaderIndices={[0]}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
+    >
+      <View style={{ paddingBottom: 10 }}>
+        <BannerHeader variant="light" title={clientName} />
+        <TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+      </View>
 
-			{activeTab === "Details" ? (
-				<SharedQuotationDetails
-					quotationData={data}
-					isPending={isPending}
-					footer={
-						<Link
-							asChild
-							href={{
-								pathname: "/dashboard/request-quotation/[id]/upload",
-								params: { id, clientName },
-							}}
-							style={[styles.button, styles.container]}
-						>
-							<Button mode="contained" labelStyle={styles.buttonLabel}>
-								Upload Quotation
-							</Button>
-						</Link>
-					}
-				/>
-			) : activeTab === "Documents" ? (
-				<SharedQuotationDocuments />
-			) : null}
-		</ScrollView>
-	);
+      {activeTab === "Details" ? (
+        <SharedQuotationDetails
+          quotationData={data}
+          isPending={isPending}
+          footer={
+            <Link
+              asChild
+              href={{
+                pathname: "/dashboard/request-quotation/[id]/upload",
+                params: { id, clientName },
+              }}
+              style={[styles.button, styles.container]}
+            >
+              <Button mode="contained" labelStyle={styles.buttonLabel}>
+                Upload Quotation
+              </Button>
+            </Link>
+          }
+        />
+      ) : activeTab === "Documents" ? (
+        <SharedQuotationDocuments />
+      ) : null}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-	button: {
-		marginTop: 16,
-		borderRadius: 6,
-		backgroundColor: "#1C213B",
-	},
-	buttonLabel: {
-		paddingVertical: 5,
-		textTransform: "uppercase",
-	},
-	container: {
-		marginHorizontal: 20,
-	},
+  button: {
+    marginTop: 16,
+    borderRadius: 6,
+    backgroundColor: "#1C213B",
+  },
+  buttonLabel: {
+    paddingVertical: 5,
+    textTransform: "uppercase",
+  },
+  container: {
+    marginHorizontal: 20,
+  },
 });
