@@ -1,7 +1,7 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RefreshControl, StyleSheet, View } from "react-native";
@@ -13,70 +13,98 @@ import BannerHeader from "@/components/ui/BannerHeader";
 import Button from "@/components/ui/Button";
 import PageList from "@/components/ui/PageList";
 import Search from "@/components/ui/Search";
+import SwitchToggle from "@/components/ui/SwitchToggle";
 
 import { THEMES } from "@/constants/themes";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { jobOrderKeys } from "@/query-key-factories/jobOrders";
-import { apiGet } from "@/services/axiosInstance";
-import type { JobOrderResponse } from "@/types/job-order";
+import { jobOrdersQueryOptions } from "@/query-options/job-orders/jobOrdersQueryOptions";
+
+type JobFilterOption = "all" | "my-jobs";
 
 const searchSchema = z.object({
   search: z.string().trim(),
 });
 
-export default function JobOrderList() {
+export default function ListOfCreatedJO() {
+  const { tab = "all" } = useLocalSearchParams<{ tab?: JobFilterOption }>();
   const router = useRouter();
+
   const [submittedSearch, setSubmittedSearch] = useState("");
 
   const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
   });
 
-  const onSubmit = handleSubmit(({ search }) => {
-    setSubmittedSearch(search);
-  });
-
-  const { data, isPending, refetch, error } = useQuery({
-    queryKey: jobOrderKeys.list({ search: submittedSearch }),
-    queryFn: () =>
-      apiGet<JobOrderResponse>("job-orders", {
-        ...(submittedSearch ? { params: { search: submittedSearch } } : {}),
-      }),
-  });
+  const { data, isPending, error, refetch } = useQuery(
+    jobOrdersQueryOptions({
+      filter: { completion_status: "IN PROGRESS" },
+      ...(submittedSearch && { search: submittedSearch }),
+    }),
+  );
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
 
+  const onSubmit = handleSubmit(({ search }) => {
+    setSubmittedSearch(search);
+  });
+
+  const jobOrders = data?.data.job_orders ?? [];
+  const myJobOrders = data?.data.my_job_orders ?? [];
+
+  const filteredData = tab === "my-jobs" ? myJobOrders : jobOrders;
+
   return (
     <PageList
-      data={data?.data.job_orders}
-      ListHeaderComponent={
-        <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-          <BannerHeader variant="light" title="List of Job Order" />
-          <Controller
-            control={control}
-            name="search"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Search
-                variant="dark"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                onSearch={onSubmit}
-              />
-            )}
-          />
-        </View>
-      }
       refreshControl={
         <RefreshControl
           refreshing={isRefetchingByUser}
           onRefresh={refetchByUser}
         />
       }
+      data={filteredData}
+      keyExtractor={(item) => item.id.toString()}
+      ListHeaderComponent={
+        <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
+          <BannerHeader variant="light" title="Pending Job Orders" />
+
+          <Controller
+            control={control}
+            name="search"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Search
+                variant="dark"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+                onSearch={onSubmit}
+                containerStyle={{
+                  marginHorizontal: 16,
+                  marginBottom: 20,
+                }}
+              />
+            )}
+          />
+
+          <SwitchToggle
+            value={tab}
+            onValueChange={(value) => router.setParams({ tab: value })}
+            options={[
+              { label: "ALL", value: "all" },
+              { label: "MY JOBS", value: "my-jobs" },
+            ]}
+          />
+        </View>
+      }
+      contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => (
-        <View style={styles.itemContainer}>
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: 16,
+          }}
+        >
           <JobOrderCard.Root>
             <JobOrderCard.Header>
               <MaterialCommunityIcons
@@ -84,9 +112,11 @@ export default function JobOrderList() {
                 size={24}
                 color="black"
               />
+
               <JobOrderCard.HeaderTitle>
                 {item.reference_number}
               </JobOrderCard.HeaderTitle>
+
               <JobOrderCard.Badge label={item.service} />
             </JobOrderCard.Header>
 
@@ -94,18 +124,21 @@ export default function JobOrderList() {
               <JobOrderCard.ContentTitle>
                 {item.client}
               </JobOrderCard.ContentTitle>
+
               <View style={{ gap: 4 }}>
                 <JobOrderCard.DetailRow
                   label="Date Created"
                   value={item.date_created}
                 />
+
                 <JobOrderCard.DetailRow
                   label="Quotation Source"
                   value={item.quotation_reference_number}
                 />
+
                 {item.assigned_to !== "Available" && (
                   <JobOrderCard.DetailRow
-                    label="Assigned To"
+                    label="Assigned"
                     value={item.assigned_to}
                     valueStyle={{ color: "#4A7AFF" }}
                   />
@@ -118,32 +151,22 @@ export default function JobOrderList() {
                 first
                 onPress={() =>
                   router.push({
-                    pathname: "/dashboard/created-job-order/[id]",
+                    pathname: "/dashboard/job-order/[id]",
                     params: {
                       id: item.id,
                       referenceNumber: item.reference_number,
                       service: item.service,
+                      bannerTitle: item.reference_number,
                     },
                   })
                 }
               >
                 View JO
               </JobOrderCard.Action>
-              <JobOrderCard.Action
-                onPress={() =>
-                  router.push({
-                    pathname: "/dashboard/created-job-order/quotation/[id]",
-                    params: { id: item.quotation_id, bannerTitle: item.client },
-                  })
-                }
-              >
-                View Details
-              </JobOrderCard.Action>
             </JobOrderCard.Footer>
           </JobOrderCard.Root>
         </View>
       )}
-      ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
       ListEmptyComponent={() => {
         if (isPending) {
           return (
@@ -171,13 +194,6 @@ export default function JobOrderList() {
 }
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    marginHorizontal: 20,
-    marginVertical: 5,
-  },
-  itemSeparator: {
-    height: 10,
-  },
   emptyComponentContainer: {
     flex: 1,
     justifyContent: "center",
