@@ -1,5 +1,5 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Assignment from "@material-symbols/svg-500/outlined/assignment.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -107,11 +107,7 @@ export default function ListOfCreatedJO() {
         >
           <JobOrderCard.Root>
             <JobOrderCard.Header>
-              <MaterialCommunityIcons
-                name="clipboard-text-outline"
-                size={24}
-                color="black"
-              />
+              <Assignment width={24} height={24} />
 
               <JobOrderCard.HeaderTitle>
                 {item.reference_number}

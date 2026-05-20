@@ -1,4 +1,5 @@
-import type { ElementType } from "react";
+import type { FC } from "react";
+import type { SvgProps } from "react-native-svg";
 
 import type { ContainerSize, options } from "@/constants/client-const";
 import type { ClientType } from "@/types/jobOrderEnums";
@@ -199,7 +200,7 @@ export interface QuotationFilter<T extends QuotationStatus = QuotationStatus> {
 }
 
 export interface QuotationDetailsSection {
-  icon: ElementType;
+  icon: FC<SvgProps>;
   title: string;
   details: string[][];
 }

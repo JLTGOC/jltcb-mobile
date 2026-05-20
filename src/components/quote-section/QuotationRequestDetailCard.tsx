@@ -21,7 +21,7 @@ export default function QuotationRequestDetailCard({
         title={section.title}
         titleVariant="titleMedium"
         titleStyle={{ textTransform: "uppercase", textAlignVertical: "center" }}
-        left={() => <section.icon size={20} />}
+        left={() => <section.icon height={20} width={20} />}
         leftStyle={{
           aspectRatio: 1,
           alignItems: "center",

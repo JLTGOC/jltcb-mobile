@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import BoxAdd from "@material-symbols/svg-500/outlined/box_add.svg";
 import { Image } from "expo-image";
 import { Tabs, useRouter } from "expo-router";
 import {
@@ -79,8 +80,8 @@ export default function ClientTabsLayout() {
       <Tabs.Screen
         name="get-quote"
         options={{
-          tabBarIcon: (props) => (
-            <MaterialCommunityIcons name="book-plus-outline" {...props} />
+          tabBarIcon: ({ size, color, ...props }) => (
+            <BoxAdd width={size} height={size} fill={color} {...props} />
           ),
         }}
       />

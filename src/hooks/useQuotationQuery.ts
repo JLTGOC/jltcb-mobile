@@ -1,5 +1,6 @@
+import Box from "@material-symbols/svg-500/outlined/box.svg";
+import CorporateFare from "@material-symbols/svg-500/outlined/corporate_fare.svg";
 import { useQuery } from "@tanstack/react-query";
-import { Building, Package } from "lucide-react-native";
 
 import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
 import type { ApiResponse } from "@/types/api";
@@ -22,7 +23,7 @@ function selectQuotationData({ data }: ApiResponse<Quotation>) {
     ? []
     : [
         {
-          icon: Package,
+          icon: Box,
           title: "Shipment Details",
           details: [
             ["Service Type", service.type],
@@ -47,7 +48,7 @@ function selectQuotationData({ data }: ApiResponse<Quotation>) {
     conversationId,
     sections: [
       {
-        icon: Building,
+        icon: CorporateFare,
         title: "Consignee Details",
         details: [
           ["Company Name", company.name],
@@ -59,7 +60,7 @@ function selectQuotationData({ data }: ApiResponse<Quotation>) {
       },
       ...shipmentSection,
       {
-        icon: Package,
+        icon: Box,
         title: "Person in Charge",
         details: [["Account Specialist", account_specialist]],
       },

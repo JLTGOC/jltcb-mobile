@@ -1,3 +1,4 @@
+import Download from "@material-symbols/svg-500/outlined/download.svg";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
@@ -34,7 +35,12 @@ const TABLE_HEADERS: TableHeader[] = [
 
 const MENU_OPTIONS = [
   { title: "PRINT", icon: "printer-outline" },
-  { title: "DOWNLOAD", icon: "download" },
+  {
+    title: "DOWNLOAD",
+    icon: ({ size, color, ...props }) => (
+      <Download width={size} height={size} fill={color} {...props} />
+    ),
+  },
   { title: "MAKE JOB ORDER", icon: "truck-fast-outline" },
 ] as const satisfies MenuOption[];
 

@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Article from "@material-symbols/svg-500/outlined/article.svg";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -19,11 +19,7 @@ export default function SubjectCard({ subject, body }: SubjectCardProps) {
     <Card>
       <CardHeader>
         <View style={styles.headerLeft}>
-          <MaterialCommunityIcons
-            name="sticker-text-outline"
-            size={20}
-            color="#4E6174"
-          />
+          <Article width={20} height={20} fill="#4E6174" />
           <CardTitle variant="labelSmall" style={styles.upper}>
             Subject
           </CardTitle>

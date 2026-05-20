@@ -1,4 +1,4 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import SearchSvg from "@material-symbols/svg-500/outlined/search.svg";
 import {
   type GestureResponderEvent,
   Pressable,
@@ -50,7 +50,7 @@ export default function Search({
         ]}
         disabled={searchButtonDisabled}
       >
-        <Ionicons name="search" size={16} color="white" />
+        <SearchSvg width={30} height={30} fill="white" />
       </Pressable>
     </View>
   );
@@ -74,8 +74,7 @@ const styles = StyleSheet.create({
     boxShadow: "0 4px 4px #BEBEBE",
   },
   searchButton: {
-    paddingRight: 20,
-    paddingLeft: 30,
+    paddingHorizontal: 25,
     borderTopRightRadius: 999,
     borderBottomRightRadius: 999,
     justifyContent: "center",

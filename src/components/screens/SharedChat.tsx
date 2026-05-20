@@ -29,6 +29,7 @@ import ChatShipmentCard from "@/components/chats-section/ChatShipmentCard";
 import ChatTextBubble from "@/components/chats-section/ChatTextBubble";
 import BannerHeader from "@/components/ui/BannerHeader";
 
+import { THEMES } from "@/constants/themes";
 import {
   ChatPendingIdsProvider,
   useChatPendingIdsContext,
@@ -292,7 +293,7 @@ function SharedChatContent({ variant }: Props) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: THEMES.pageBackgroundColor }}>
       <View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
         <BannerHeader
           onBack={() => router.dismissTo("/messages")}

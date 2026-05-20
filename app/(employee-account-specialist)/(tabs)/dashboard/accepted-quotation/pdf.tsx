@@ -1,8 +1,5 @@
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import Download from "@material-symbols/svg-500/outlined/download.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -92,11 +89,7 @@ export default function PdfScreen() {
 
           <View style={{ flexDirection: "row", gap: 16 }}>
             <Pressable onPress={handleDownload}>
-              <MaterialIcons
-                name="download"
-                size={24}
-                color={THEMES.darkAccentColor}
-              />
+              <Download width={24} height={24} fill={THEMES.darkAccentColor} />
             </Pressable>
 
             <Pressable onPress={handlePrint}>

@@ -1,3 +1,4 @@
+import Handyman from "@material-symbols/svg-500/outlined/handyman.svg";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import {
@@ -12,7 +13,6 @@ import { ActivityIndicator } from "react-native-paper";
 import FolderSection from "@/components/dashboard-section/FolderSection";
 import UserHeader from "@/components/dashboard-section/UserHeader";
 
-import ToolsIcon from "@/assets/icons/tools.svg";
 import { OPERATIONS_DB_FOLDER_SECTION } from "@/constants/user-dashboards";
 import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
@@ -56,7 +56,7 @@ export default function Index() {
                 },
               ]}
             >
-              <ToolsIcon width={24} height={24} />
+              <Handyman width={24} height={24} fill="#3B3B3B" />
             </Pressable>
           </Link>
         </View>

@@ -1,4 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import LineEndCircle from "@material-symbols/svg-500/outlined/line_end_circle.svg";
+import LineStartCircle from "@material-symbols/svg-500/outlined/line_start_circle.svg";
+import ServiceToolbox from "@material-symbols/svg-500/outlined/service_toolbox.svg";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
@@ -67,11 +70,7 @@ export default function SharedLogisticsJobOrder({
           {
             title: "Service Information",
             renderIcon: () => (
-              <MaterialCommunityIcons
-                name="briefcase-variant-outline"
-                size={20}
-                color={COLOR}
-              />
+              <ServiceToolbox fill={COLOR} width={20} height={20} />
             ),
             content: [
               {
@@ -129,7 +128,15 @@ export default function SharedLogisticsJobOrder({
           {
             title: "Commitment Information",
             renderIcon: () => (
-              <MaterialIcons name="linear-scale" size={20} color={COLOR} />
+              <>
+                <LineEndCircle fill={COLOR} width={20} height={20} />
+                <LineStartCircle
+                  style={{ marginLeft: -21 }}
+                  fill={COLOR}
+                  width={20}
+                  height={20}
+                />
+              </>
             ),
             content: [
               {

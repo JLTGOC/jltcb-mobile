@@ -21,6 +21,7 @@ import InboxListItem from "@/components/chats-section/InboxListItem";
 import BannerHeader from "@/components/ui/BannerHeader";
 import Search from "@/components/ui/Search";
 
+import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
@@ -138,7 +139,10 @@ export default function SharedMessages({ variant }: Props) {
         />
       }
       data={data?.data}
-      contentContainerStyle={{ flex: 1 }}
+      contentContainerStyle={{
+        flex: 1,
+        backgroundColor: THEMES.pageBackgroundColor,
+      }}
       ListHeaderComponent={
         <>
           <BannerHeader back={false} title="Messages" variant={variant} />
