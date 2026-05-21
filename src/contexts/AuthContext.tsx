@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedToken = await SecureStore.getItemAsync("token");
 
       if (storedToken) {
-        await logout(storedToken);
+        await logout();
       }
     } catch (err: any) {
       if (err.response?.status === 401) {
