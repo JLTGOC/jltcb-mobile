@@ -1,7 +1,7 @@
 {
   "cli": {
-    "version": ">= 0.0.0",
-    "appVersionSource": "local"
+    "version": ">= 18.11.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -9,33 +9,11 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "app-bundle"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api",
-        "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
-        "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1"
-      }
+      "distribution": "internal"
     },
     "production": {
-      "android": {
-        "buildType": "app-bundle"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://jltgtbsc.jltgtbsc.com/api",
-        "EXPO_PUBLIC_PUSHER_API_KEY": "8bd95311223674aad488",
-        "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1",
-        "SENTRY_ALLOW_FAILURE": "true"
-      }
+      "autoIncrement": true
     }
-    // "ios-simulator": {
-    //   "extends": "development",
-    //   "ios": {
-    //     "simulator": true
-    //   }
-    // }
   },
   "submit": {
     "production": {}

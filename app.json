@@ -15,7 +15,6 @@
     },
     "android": {
       "package": "com.jltcb.app",
-      "versionCode": 5,
       "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
       "blockedPermissions": [
         "android.permission.READ_MEDIA_IMAGES",
