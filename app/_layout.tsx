@@ -74,7 +74,6 @@ function RootNavigator() {
       <Stack.Protected guard={!!userData}>
         <Stack.Protected guard={role === "Client"}>
           <Stack.Screen name="(client)" />
-          {/* <Stack.Screen name="(employee-operations)" /> */}
         </Stack.Protected>
         <Stack.Protected
           guard={
@@ -83,14 +82,10 @@ function RootNavigator() {
         >
           <Stack.Screen name="(employee-account-specialist)" />
         </Stack.Protected>
-        <Stack.Protected
-          guard={role === "Operations" || role === "Lead Account Specialist"}
-        >
+        <Stack.Protected guard={role === "Operations"}>
           <Stack.Screen name="(employee-operations)" />
         </Stack.Protected>
-        <Stack.Protected
-          guard={role === "Finance" || role === "Lead Account Specialist"}
-        >
+        <Stack.Protected guard={role === "Finance"}>
           <Stack.Screen name="(employee-finance)" />
         </Stack.Protected>
         <Stack.Protected guard={role === "Marketing"}>
