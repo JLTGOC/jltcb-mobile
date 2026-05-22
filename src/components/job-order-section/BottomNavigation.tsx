@@ -45,12 +45,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#4E6174",
     paddingVertical: 10,
+    paddingHorizontal: 12,
     gap: 8,
   },
   actionText: {
     color: "white",
     textTransform: "uppercase",
     fontWeight: 500,
+    flexShrink: 1,
+    textAlign: "center",
   },
 });
 
