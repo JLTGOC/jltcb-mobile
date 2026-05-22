@@ -119,6 +119,10 @@ interface BaseQuotation {
   documents: Document[] | string;
   remarks: string | null;
   conversation_id: string | null;
+  job_order: {
+    reference_number: string | null;
+    person_in_charge: string | null;
+  };
 }
 
 export interface LogisticsQuotation extends BaseQuotation {
@@ -197,6 +201,7 @@ export type QuotationStatus =
 export interface QuotationFilter<T extends QuotationStatus = QuotationStatus> {
   filter: T;
   search?: string;
+  client_id?: number;
 }
 
 export interface QuotationDetailsSection {

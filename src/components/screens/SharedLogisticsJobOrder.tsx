@@ -2,7 +2,6 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import LineEndCircle from "@material-symbols/svg-500/outlined/line_end_circle.svg";
 import LineStartCircle from "@material-symbols/svg-500/outlined/line_start_circle.svg";
 import ServiceToolbox from "@material-symbols/svg-500/outlined/service_toolbox.svg";
-import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import { type FlatListProps, StyleSheet, View } from "react-native";
@@ -14,7 +13,7 @@ import SubjectCard from "@/components/ui/SubjectCard";
 import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
-import { jobOrderQueryOptions } from "@/query-options/job-orders/jobOrderQueryOptions";
+import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
 import type { LogisticsJobOrder, SummaryCardData } from "@/types/job-order";
 import { formatTargetDeliveryDate } from "@/utils/jobOrderForm";
 import { buildSummaryItems } from "@/utils/summaryItems";
@@ -24,13 +23,12 @@ const COLOR = "#4E6174";
 export default function SharedLogisticsJobOrder({
   ...props
 }: Partial<Omit<FlatListProps<any>, "data" | "renderItem">>) {
-  const { referenceNumber, jobOrderId } = useLocalSearchParams<{
-    referenceNumber: string;
+  const { jobOrderId } = useLocalSearchParams<{
     jobOrderId: string;
   }>();
 
-  const { data, isPending } = useQuery(
-    jobOrderQueryOptions<LogisticsJobOrder>(Number(jobOrderId)),
+  const { data, isPending } = useJobOrderQuery<LogisticsJobOrder>(
+    Number(jobOrderId),
   );
 
   const containerSize = data?.data?.shipment.container_size;
@@ -196,7 +194,10 @@ export default function SharedLogisticsJobOrder({
     <PageList
       ListHeaderComponent={
         <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-          <BannerHeader variant="light" title={referenceNumber} />
+          <BannerHeader
+            variant="light"
+            title={data?.data.reference_number ?? ""}
+          />
         </View>
       }
       data={listData}

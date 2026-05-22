@@ -51,7 +51,10 @@ export default function RequestList() {
   });
 
   const { data: quotationsData } = useQuery(
-    asQuotationsQueryOptions({ filter: "REQUESTED" }),
+    asQuotationsQueryOptions({
+      filter: "REQUESTED",
+      client_id: Number(clientId),
+    }),
   );
 
   const { mutateAsync } = useMutation(updateAsMutationOptions);
@@ -71,17 +74,14 @@ export default function RequestList() {
     }
   };
 
-  const navigateToQuotation = (quotationId: number, clientName: string) => {
+  const navigateToQuotation = (quotationId: number) => {
     router.push({
-      pathname: "/dashboard/request-quotation/[id]",
-      params: { id: quotationId, clientName },
+      pathname: "/dashboard/request-quotation/[quotationId]",
+      params: { quotationId },
     });
   };
 
-  const userQuotations = quotationsData?.data.find(
-    (q) => q.client_id === Number(clientId),
-  );
-  const quotations = userQuotations?.quotations ?? [];
+  const userQuotations = quotationsData?.data[0];
 
   return (
     <ScrollView style={styles.container}>
@@ -90,7 +90,7 @@ export default function RequestList() {
       <View style={styles.table}>
         <DataTable
           headers={TABLE_HEADERS}
-          data={quotations}
+          data={userQuotations?.quotations ?? []}
           keyExtractor={(item) => item.id.toString()}
           extractCells={(quotation) => {
             const formattedDate = format(
@@ -131,12 +131,7 @@ export default function RequestList() {
               ),
             ];
           }}
-          onRowPress={(quotation) =>
-            navigateToQuotation(
-              quotation.id,
-              userQuotations?.client_full_name ?? "",
-            )
-          }
+          onRowPress={(quotation) => navigateToQuotation(quotation.id)}
         />
       </View>
     </ScrollView>

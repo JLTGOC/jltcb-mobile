@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Assignment from "@material-symbols/svg-500/outlined/assignment.svg";
-import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -16,9 +15,9 @@ import Search from "@/components/ui/Search";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 
 import { THEMES } from "@/constants/themes";
+import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { jobOrdersQueryOptions } from "@/query-options/job-orders/jobOrdersQueryOptions";
 
 type JobFilterOption = "all" | "my-jobs";
 
@@ -39,14 +38,12 @@ export default function CreatedJobOrders() {
     resolver: zodResolver(searchSchema),
   });
 
-  const { data, isPending, error, refetch } = useQuery(
-    jobOrdersQueryOptions({
-      filter: {
-        completion_status: status === "created" ? "CREATED" : "PROCESSED",
-      },
-      ...(submittedSearch && { search: submittedSearch }),
-    }),
-  );
+  const { data, isPending, error, refetch } = useJobOrdersQuery({
+    filter: {
+      completion_status: status === "created" ? "CREATED" : "PROCESSED",
+    },
+    search: submittedSearch,
+  });
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
@@ -159,10 +156,6 @@ export default function CreatedJobOrders() {
                     pathname: "/job-orders/[jobOrderId]",
                     params: {
                       jobOrderId: item.id,
-                      quotationId: item.quotation_id,
-                      referenceNumber: item.reference_number,
-                      service: item.service,
-                      bannerTitle: item.reference_number,
                     },
                   })
                 }

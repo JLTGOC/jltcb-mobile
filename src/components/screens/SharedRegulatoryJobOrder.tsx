@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { type FlatListProps, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -10,7 +9,7 @@ import SubjectCard from "@/components/ui/SubjectCard";
 import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
-import { jobOrderQueryOptions } from "@/query-options/job-orders/jobOrderQueryOptions";
+import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
 import type { RegulatoryJobOrder, SummaryCardData } from "@/types/job-order";
 import { buildSummaryItems } from "@/utils/summaryItems";
 
@@ -19,13 +18,12 @@ const COLOR = "#4E6174";
 export default function SharedRegulatoryJobOrder({
   ...props
 }: Partial<Omit<FlatListProps<any>, "data" | "renderItem">>) {
-  const { referenceNumber, jobOrderId } = useLocalSearchParams<{
-    referenceNumber: string;
+  const { jobOrderId } = useLocalSearchParams<{
     jobOrderId: string;
   }>();
 
-  const { data, isPending } = useQuery(
-    jobOrderQueryOptions<RegulatoryJobOrder>(Number(jobOrderId)),
+  const { data, isPending } = useJobOrderQuery<RegulatoryJobOrder>(
+    Number(jobOrderId),
   );
 
   const summaryCardsData: SummaryCardData[] =
@@ -64,7 +62,10 @@ export default function SharedRegulatoryJobOrder({
     <PageList
       ListHeaderComponent={
         <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-          <BannerHeader variant="light" title={referenceNumber} />
+          <BannerHeader
+            variant="light"
+            title={data?.data.reference_number ?? ""}
+          />
         </View>
       }
       data={listData}

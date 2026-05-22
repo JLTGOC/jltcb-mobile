@@ -14,6 +14,7 @@ import SuccesModal from "@/components/ui/SuccessModal";
 
 import { routes } from "@/constants/routes";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { uploadQuotationFileMutationOptions } from "@/mutation-options/asLead-quotations/uploadQuotationFileMutationOptions";
 
 type Props = {
@@ -27,10 +28,10 @@ export default function Upload({
   confirmModalTitle,
   confirmModalDescription,
 }: Props) {
-  const { id, clientName } = useLocalSearchParams<{
-    id: string;
-    clientName: string;
+  const { quotationId } = useLocalSearchParams<{
+    quotationId: string;
   }>();
+  const { data } = useQuotationQuery(quotationId);
   const { userData } = useAuth();
   const router = useRouter();
   const [file, setFile] = useState<DocumentPicker.DocumentPickerAsset | null>(
@@ -63,14 +64,14 @@ export default function Upload({
   };
 
   const handleSendQuotation = () => {
-    if (file && id) {
-      mutation.mutate({ quotationId: id, file });
+    if (file && quotationId) {
+      mutation.mutate({ quotationId, file });
     }
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <BannerHeader variant="light" title={clientName} />
+      <BannerHeader variant="light" title={data?.data.client ?? ""} />
       <View style={styles.content}>
         {file ? (
           <QuotationRequestDocumentCard

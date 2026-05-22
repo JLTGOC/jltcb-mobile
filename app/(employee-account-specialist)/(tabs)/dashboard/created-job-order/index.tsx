@@ -114,11 +114,9 @@ export default function JobOrderList() {
                 first
                 onPress={() =>
                   router.push({
-                    pathname: "/dashboard/created-job-order/[id]",
+                    pathname: "/dashboard/created-job-order/[jobOrderId]",
                     params: {
-                      id: item.id,
-                      referenceNumber: item.reference_number,
-                      service: item.service,
+                      jobOrderId: item.id,
                     },
                   })
                 }
@@ -128,8 +126,11 @@ export default function JobOrderList() {
               <JobOrderCard.Action
                 onPress={() =>
                   router.push({
-                    pathname: "/dashboard/created-job-order/quotation/[id]",
-                    params: { id: item.quotation_id, bannerTitle: item.client },
+                    pathname:
+                      "/dashboard/created-job-order/quotation/[quotationId]",
+                    params: {
+                      quotationId: item.quotation_id,
+                    },
                   })
                 }
               >

@@ -1,81 +1,49 @@
-import Box from "@material-symbols/svg-500/outlined/box.svg";
-import Files from "@material-symbols/svg-500/outlined/files.svg";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import { BottomNavigation } from "@/components/job-order-section/BottomNavigation";
+import JobOrderNavigation from "@/components/job-order-section/JorOrderNavigation";
 import SharedLogisticsJobOrder from "@/components/screens/SharedLogisticsJobOrder";
 import SharedRegulatoryJobOrder from "@/components/screens/SharedRegulatoryJobOrder";
 
-import type { JobTypeSummary } from "@/types/job-order";
+import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
 
 export default function JobOrder() {
-  const { service } = useLocalSearchParams<{
-    service: JobTypeSummary;
+  const { jobOrderId } = useLocalSearchParams<{
+    jobOrderId: string;
   }>();
+  const { data, isPending } = useJobOrderQuery(Number(jobOrderId));
 
-  if (service === "Logistics Services") {
+  const jobType = data?.data.job_type;
+  const quotationId = data?.data.quotation_id;
+
+  if (isPending) {
+    return <ActivityIndicator size="large" style={styles.loader} />;
+  }
+
+  if (jobType === "LOGISTICS") {
     return (
       <View style={styles.container}>
         <SharedLogisticsJobOrder
           contentContainerStyle={styles.jobOrderContainer}
         />
-        <JobOrderNavigation />
+        {quotationId && (
+          <JobOrderNavigation quotationId={quotationId} jobType={jobType} />
+        )}
       </View>
     );
-  } else if (service === "Regulatory Services") {
+  } else if (jobType === "REGULATORY") {
     return (
       <View style={styles.container}>
         <SharedRegulatoryJobOrder
           contentContainerStyle={styles.jobOrderContainer}
         />
-        <JobOrderNavigation />
+        {quotationId && (
+          <JobOrderNavigation quotationId={quotationId} jobType={jobType} />
+        )}
       </View>
     );
   }
-}
-
-function JobOrderNavigation() {
-  const params = useLocalSearchParams<{
-    quotationId: string;
-    service: JobTypeSummary;
-  }>();
-
-  return (
-    <BottomNavigation.Root>
-      <Link
-        href={{
-          pathname: "/quotation/[quotationId]",
-          params,
-        }}
-        asChild
-        push
-      >
-        <BottomNavigation.Action>
-          <Box width={24} height={24} fill="white" />
-          <BottomNavigation.ActionText>
-            View
-            {params.service === "Logistics Services"
-              ? " Shipment"
-              : " Business Solution"}
-          </BottomNavigation.ActionText>
-        </BottomNavigation.Action>
-      </Link>
-      <Link
-        href={{
-          pathname: "/quotation/[quotationId]",
-          params: { ...params, tab: "documents" },
-        }}
-        asChild
-        push
-      >
-        <BottomNavigation.Action>
-          <Files width={24} height={24} fill="white" />
-          <BottomNavigation.ActionText>Documents</BottomNavigation.ActionText>
-        </BottomNavigation.Action>
-      </Link>
-    </BottomNavigation.Root>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -84,5 +52,8 @@ const styles = StyleSheet.create({
   },
   jobOrderContainer: {
     paddingBottom: 60,
+  },
+  loader: {
+    flex: 1,
   },
 });

@@ -6,25 +6,30 @@ import { ActivityIndicator } from "react-native-paper";
 import ClientCard from "@/components/quote-section/ClientCard";
 import QuotationRequestDetailCard from "@/components/quote-section/QuotationRequestDetailCard";
 
-import type { SelectedQuotationData } from "@/hooks/useQuotationQuery";
+import { useQuotationDetailQuery } from "@/hooks/useQuotationDetailQuery";
+import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { userQueryOptions } from "@/query-options/users/userQueryOptions";
+import { useLocalSearchParams } from "expo-router";
 
 interface SharedQuotationDetailsProps {
-  quotationData?: SelectedQuotationData;
-  isPending: boolean;
   footer?: ReactNode;
 }
 
 export default function SharedQuotationDetails({
-  quotationData,
-  isPending,
   footer,
 }: SharedQuotationDetailsProps) {
+  const { quotationId } = useLocalSearchParams<{
+    quotationId: string;
+  }>();
+
+  const { data: quotationData, isPending } = useQuotationQuery(quotationId);
+  const { data: quotationDetailData, isPending: isQuotationDetailDataPending } =
+    useQuotationDetailQuery(quotationId);
   const { data: clientData, isPending: isClientDataPending } = useQuery(
-    userQueryOptions(quotationData?.clientId.toString() ?? ""),
+    userQueryOptions(quotationData?.data.client_id.toString()),
   );
 
-  if (isPending || isClientDataPending) {
+  if (isPending || isQuotationDetailDataPending || isClientDataPending) {
     return <ActivityIndicator style={styles.loader} />;
   }
 
@@ -38,7 +43,7 @@ export default function SharedQuotationDetails({
     companyName: clientData.data.company_name,
     contactNumber: clientData.data.contact_number,
     email: clientData.data.email,
-    conversationId: quotationData.conversationId,
+    conversationId: quotationData.data.conversation_id,
   };
 
   return (
@@ -47,7 +52,7 @@ export default function SharedQuotationDetails({
         <ClientCard {...clientCardData} />
       </View>
 
-      {quotationData.sections.map((section) => (
+      {quotationDetailData?.sections.map((section) => (
         <View key={section.title} style={styles.container}>
           <QuotationRequestDetailCard section={section} />
         </View>

@@ -7,10 +7,11 @@ import SharedQuotationDocuments from "@/components/quote-section/SharedQuotation
 import TabBar from "@/components/tabs-ui/TabBar";
 import BannerHeader from "@/components/ui/BannerHeader";
 
+import { useQuotationBannerTitle } from "@/hooks/useQuotationBannerTitle";
 import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
-import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { quotationKeys } from "@/query-key-factories/quotations";
+import { userKeys } from "@/query-key-factories/users";
 
 const TABS = ["details", "documents", "billing"] as const;
 type TabType = (typeof TABS)[number];
@@ -19,13 +20,8 @@ export default function SharedQuotation() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const {
-    quotationId,
-    bannerTitle,
-    tab = "details",
-  } = useLocalSearchParams<{
+  const { quotationId, tab = "details" } = useLocalSearchParams<{
     quotationId: string;
-    bannerTitle: string;
     tab?: TabType;
   }>();
 
@@ -33,12 +29,20 @@ export default function SharedQuotation() {
     ? (tab as TabType)
     : "details";
 
-  const { data, isPending, refetch } = useQuotationQuery(quotationId);
-
-  useRefreshOnFocus(refetch);
+  const { data: quotationData } = useQuotationQuery(quotationId);
+  const bannerTitle = useQuotationBannerTitle(quotationData?.data);
 
   const refreshActiveTab = async () => {
-    if (activeTab === "documents") {
+    if (activeTab === "details") {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: quotationKeys.getQuotation(quotationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: userKeys.detail(Number(quotationData?.data.client_id)),
+        }),
+      ]);
+    } else if (activeTab === "documents") {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: quotationKeys.getClientQuotationDocuments(quotationId),
@@ -47,10 +51,7 @@ export default function SharedQuotation() {
           queryKey: quotationKeys.getCompanyQuotationDocuments(quotationId),
         }),
       ]);
-      return;
     }
-
-    await refetch();
   };
 
   const { isRefetchingByUser, refetchByUser } =
@@ -83,7 +84,7 @@ export default function SharedQuotation() {
       </View>
 
       {activeTab === "details" ? (
-        <SharedQuotationDetails quotationData={data} isPending={isPending} />
+        <SharedQuotationDetails />
       ) : activeTab === "documents" ? (
         <SharedQuotationDocuments />
       ) : activeTab === "billing" ? (

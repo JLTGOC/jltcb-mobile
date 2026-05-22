@@ -11,8 +11,8 @@ import BannerHeader from "@/components/ui/BannerHeader";
 
 import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
-import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { quotationKeys } from "@/query-key-factories/quotations";
+import { userKeys } from "@/query-key-factories/users";
 
 const TABS = ["Details", "Documents"] as const;
 type TabType = (typeof TABS)[number];
@@ -20,30 +20,32 @@ type TabType = (typeof TABS)[number];
 export default function Quotation() {
   const queryClient = useQueryClient();
 
-  const { id, clientName } = useLocalSearchParams<{
-    id: string;
-    clientName: string;
+  const { quotationId } = useLocalSearchParams<{
+    quotationId: string;
   }>();
   const [activeTab, setActiveTab] = useState<TabType>("Details");
 
-  const { data, isPending, refetch } = useQuotationQuery(id);
-
-  useRefreshOnFocus(refetch);
+  const { data, refetch } = useQuotationQuery(quotationId);
 
   const refreshActiveTab = async () => {
-    if (activeTab === "Documents") {
+    if (activeTab === "Details") {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getClientQuotationDocuments(id),
+          queryKey: userKeys.detail(Number(data?.data.client_id)),
+        }),
+        refetch(),
+      ]);
+    } else if (activeTab === "Documents") {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: quotationKeys.getClientQuotationDocuments(quotationId),
         }),
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getCompanyQuotationDocuments(id),
+          queryKey: quotationKeys.getCompanyQuotationDocuments(quotationId),
         }),
       ]);
       return;
     }
-
-    await refetch();
   };
 
   const { isRefetchingByUser, refetchByUser } =
@@ -63,20 +65,18 @@ export default function Quotation() {
       }
     >
       <View style={{ paddingBottom: 10 }}>
-        <BannerHeader variant="light" title={clientName} />
+        <BannerHeader variant="light" title={data?.data.client ?? ""} />
         <TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
       </View>
 
       {activeTab === "Details" ? (
         <SharedQuotationDetails
-          quotationData={data}
-          isPending={isPending}
           footer={
             <Link
               asChild
               href={{
-                pathname: "/dashboard/request-quotation/[id]/upload",
-                params: { id, clientName },
+                pathname: "/dashboard/request-quotation/[quotationId]/upload",
+                params: { quotationId },
               }}
               style={[styles.button, styles.container]}
             >

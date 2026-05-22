@@ -23,9 +23,10 @@ interface QuotationResponseMap {
 export const fetchQuotations = <T extends QuotationStatus>({
   filter,
   search,
+  client_id,
 }: QuotationFilter<T>) =>
   apiGet<QuotationResponseMap[T][]>("quotations", {
-    params: { "filter[status]": filter, search },
+    params: { "filter[status]": filter, search, client_id },
   });
 
 export const createQuotation = (payload: CreateQuotationRequestBody) => {
