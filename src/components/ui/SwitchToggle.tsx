@@ -1,5 +1,6 @@
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Pressable } from "react-native-gesture-handler";
 
 type ToggleOption = {
   label: string;
