@@ -1,5 +1,5 @@
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
-import { usePathname } from "expo-router";
+import { useSegments } from "expo-router";
 import {
   Pressable,
   type StyleProp,
@@ -12,8 +12,10 @@ interface Props extends Omit<BottomTabBarButtonProps, "ref"> {
 }
 
 export default function TabBarButton({ style, activeStyle, ...props }: Props) {
-  const pathname = usePathname();
-  const isActive = pathname.includes(props.href ?? "");
+  const segments = useSegments() as string[];
+  const isActive = segments.includes(
+    props.accessibilityLargeContentTitle ?? "",
+  );
 
   return (
     <Pressable

@@ -26,8 +26,11 @@ const searchSchema = z.object({
   search: z.string().trim(),
 });
 
-export default function ListOfCreatedJO() {
-  const { tab = "all" } = useLocalSearchParams<{ tab?: JobFilterOption }>();
+export default function CreatedJobOrders() {
+  const { tab = "all", status } = useLocalSearchParams<{
+    tab?: JobFilterOption;
+    status: "created" | "processed";
+  }>();
   const router = useRouter();
 
   const [submittedSearch, setSubmittedSearch] = useState("");
@@ -38,7 +41,9 @@ export default function ListOfCreatedJO() {
 
   const { data, isPending, error, refetch } = useQuery(
     jobOrdersQueryOptions({
-      filter: { completion_status: "IN PROGRESS" },
+      filter: {
+        completion_status: status === "created" ? "CREATED" : "PROCESSED",
+      },
       ...(submittedSearch && { search: submittedSearch }),
     }),
   );
@@ -67,7 +72,10 @@ export default function ListOfCreatedJO() {
       keyExtractor={(item) => item.id.toString()}
       ListHeaderComponent={
         <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
-          <BannerHeader variant="light" title="Pending Job Orders" />
+          <BannerHeader
+            variant="light"
+            title={`${status === "created" ? "Pending" : "Processed"} Job Orders`}
+          />
 
           <Controller
             control={control}
@@ -79,6 +87,7 @@ export default function ListOfCreatedJO() {
                 onBlur={onBlur}
                 value={value}
                 onSearch={onSubmit}
+                onSubmitEditing={onSubmit}
                 containerStyle={{
                   marginHorizontal: 16,
                   marginBottom: 20,
@@ -147,9 +156,10 @@ export default function ListOfCreatedJO() {
                 first
                 onPress={() =>
                   router.push({
-                    pathname: "/dashboard/job-order/[id]",
+                    pathname: "/job-orders/[jobOrderId]",
                     params: {
-                      id: item.id,
+                      jobOrderId: item.id,
+                      quotationId: item.quotation_id,
                       referenceNumber: item.reference_number,
                       service: item.service,
                       bannerTitle: item.reference_number,

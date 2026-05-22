@@ -37,31 +37,37 @@ export default function JobOrder() {
 
 function JobOrderNavigation() {
   const params = useLocalSearchParams<{
-    id: string;
+    quotationId: string;
+    service: JobTypeSummary;
   }>();
 
   return (
     <BottomNavigation.Root>
       <Link
         href={{
-          pathname: "/dashboard/job-order/quotation/[id]",
+          pathname: "/quotation/[quotationId]",
           params,
         }}
         asChild
+        push
       >
         <BottomNavigation.Action>
           <Box width={24} height={24} fill="white" />
           <BottomNavigation.ActionText>
-            View Shipment
+            View
+            {params.service === "Logistics Services"
+              ? " Shipment"
+              : " Business Solution"}
           </BottomNavigation.ActionText>
         </BottomNavigation.Action>
       </Link>
       <Link
         href={{
-          pathname: "/dashboard/job-order/quotation/[id]",
-          params: { ...params, tab: "Documents" },
+          pathname: "/quotation/[quotationId]",
+          params: { ...params, tab: "documents" },
         }}
         asChild
+        push
       >
         <BottomNavigation.Action>
           <Files width={24} height={24} fill="white" />

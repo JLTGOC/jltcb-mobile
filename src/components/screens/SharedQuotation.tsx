@@ -12,7 +12,7 @@ import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { quotationKeys } from "@/query-key-factories/quotations";
 
-const TABS = ["Details", "Documents", "Billing"] as const;
+const TABS = ["details", "documents", "billing"] as const;
 type TabType = (typeof TABS)[number];
 
 export default function SharedQuotation() {
@@ -20,31 +20,31 @@ export default function SharedQuotation() {
   const router = useRouter();
 
   const {
-    id,
+    quotationId,
     bannerTitle,
-    tab = "Details",
+    tab = "details",
   } = useLocalSearchParams<{
-    id: string;
+    quotationId: string;
     bannerTitle: string;
     tab?: TabType;
   }>();
 
   const activeTab = TABS.includes(tab as TabType)
     ? (tab as TabType)
-    : "Details";
+    : "details";
 
-  const { data, isPending, refetch } = useQuotationQuery(id);
+  const { data, isPending, refetch } = useQuotationQuery(quotationId);
 
   useRefreshOnFocus(refetch);
 
   const refreshActiveTab = async () => {
-    if (activeTab === "Documents") {
+    if (activeTab === "documents") {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getClientQuotationDocuments(id),
+          queryKey: quotationKeys.getClientQuotationDocuments(quotationId),
         }),
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getCompanyQuotationDocuments(id),
+          queryKey: quotationKeys.getCompanyQuotationDocuments(quotationId),
         }),
       ]);
       return;
@@ -82,11 +82,11 @@ export default function SharedQuotation() {
         />
       </View>
 
-      {activeTab === "Details" ? (
+      {activeTab === "details" ? (
         <SharedQuotationDetails quotationData={data} isPending={isPending} />
-      ) : activeTab === "Documents" ? (
+      ) : activeTab === "documents" ? (
         <SharedQuotationDocuments />
-      ) : activeTab === "Billing" ? (
+      ) : activeTab === "billing" ? (
         <View>
           <Text style={{ textAlign: "center" }}>
             Billing information will be displayed here.

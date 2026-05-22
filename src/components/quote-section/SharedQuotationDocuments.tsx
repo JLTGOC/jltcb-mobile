@@ -9,16 +9,16 @@ import { useCompanyQuotationDocumentsQuery } from "@/hooks/useCompanyQuotationDo
 import { useRenameQuotationDocumentMutation } from "@/hooks/useRenameQuotationDocumentMutation";
 
 export default function SharedQuotationDocuments() {
-  const { id } = useLocalSearchParams<{
-    id: string;
+  const { quotationId } = useLocalSearchParams<{
+    quotationId: string;
   }>();
 
   const { data: clientDocumentsData, isPending: isClientDocumentsPending } =
-    useClientQuotationDocumentsQuery(id);
+    useClientQuotationDocumentsQuery(quotationId);
   const { data: companyDocumentsData, isPending: isCompanyDocumentsPending } =
-    useCompanyQuotationDocumentsQuery(id);
+    useCompanyQuotationDocumentsQuery(quotationId);
 
-  const { mutate } = useRenameQuotationDocumentMutation(id);
+  const { mutate } = useRenameQuotationDocumentMutation(quotationId);
 
   if (isClientDocumentsPending || isCompanyDocumentsPending) {
     return <ActivityIndicator style={styles.loader} />;

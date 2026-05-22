@@ -19,13 +19,13 @@ const COLOR = "#4E6174";
 export default function SharedRegulatoryJobOrder({
   ...props
 }: Partial<Omit<FlatListProps<any>, "data" | "renderItem">>) {
-  const { referenceNumber, id } = useLocalSearchParams<{
+  const { referenceNumber, jobOrderId } = useLocalSearchParams<{
     referenceNumber: string;
-    id: string;
+    jobOrderId: string;
   }>();
 
   const { data, isPending } = useQuery(
-    jobOrderQueryOptions<RegulatoryJobOrder>(Number(id)),
+    jobOrderQueryOptions<RegulatoryJobOrder>(Number(jobOrderId)),
   );
 
   const summaryCardsData: SummaryCardData[] =

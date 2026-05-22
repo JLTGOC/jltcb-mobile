@@ -191,7 +191,7 @@ export type SummaryItem =
   | { type: "subject"; key: "subject" }
   | { type: "summary"; key: string; item: SummaryCardData };
 
-export type JobOrderCompletionStatus = "COMPLETED" | "IN PROGRESS";
+export type JobOrderCompletionStatus = "CREATED" | "PROCESSED";
 
 export interface JobOrderListQueryFilter {
   completion_status?: JobOrderCompletionStatus;

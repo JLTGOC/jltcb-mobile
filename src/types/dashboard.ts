@@ -68,6 +68,7 @@ export type OperationsDashboard = {
   };
   job_orders: {
     created_count: number;
+    processed_count: number;
   };
 };
 
