@@ -127,72 +127,68 @@ export default function CreatedJobOrders() {
           isFetching && acceptJobOrderVariables === item.id;
 
         return (
-          <JobOrderCard.Root style={styles.itemContainer}>
-            <JobOrderCard.Header>
-              <Assignment width={24} height={24} />
+          <JobOrderCard.Provider jobOrder={item}>
+            <JobOrderCard.Root style={styles.itemContainer}>
+              <JobOrderCard.Header>
+                <Assignment width={24} height={24} />
+                <JobOrderCard.HeaderTitle />
+                <JobOrderCard.Badge />
+              </JobOrderCard.Header>
 
-              <JobOrderCard.HeaderTitle>
-                {item.reference_number}
-              </JobOrderCard.HeaderTitle>
+              <JobOrderCard.Content>
+                <JobOrderCard.ContentTitle />
 
-              <JobOrderCard.Badge label={item.service} />
-            </JobOrderCard.Header>
-
-            <JobOrderCard.Content>
-              <JobOrderCard.ContentTitle>
-                {item.client}
-              </JobOrderCard.ContentTitle>
-
-              <View style={{ gap: 4 }}>
-                <JobOrderCard.DetailRow
-                  label="Date Created"
-                  value={item.date_created}
-                />
-
-                <JobOrderCard.DetailRow
-                  label="Quotation Source"
-                  value={item.quotation_reference_number}
-                />
-
-                {item.assigned_to !== "Available" && (
+                <View style={{ gap: 4 }}>
                   <JobOrderCard.DetailRow
-                    label="Assigned"
-                    value={item.assigned_to}
-                    valueStyle={{ color: "#4A7AFF" }}
+                    label="Date Created"
+                    valueKey="date_created"
                   />
-                )}
-              </View>
-            </JobOrderCard.Content>
 
-            <JobOrderCard.Footer>
-              <JobOrderCard.Action
-                first
-                onPress={() =>
-                  router.push({
-                    pathname: "/job-orders/[jobOrderId]",
-                    params: {
-                      jobOrderId: item.id,
-                    },
-                  })
-                }
-              >
-                View JO
-              </JobOrderCard.Action>
-              {/* TODO: Implement reassignment functionality */}
-              {/* {item.reassignment_request_id && role === "Lead Operations" && (
-                <JobOrderCard.Action>Reassign</JobOrderCard.Action>
-              )} */}
-              {item.assigned_to === "Available" && (
+                  <JobOrderCard.DetailRow
+                    label="Quotation Source"
+                    valueKey="quotation_reference_number"
+                  />
+
+                  {item.assigned_to !== "Available" && (
+                    <JobOrderCard.DetailRow
+                      label="Assigned"
+                      valueKey="assigned_to"
+                      valueStyle={{ color: "#4A7AFF" }}
+                    />
+                  )}
+                </View>
+              </JobOrderCard.Content>
+
+              <JobOrderCard.Footer>
                 <JobOrderCard.Action
-                  disabled={isAcceptingJobOrder}
-                  loading={isAcceptingJobOrder}
-                  onPress={() => handleAcceptJobOrder(item.id)}
+                  first
+                  onPress={() =>
+                    router.push({
+                      pathname: "/job-orders/[jobOrderId]",
+                      params: {
+                        jobOrderId: item.id,
+                      },
+                    })
+                  }
                 >
-                  Accept
+                  View JO
                 </JobOrderCard.Action>
-              )}
-            </JobOrderCard.Footer>
-          </JobOrderCard.Root>
+                {/* TODO: Implement reassignment functionality */}
+                {/* {item.reassignment_request_id && role === "Lead Operations" && (
+                  <JobOrderCard.Action>Reassign</JobOrderCard.Action>
+                )} */}
+                {item.assigned_to === "Available" && (
+                  <JobOrderCard.Action
+                    disabled={isAcceptingJobOrder}
+                    loading={isAcceptingJobOrder}
+                    onPress={() => handleAcceptJobOrder(item.id)}
+                  >
+                    Accept
+                  </JobOrderCard.Action>
+                )}
+              </JobOrderCard.Footer>
+            </JobOrderCard.Root>
+          </JobOrderCard.Provider>
         );
       }}
       ListEmptyComponent={() => {

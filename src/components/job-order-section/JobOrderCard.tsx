@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import { createContext, type PropsWithChildren, use } from "react";
 import {
   type StyleProp,
   StyleSheet,
@@ -14,6 +14,34 @@ import {
 } from "react-native-paper";
 
 import ArrowLine from "@/components/job-order-section/ArrowLine";
+import type { JobOrderSummary } from "@/types/job-order";
+
+interface JobOrderCardContextValue {
+  jobOrder: JobOrderSummary;
+}
+
+const JobOrderCardContext = createContext<JobOrderCardContextValue | null>(
+  null,
+);
+
+function useJobOrderCardContext() {
+  const context = use(JobOrderCardContext);
+  if (!context) {
+    throw new Error(
+      "JobOrderCard compound components cannot be rendered outside the JobOrderCard component",
+    );
+  }
+  return context;
+}
+
+function JobOrderCardProvider({
+  children,
+  jobOrder,
+}: PropsWithChildren<{ jobOrder: JobOrderSummary }>) {
+  return (
+    <JobOrderCardContext value={{ jobOrder }}>{children}</JobOrderCardContext>
+  );
+}
 
 function JobOrderCardRoot({ style, ...props }: ViewProps) {
   return <View style={[styles.card, style]} {...props} />;
@@ -23,13 +51,17 @@ function JobOrderCardHeader({ style, ...props }: ViewProps) {
   return <View style={[styles.cardHeader, style]} {...props} />;
 }
 
-function JobOrderCardHeaderTitle({ children }: PropsWithChildren) {
+function JobOrderCardHeaderTitle() {
+  const { jobOrder } = useJobOrderCardContext();
+
   return (
     <View style={styles.cardTitleContainer}>
       <Text style={[styles.cardTitleHeader, styles.uppercase]}>
         Reference No
       </Text>
-      <Text style={[styles.cardTitle, styles.uppercase]}>{children}</Text>
+      <Text style={[styles.cardTitle, styles.uppercase]}>
+        {jobOrder.reference_number}
+      </Text>
     </View>
   );
 }
@@ -39,15 +71,18 @@ const BADGE_COLORS: Record<string, string> = {
   "Logistics Services": "#4E6174",
 };
 
-function JobOrderCardBadge({ label }: { label: string }) {
+function JobOrderCardBadge() {
+  const { jobOrder } = useJobOrderCardContext();
+  const jobOrderService = jobOrder.service;
+
   return (
     <Text
       style={[
         styles.cardBadge,
-        { backgroundColor: BADGE_COLORS[label] ?? "#E0E0E0" },
+        { backgroundColor: BADGE_COLORS[jobOrderService] ?? "#E0E0E0" },
       ]}
     >
-      {label}
+      {jobOrderService}
     </Text>
   );
 }
@@ -56,24 +91,30 @@ function JobOrderCardContent({ style, ...props }: ViewProps) {
   return <View style={[styles.cardContent, style]} {...props} />;
 }
 
-function JobOrderCardContentTitle({ style, ...props }: TextProps<string>) {
+function JobOrderCardContentTitle({
+  style,
+  ...props
+}: Omit<TextProps<string>, "children">) {
+  const { jobOrder } = useJobOrderCardContext();
+
   return (
-    <Text
-      style={[styles.cardContentTitle, styles.uppercase, style]}
-      {...props}
-    />
+    <Text style={[styles.cardContentTitle, styles.uppercase, style]} {...props}>
+      {jobOrder.client}
+    </Text>
   );
 }
 
 function JobOrderCardDetailRow({
   label,
-  value,
+  valueKey,
   valueStyle,
 }: {
   label: string;
-  value?: string;
+  valueKey: keyof JobOrderSummary;
   valueStyle?: StyleProp<TextStyle>;
 }) {
+  const { jobOrder } = useJobOrderCardContext();
+
   return (
     <View style={styles.contentDetailRow}>
       <Text
@@ -92,7 +133,7 @@ function JobOrderCardDetailRow({
           valueStyle,
         ]}
       >
-        {value}
+        {jobOrder[valueKey]}
       </Text>
     </View>
   );
@@ -203,6 +244,7 @@ const styles = StyleSheet.create({
 });
 
 export const JobOrderCard = {
+  Provider: JobOrderCardProvider,
   Root: JobOrderCardRoot,
   Header: JobOrderCardHeader,
   HeaderTitle: JobOrderCardHeaderTitle,

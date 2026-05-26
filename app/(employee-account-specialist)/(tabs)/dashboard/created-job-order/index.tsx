@@ -76,65 +76,65 @@ export default function JobOrderList() {
         />
       }
       renderItem={({ item }) => (
-        <JobOrderCard.Root style={styles.itemContainer}>
-          <JobOrderCard.Header>
-            <Assignment width={24} height={24} />
-            <JobOrderCard.HeaderTitle>
-              {item.reference_number}
-            </JobOrderCard.HeaderTitle>
-            <JobOrderCard.Badge label={item.service} />
-          </JobOrderCard.Header>
+        <JobOrderCard.Provider jobOrder={item}>
+          <JobOrderCard.Root style={styles.itemContainer}>
+            <JobOrderCard.Header>
+              <Assignment width={24} height={24} />
+              <JobOrderCard.HeaderTitle />
+              <JobOrderCard.Badge />
+            </JobOrderCard.Header>
 
-          <JobOrderCard.Content>
-            <JobOrderCard.ContentTitle>{item.client}</JobOrderCard.ContentTitle>
-            <View style={{ gap: 4 }}>
-              <JobOrderCard.DetailRow
-                label="Date Created"
-                value={item.date_created}
-              />
-              <JobOrderCard.DetailRow
-                label="Quotation Source"
-                value={item.quotation_reference_number}
-              />
-              {item.assigned_to !== "Available" && (
+            <JobOrderCard.Content>
+              <JobOrderCard.ContentTitle />
+              <View style={{ gap: 4 }}>
                 <JobOrderCard.DetailRow
-                  label="Assigned To"
-                  value={item.assigned_to}
-                  valueStyle={{ color: "#4A7AFF" }}
+                  label="Date Created"
+                  valueKey="date_created"
                 />
-              )}
-            </View>
-          </JobOrderCard.Content>
+                <JobOrderCard.DetailRow
+                  label="Quotation Source"
+                  valueKey="quotation_reference_number"
+                />
+                {item.assigned_to !== "Available" && (
+                  <JobOrderCard.DetailRow
+                    label="Assigned To"
+                    valueKey="assigned_to"
+                    valueStyle={{ color: "#4A7AFF" }}
+                  />
+                )}
+              </View>
+            </JobOrderCard.Content>
 
-          <JobOrderCard.Footer>
-            <JobOrderCard.Action
-              first
-              onPress={() =>
-                router.push({
-                  pathname: "/dashboard/created-job-order/[jobOrderId]",
-                  params: {
-                    jobOrderId: item.id,
-                  },
-                })
-              }
-            >
-              View JO
-            </JobOrderCard.Action>
-            <JobOrderCard.Action
-              onPress={() =>
-                router.push({
-                  pathname:
-                    "/dashboard/created-job-order/quotation/[quotationId]",
-                  params: {
-                    quotationId: item.quotation_id,
-                  },
-                })
-              }
-            >
-              View Details
-            </JobOrderCard.Action>
-          </JobOrderCard.Footer>
-        </JobOrderCard.Root>
+            <JobOrderCard.Footer>
+              <JobOrderCard.Action
+                first
+                onPress={() =>
+                  router.push({
+                    pathname: "/dashboard/created-job-order/[jobOrderId]",
+                    params: {
+                      jobOrderId: item.id,
+                    },
+                  })
+                }
+              >
+                View JO
+              </JobOrderCard.Action>
+              <JobOrderCard.Action
+                onPress={() =>
+                  router.push({
+                    pathname:
+                      "/dashboard/created-job-order/quotation/[quotationId]",
+                    params: {
+                      quotationId: item.quotation_id,
+                    },
+                  })
+                }
+              >
+                View Details
+              </JobOrderCard.Action>
+            </JobOrderCard.Footer>
+          </JobOrderCard.Root>
+        </JobOrderCard.Provider>
       )}
       ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
       ListEmptyComponent={() => {
