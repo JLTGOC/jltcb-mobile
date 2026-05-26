@@ -15,9 +15,12 @@ import Search from "@/components/ui/Search";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 
 import { THEMES } from "@/constants/themes";
+import { useAcceptJobOrderMutation } from "@/hooks/useAcceptJobOrderMutation";
+import { useAuth } from "@/hooks/useAuth";
 import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { showToast } from "@/utils/showToast";
 
 type JobFilterOption = "all" | "my-jobs";
 
@@ -26,6 +29,8 @@ const searchSchema = z.object({
 });
 
 export default function CreatedJobOrders() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { role } = useAuth();
   const { tab = "all", status } = useLocalSearchParams<{
     tab?: JobFilterOption;
     status: "created" | "processed";
@@ -34,11 +39,14 @@ export default function CreatedJobOrders() {
 
   const [submittedSearch, setSubmittedSearch] = useState("");
 
+  const { mutateAsync, variables: acceptJobOrderVariables } =
+    useAcceptJobOrderMutation();
+
   const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
   });
 
-  const { data, isPending, error, refetch } = useJobOrdersQuery({
+  const { data, isPending, error, refetch, isFetching } = useJobOrdersQuery({
     filter: {
       completion_status: status === "created" ? "CREATED" : "PROCESSED",
     },
@@ -51,6 +59,16 @@ export default function CreatedJobOrders() {
   const onSubmit = handleSubmit(({ search }) => {
     setSubmittedSearch(search);
   });
+
+  const handleAcceptJobOrder = async (jobOrderId: number) => {
+    try {
+      await mutateAsync(jobOrderId);
+      showToast("Job order accepted successfully.");
+    } catch (err) {
+      showToast("Error accepting job order. Please try again.");
+      console.error("Error accepting job order:", err);
+    }
+  };
 
   const jobOrders = data?.data.job_orders ?? [];
   const myJobOrders = data?.data.my_job_orders ?? [];
@@ -104,14 +122,12 @@ export default function CreatedJobOrders() {
         </View>
       }
       contentInsetAdjustmentBehavior="automatic"
-      renderItem={({ item }) => (
-        <View
-          style={{
-            paddingHorizontal: 16,
-            paddingTop: 16,
-          }}
-        >
-          <JobOrderCard.Root>
+      renderItem={({ item }) => {
+        const isAcceptingJobOrder =
+          isFetching && acceptJobOrderVariables === item.id;
+
+        return (
+          <JobOrderCard.Root style={styles.itemContainer}>
             <JobOrderCard.Header>
               <Assignment width={24} height={24} />
 
@@ -162,10 +178,23 @@ export default function CreatedJobOrders() {
               >
                 View JO
               </JobOrderCard.Action>
+              {/* TODO: Implement reassignment functionality */}
+              {/* {item.reassignment_request_id && role === "Lead Operations" && (
+                <JobOrderCard.Action>Reassign</JobOrderCard.Action>
+              )} */}
+              {item.assigned_to === "Available" && (
+                <JobOrderCard.Action
+                  disabled={isAcceptingJobOrder}
+                  loading={isAcceptingJobOrder}
+                  onPress={() => handleAcceptJobOrder(item.id)}
+                >
+                  Accept
+                </JobOrderCard.Action>
+              )}
             </JobOrderCard.Footer>
           </JobOrderCard.Root>
-        </View>
-      )}
+        );
+      }}
       ListEmptyComponent={() => {
         if (isPending) {
           return (
@@ -197,5 +226,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginHorizontal: 16,
+  },
+  itemContainer: {
+    marginHorizontal: 16,
+    marginTop: 16,
   },
 });

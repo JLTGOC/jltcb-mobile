@@ -20,7 +20,7 @@ import SummaryCard from "@/components/ui/SummaryCard";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
-import { createJobOrderMutationOptions } from "@/mutation-options/as-job-orders/createJobOrderMutationOptions";
+import { createJobOrderMutationOptions } from "@/mutation-options/job-orders/createJobOrderMutationOptions";
 import { logisticsJobOrderFormSchema } from "@/schemas/job-order/logistics-service-form-schema";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import type { SummaryCardData } from "@/types/job-order";

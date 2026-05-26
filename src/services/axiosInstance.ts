@@ -45,6 +45,9 @@ api.interceptors.response.use(
 
     const errorMessageHeader = `[${method}] ${url} -`;
 
+    console.error(errorMessageHeader, data.message);
+    console.error(errorMessageHeader, data);
+
     switch (status) {
       case 400:
         console.error(data);
@@ -61,10 +64,6 @@ api.interceptors.response.use(
       case 500:
         console.error("/server-error");
         break;
-
-      default:
-        console.error(errorMessageHeader, data.message);
-        console.error(errorMessageHeader, data);
     }
     return Promise.reject(error);
   },
