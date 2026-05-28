@@ -1,6 +1,11 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
-import { type FlatListProps, StyleSheet, View } from "react-native";
+import {
+  type FlatListProps,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import BannerHeader from "@/components/ui/BannerHeader";
@@ -10,6 +15,7 @@ import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
 import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import type { RegulatoryJobOrder, SummaryCardData } from "@/types/job-order";
 import { buildSummaryItems } from "@/utils/summaryItems";
 
@@ -22,9 +28,10 @@ export default function SharedRegulatoryJobOrder({
     jobOrderId: string;
   }>();
 
-  const { data, isPending } = useJobOrderQuery<RegulatoryJobOrder>(
+  const { data, isPending, refetch } = useJobOrderQuery<RegulatoryJobOrder>(
     Number(jobOrderId),
   );
+  const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
 
   const summaryCardsData: SummaryCardData[] =
     !isPending && data
@@ -60,6 +67,12 @@ export default function SharedRegulatoryJobOrder({
 
   return (
     <PageList
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
       ListHeaderComponent={
         <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
           <BannerHeader

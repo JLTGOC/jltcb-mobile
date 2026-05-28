@@ -4,7 +4,12 @@ import LineStartCircle from "@material-symbols/svg-500/outlined/line_start_circl
 import ServiceToolbox from "@material-symbols/svg-500/outlined/service_toolbox.svg";
 import { format } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
-import { type FlatListProps, StyleSheet, View } from "react-native";
+import {
+  type FlatListProps,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import BannerHeader from "@/components/ui/BannerHeader";
@@ -14,6 +19,7 @@ import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
 import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import type { LogisticsJobOrder, SummaryCardData } from "@/types/job-order";
 import { formatTargetDeliveryDate } from "@/utils/jobOrderForm";
 import { buildSummaryItems } from "@/utils/summaryItems";
@@ -27,9 +33,10 @@ export default function SharedLogisticsJobOrder({
     jobOrderId: string;
   }>();
 
-  const { data, isPending } = useJobOrderQuery<LogisticsJobOrder>(
+  const { data, isPending, refetch } = useJobOrderQuery<LogisticsJobOrder>(
     Number(jobOrderId),
   );
+  const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
 
   const containerSize = data?.data?.shipment.container_size;
   const volumeDimension = `${data?.data?.shipment.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
@@ -192,6 +199,12 @@ export default function SharedLogisticsJobOrder({
 
   return (
     <PageList
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
       ListHeaderComponent={
         <View style={{ backgroundColor: THEMES.pageBackgroundColor }}>
           <BannerHeader
