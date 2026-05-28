@@ -6,6 +6,7 @@ import {
   CLIENT_TYPES,
   SERVICE_LEVEL_TYPES,
 } from "@/types/jobOrderEnums";
+import { fileSchema } from "../fileSchema";
 
 export const logisticsJobOrderFormSchema = z.object({
   subject: z.string().trim().min(1, "Subject is required."),
@@ -39,6 +40,7 @@ export const logisticsJobOrderFormSchema = z.object({
   billing_date: z.date("When to bill is required.").optional(),
   // billing_date: z.string().trim(),
   shall_be_billed: z.enum(BILLING_TYPES, "Shall be billed is required."),
+  attached_docs: z.array(fileSchema).optional(),
 });
 export type LogisticsJobOrderFormSchema = z.infer<
   typeof logisticsJobOrderFormSchema
@@ -95,6 +97,7 @@ const step3BaseSchema = logisticsJobOrderFormSchema.pick({
   terms_of_payment: true,
   billing_date: true,
   shall_be_billed: true,
+  attached_docs: true,
 });
 
 export const step3Schema = step3BaseSchema;

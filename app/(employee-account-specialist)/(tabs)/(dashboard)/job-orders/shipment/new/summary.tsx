@@ -193,7 +193,12 @@ export default function Summary() {
           value: logisticsFormData.shall_be_billed,
         },
         {
-          label: "Availbale Docs Attached",
+          label: "Available Docs Attached",
+          value:
+            logisticsFormData.attached_docs &&
+            logisticsFormData.attached_docs.length > 0
+              ? logisticsFormData.attached_docs.map((d) => d.name).join("\n")
+              : "",
         },
       ],
     },

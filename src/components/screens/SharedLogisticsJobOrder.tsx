@@ -188,7 +188,12 @@ export default function SharedLogisticsJobOrder({
                 value: data.data.billing_details.shall_be_billed,
               },
               {
-                label: "Availbale Docs Attached",
+                label: "Available Docs Attached",
+                value: Array.isArray(data.data.billing_files?.attached_files)
+                  ? data.data.billing_files.attached_files
+                      .map((f) => f.file_name)
+                      .join("\n")
+                  : data.data.billing_files.attached_files,
               },
             ],
           },

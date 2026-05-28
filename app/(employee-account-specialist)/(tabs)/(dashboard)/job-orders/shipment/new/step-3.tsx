@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays, compareAsc, format, formatDistance } from "date-fns";
+import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
@@ -53,6 +54,7 @@ export default function Step3Form() {
       terms_of_payment: logisticsFormData.terms_of_payment ?? "",
       billing_date: logisticsFormData.billing_date,
       shall_be_billed: logisticsFormData.shall_be_billed ?? undefined,
+      attached_docs: logisticsFormData.attached_docs ?? [],
     },
   });
 
@@ -203,12 +205,57 @@ export default function Step3Form() {
           )}
         </View>
 
-        <FloatingLabelInput
-          label="AVAILABLE DOCS ATTACHED"
-          multiline
-          numberOfLines={3}
-          style={{ minHeight: 75 }}
-          editable={false}
+        <Controller
+          control={control}
+          name="attached_docs"
+          render={({ field: { onChange, value } }) => {
+            const handlePickDocument = async () => {
+              try {
+                const result = await DocumentPicker.getDocumentAsync({
+                  type: [
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "image/png",
+                    "image/jpeg",
+                  ],
+                  copyToCacheDirectory: true,
+                  multiple: true,
+                });
+
+                if (!result.canceled) {
+                  const currentDocs = value ?? [];
+                  onChange([...currentDocs, ...result.assets]);
+                }
+              } catch (err) {
+                console.error("Error picking document:", err);
+              }
+            };
+
+            const displayValue =
+              value && value.length > 0
+                ? value.map((v) => v.name).join("\n")
+                : "";
+
+            return (
+              <Pressable onPress={handlePickDocument}>
+                <View pointerEvents="none">
+                  <FloatingLabelInput
+                    label="AVAILABLE DOCS ATTACHED"
+                    value={displayValue}
+                    multiline
+                    numberOfLines={
+                      displayValue
+                        ? Math.max(3, displayValue.split("\n").length)
+                        : 3
+                    }
+                    style={{ minHeight: 75 }}
+                    editable={false}
+                  />
+                </View>
+              </Pressable>
+            );
+          }}
         />
 
         <Button

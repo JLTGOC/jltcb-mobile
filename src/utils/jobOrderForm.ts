@@ -48,6 +48,7 @@ export const transformToLogisticsJobOrderPayload = ({
       terms_of_payment: data.terms_of_payment,
       billing_date: formatDate(data.billing_date),
       shall_be_billed: data.shall_be_billed,
+      attached_docs: data.attached_docs,
     },
   };
 };

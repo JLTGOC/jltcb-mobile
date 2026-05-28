@@ -6,6 +6,7 @@ import type {
   ClientType,
   ServiceLevelType,
 } from "@/types/jobOrderEnums";
+import type { ReactNativeFile } from "./files";
 
 export const JOB_TYPES_SUMMARY = [
   "Logistics Services",
@@ -31,9 +32,11 @@ interface BaseJobOrder<T extends JobType> {
   client: Client;
   created_at: string;
   updated_at: string;
-  quotation_file: QuotationFile;
-  documents: Document[];
+  quotation_file: File;
+  date: string | null;
+  documents: File[];
   job_type: T;
+  billing_files: BillingFiles;
 }
 
 export interface LogisticsJobOrder extends BaseJobOrder<"LOGISTICS"> {
@@ -95,18 +98,18 @@ export interface BillingDetails {
   shall_be_billed: BillingType;
 }
 
-export interface QuotationFile {
+export interface File {
   id: number;
   file_name: string;
   file_url: string;
   file_type: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface Document {
-  id: number;
-  file_name: string;
-  file_url: string;
-  file_type: string;
+export interface BillingFiles {
+  listed_files: null;
+  attached_files: string | File[];
 }
 
 export interface JobOrderSummary {
@@ -163,6 +166,7 @@ export interface CreateLogisticsJobOrderRequestBody extends CreateJobOrderBaseRe
     terms_of_payment: string;
     billing_date: string;
     shall_be_billed: string;
+    attached_docs?: ReactNativeFile[];
   };
 }
 
