@@ -86,7 +86,7 @@ export default function Quotation() {
               <Link
                 asChild
                 href={{
-                  pathname: "/request-quotation/[quotationId]/upload",
+                  pathname: "/quotations/[quotationId]/upload",
                   params: { quotationId },
                 }}
                 style={[styles.button, styles.container]}

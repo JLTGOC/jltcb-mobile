@@ -1,7 +1,13 @@
 import { format, parse } from "date-fns";
 import { useRouter, type Href } from "expo-router";
 import { useState } from "react";
-import { ScrollView, View, type StyleProp, type ViewStyle } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { ActivityIndicator, IconButton, Menu } from "react-native-paper";
 
 import BannerHeader from "@/components/ui/BannerHeader";
@@ -9,6 +15,8 @@ import DataTable from "@/components/ui/DataTable";
 
 import { THEMES } from "@/constants/themes";
 import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import type { BaseASQuotation } from "@/types/quotations";
 import { StyleSheet } from "react-native";
 
@@ -43,9 +51,12 @@ const MENUS: {
 ];
 
 export default function RespondedQuotations() {
-  const { data, isPending } = useQuotationsQuery<BaseASQuotation[]>({
+  const { data, isPending, refetch } = useQuotationsQuery<BaseASQuotation[]>({
     filter: { status: "RESPONDED" },
   });
+  const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
+
   const router = useRouter();
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
@@ -55,6 +66,12 @@ export default function RespondedQuotations() {
       contentContainerStyle={styles.contentContainer}
       overScrollMode="never"
       bounces={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
     >
       <BannerHeader title="Responded Quotations" variant="light" />
 

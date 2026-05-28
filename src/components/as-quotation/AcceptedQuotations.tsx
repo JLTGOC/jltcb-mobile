@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, IconButton, Menu } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
@@ -13,6 +13,8 @@ import DataTable from "@/components/ui/DataTable";
 import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import type { MenuOption, TableHeader } from "@/types";
@@ -60,9 +62,11 @@ export default function AcceptedQuotations() {
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
-  const { data, isPending } = useQuotationsQuery<BaseASQuotation[]>({
+  const { data, isPending, refetch } = useQuotationsQuery<BaseASQuotation[]>({
     filter: { status: "ACCEPTED" },
   });
+  const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
 
   const handlePrint = async (uri: string) => {
     try {
@@ -135,6 +139,12 @@ export default function AcceptedQuotations() {
       contentContainerStyle={styles.contentContainer}
       overScrollMode="never"
       bounces={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
     >
       <BannerHeader title="Accepted Quotation" variant="light" />
 

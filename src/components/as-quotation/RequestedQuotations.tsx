@@ -3,7 +3,7 @@ import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import * as z from "zod";
 
@@ -13,6 +13,8 @@ import Search from "@/components/ui/Search";
 
 import { THEMES } from "@/constants/themes";
 import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import type { TableHeader } from "@/types";
 import type { ASRequestedQuotationSummary } from "@/types/quotations";
 
@@ -38,14 +40,16 @@ export default function RequestedQuotations() {
 
   const [submittedSearch, setSubmittedSearch] = useState("");
 
-  const { data, isPending } = useQuotationsQuery<ASRequestedQuotationSummary[]>(
-    {
-      filter: {
-        status: "REQUESTED",
-      },
-      ...(submittedSearch && { search: submittedSearch }),
+  const { data, isPending, refetch } = useQuotationsQuery<
+    ASRequestedQuotationSummary[]
+  >({
+    filter: {
+      status: "REQUESTED",
     },
-  );
+    ...(submittedSearch && { search: submittedSearch }),
+  });
+  const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
 
   const handleSearch = handleSubmit(({ search }) => setSubmittedSearch(search));
 
@@ -56,6 +60,12 @@ export default function RequestedQuotations() {
       keyboardShouldPersistTaps="handled"
       overScrollMode="never"
       bounces={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
     >
       <BannerHeader variant="light" title="New Request" />
 

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import ASDropdown from "@/components/lead-as-section/ASDropdown";
@@ -11,6 +11,8 @@ import DataTable from "@/components/ui/DataTable";
 import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { updateAsMutationOptions } from "@/mutation-options/asLead-quotations/updateAsMutationOptions";
 import { asQueryOptions } from "@/query-options/users/asQueryOptions";
 import type { TableHeader } from "@/types";
@@ -41,7 +43,11 @@ export default function ClientRequestedQuotations() {
 
   const isLeadAS = role === "Lead Account Specialist";
 
-  const { data: asUsers, isPending: isAsUsersPending } = useQuery({
+  const {
+    data: asUsers,
+    isPending: isAsUsersPending,
+    refetch: refetchAsUsers,
+  } = useQuery({
     ...asQueryOptions,
     select: (data) => {
       const formattedNames = data.data.account_specialists.map((user) => ({
@@ -53,14 +59,24 @@ export default function ClientRequestedQuotations() {
     enabled: isLeadAS,
   });
 
-  const { data: quotationsData, isPending } = useQuotationsQuery<
-    ASRequestedQuotationSummary[]
-  >({
+  const {
+    data: quotationsData,
+    isPending,
+    refetch: refetchQuotations,
+  } = useQuotationsQuery<ASRequestedQuotationSummary[]>({
     filter: {
       status: "REQUESTED",
     },
     client_id: Number(clientId),
   });
+
+  const refetch = () => {
+    if (isLeadAS) refetchAsUsers();
+    return refetchQuotations();
+  };
+
+  const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
+  useRefreshOnFocus(refetch);
 
   const {
     mutateAsync,
@@ -94,6 +110,12 @@ export default function ClientRequestedQuotations() {
       bounces={false}
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingByUser}
+          onRefresh={refetchByUser}
+        />
+      }
     >
       <BannerHeader variant="light" title="List of Request for Quotation" />
 
