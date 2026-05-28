@@ -1,10 +1,10 @@
-import type { QuotationFilter } from "@/types/quotations";
+import type { QuotationListQueryParams } from "@/types/quotations";
 
 export const quotationKeys = {
   all: () => ["quotations"] as const,
   lists: () => [...quotationKeys.all(), "list"] as const,
-  getQuotations: (filter: QuotationFilter) =>
-    [...quotationKeys.lists(), { filter }] as const,
+  getQuotations: (filters?: QuotationListQueryParams) =>
+    [...quotationKeys.lists(), filters] as const,
   details: () => [...quotationKeys.all(), "detail"] as const,
   getQuotation: (quotationId: string) =>
     [...quotationKeys.details(), { quotationId }] as const,

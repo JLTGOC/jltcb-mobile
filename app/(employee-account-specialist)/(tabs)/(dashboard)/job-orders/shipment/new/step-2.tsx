@@ -51,9 +51,7 @@ export default function Step2Form() {
 
   const onSubmit = handleSubmit((data) => {
     setLogisticsFormData(data);
-    router.push(
-      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/step3",
-    );
+    router.push("/job-orders/shipment/new/step-3");
   });
 
   return (

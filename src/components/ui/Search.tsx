@@ -31,7 +31,11 @@ export default function Search({
 }: TextInputProps & Props) {
   return (
     <View style={[styles.inputContainer, styles.boxShadow, containerStyle]}>
-      <TextInput {...props} style={[styles.input, style]} />
+      <TextInput
+        placeholderTextColor="black"
+        {...props}
+        style={[styles.input, style]}
+      />
       <Pressable
         onPress={onSearch}
         style={({ pressed }) => [

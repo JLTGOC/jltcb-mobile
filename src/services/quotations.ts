@@ -2,32 +2,15 @@ import type { DocumentPickerAsset } from "expo-document-picker";
 
 import { apiGet, apiPost, apiPut } from "@/services/axiosInstance";
 import type {
-  ASAcceptedQuotation,
-  ASRequestedQuotationSummary,
-  ASRespondedQuotation,
   CreateQuotationRequestBody,
   Quotation,
   QuotationFile,
-  QuotationFilter,
-  QuotationStatus,
+  QuotationListQueryParams,
 } from "@/types/quotations";
 import { jsonToFormData } from "@/utils/jsonToFormData";
 
-interface QuotationResponseMap {
-  REQUESTED: ASRequestedQuotationSummary;
-  RESPONDED: ASRespondedQuotation;
-  ACCEPTED: ASAcceptedQuotation;
-  DISCARDED: unknown;
-}
-
-export const fetchQuotations = <T extends QuotationStatus>({
-  filter,
-  search,
-  client_id,
-}: QuotationFilter<T>) =>
-  apiGet<QuotationResponseMap[T][]>("quotations", {
-    params: { "filter[status]": filter, search, client_id },
-  });
+export const fetchQuotations = <T>(params?: QuotationListQueryParams) =>
+  apiGet<T>("quotations", { params });
 
 export const createQuotation = (payload: CreateQuotationRequestBody) => {
   const formData = jsonToFormData(payload);

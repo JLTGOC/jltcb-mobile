@@ -48,7 +48,7 @@ export default function Index() {
       ListHeaderComponent={
         <View style={{ position: "relative" }}>
           <UserHeader variant="light" />
-          <Link style={styles.toolLink} href="/dashboard/tools" asChild>
+          <Link style={styles.toolLink} href="/tools" asChild>
             <Pressable
               style={({ pressed }) => [
                 {

@@ -38,22 +38,20 @@ export type BaseASQuotation = {
   id: number;
   client_name: string;
   reference_number: string;
-  issued_quotation_id: string | null;
+  issued_quotation_id: number | null;
   commodity: string;
   date: string;
   conversation_id: string | null;
   prepared_by: string;
+  reassignment_request_id: number | null;
 } & BaseQuotationServiceDetails;
 
-export type ASRespondedQuotation = BaseASQuotation & {
-  status: "RESPONDED";
-  accepted_at: null;
-};
-
-export type ASAcceptedQuotation = BaseASQuotation & {
-  status: "ACCEPTED";
-  accepted_at: string;
-};
+type ReassignmentDetails =
+  | {
+      reassignment_request_id: number;
+      requested_at: string;
+    }
+  | { reassignment_request_id: null; requested_at: null };
 
 interface LogisticsServiceSummary {
   commodity: string;
@@ -101,7 +99,8 @@ export type ASRequestedQuotation = {
   conversation_id: string | null;
   prepared_by: string | null;
   issued_quotation_id: string | null;
-} & RequestedQuotationAssignmentDetails &
+} & ReassignmentDetails &
+  RequestedQuotationAssignmentDetails &
   RequestedQuotationServiceDetails;
 
 interface BaseQuotation {
@@ -265,3 +264,13 @@ export interface CreateRegulatoryQuotationRequestBody {
 export type CreateQuotationRequestBody =
   | CreateLogisticsQuotationRequestBody
   | CreateRegulatoryQuotationRequestBody;
+
+export interface QuotationListQueryFilter {
+  status?: QuotationStatus;
+}
+
+export interface QuotationListQueryParams {
+  search?: string;
+  filter?: QuotationListQueryFilter;
+  client_id?: number;
+}

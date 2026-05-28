@@ -27,7 +27,7 @@ import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import { transformToRegulatoryJobOrderPayload } from "@/utils/jobOrderForm";
 import { showToast } from "@/utils/showToast";
 
-export default function RegulatoryServices() {
+export default function RegulatoryJobOrderForm() {
   const router = useRouter();
   const { userData } = useAuth();
 
@@ -266,8 +266,8 @@ export default function RegulatoryServices() {
         <SuccesModal
           onConfirm={() => {
             setSuccessModalVisible(false);
-            router.dismissTo("/dashboard");
-            router.push("/dashboard/created-job-order");
+            router.dismissTo("/");
+            router.push("/job-orders");
           }}
           visible={successModalVisible}
           title="SUCCESSFULLY SENT!"

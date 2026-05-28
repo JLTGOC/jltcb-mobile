@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addDays, compareAsc, formatDistance } from "date-fns";
+import { addDays, compareAsc, format, formatDistance } from "date-fns";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -58,9 +58,7 @@ export default function Step3Form() {
 
   const onSubmit = handleSubmit((data) => {
     setLogisticsFormData(data);
-    router.push(
-      "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment/summary",
-    );
+    router.push("/job-orders/shipment/new/summary");
   });
 
   return (
@@ -82,12 +80,14 @@ export default function Step3Form() {
                   trigger("delivery_date");
                 }}
                 formatFunction={(date) => {
-                  if (compareAsc(date, new Date(eta!)) !== 1) {
-                    return formatDistance(date, new Date(eta!), {
+                  if (!eta) return format(date, "P");
+
+                  if (compareAsc(date, new Date(eta)) !== 1) {
+                    return formatDistance(date, new Date(eta), {
                       addSuffix: true,
                     });
                   }
-                  return formatTargetDeliveryDate(date, new Date(eta!));
+                  return formatTargetDeliveryDate(date, new Date(eta));
                 }}
                 minimumDate={minimumDeliveryDate}
               />

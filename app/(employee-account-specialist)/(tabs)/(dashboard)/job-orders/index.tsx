@@ -25,7 +25,7 @@ const searchSchema = z.object({
   search: z.string().trim(),
 });
 
-export default function JobOrderList() {
+export default function JobOrders() {
   const router = useRouter();
   const [submittedSearch, setSubmittedSearch] = useState("");
 
@@ -110,7 +110,7 @@ export default function JobOrderList() {
                 first
                 onPress={() =>
                   router.push({
-                    pathname: "/dashboard/created-job-order/[jobOrderId]",
+                    pathname: "/job-orders/[jobOrderId]",
                     params: {
                       jobOrderId: item.id,
                     },
@@ -122,8 +122,7 @@ export default function JobOrderList() {
               <JobOrderCard.Action
                 onPress={() =>
                   router.push({
-                    pathname:
-                      "/dashboard/created-job-order/quotation/[quotationId]",
+                    pathname: "/job-orders/quotations/[quotationId]",
                     params: {
                       quotationId: item.quotation_id,
                     },
@@ -141,7 +140,7 @@ export default function JobOrderList() {
         if (isPending) {
           return (
             <View style={styles.emptyComponentContainer}>
-              <ActivityIndicator size="large" style={{ flex: 1 }} />
+              <ActivityIndicator size="large" />
             </View>
           );
         }
@@ -174,6 +173,5 @@ const styles = StyleSheet.create({
   emptyComponentContainer: {
     flex: 1,
     justifyContent: "center",
-    marginHorizontal: 16,
   },
 });

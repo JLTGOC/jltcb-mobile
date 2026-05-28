@@ -1,21 +1,22 @@
 import Download from "@material-symbols/svg-500/outlined/download.svg";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, IconButton, Menu } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
 import BannerHeader from "@/components/ui/BannerHeader";
 import DataTable from "@/components/ui/DataTable";
 
+import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
-import { asQuotationsQueryOptions } from "@/query-options/asLead-quotations/asQuotationsQueryOptions";
+import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import type { MenuOption, TableHeader } from "@/types";
-import type { ASAcceptedQuotation } from "@/types/quotations";
+import type { BaseASQuotation } from "@/types/quotations";
 import { downloadFile, saveFile } from "@/utils/handleFileDownload";
 import { print } from "@/utils/print";
 import { showToast } from "@/utils/showToast";
@@ -46,7 +47,7 @@ const MENU_OPTIONS = [
 
 type MenuTitle = (typeof MENU_OPTIONS)[number]["title"];
 
-export default function AcceptedQuotation() {
+export default function AcceptedQuotations() {
   const { token } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -59,9 +60,9 @@ export default function AcceptedQuotation() {
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
-  const { data, isPending } = useQuery(
-    asQuotationsQueryOptions({ filter: "ACCEPTED" }),
-  );
+  const { data, isPending } = useQuotationsQuery<BaseASQuotation[]>({
+    filter: { status: "ACCEPTED" },
+  });
 
   const handlePrint = async (uri: string) => {
     try {
@@ -96,8 +97,8 @@ export default function AcceptedQuotation() {
   };
 
   const handleRowPress = async (quotationId: string) => {
-    router.navigate({
-      pathname: "/dashboard/accepted-quotation/pdf",
+    router.push({
+      pathname: "/quotations/[quotationId]/document",
       params: { quotationId },
     });
   };
@@ -107,7 +108,7 @@ export default function AcceptedQuotation() {
     quotation,
   }: {
     title: MenuTitle;
-    quotation: ASAcceptedQuotation;
+    quotation: BaseASQuotation;
   }) => {
     if (title !== "MAKE JOB ORDER") {
       const file = await getQuotationFile(quotation.id.toString());
@@ -121,72 +122,89 @@ export default function AcceptedQuotation() {
     reset();
     setQuotationReference(quotation.reference_number);
     if (quotation.service === "LOGISTICS") {
-      router.push(
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment",
-      );
+      router.push("/job-orders/shipment/new");
     } else if (quotation.service === "REGULATORY") {
-      router.push(
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/regulatory-services",
-      );
+      router.push("/job-orders/regulatory/new");
     }
     setVisibleMenuId(null);
   };
 
   return (
-    <ScrollView>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      overScrollMode="never"
+      bounces={false}
+    >
       <BannerHeader title="Accepted Quotation" variant="light" />
-      {isPending ? (
-        <ActivityIndicator style={{ marginTop: 20 }} />
-      ) : (
-        data && (
-          <DataTable
-            headers={TABLE_HEADERS}
-            data={data.data}
-            keyExtractor={(item) => item.id.toString()}
-            extractCells={(quotation) => {
-              const formattedDate = format(
-                parse(quotation.date, "yyyy/MM/dd", new Date()),
-                "MM/dd/yyyy",
-              );
 
-              return [
-                quotation.reference_number,
-                formattedDate,
-                quotation.commodity,
-                <Menu
-                  key={quotation.id}
-                  anchor={
-                    <IconButton
-                      icon="dots-vertical"
-                      size={20}
-                      onPress={() => setVisibleMenuId(quotation.id)}
-                    />
-                  }
-                  anchorPosition="bottom"
-                  onDismiss={() => setVisibleMenuId(null)}
-                  visible={visibleMenuId === quotation.id}
-                >
-                  {MENU_OPTIONS.map((menu) => (
-                    <Menu.Item
-                      dense
-                      key={menu.title}
-                      leadingIcon={menu.icon}
-                      title={menu.title}
-                      onPress={() =>
-                        handleMenuAction({
-                          title: menu.title,
-                          quotation,
-                        })
-                      }
-                    />
-                  ))}
-                </Menu>,
-              ];
-            }}
-            onRowPress={(item) => handleRowPress(item.id.toString())}
-          />
-        )
+      {isPending && (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+
+      {data && (
+        <DataTable
+          headers={TABLE_HEADERS}
+          data={data.data}
+          keyExtractor={(item) => item.id.toString()}
+          extractCells={(quotation) => {
+            const formattedDate = format(
+              parse(quotation.date, "yyyy/MM/dd", new Date()),
+              "MM/dd/yyyy",
+            );
+
+            return [
+              quotation.reference_number,
+              formattedDate,
+              quotation.commodity,
+              <Menu
+                key={quotation.id}
+                anchor={
+                  <IconButton
+                    icon="dots-vertical"
+                    size={20}
+                    onPress={() => setVisibleMenuId(quotation.id)}
+                  />
+                }
+                anchorPosition="bottom"
+                onDismiss={() => setVisibleMenuId(null)}
+                visible={visibleMenuId === quotation.id}
+              >
+                {MENU_OPTIONS.map((menu) => (
+                  <Menu.Item
+                    dense
+                    key={menu.title}
+                    leadingIcon={menu.icon}
+                    title={menu.title}
+                    onPress={() =>
+                      handleMenuAction({
+                        title: menu.title,
+                        quotation,
+                      })
+                    }
+                  />
+                ))}
+              </Menu>,
+            ];
+          }}
+          onRowPress={(item) => handleRowPress(item.id.toString())}
+        />
       )}
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: THEMES.pageBackgroundColor,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+});

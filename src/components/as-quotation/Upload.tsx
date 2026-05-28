@@ -13,14 +13,15 @@ import ConfirmModal from "@/components/ui/ConfirmModal";
 import SuccesModal from "@/components/ui/SuccessModal";
 
 import { routes } from "@/constants/routes";
+import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { uploadQuotationFileMutationOptions } from "@/mutation-options/asLead-quotations/uploadQuotationFileMutationOptions";
 
 type Props = {
   submitButtonText: string;
-  confirmModalTitle?: string;
-  confirmModalDescription?: string;
+  confirmModalTitle: string;
+  confirmModalDescription: string;
 };
 
 export default function Upload({
@@ -70,7 +71,7 @@ export default function Upload({
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <BannerHeader variant="light" title={data?.data.client ?? ""} />
       <View style={styles.content}>
         {file ? (
@@ -133,8 +134,8 @@ export default function Upload({
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
           onConfirm={handleSendQuotation}
-          title={confirmModalTitle as any}
-          description={confirmModalDescription as any}
+          title={confirmModalTitle}
+          description={confirmModalDescription}
         />
         <SuccesModal
           onConfirm={() => {
@@ -152,6 +153,10 @@ export default function Upload({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: THEMES.pageBackgroundColor,
+  },
   content: {
     padding: 20,
     flex: 1,

@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Link, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
 
@@ -13,29 +12,36 @@ import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { quotationKeys } from "@/query-key-factories/quotations";
 import { userKeys } from "@/query-key-factories/users";
+import type { QuotationStatus } from "@/types/quotations";
 
-const TABS = ["Details", "Documents"] as const;
+const TABS = ["details", "documents"] as const;
 type TabType = (typeof TABS)[number];
 
 export default function Quotation() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
-  const { quotationId } = useLocalSearchParams<{
+  const {
+    quotationId,
+    status,
+    tab = "details",
+  } = useLocalSearchParams<{
     quotationId: string;
+    status: Lowercase<QuotationStatus>;
+    tab?: TabType;
   }>();
-  const [activeTab, setActiveTab] = useState<TabType>("Details");
 
   const { data, refetch } = useQuotationQuery(quotationId);
 
   const refreshActiveTab = async () => {
-    if (activeTab === "Details") {
+    if (tab === "details") {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: userKeys.detail(Number(data?.data.client_id)),
         }),
         refetch(),
       ]);
-    } else if (activeTab === "Documents") {
+    } else if (tab === "documents") {
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: quotationKeys.getClientQuotationDocuments(quotationId),
@@ -66,27 +72,33 @@ export default function Quotation() {
     >
       <View style={{ paddingBottom: 10 }}>
         <BannerHeader variant="light" title={data?.data.client ?? ""} />
-        <TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+        <TabBar
+          tabs={TABS}
+          activeTab={tab}
+          onTabChange={(newTab) => router.setParams({ tab: newTab })}
+        />
       </View>
 
-      {activeTab === "Details" ? (
+      {tab === "details" ? (
         <SharedQuotationDetails
           footer={
-            <Link
-              asChild
-              href={{
-                pathname: "/dashboard/request-quotation/[quotationId]/upload",
-                params: { quotationId },
-              }}
-              style={[styles.button, styles.container]}
-            >
-              <Button mode="contained" labelStyle={styles.buttonLabel}>
-                Upload Quotation
-              </Button>
-            </Link>
+            status === "requested" && (
+              <Link
+                asChild
+                href={{
+                  pathname: "/request-quotation/[quotationId]/upload",
+                  params: { quotationId },
+                }}
+                style={[styles.button, styles.container]}
+              >
+                <Button mode="contained" labelStyle={styles.buttonLabel}>
+                  Upload Quotation
+                </Button>
+              </Link>
+            )
           }
         />
-      ) : activeTab === "Documents" ? (
+      ) : tab === "documents" ? (
         <SharedQuotationDocuments />
       ) : null}
     </ScrollView>

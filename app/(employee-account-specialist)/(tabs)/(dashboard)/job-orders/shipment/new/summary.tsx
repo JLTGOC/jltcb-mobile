@@ -97,11 +97,15 @@ export default function Summary() {
         { label: "BL NO", value: logisticsFormData.bl_no },
         {
           label: "ETA",
-          value: format(logisticsFormData.eta ?? "", "P"),
+          value: logisticsFormData.eta
+            ? format(logisticsFormData.eta, "P")
+            : "",
         },
         {
           label: "ETD",
-          value: format(logisticsFormData.etd ?? "", "P"),
+          value: logisticsFormData.etd
+            ? format(logisticsFormData.etd, "P")
+            : "",
         },
       ],
     },
@@ -144,15 +148,18 @@ export default function Summary() {
       content: [
         {
           label: "Target Delivery",
-          value: formatTargetDeliveryDate(
-            logisticsFormData.delivery_date!,
-            logisticsFormData.eta!,
-          ),
+          value:
+            logisticsFormData.delivery_date && logisticsFormData.eta
+              ? formatTargetDeliveryDate(
+                  logisticsFormData.delivery_date,
+                  logisticsFormData.eta,
+                )
+              : "",
         },
         {
           label: "Target Completion Period",
           value: logisticsFormData.completion_date
-            ? format(logisticsFormData.completion_date ?? "", "P")
+            ? format(logisticsFormData.completion_date, "P")
             : "",
         },
         {
@@ -178,7 +185,7 @@ export default function Summary() {
         {
           label: "When To Bill",
           value: logisticsFormData.billing_date
-            ? format(logisticsFormData.billing_date ?? "", "P")
+            ? format(logisticsFormData.billing_date, "P")
             : "",
         },
         {
@@ -291,8 +298,8 @@ export default function Summary() {
         <SuccesModal
           onConfirm={() => {
             setSuccessModalVisible(false);
-            router.dismissTo("/dashboard");
-            router.push("/dashboard/created-job-order");
+            router.dismissTo("/");
+            router.push("/job-orders");
           }}
           visible={successModalVisible}
           title="SUCCESSFULLY SENT!"

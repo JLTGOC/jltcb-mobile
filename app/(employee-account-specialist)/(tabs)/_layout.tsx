@@ -61,7 +61,7 @@ export default function ASTabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="dashboard"
+        name="(dashboard)"
         options={{
           tabBarItemStyle: { marginRight: "auto", maxWidth: "25%" },
           tabBarIcon: (props) => (

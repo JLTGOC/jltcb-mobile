@@ -28,7 +28,7 @@ const searchSchema = z.object({
   search: z.string().trim(),
 });
 
-export default function CreatedJobOrders() {
+export default function JobOrders() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { role } = useAuth();
   const { tab = "all", status } = useLocalSearchParams<{

@@ -8,6 +8,8 @@ export const updateAsMutationOptions = mutationOptions({
   mutationFn: ({ quotationId, asId }: UpdateAsArgs) =>
     updateAsQuotation(quotationId, asId),
   meta: {
-    invalidatesQuery: quotationKeys.getQuotations({ filter: "REQUESTED" }),
+    invalidatesQuery: quotationKeys.getQuotations({
+      filter: { status: "REQUESTED" },
+    }),
   },
 });

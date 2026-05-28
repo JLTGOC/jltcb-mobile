@@ -16,7 +16,7 @@ import { downloadFile, handleSaveFile } from "@/utils/handleFileDownload";
 import { print } from "@/utils/print";
 import { showToast } from "@/utils/showToast";
 
-export default function PdfScreen() {
+export default function QuotationDocument() {
   const { quotationId } = useLocalSearchParams<{ quotationId: string }>();
   const router = useRouter();
   const { token } = useAuth();
@@ -65,13 +65,9 @@ export default function PdfScreen() {
     reset();
     setQuotationReference(data.data.reference_number);
     if (data.data.service) {
-      router.push(
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/shipment",
-      );
+      router.push("/job-orders/shipment/new");
     } else if (data.data.regulatory_service) {
-      router.push(
-        "/(employee-account-specialist)/(tabs)/dashboard/accepted-quotation/regulatory-services",
-      );
+      router.push("/job-orders/regulatory/new");
     }
   };
 
