@@ -7,27 +7,23 @@ export function useOnlineManager() {
   React.useEffect(() => {
     if (Platform.OS === "web") return;
 
-    onlineManager.setEventListener((setOnline) => {
-      let initialised = false;
+    let initialised = false;
 
-      const subscription = Network.addNetworkStateListener((state) => {
-        initialised = true;
-        setOnline(!!state.isConnected);
+    const eventSubscription = Network.addNetworkStateListener((state) => {
+      initialised = true;
+      onlineManager.setOnline(!!state.isConnected);
+    });
+
+    Network.getNetworkStateAsync()
+      .then((state) => {
+        if (!initialised) {
+          onlineManager.setOnline(!!state.isConnected);
+        }
+      })
+      .catch(() => {
+        // getNetworkStateAsync can reject on some SDK versions
       });
 
-      Network.getNetworkStateAsync()
-        .then((state) => {
-          if (!initialised) {
-            setOnline(!!state.isConnected);
-          }
-        })
-        .catch(() => {
-          // getNetworkStateAsync can reject on some SDK versions
-        });
-
-      return () => {
-        subscription.remove();
-      };
-    });
+    return eventSubscription.remove;
   }, []);
 }
