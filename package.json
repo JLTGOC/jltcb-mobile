@@ -80,6 +80,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.100.14",
     "@types/react": "~19.2.10",
     "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.25.0",
