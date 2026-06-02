@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Assignment from "@material-symbols/svg-500/outlined/assignment.svg";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,11 +14,9 @@ import PageList from "@/components/ui/PageList";
 import Search from "@/components/ui/Search";
 
 import { THEMES } from "@/constants/themes";
+import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { jobOrderKeys } from "@/query-key-factories/jobOrders";
-import { apiGet } from "@/services/axiosInstance";
-import type { JobOrderResponse } from "@/types/job-order";
 
 const searchSchema = z.object({
   search: z.string().trim(),
@@ -37,12 +34,8 @@ export default function JobOrders() {
     setSubmittedSearch(search);
   });
 
-  const { data, isPending, refetch, error } = useQuery({
-    queryKey: jobOrderKeys.list({ search: submittedSearch }),
-    queryFn: () =>
-      apiGet<JobOrderResponse>("job-orders", {
-        ...(submittedSearch ? { params: { search: submittedSearch } } : {}),
-      }),
+  const { data, isPending, refetch, error } = useJobOrdersQuery({
+    search: submittedSearch,
   });
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);

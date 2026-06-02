@@ -28,5 +28,6 @@ const mutationCache = new MutationCache({
 });
 
 export const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 2 } },
   mutationCache,
 });
