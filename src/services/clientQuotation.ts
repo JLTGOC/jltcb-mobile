@@ -14,7 +14,7 @@ import type {
   RegulatoryQuoteEnums,
 } from "@/types/client-quotation";
 import type { JobType } from "@/types/job-order";
-import type { LogisticsServiceLevel } from "@/types/quotations";
+import type { LogisticsServiceType } from "@/types/quotations";
 
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
@@ -93,7 +93,7 @@ const postMultipart = async <T>(
 export type FetchQuoteParamsByService<T extends JobType> = T extends "LOGISTICS"
   ? {
       service: "LOGISTICS";
-      service_type?: LogisticsServiceLevel;
+      service_type?: LogisticsServiceType;
     }
   : T extends "REGULATORY"
     ? {

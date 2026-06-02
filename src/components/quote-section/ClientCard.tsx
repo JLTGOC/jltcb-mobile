@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserQuery } from "@/hooks/useUserQuery";
 
 export interface ClientCardProps {
-  clientId: string;
+  clientId: number;
   conversationId: string | null;
 }
 

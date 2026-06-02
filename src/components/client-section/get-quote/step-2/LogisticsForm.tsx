@@ -22,7 +22,7 @@ import {
 import { useClientQuotationFormStore } from "@/stores/useClientQuotationFormStore";
 import { CARGO_TYPES } from "@/types/job-order";
 import {
-  LOGISTICS_SERVICE_LEVELS,
+  LOGISTICS_SERVICE_TYPES,
   LOGISTICS_TRANSPORT_MODES,
 } from "@/types/quotations";
 
@@ -83,7 +83,7 @@ export default function LogisticsForm() {
           <Field>
             <FieldLabel>SERVICE TYPE *</FieldLabel>
             <AutocompleteDropdown
-              dataSet={LOGISTICS_SERVICE_LEVELS.map((level) => ({
+              dataSet={LOGISTICS_SERVICE_TYPES.map((level) => ({
                 id: level,
                 title: level,
               }))}

@@ -2,7 +2,7 @@ import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
-import JobOrderNavigation from "@/components/job-order-section/JorOrderNavigation";
+import JobOrderNavigation from "@/components/job-order-section/JobOrderNavigation";
 import SharedLogisticsJobOrder from "@/components/screens/SharedLogisticsJobOrder";
 import SharedRegulatoryJobOrder from "@/components/screens/SharedRegulatoryJobOrder";
 
@@ -15,7 +15,8 @@ export default function JobOrder() {
   const { data, isPending } = useJobOrderQuery(Number(jobOrderId));
 
   const jobType = data?.data.job_type;
-  const quotationId = data?.data.quotation_id;
+  const targetId =
+    jobType === "LOGISTICS" ? data?.data.shipment_id : data?.data.service_id;
 
   if (isPending) {
     return <ActivityIndicator size="large" style={styles.loader} />;
@@ -27,8 +28,8 @@ export default function JobOrder() {
         <SharedLogisticsJobOrder
           contentContainerStyle={styles.jobOrderContainer}
         />
-        {quotationId && (
-          <JobOrderNavigation quotationId={quotationId} jobType={jobType} />
+        {targetId && (
+          <JobOrderNavigation targetId={targetId} jobType={jobType} />
         )}
       </View>
     );
@@ -38,8 +39,8 @@ export default function JobOrder() {
         <SharedRegulatoryJobOrder
           contentContainerStyle={styles.jobOrderContainer}
         />
-        {quotationId && (
-          <JobOrderNavigation quotationId={quotationId} jobType={jobType} />
+        {targetId && (
+          <JobOrderNavigation targetId={targetId} jobType={jobType} />
         )}
       </View>
     );

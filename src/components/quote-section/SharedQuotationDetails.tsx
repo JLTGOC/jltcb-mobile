@@ -25,7 +25,7 @@ export default function SharedQuotationDetails({
   const { data: quotationDetailData, isPending: isQuotationDetailDataPending } =
     useQuotationDetailQuery(quotationId);
   const { isPending: isClientDataPending } = useUserQuery(
-    quotationData?.data.client_id.toString(),
+    quotationData?.data.client_id,
   );
 
   if (isPending || isQuotationDetailDataPending || isClientDataPending) {
@@ -40,7 +40,7 @@ export default function SharedQuotationDetails({
     <View style={styles.contentContainer}>
       <View style={styles.container}>
         <ClientCard
-          clientId={quotationData.data.client_id.toString()}
+          clientId={quotationData.data.client_id}
           conversationId={quotationData.data.conversation_id}
         />
       </View>

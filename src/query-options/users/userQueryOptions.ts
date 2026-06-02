@@ -3,12 +3,9 @@ import { queryOptions } from "@tanstack/react-query";
 import { userKeys } from "@/query-key-factories/users";
 import { fetchUser } from "@/services/users";
 
-export const userQueryOptions = (userId?: string) =>
+export const userQueryOptions = (userId?: number) =>
   queryOptions({
     queryKey: userKeys.detail(Number(userId)),
-    queryFn: () => {
-      if (!userId) throw new Error("userId is required");
-      return fetchUser(userId);
-    },
+    queryFn: () => fetchUser(userId!),
     enabled: !!userId,
   });

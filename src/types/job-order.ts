@@ -24,6 +24,8 @@ interface BaseJobOrder<T extends JobType> {
   id: number;
   reference_number: string;
   quotation_id: number;
+  shipment_id: number | null;
+  service_id: number | null;
   as_id: number;
   operations_id: number | null;
   finance_id: number | null;
@@ -53,6 +55,7 @@ export interface RegulatoryJobOrder extends Omit<
   client: Client & {
     service_type: string;
   };
+  service: RegulatoryService;
   shipment: null;
   target: null;
   billing_details: null;
@@ -73,6 +76,13 @@ export interface LogisticsService {
   bl_no: string;
   eta: string;
   etd: string;
+}
+
+export interface RegulatoryService {
+  regulatory_assistance: string;
+  application_type: ClientType;
+  accredited: AccreditedType;
+  remarks: string;
 }
 
 export interface Shipment {

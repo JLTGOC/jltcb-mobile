@@ -1,6 +1,6 @@
 import type { CargoType, JobType } from "./job-order";
 import type {
-  LogisticsServiceLevel,
+  LogisticsServiceType,
   LogisticsTransportMode,
 } from "./quotations";
 
@@ -174,7 +174,7 @@ export interface BaseQuoteEnums<T extends JobType = JobType> {
 export interface LogisticsQuoteEnums extends BaseQuoteEnums<"LOGISTICS"> {
   business_types: [];
   regulatory_assistance_types: [];
-  service_types: LogisticsServiceLevel[];
+  service_types: LogisticsServiceType[];
   transport_modes: LogisticsTransportMode[];
   cargo_type: CargoType[];
 }

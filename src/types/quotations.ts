@@ -14,8 +14,8 @@ export const ASSIGNMENT_STATUSES = [
 ] as const;
 export type AssignmentStatus = (typeof ASSIGNMENT_STATUSES)[number];
 
-export const LOGISTICS_SERVICE_LEVELS = ["IMPORT", "EXPORT"] as const;
-export type LogisticsServiceLevel = (typeof LOGISTICS_SERVICE_LEVELS)[number];
+export const LOGISTICS_SERVICE_TYPES = ["IMPORT", "EXPORT"] as const;
+export type LogisticsServiceType = (typeof LOGISTICS_SERVICE_TYPES)[number];
 
 export const LOGISTICS_TRANSPORT_MODES = ["SEA", "AIR"] as const;
 export type LogisticsTransportMode = (typeof LOGISTICS_TRANSPORT_MODES)[number];
@@ -55,7 +55,7 @@ type ReassignmentDetails =
 
 interface LogisticsServiceSummary {
   commodity: string;
-  service_level: LogisticsServiceLevel;
+  service_level: LogisticsServiceType;
   transport_mode: LogisticsTransportMode;
   origin: string;
   destination: string;
@@ -151,7 +151,7 @@ export interface Company {
 }
 
 export interface LogisticsService {
-  type: LogisticsServiceLevel;
+  type: LogisticsServiceType;
   transport_mode: LogisticsTransportMode;
   options: LogisticsServiceOptions[];
 }
@@ -224,7 +224,7 @@ export interface CreateLogisticsQuotationRequestBody {
     email: string;
   };
   service: {
-    type: LogisticsServiceLevel;
+    type: LogisticsServiceType;
     transport_mode: LogisticsTransportMode;
     options: ["ALL IN"] | string[];
   };

@@ -1,27 +1,36 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Box from "@material-symbols/svg-500/outlined/box.svg";
 import Files from "@material-symbols/svg-500/outlined/files.svg";
-import { Link } from "expo-router";
+import { type Href, Link } from "expo-router";
 
 import type { JobType } from "@/types/job-order";
 import { BottomNavigation } from "./BottomNavigation";
 
 interface Props {
-  quotationId: number;
+  targetId: number;
   jobType: JobType;
 }
 
-export default function JobOrderNavigation({ quotationId, jobType }: Props) {
+export default function JobOrderNavigation({ targetId, jobType }: Props) {
+  const isLogistics = jobType === "LOGISTICS";
+
+  const href: Href = isLogistics
+    ? { pathname: "/shipments/[shipmentId]", params: { shipmentId: targetId } }
+    : { pathname: "/services/[serviceId]", params: { serviceId: targetId } };
+
+  const hrefDocuments: Href = isLogistics
+    ? {
+        pathname: "/shipments/[shipmentId]",
+        params: { shipmentId: targetId, tab: "documents" },
+      }
+    : {
+        pathname: "/services/[serviceId]",
+        params: { serviceId: targetId, tab: "documents" },
+      };
+
   return (
     <BottomNavigation.Root>
-      <Link
-        href={{
-          pathname: "/quotation/[quotationId]",
-          params: { quotationId },
-        }}
-        asChild
-        push
-      >
+      <Link href={href} asChild push>
         <BottomNavigation.Action>
           {jobType === "LOGISTICS" ? (
             <Box width={24} height={24} fill="white" />
@@ -33,14 +42,7 @@ export default function JobOrderNavigation({ quotationId, jobType }: Props) {
           </BottomNavigation.ActionText>
         </BottomNavigation.Action>
       </Link>
-      <Link
-        href={{
-          pathname: "/quotation/[quotationId]",
-          params: { quotationId, tab: "documents" },
-        }}
-        asChild
-        push
-      >
+      <Link href={hrefDocuments} asChild push>
         <BottomNavigation.Action>
           <Files width={24} height={24} fill="white" />
           <BottomNavigation.ActionText>Documents</BottomNavigation.ActionText>

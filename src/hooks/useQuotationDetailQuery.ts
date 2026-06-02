@@ -66,9 +66,10 @@ const selectQuotationData = ({ data }: ApiResponse<Quotation>) => {
 
 export type SelectedQuotationData = ReturnType<typeof selectQuotationData>;
 
-export function useQuotationDetailQuery(id: string) {
+export function useQuotationDetailQuery(id?: string) {
   return useQuery({
-    ...quotationQueryOptions(id),
+    ...quotationQueryOptions(id ?? ""),
     select: selectQuotationData,
+    enabled: !!id,
   });
 }

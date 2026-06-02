@@ -2,7 +2,7 @@ import * as z from "zod";
 
 import { CARGO_TYPES } from "@/types/job-order";
 import {
-  LOGISTICS_SERVICE_LEVELS,
+  LOGISTICS_SERVICE_TYPES,
   LOGISTICS_TRANSPORT_MODES,
 } from "@/types/quotations";
 
@@ -16,7 +16,7 @@ export const extendedLogisticsQuotationFormSchema = z
       .min(1, "Contact person is required."),
 
     // Step 2
-    serviceType: z.enum(LOGISTICS_SERVICE_LEVELS, "Service type is required."),
+    serviceType: z.enum(LOGISTICS_SERVICE_TYPES, "Service type is required."),
     serviceTransportMode: z.enum(
       LOGISTICS_TRANSPORT_MODES,
       "Transport mode is required.",
