@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -8,8 +8,7 @@ import QuotationRequestDetailCard from "@/components/quote-section/QuotationRequ
 
 import { useQuotationDetailQuery } from "@/hooks/useQuotationDetailQuery";
 import { useQuotationQuery } from "@/hooks/useQuotationQuery";
-import { userQueryOptions } from "@/query-options/users/userQueryOptions";
-import { useLocalSearchParams } from "expo-router";
+import { useUserQuery } from "@/hooks/useUserQuery";
 
 interface SharedQuotationDetailsProps {
   footer?: ReactNode;
@@ -25,31 +24,25 @@ export default function SharedQuotationDetails({
   const { data: quotationData, isPending } = useQuotationQuery(quotationId);
   const { data: quotationDetailData, isPending: isQuotationDetailDataPending } =
     useQuotationDetailQuery(quotationId);
-  const { data: clientData, isPending: isClientDataPending } = useQuery(
-    userQueryOptions(quotationData?.data.client_id.toString()),
+  const { isPending: isClientDataPending } = useUserQuery(
+    quotationData?.data.client_id.toString(),
   );
 
   if (isPending || isQuotationDetailDataPending || isClientDataPending) {
     return <ActivityIndicator style={styles.loader} />;
   }
 
-  if (!quotationData || !clientData) {
+  if (!quotationData) {
     return null;
   }
-
-  const clientCardData = {
-    fullName: clientData.data.full_name,
-    userImage: clientData.data.image_path,
-    companyName: clientData.data.company_name,
-    contactNumber: clientData.data.contact_number,
-    email: clientData.data.email,
-    conversationId: quotationData.data.conversation_id,
-  };
 
   return (
     <View style={styles.contentContainer}>
       <View style={styles.container}>
-        <ClientCard {...clientCardData} />
+        <ClientCard
+          clientId={quotationData.data.client_id.toString()}
+          conversationId={quotationData.data.conversation_id}
+        />
       </View>
 
       {quotationDetailData?.sections.map((section) => (

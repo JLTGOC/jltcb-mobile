@@ -2,28 +2,23 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 import { useAuth } from "@/hooks/useAuth";
+import { useUserQuery } from "@/hooks/useUserQuery";
 
 export interface ClientCardProps {
-  fullName: string;
-  userImage: string;
-  companyName: string;
-  contactNumber: string;
-  email: string;
+  clientId: string;
   conversationId: string | null;
 }
 
 export default function ClientCard({
-  fullName,
-  userImage,
-  companyName,
-  contactNumber,
-  email,
+  clientId,
   conversationId,
 }: ClientCardProps) {
   const router = useRouter();
   const { role } = useAuth();
+  const { data: clientData, isPending } = useUserQuery(clientId);
 
   const handleConversationPress = async () => {
     if (conversationId) {
@@ -34,13 +29,24 @@ export default function ClientCard({
     }
   };
 
+  if (isPending) {
+    return <ActivityIndicator style={styles.loader} />;
+  }
+
+  if (!clientData?.data) {
+    return null;
+  }
+
+  const { full_name, image_path, company_name, contact_number, email } =
+    clientData.data;
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={userImage} />
+          <Image style={styles.image} source={image_path} />
         </View>
-        <Text style={styles.headerText}>{fullName}</Text>
+        <Text style={styles.headerText}>{full_name}</Text>
         {role !== "Lead Account Specialist" && conversationId && (
           <Pressable onPress={handleConversationPress}>
             <Ionicons
@@ -55,12 +61,12 @@ export default function ClientCard({
       <View style={styles.content}>
         <View style={styles.contentRow}>
           <Text style={styles.label}>Company Name</Text>
-          <Text style={[styles.value, styles.blue]}>{companyName}</Text>
+          <Text style={[styles.value, styles.blue]}>{company_name}</Text>
         </View>
 
         <View style={styles.contentRow}>
           <Text style={styles.label}>Contact No.</Text>
-          <Text style={[styles.value, styles.blue]}>{contactNumber}</Text>
+          <Text style={[styles.value, styles.blue]}>{contact_number}</Text>
         </View>
 
         <View style={styles.contentRow}>
@@ -123,5 +129,8 @@ const styles = StyleSheet.create({
   },
   blue: {
     color: "#1D274E",
+  },
+  loader: {
+    marginVertical: 8,
   },
 });
