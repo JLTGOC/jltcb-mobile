@@ -16,8 +16,12 @@ import {
 import ArrowLine from "@/components/job-order-section/ArrowLine";
 import type { JobOrderSummary } from "@/types/job-order";
 
-interface JobOrderCardContextValue {
+interface JobOrderState {
   jobOrder: JobOrderSummary;
+}
+
+interface JobOrderCardContextValue {
+  state: JobOrderState;
 }
 
 const JobOrderCardContext = createContext<JobOrderCardContextValue | null>(
@@ -37,9 +41,11 @@ function useJobOrderCardContext() {
 function JobOrderCardProvider({
   children,
   jobOrder,
-}: PropsWithChildren<{ jobOrder: JobOrderSummary }>) {
+}: PropsWithChildren<JobOrderState>) {
   return (
-    <JobOrderCardContext value={{ jobOrder }}>{children}</JobOrderCardContext>
+    <JobOrderCardContext value={{ state: { jobOrder } }}>
+      {children}
+    </JobOrderCardContext>
   );
 }
 
@@ -52,7 +58,9 @@ function JobOrderCardHeader({ style, ...props }: ViewProps) {
 }
 
 function JobOrderCardHeaderTitle() {
-  const { jobOrder } = useJobOrderCardContext();
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
 
   return (
     <View style={styles.cardTitleContainer}>
@@ -72,7 +80,9 @@ const BADGE_COLORS: Record<string, string> = {
 };
 
 function JobOrderCardBadge() {
-  const { jobOrder } = useJobOrderCardContext();
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
   const jobOrderService = jobOrder.service;
 
   return (
@@ -95,7 +105,9 @@ function JobOrderCardContentTitle({
   style,
   ...props
 }: Omit<TextProps<string>, "children">) {
-  const { jobOrder } = useJobOrderCardContext();
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
 
   return (
     <Text style={[styles.cardContentTitle, styles.uppercase, style]} {...props}>
@@ -113,7 +125,9 @@ function JobOrderCardDetailRow({
   valueKey: keyof JobOrderSummary;
   valueStyle?: StyleProp<TextStyle>;
 }) {
-  const { jobOrder } = useJobOrderCardContext();
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
 
   return (
     <View style={styles.contentDetailRow}>
