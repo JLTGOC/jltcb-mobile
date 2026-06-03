@@ -100,7 +100,7 @@ interface Client {
   company_name: string;
   contact_number: string;
   email: string;
-  image_path: string | null;
+  image_path: string;
 }
 
 interface PersonInChargeDetails {
