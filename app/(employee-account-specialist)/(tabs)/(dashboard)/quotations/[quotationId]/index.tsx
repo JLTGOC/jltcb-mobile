@@ -89,9 +89,12 @@ export default function Quotation() {
                   pathname: "/quotations/[quotationId]/upload",
                   params: { quotationId },
                 }}
-                style={[styles.button, styles.container]}
               >
-                <Button mode="contained" labelStyle={styles.buttonLabel}>
+                <Button
+                  mode="contained"
+                  style={styles.button}
+                  labelStyle={styles.buttonLabel}
+                >
                   Upload Quotation
                 </Button>
               </Link>
@@ -107,15 +110,11 @@ export default function Quotation() {
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 16,
     borderRadius: 6,
     backgroundColor: "#1C213B",
   },
   buttonLabel: {
     paddingVertical: 5,
     textTransform: "uppercase",
-  },
-  container: {
-    marginHorizontal: 20,
   },
 });
