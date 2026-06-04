@@ -1,10 +1,6 @@
-import type { ComponentProps } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 
-export default function ArrowLine({
-  style,
-  ...props
-}: ComponentProps<typeof View>) {
+export default function ArrowLine({ style, ...props }: ViewProps) {
   return (
     <View style={[styles.container, style]} {...props}>
       <View style={styles.line} />
