@@ -1,7 +1,6 @@
 export const ShipmentStatuses = [
-  "Pending",
   "Berthed",
-  "Not Yet Delivered",
+  "Not Yet Departed",
   "Discharged",
   "In Transit",
   "Delivered",

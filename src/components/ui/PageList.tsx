@@ -14,6 +14,7 @@ export default function PageList<T>({
         styles.listContentContainer,
         contentContainerStyle,
       ]}
+      ListHeaderComponentStyle={styles.listHeader}
       keyboardShouldPersistTaps="handled"
       overScrollMode="never"
       bounces={false}
@@ -31,5 +32,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: THEMES.pageBackgroundColor,
     flexGrow: 1,
+  },
+  listHeader: {
+    backgroundColor: THEMES.pageBackgroundColor,
   },
 });

@@ -24,6 +24,15 @@ function CardFooter({ style, ...props }: ViewProps) {
   return <View style={[styles.cardFooter, style]} {...props} />;
 }
 
+export const Card = {
+  Root: CardRoot,
+  Header: CardHeader,
+  Title: CardTitle,
+  Action: CardAction,
+  Content: CardContent,
+  Footer: CardFooter,
+};
+
 const styles = StyleSheet.create({
   card: {
     shadowColor: "black",
@@ -59,12 +68,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export const Card = {
-  Root: CardRoot,
-  Header: CardHeader,
-  Title: CardTitle,
-  Action: CardAction,
-  Content: CardContent,
-  Footer: CardFooter,
-};

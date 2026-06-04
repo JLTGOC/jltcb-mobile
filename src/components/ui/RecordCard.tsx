@@ -1,11 +1,20 @@
 import { Children, type ReactNode } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
-import { Button, type ButtonProps } from "react-native-paper";
+import {
+  Button,
+  Text,
+  type ButtonProps,
+  type TextProps,
+} from "react-native-paper";
 
 import ArrowLine from "@/components/ui/ArrowLine";
 import { Card } from "@/components/ui/Card";
 
-export interface RecordCardDetailProps extends Omit<ViewProps, "children"> {
+function RecordCardDetails({ style, ...props }: ViewProps) {
+  return <View style={[styles.detailsContainer, style]} {...props} />;
+}
+
+export interface RecordCardDetailRowProps extends Omit<ViewProps, "children"> {
   label: ReactNode;
   value: ReactNode;
 }
@@ -15,13 +24,23 @@ function RecordCardDetail({
   value,
   style,
   ...props
-}: RecordCardDetailProps) {
+}: RecordCardDetailRowProps) {
   return (
     <View style={[styles.detail, style]} {...props}>
-      {label}
+      <View style={styles.column}>{label}</View>
       <ArrowLine style={[styles.detailArrow, styles.flex]} />
-      {value}
+      <View style={styles.column}>{value}</View>
     </View>
+  );
+}
+
+function RecordCardDetailText({ style, ...props }: TextProps<never>) {
+  return (
+    <Text
+      variant="labelSmall"
+      style={[styles.detailText, styles.uppercase, style]}
+      {...props}
+    />
   );
 }
 
@@ -56,16 +75,28 @@ function RecordCardFooterButton({ labelStyle, style, ...props }: ButtonProps) {
 }
 
 export const RecordCard = {
+  Details: RecordCardDetails,
   Detail: RecordCardDetail,
+  DetailText: RecordCardDetailText,
   Footer: RecordCardFooter,
   FooterButton: RecordCardFooterButton,
 };
 
 const styles = StyleSheet.create({
+  column: {
+    flex: 2,
+    alignItems: "flex-start",
+  },
   flex: {
     flex: 1,
   },
+  uppercase: {
+    textTransform: "uppercase",
+  },
 
+  detailsContainer: {
+    gap: 4,
+  },
   detail: {
     flexDirection: "row",
     alignItems: "center",
@@ -74,6 +105,10 @@ const styles = StyleSheet.create({
   },
   detailArrow: {
     marginRight: 4,
+  },
+  detailText: {
+    fontSize: 12,
+    color: "#9D9D9D",
   },
   footerChildContainerBorderLeft: {
     borderLeftWidth: 2,

@@ -3,8 +3,8 @@ import Assignment from "@material-symbols/svg-500/outlined/assignment.svg";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { RefreshControl, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
+import { RefreshControl, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import * as z from "zod";
 
 import { JobOrderCard } from "@/components/job-order-section/JobOrderCard";
@@ -84,21 +84,19 @@ export default function JobOrders() {
             <Card.Content>
               <JobOrderCard.ContentTitle />
 
-              <View style={{ gap: 4 }}>
-                <JobOrderCard.Detail
+              <RecordCard.Details>
+                <RecordCard.Detail
                   label={
-                    <JobOrderCard.DetailLabel>
-                      Date Created
-                    </JobOrderCard.DetailLabel>
+                    <RecordCard.DetailText>Date Created</RecordCard.DetailText>
                   }
                   value={<JobOrderCard.DetailValue valueKey="date_created" />}
                 />
 
-                <JobOrderCard.Detail
+                <RecordCard.Detail
                   label={
-                    <JobOrderCard.DetailLabel>
+                    <RecordCard.DetailText>
                       Quotation Reference
-                    </JobOrderCard.DetailLabel>
+                    </RecordCard.DetailText>
                   }
                   value={
                     <JobOrderCard.DetailValue valueKey="quotation_reference_number" />
@@ -106,11 +104,9 @@ export default function JobOrders() {
                 />
 
                 {item.assigned_to !== "Available" && (
-                  <JobOrderCard.Detail
+                  <RecordCard.Detail
                     label={
-                      <JobOrderCard.DetailLabel>
-                        Assigned
-                      </JobOrderCard.DetailLabel>
+                      <RecordCard.DetailText>Assigned</RecordCard.DetailText>
                     }
                     value={
                       <JobOrderCard.DetailValue
@@ -120,7 +116,7 @@ export default function JobOrders() {
                     }
                   />
                 )}
-              </View>
+              </RecordCard.Details>
             </Card.Content>
 
             <RecordCard.Footer>

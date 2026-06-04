@@ -1,3 +1,4 @@
+import type { ShipmentStatuses } from "@/constants/shipments";
 import type {
   LogisticsServiceType,
   LogisticsTransportMode,
@@ -86,13 +87,7 @@ export interface BaseShipment {
   client_documents: Document<"REQUESTED">[];
 }
 
-export type ShipmentStatus =
-  | "NOT YET DEPARTED"
-  | "IN TRANSIT"
-  | "ARRIVED"
-  | "BERTHED"
-  | "DISCHARGED"
-  | "DELIVERED";
+export type ShipmentStatus = Uppercase<(typeof ShipmentStatuses)[number]>;
 
 interface Client {
   id: number;
@@ -137,3 +132,14 @@ interface ActivityHistoryItem {
   user: string;
   datetime: string;
 }
+
+export interface ShipmentListQueryParams {
+  filter?: ShipmentListQueryFilter;
+  search?: string;
+}
+
+interface ShipmentListQueryFilter {
+  status?: ShipmentQueryStatus;
+}
+
+export type ShipmentQueryStatus = "ONGOING" | "DELIVERED";

@@ -143,20 +143,20 @@ export default function JobOrders() {
                 <JobOrderCard.ContentTitle />
 
                 <View style={{ gap: 4 }}>
-                  <JobOrderCard.Detail
+                  <RecordCard.Detail
                     label={
-                      <JobOrderCard.DetailLabel>
+                      <RecordCard.DetailText>
                         Date Created
-                      </JobOrderCard.DetailLabel>
+                      </RecordCard.DetailText>
                     }
                     value={<JobOrderCard.DetailValue valueKey="date_created" />}
                   />
 
-                  <JobOrderCard.Detail
+                  <RecordCard.Detail
                     label={
-                      <JobOrderCard.DetailLabel>
+                      <RecordCard.DetailText>
                         Quotation Reference
-                      </JobOrderCard.DetailLabel>
+                      </RecordCard.DetailText>
                     }
                     value={
                       <JobOrderCard.DetailValue valueKey="quotation_reference_number" />
@@ -164,11 +164,9 @@ export default function JobOrders() {
                   />
 
                   {item.assigned_to !== "Available" && (
-                    <JobOrderCard.Detail
+                    <RecordCard.Detail
                       label={
-                        <JobOrderCard.DetailLabel>
-                          Assigned
-                        </JobOrderCard.DetailLabel>
+                        <RecordCard.DetailText>Assigned</RecordCard.DetailText>
                       }
                       value={
                         <JobOrderCard.DetailValue

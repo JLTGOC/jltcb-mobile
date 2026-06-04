@@ -13,7 +13,7 @@ import {
 import { THEMES } from "@/constants/themes";
 
 type Props = {
-  onSearch: (event: GestureResponderEvent) => void;
+  onSearch?: (event: GestureResponderEvent) => void;
   containerStyle?: StyleProp<ViewStyle>;
   searchButtonStyle?: StyleProp<ViewStyle>;
   searchButtonDisabled?: boolean;

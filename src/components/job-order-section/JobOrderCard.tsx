@@ -4,10 +4,7 @@ import { Text, type TextProps } from "react-native-paper";
 
 import Badge from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import {
-  RecordCard,
-  type RecordCardDetailProps,
-} from "@/components/ui/RecordCard";
+import { RecordCard } from "@/components/ui/RecordCard";
 
 import type { JobOrderSummary, JobTypeSummary } from "@/types/job-order";
 
@@ -94,20 +91,6 @@ function JobOrderCardContentTitle({
   );
 }
 
-function JobOrderCardDetail({ label, value, ...props }: RecordCardDetailProps) {
-  return <RecordCard.Detail label={label} value={value} {...props} />;
-}
-
-function JobOrderCardDetailLabel({ style, ...props }: TextProps<never>) {
-  return (
-    <Text
-      variant="labelSmall"
-      style={[styles.cardContentDesc, styles.uppercase, styles.column, style]}
-      {...props}
-    />
-  );
-}
-
 interface JobOrderCardDetailValueProps extends Omit<
   TextProps<never>,
   "children"
@@ -125,13 +108,9 @@ function JobOrderCardDetailValue({
   } = useJobOrderCardContext();
 
   return (
-    <Text
-      variant="labelSmall"
-      style={[styles.cardContentDesc, styles.uppercase, styles.column, style]}
-      {...props}
-    >
+    <RecordCard.DetailText {...props}>
       {jobOrder[valueKey]}
-    </Text>
+    </RecordCard.DetailText>
   );
 }
 
@@ -164,7 +143,5 @@ export const JobOrderCard = {
   Title: JobOrderCardTitle,
   Badge: JobOrderCardBadge,
   ContentTitle: JobOrderCardContentTitle,
-  Detail: JobOrderCardDetail,
-  DetailLabel: JobOrderCardDetailLabel,
   DetailValue: JobOrderCardDetailValue,
 };
