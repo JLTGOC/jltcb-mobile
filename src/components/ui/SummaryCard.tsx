@@ -1,12 +1,7 @@
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { Text } from "react-native-paper";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/job-order-section/Card";
+import { SummaryDetailCard } from "@/components/ui/SummaryDetailCard";
 
 import type { SummaryCardData } from "@/types/job-order";
 
@@ -17,14 +12,14 @@ interface SummaryCardProps {
 
 export default function SummaryCard({ item, style }: SummaryCardProps) {
   return (
-    <Card style={style}>
-      <CardHeader>
+    <SummaryDetailCard.Root style={style}>
+      <SummaryDetailCard.Header>
         {item.renderIcon()}
-        <CardTitle variant="labelSmall" style={styles.upper}>
+        <SummaryDetailCard.Title variant="labelSmall" style={styles.upper}>
           {item.title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </SummaryDetailCard.Title>
+      </SummaryDetailCard.Header>
+      <SummaryDetailCard.Content>
         {item.content.map((contentItem) => (
           <View
             key={`${item.title}-${contentItem.label}`}
@@ -41,8 +36,8 @@ export default function SummaryCard({ item, style }: SummaryCardProps) {
             </Text>
           </View>
         ))}
-      </CardContent>
-    </Card>
+      </SummaryDetailCard.Content>
+    </SummaryDetailCard.Root>
   );
 }
 

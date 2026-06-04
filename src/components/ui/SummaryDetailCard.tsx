@@ -1,30 +1,45 @@
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
-function Card({ style, ...props }: React.ComponentProps<typeof View>) {
+function SummaryDetailCardRoot({
+  style,
+  ...props
+}: React.ComponentProps<typeof View>) {
   return <View style={[styles.card, style]} {...props} />;
 }
 
-function CardHeader({ style, ...props }: React.ComponentProps<typeof View>) {
+function SummaryDetailCardHeader({
+  style,
+  ...props
+}: React.ComponentProps<typeof View>) {
   return <View style={[styles.cardHeader, style]} {...props} />;
 }
 
-function CardTitle({ style, ...props }: React.ComponentProps<typeof Text>) {
+function SummaryDetailCardTitle({
+  style,
+  ...props
+}: React.ComponentProps<typeof Text>) {
   return <Text style={[styles.cardTitle, style]} {...props} />;
 }
 
-function CardDescription({
+function SummaryDetailCardDescription({
   style,
   ...props
 }: React.ComponentProps<typeof Text>) {
   return <Text style={[styles.cardDescription, style]} {...props} />;
 }
 
-function CardContent({ style, ...props }: React.ComponentProps<typeof View>) {
+function SummaryDetailCardContent({
+  style,
+  ...props
+}: React.ComponentProps<typeof View>) {
   return <View style={[styles.cardContent, style]} {...props} />;
 }
 
-function CardFooter({ style, ...props }: React.ComponentProps<typeof View>) {
+function SummaryDetailCardFooter({
+  style,
+  ...props
+}: React.ComponentProps<typeof View>) {
   return <View style={[styles.cardFooter, style]} {...props} />;
 }
 
@@ -70,11 +85,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+export const SummaryDetailCard = {
+  Root: SummaryDetailCardRoot,
+  Content: SummaryDetailCardContent,
+  Description: SummaryDetailCardDescription,
+  Footer: SummaryDetailCardFooter,
+  Header: SummaryDetailCardHeader,
+  Title: SummaryDetailCardTitle,
 };

@@ -2,12 +2,7 @@ import Article from "@material-symbols/svg-500/outlined/article.svg";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/job-order-section/Card";
+import { SummaryDetailCard } from "@/components/ui/SummaryDetailCard";
 
 interface SubjectCardProps {
   subject: string;
@@ -16,20 +11,22 @@ interface SubjectCardProps {
 
 export default function SubjectCard({ subject, body }: SubjectCardProps) {
   return (
-    <Card>
-      <CardHeader>
+    <SummaryDetailCard.Root>
+      <SummaryDetailCard.Header>
         <View style={styles.headerLeft}>
           <Article width={20} height={20} fill="#4E6174" />
-          <CardTitle variant="labelSmall" style={styles.upper}>
+          <SummaryDetailCard.Title variant="labelSmall" style={styles.upper}>
             Subject
-          </CardTitle>
+          </SummaryDetailCard.Title>
         </View>
-        <CardTitle style={styles.flexContent}>{subject}</CardTitle>
-      </CardHeader>
-      <CardContent>
+        <SummaryDetailCard.Title style={styles.flexContent}>
+          {subject}
+        </SummaryDetailCard.Title>
+      </SummaryDetailCard.Header>
+      <SummaryDetailCard.Content>
         <Text variant="bodySmall">{body}</Text>
-      </CardContent>
-    </Card>
+      </SummaryDetailCard.Content>
+    </SummaryDetailCard.Root>
   );
 }
 
