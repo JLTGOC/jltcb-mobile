@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Checkbox } from "react-native-paper";
 import { useShallow } from "zustand/react/shallow";
 
-import ContainerSizeCard from "@/components/shipment/ContainerSizeCard";
+import ContainerSizeCard from "@/components/shipments/ContainerSizeCard";
 import AutocompleteDropdown from "@/components/ui/AutocompleteDropdown";
 import Button from "@/components/ui/Button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
