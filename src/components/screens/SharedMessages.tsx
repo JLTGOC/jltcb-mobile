@@ -15,7 +15,6 @@ import {
   View,
 } from "react-native";
 import { ActivityIndicator, HelperText } from "react-native-paper";
-import * as z from "zod";
 
 import InboxListItem from "@/components/chats-section/InboxListItem";
 import BannerHeader from "@/components/ui/BannerHeader";
@@ -29,16 +28,13 @@ import { pusher } from "@/lib/pusher";
 import { chatKeys } from "@/query-key-factories/chats";
 import { chatMessagesInfiniteQueryOptions } from "@/query-options/chats/chatMessagesInfiniteQueryOptions";
 import { chatsQueryOptions } from "@/query-options/chats/chatsQueryOptions";
+import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import type {
   ChatEvent,
   InboxListApiResponse,
   InboxUpdatedEvent,
 } from "@/types/chats";
 import { parseEventData, subscribeToUser } from "@/utils/pusher";
-
-const searchSchema = z.object({
-  search: z.string().trim(),
-});
 
 type Props = {
   variant: "dark" | "light";
@@ -59,7 +55,7 @@ export default function SharedMessages({ variant }: Props) {
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
 
-  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
+  const { control, handleSubmit } = useForm<SearchForm>({
     resolver: zodResolver(searchSchema),
     defaultValues: {
       search: "",

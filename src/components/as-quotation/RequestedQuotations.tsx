@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import * as z from "zod";
 
 import BannerHeader from "@/components/ui/BannerHeader";
 import DataTable from "@/components/ui/DataTable";
@@ -15,6 +14,7 @@ import { THEMES } from "@/constants/themes";
 import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import type { TableHeader } from "@/types";
 import type { ASRequestedQuotationSummary } from "@/types/quotations";
 
@@ -28,13 +28,9 @@ const TABLE_HEADERS: TableHeader[] = [
   },
 ];
 
-const searchSchema = z.object({
-  search: z.string().trim(),
-});
-
 export default function RequestedQuotations() {
   const router = useRouter();
-  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
+  const { control, handleSubmit } = useForm<SearchForm>({
     resolver: zodResolver(searchSchema),
   });
 

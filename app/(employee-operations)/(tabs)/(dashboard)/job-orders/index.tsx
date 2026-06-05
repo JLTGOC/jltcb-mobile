@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RefreshControl, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
-import * as z from "zod";
 
 import { JobOrderCard } from "@/components/job-order-section/JobOrderCard";
 import BannerHeader from "@/components/ui/BannerHeader";
@@ -22,13 +21,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import { showToast } from "@/utils/showToast";
 
 type JobFilterOption = "all" | "my-jobs";
-
-const searchSchema = z.object({
-  search: z.string().trim(),
-});
 
 export default function JobOrders() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,7 +40,7 @@ export default function JobOrders() {
   const { mutateAsync, variables: acceptJobOrderVariables } =
     useAcceptJobOrderMutation();
 
-  const { control, handleSubmit } = useForm<z.infer<typeof searchSchema>>({
+  const { control, handleSubmit } = useForm<SearchForm>({
     resolver: zodResolver(searchSchema),
   });
 
