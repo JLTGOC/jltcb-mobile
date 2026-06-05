@@ -110,123 +110,125 @@ export default function RespondedQuotes() {
     <View style={{ flex: 1, backgroundColor: THEMES.pageBackgroundColor }}>
       <BannerHeader title="QUOTATIONS" variant="dark" />
 
-      <DataTable>
-        <DataTable.Header style={styles.header}>
-          {tableHeaders.map((header, index) => {
-            const flexValues = [1.35, 1, 2.15, 1, 0.5];
-            const flexValue = flexValues[index] || 1;
-            return (
-              <DataTable.Title
-                key={index}
-                style={{ flex: flexValue }}
-                textStyle={styles.headerText}
-              >
-                {header.toUpperCase()}
-              </DataTable.Title>
-            );
-          })}
-        </DataTable.Header>
-        {isPending ? (
-          <ActivityIndicator animating={true} style={{ marginTop: 40 }} />
-        ) : (
-          <ScrollView>
-            {quotes.map((item) => (
-              <Pressable
-                key={item.id}
-                onPress={() => {
-                  router.navigate({
-                    pathname:
-                      "/(client)/(tabs)/dashboard/responded-quotation/[id]",
-                    params: { id: item.id, title: item.commodity },
-                  });
-                }}
-                style={({ pressed }) => [
-                  {
-                    opacity: pressed ? 0.7 : 1,
-                  },
-                ]}
-              >
-                <DataTable.Row>
-                  <DataTable.Cell
-                    textStyle={styles.cellText}
-                    style={{ flex: 1.35 }}
-                  >
-                    {item.reference_number}
-                  </DataTable.Cell>
+      <ScrollView>
+        <DataTable>
+          <DataTable.Header style={styles.header}>
+            {tableHeaders.map((header, index) => {
+              const flexValues = [1.35, 1, 2.15, 1, 0.5];
+              const flexValue = flexValues[index] || 1;
+              return (
+                <DataTable.Title
+                  key={index}
+                  style={{ flex: flexValue }}
+                  textStyle={styles.headerText}
+                >
+                  {header.toUpperCase()}
+                </DataTable.Title>
+              );
+            })}
+          </DataTable.Header>
+          {isPending ? (
+            <ActivityIndicator animating={true} style={{ marginTop: 40 }} />
+          ) : (
+            <>
+              {quotes.map((item) => (
+                <Pressable
+                  key={item.id}
+                  onPress={() => {
+                    router.navigate({
+                      pathname:
+                        "/(client)/(tabs)/dashboard/responded-quotation/[id]",
+                      params: { id: item.id, title: item.commodity },
+                    });
+                  }}
+                  style={({ pressed }) => [
+                    {
+                      opacity: pressed ? 0.7 : 1,
+                    },
+                  ]}
+                >
+                  <DataTable.Row>
+                    <DataTable.Cell
+                      textStyle={styles.cellText}
+                      style={{ flex: 1.35 }}
+                    >
+                      {item.reference_number}
+                    </DataTable.Cell>
 
-                  <DataTable.Cell
-                    textStyle={styles.cellText}
-                    style={{ flex: 1 }}
-                  >
-                    {item.date}
-                  </DataTable.Cell>
+                    <DataTable.Cell
+                      textStyle={styles.cellText}
+                      style={{ flex: 1 }}
+                    >
+                      {item.date}
+                    </DataTable.Cell>
 
-                  <DataTable.Cell
-                    textStyle={styles.cellText}
-                    style={{ flex: 2.15 }}
-                  >
-                    {item.commodity}
-                  </DataTable.Cell>
+                    <DataTable.Cell
+                      textStyle={styles.cellText}
+                      style={{ flex: 2.15 }}
+                    >
+                      {item.commodity}
+                    </DataTable.Cell>
 
-                  <DataTable.Cell
-                    textStyle={styles.cellText}
-                    style={{ flex: 1 }}
-                  >
-                    {item.status}
-                  </DataTable.Cell>
+                    <DataTable.Cell
+                      textStyle={styles.cellText}
+                      style={{ flex: 1 }}
+                    >
+                      {item.status}
+                    </DataTable.Cell>
 
-                  <DataTable.Cell
-                    onPress={() => {}}
-                    numeric
-                    style={{ flex: 0.5, justifyContent: "center" }}
-                  >
-                    {item?.status === "ACCEPTED" ? (
-                      <IconButton
-                        icon="chat"
-                        size={20}
-                        onPress={() => {
-                          redirectToChat(item.conversation_id);
-                        }}
-                      />
-                    ) : (
-                      <Menu
-                        visible={visibleMenuId === item.id}
-                        onDismiss={() => setVisibleMenuId(null)}
-                        anchor={
-                          <IconButton
-                            icon="dots-vertical"
-                            size={20}
-                            onPress={() => setVisibleMenuId(item.id)}
-                          />
-                        }
-                      >
-                        {menuItems.map((menu, index) => (
-                          <Menu.Item
-                            key={index}
-                            onPress={() => {
-                              handleOnPress(menu.title, item);
-                            }}
-                            leadingIcon={({ size }) => (
-                              <Icon
-                                source={menu.iconName}
-                                color={menu.color}
-                                size={size}
-                              />
-                            )}
-                            title={menu.title}
-                            style={styles.menuItem}
-                            titleStyle={{ color: menu.color }}
-                          />
-                        ))}
-                      </Menu>
-                    )}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              </Pressable>
-            ))}
-          </ScrollView>
-        )}
-      </DataTable>
+                    <DataTable.Cell
+                      onPress={() => {}}
+                      numeric
+                      style={{ flex: 0.5, justifyContent: "center" }}
+                    >
+                      {item?.status === "ACCEPTED" ? (
+                        <IconButton
+                          icon="chat"
+                          size={20}
+                          onPress={() => {
+                            redirectToChat(item.conversation_id);
+                          }}
+                        />
+                      ) : (
+                        <Menu
+                          visible={visibleMenuId === item.id}
+                          onDismiss={() => setVisibleMenuId(null)}
+                          anchor={
+                            <IconButton
+                              icon="dots-vertical"
+                              size={20}
+                              onPress={() => setVisibleMenuId(item.id)}
+                            />
+                          }
+                        >
+                          {menuItems.map((menu, index) => (
+                            <Menu.Item
+                              key={index}
+                              onPress={() => {
+                                handleOnPress(menu.title, item);
+                              }}
+                              leadingIcon={({ size }) => (
+                                <Icon
+                                  source={menu.iconName}
+                                  color={menu.color}
+                                  size={size}
+                                />
+                              )}
+                              title={menu.title}
+                              style={styles.menuItem}
+                              titleStyle={{ color: menu.color }}
+                            />
+                          ))}
+                        </Menu>
+                      )}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                </Pressable>
+              ))}
+            </>
+          )}
+        </DataTable>
+      </ScrollView>
 
       <Portal>
         <ConfirmModal
