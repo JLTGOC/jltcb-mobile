@@ -126,101 +126,100 @@ export default function SharedMessages({ variant }: Props) {
   );
 
   return (
-    <FlatList
-      keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefetchingByUser}
-          onRefresh={refetchByUser}
-        />
-      }
-      data={data?.data}
-      contentContainerStyle={{
-        flex: 1,
-        backgroundColor: THEMES.pageBackgroundColor,
-      }}
-      ListHeaderComponent={
-        <>
-          <BannerHeader back={false} title="Messages" variant={variant} />
+    <View style={{ backgroundColor: THEMES.pageBackgroundColor, flex: 1 }}>
+      <BannerHeader back={false} title="Messages" variant={variant} />
 
-          <Controller
-            name="search"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Search
-                variant="dark"
-                containerStyle={styles.searchContainer}
-                style={styles.searchInput}
-                onSearch={onSubmit}
-                onChangeText={onChange}
-                value={value}
-                onBlur={onBlur}
-                placeholder="SEARCH QUERIES"
-                autoCapitalize="none"
-                placeholderTextColor="black"
-                onSubmitEditing={onSubmit}
-                returnKeyType="search"
-              />
-            )}
+      <Controller
+        name="search"
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Search
+            variant="dark"
+            containerStyle={styles.searchContainer}
+            style={styles.searchInput}
+            onSearch={onSubmit}
+            onChangeText={onChange}
+            value={value}
+            onBlur={onBlur}
+            placeholder="SEARCH QUERIES"
+            autoCapitalize="none"
+            placeholderTextColor="black"
+            onSubmitEditing={onSubmit}
+            returnKeyType="search"
           />
-        </>
-      }
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: "/messages/[id]",
-              params: { id: item.id, group: String(item.type === "GROUP") },
-            })
+        )}
+      />
+
+      <FlatList
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetchingByUser}
+            onRefresh={refetchByUser}
+          />
+        }
+        data={data?.data}
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: THEMES.pageBackgroundColor,
+        }}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: "/messages/[id]",
+                params: { id: item.id, group: String(item.type === "GROUP") },
+              })
+            }
+            style={({ pressed }) => [
+              styles.container,
+              styles.inboxListItem,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <InboxListItem {...item} />
+          </Pressable>
+        )}
+        ListEmptyComponent={() => {
+          if (isPending) {
+            return (
+              <View style={[styles.centeredContainer, styles.container]}>
+                <ActivityIndicator size="large" />
+              </View>
+            );
           }
-          style={({ pressed }) => [
-            styles.container,
-            styles.inboxListItem,
-            {
-              opacity: pressed ? 0.7 : 1,
-            },
-          ]}
-        >
-          <InboxListItem {...item} />
-        </Pressable>
-      )}
-      ListEmptyComponent={() => {
-        if (isPending && !isRefetching) {
-          return (
-            <View style={[styles.centeredContainer, styles.container]}>
-              <ActivityIndicator size="large" />
-            </View>
-          );
-        }
 
-        if (submittedSearch && isRefetching) {
-          return null;
-        }
+          if (submittedSearch && isRefetching) {
+            return null;
+          }
 
-        if (error) {
-          return (
-            <View style={[styles.centeredContainer, styles.container]}>
-              <HelperText type="error" style={styles.infoText}>
-                {error.message || "Something went wrong. Please try again."}
-              </HelperText>
-            </View>
-          );
-        }
+          if (error) {
+            return (
+              <View style={[styles.centeredContainer, styles.container]}>
+                <HelperText type="error" style={styles.infoText}>
+                  {error.message || "Something went wrong. Please try again."}
+                </HelperText>
+              </View>
+            );
+          }
 
-        if (data?.data?.length === 0) {
-          return (
-            <View style={styles.container}>
-              <HelperText type="info" style={styles.infoText}>
-                {data.message}
-              </HelperText>
-            </View>
-          );
+          if (data?.data?.length === 0) {
+            return (
+              <View style={styles.container}>
+                <HelperText type="info" style={styles.infoText}>
+                  {data.message}
+                </HelperText>
+              </View>
+            );
+          }
+        }}
+        ListFooterComponent={
+          isRefetching && submittedSearch ? <ActivityIndicator /> : null
         }
-      }}
-      ListFooterComponent={
-        isRefetching && submittedSearch ? <ActivityIndicator /> : null
-      }
-    />
+      />
+    </View>
   );
 }
 
