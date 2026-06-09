@@ -1,5 +1,6 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -13,9 +14,9 @@ import { Card } from "@/components/ui/Card";
 import { RecordCard } from "@/components/ui/RecordCard";
 import Search from "@/components/ui/Search";
 
-import { useShipmentsQuery } from "@/hooks/shipments/useShipmentsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { shipmentQueries } from "@/queries/shipments";
 import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import type { ShipmentQueryStatus } from "@/types/shipments";
 import { capitalize } from "@/utils/capitalize";
@@ -31,10 +32,12 @@ export default function Shipments() {
 
   const [submittedSearch, setSubmittedSearch] = useState("");
 
-  const { data, isPending, error, refetch } = useShipmentsQuery({
-    ...(submittedSearch && { search: submittedSearch }),
-    filter: { status: status.toUpperCase() as ShipmentQueryStatus },
-  });
+  const { data, isPending, error, refetch } = useQuery(
+    shipmentQueries.list({
+      ...(submittedSearch && { search: submittedSearch }),
+      filter: { status: status.toUpperCase() as ShipmentQueryStatus },
+    }),
+  );
 
   useRefreshOnFocus(refetch);
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
@@ -57,6 +60,7 @@ export default function Shipments() {
             onBlur={onBlur}
             value={value}
             onSearch={handleSearch}
+            onSubmitEditing={handleSearch}
           />
         )}
       />

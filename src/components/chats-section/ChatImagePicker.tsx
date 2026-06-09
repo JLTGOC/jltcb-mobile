@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Pressable } from "react-native";
 
-import { useSendImageMutation } from "@/hooks/useSendImageMutation";
+import { useSendImageMutation } from "@/hooks/mutations/chats/useSendImageMutation";
 import type { SendImageBody } from "@/types/chats";
 
 export default function ChatImagePicker() {

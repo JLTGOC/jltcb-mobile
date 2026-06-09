@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
 
@@ -8,10 +8,10 @@ import TabBar from "@/components/tabs-ui/TabBar";
 import BannerHeader from "@/components/ui/BannerHeader";
 
 import { useQuotationBannerTitle } from "@/hooks/useQuotationBannerTitle";
-import { useQuotationQuery } from "@/hooks/useQuotationQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
-import { quotationKeys } from "@/query-key-factories/quotations";
-import { userKeys } from "@/query-key-factories/users";
+import { quotationQueries } from "@/queries/quotations";
+import { quotationFileQueries } from "@/queries/quotations/files";
+import { userQueries } from "@/queries/users";
 
 const TABS = ["details", "documents", "billing"] as const;
 type TabType = (typeof TABS)[number];
@@ -29,26 +29,33 @@ export default function SharedQuotation() {
     ? (tab as TabType)
     : "details";
 
-  const { data: quotationData } = useQuotationQuery(quotationId);
+  const { data: quotationData } = useQuery(
+    quotationQueries.detail(Number(quotationId)),
+  );
   const bannerTitle = useQuotationBannerTitle(quotationData?.data);
 
   const refreshActiveTab = async () => {
+    if (!quotationData) return;
+
     if (activeTab === "details") {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getQuotation(quotationId),
+          queryKey: quotationQueries.detail(Number(quotationId)).queryKey,
         }),
         queryClient.invalidateQueries({
-          queryKey: userKeys.detail(Number(quotationData?.data.client_id)),
+          queryKey: userQueries.detail(Number(quotationData.data.client_id))
+            .queryKey,
         }),
       ]);
     } else if (activeTab === "documents") {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getClientQuotationDocuments(quotationId),
+          queryKey: quotationFileQueries.list(Number(quotationId), "REQUESTED")
+            .queryKey,
         }),
         queryClient.invalidateQueries({
-          queryKey: quotationKeys.getCompanyQuotationDocuments(quotationId),
+          queryKey: quotationFileQueries.list(Number(quotationId), "PROPOSAL")
+            .queryKey,
         }),
       ]);
     }

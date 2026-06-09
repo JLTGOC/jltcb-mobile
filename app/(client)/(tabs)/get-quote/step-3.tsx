@@ -12,7 +12,7 @@ import Button from "@/components/ui/Button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
 import TextInput from "@/components/ui/TextInput";
 
-import { useCreateQuotationMutation } from "@/hooks/useCreateQuotationMutation";
+import { useCreateQuotationMutation } from "@/hooks/mutations/quotations/useCreateQuotationMutation";
 import { logisticsQuotationFormSchema } from "@/schemas/client-quotation-form/logistics-quotation-form-schema";
 import { regulatoryQuotationFormSchema } from "@/schemas/client-quotation-form/regulatory-quotation-form-schema";
 import {
@@ -91,22 +91,24 @@ export default function Step3() {
     }
   };
 
-  const { mutateAsync, isPending } = useCreateQuotationMutation();
+  const { mutate: createQuotation, isPending } = useCreateQuotationMutation();
   const reset = useClientQuotationFormStore((state) => state.reset);
 
   const onSubmit = handleSubmit(async (data) => {
     const payload = getPayload(data);
     if (!payload) return;
 
-    try {
-      await mutateAsync(payload);
-      reset();
-      router.navigate("/get-quote/success");
-    } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Error creating quotation:", err);
-      }
-    }
+    createQuotation(payload, {
+      onSuccess: () => {
+        reset();
+        router.navigate("/get-quote/success");
+      },
+      onError: (err) => {
+        if (isAxiosError(err)) {
+          console.error("Error creating quotation:", err);
+        }
+      },
+    });
   });
 
   return (

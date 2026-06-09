@@ -5,7 +5,7 @@ import type { ContainerSize, options } from "@/constants/client-const";
 import type { ClientType } from "@/types/jobOrderEnums";
 
 import type { File } from ".";
-import type { CargoType } from "./job-order";
+import type { CargoType, JobType } from "./job-order";
 
 export const ASSIGNMENT_STATUSES = [
   "AVAILABLE",
@@ -21,6 +21,18 @@ export const LOGISTICS_TRANSPORT_MODES = ["SEA", "AIR"] as const;
 export type LogisticsTransportMode = (typeof LOGISTICS_TRANSPORT_MODES)[number];
 
 export type LogisticsServiceOptions = (typeof options)[number];
+
+export interface ClientQuotationListSummary<
+  T extends "REQUESTED" | "RESPONDED",
+> {
+  id: number;
+  status: T extends "REQUESTED" ? "NEW" : T;
+  reference_number: string;
+  commodity: string;
+  date: string;
+  conversation_id: string | null;
+  reassignment_request_id: number | null;
+}
 
 export interface ASRequestedQuotationSummary {
   client_id: number;
@@ -209,7 +221,7 @@ export interface QuotationDetailsSection {
   details: string[][];
 }
 
-export interface UpdateAsArgs {
+export interface ReassignASRequestBody {
   quotationId: number;
   asId: number;
 }
@@ -269,8 +281,22 @@ export interface QuotationListQueryFilter {
   status?: QuotationStatus;
 }
 
-export interface QuotationListQueryParams {
+export type QuotationListQueryParams = {
   search?: string;
   filter?: QuotationListQueryFilter;
   client_id?: number;
-}
+};
+
+export type QuotationFileType = "REQUESTED" | "PROPOSAL";
+
+export type FetchQuoteParamsByService<T extends JobType> = T extends "LOGISTICS"
+  ? {
+      service: "LOGISTICS";
+      service_type?: LogisticsServiceType;
+    }
+  : T extends "REGULATORY"
+    ? {
+        service: "REGULATORY";
+        service_type: "BUSINESS SOLUTION";
+      }
+    : never;

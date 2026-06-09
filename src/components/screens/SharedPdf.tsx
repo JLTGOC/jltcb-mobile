@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
-import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
+import { quotationQueries } from "@/queries/quotations";
 import { downloadFile } from "@/utils/handleFileDownload";
 import { showToast } from "@/utils/showToast";
 
@@ -30,7 +30,9 @@ export default function SharedPdfScreen({
   const { token } = useAuth();
   const [file, setFile] = useState<File | null>(null);
 
-  const { data, isPending } = useQuery(quotationQueryOptions(quotationId));
+  const { data, isPending } = useQuery(
+    quotationQueries.detail(Number(quotationId)),
+  );
 
   useFocusEffect(
     useCallback(() => {

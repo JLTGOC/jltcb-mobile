@@ -25,9 +25,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { pusher } from "@/lib/pusher";
-import { chatKeys } from "@/query-key-factories/chats";
-import { chatMessagesInfiniteQueryOptions } from "@/query-options/chats/chatMessagesInfiniteQueryOptions";
-import { chatsQueryOptions } from "@/query-options/chats/chatsQueryOptions";
+import { chatQueries } from "@/queries/chats";
+import { chatMessageQueries } from "@/queries/chats/messages";
 import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import type {
   ChatEvent,
@@ -47,10 +46,9 @@ export default function SharedMessages({ variant }: Props) {
   const [submittedSearch, setSubmittedSearch] = useState("");
   const submittedSearchRef = useRef(submittedSearch);
 
-  const { data, isPending, isRefetching, error, refetch } = useQuery({
-    ...chatsQueryOptions(submittedSearch),
-    placeholderData: (prev) => prev,
-  });
+  const { data, isPending, isRefetching, error, refetch } = useQuery(
+    chatQueries.list(submittedSearch),
+  );
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
@@ -87,7 +85,7 @@ export default function SharedMessages({ variant }: Props) {
             const { inbox } = chatData;
 
             queryClient.setQueryData<InboxListApiResponse>(
-              chatKeys.getChats(submittedSearchRef.current),
+              chatQueries.list(submittedSearchRef.current).queryKey,
               (old) => {
                 if (!old) return old;
 
@@ -101,7 +99,7 @@ export default function SharedMessages({ variant }: Props) {
             );
 
             queryClient.prefetchInfiniteQuery(
-              chatMessagesInfiniteQueryOptions(inbox.id),
+              chatMessageQueries.list(inbox.id),
             );
 
             break;

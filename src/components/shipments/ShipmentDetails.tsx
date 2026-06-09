@@ -1,5 +1,6 @@
 import Box from "@material-symbols/svg-500/outlined/box.svg";
 import CorporateFare from "@material-symbols/svg-500/outlined/corporate_fare.svg";
+import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
@@ -8,14 +9,14 @@ import ClientCard, {
 } from "@/components/details/ClientCard";
 import { DetailCard } from "@/components/details/DetailCard";
 
-import { useShipmentQuery } from "@/hooks/shipments/useShipmentQuery";
+import { shipmentQueries } from "@/queries/shipments";
 
 export default function ShipmentDetails() {
   const { shipmentId } = useLocalSearchParams<{
     shipmentId: string;
   }>();
 
-  const { data } = useShipmentQuery(Number(shipmentId));
+  const { data } = useQuery(shipmentQueries.detail(Number(shipmentId)));
 
   if (!data) return null;
 

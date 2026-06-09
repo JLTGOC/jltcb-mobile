@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
@@ -15,10 +15,10 @@ import Search from "@/components/client-section/shipment/Search";
 import BannerHeader from "@/components/ui/BannerHeader";
 
 import { THEMES } from "@/constants/themes";
-import { useAuth } from "@/hooks/useAuth";
+import { useDeleteQuotationMutation } from "@/hooks/mutations/quotations/useDeleteQuotationMutation";
 import useDebounce from "@/hooks/useDebounce";
-import { deleteClientSingleQuoteMutationOptions } from "@/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
-import { clientQuotesQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
+import { quotationQueries } from "@/queries/quotations";
+import type { ClientQuotationListSummary } from "@/types/quotations";
 
 type TableItem = {
   id: number;
@@ -38,27 +38,23 @@ const menuItems = [
 export default function RequestQuotes() {
   const [search, setSearch] = useState<string>("");
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
-  const { userData } = useAuth();
   const router = useRouter();
 
   const debouncedSearch = useDebounce(search, 500) || "";
 
   // Data Fetching
   const { data, isLoading, refetch } = useQuery({
-    ...clientQuotesQueryOptions({
-      status: "REQUESTED",
+    ...quotationQueries.list<ClientQuotationListSummary<"REQUESTED">[]>({
+      filter: {
+        status: "REQUESTED",
+      },
       search: debouncedSearch,
     }),
     placeholderData: (previousData) => previousData,
   });
 
   // Delete single quotation
-  const { mutate: deletedSingleQuotation } = useMutation({
-    ...deleteClientSingleQuoteMutationOptions(String(userData?.id)),
-    onSuccess: () => {
-      refetch();
-    },
-  });
+  const { mutate: deleteQuotation } = useDeleteQuotationMutation();
 
   const quotes = (data as unknown as TableItem[]) || [];
 
@@ -151,7 +147,9 @@ export default function RequestQuotes() {
                                 },
                               });
                             } else {
-                              deletedSingleQuotation(item.id);
+                              deleteQuotation(item.id, {
+                                onSuccess: () => refetch(),
+                              });
                             }
                             setVisibleMenuId(null);
                           }}

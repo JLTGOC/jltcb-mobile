@@ -6,17 +6,15 @@ import FolderSection from "@/components/dashboard-section/FolderSection";
 import UserHeader from "@/components/dashboard-section/UserHeader";
 
 import { CLIENT_DB_FOLDER_SECTIONS } from "@/constants/user-dashboards";
-import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { dashboardQueryOptions } from "@/query-options/dashboard/dashboardQueryOptions";
+import { dashboardQueries } from "@/queries/dashboard";
 import type { ClientDashboard } from "@/types/dashboard";
 import { mapDashboardData } from "@/utils/mapDashboardData";
 
 export default function Index() {
-  const { userData } = useAuth();
   const { data, isPending, refetch } = useQuery({
-    ...dashboardQueryOptions<ClientDashboard>(String(userData?.id)),
+    ...dashboardQueries.detail<ClientDashboard>(),
     select: ({ data }) => mapDashboardData(data, CLIENT_DB_FOLDER_SECTIONS),
   });
 

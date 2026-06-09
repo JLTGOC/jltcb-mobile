@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
@@ -18,12 +18,11 @@ import SuccesModal from "@/components/ui/SuccessModal";
 
 import { routes } from "@/constants/routes";
 import { THEMES } from "@/constants/themes";
-import { useAuth } from "@/hooks/useAuth";
-import { useSendQuotationCardMutation } from "@/hooks/useSendQuotationCardMutation";
-import { acceptClientQuotationMutationOptions } from "@/mutation-options/client-quotations/acceptClientQuotationMutationOptions";
-import { deleteClientSingleQuoteMutationOptions } from "@/mutation-options/client-quotations/deleteClientSingleQuoteMutationOptions";
-import { clientQuotesQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
-import type { QuotesListItem } from "@/types/client-quotation";
+import { useSendQuotationCardMutation } from "@/hooks/mutations/quotations/chats/useSendQuotationCardMutation";
+import { useAcceptQuotationProposalMutation } from "@/hooks/mutations/quotations/useAcceptQuotationProposalMutation";
+import { useDeleteQuotationMutation } from "@/hooks/mutations/quotations/useDeleteQuotationMutation";
+import { quotationQueries } from "@/queries/quotations";
+import type { ClientQuotationListSummary } from "@/types/quotations";
 
 const tableHeaders = ["reference", "date", "shipment details", "status", ""];
 
@@ -33,8 +32,9 @@ const menuItems = [
   { iconName: "delete-outline", title: "DISCARD", color: "red" },
 ];
 
+type RespondedQuotation = ClientQuotationListSummary<"RESPONDED">;
+
 export default function RespondedQuotes() {
-  const { userData } = useAuth();
   const router = useRouter();
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
@@ -44,37 +44,42 @@ export default function RespondedQuotes() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   // Data Fetching
-  const { data, isPending } = useQuery({
-    ...clientQuotesQueryOptions({ status: "RESPONDED" }),
+  const { data: quotationsData, isPending } = useQuery({
+    ...quotationQueries.list<RespondedQuotation[]>({
+      filter: { status: "RESPONDED" },
+    }),
     placeholderData: (previousData) => previousData,
   });
 
   // Delete single quotation
-  const { mutate: deletedSingleQuotation } = useMutation(
-    deleteClientSingleQuoteMutationOptions(String(userData?.id)),
-  );
+  const { mutate: deleteQuotation } = useDeleteQuotationMutation();
 
   // Accept the quotation
-  const { mutate: handleAccept, isPending: isAccepting } = useMutation({
-    ...acceptClientQuotationMutationOptions(String(userData?.id)),
-    onSuccess: () => {
-      setModalVisible(false);
-      setSuccessModalVisible(true);
-    },
-    onError: (err) => {
-      console.error("Failed to accept:", err);
-      setModalVisible(false);
-    },
-  });
+  const { mutate: acceptQuotationProposal, isPending: isAccepting } =
+    useAcceptQuotationProposalMutation();
 
-  const handleOnPress = (title: string, quotation: QuotesListItem) => {
+  const handleAcceptQuotationProposal = () => {
+    if (!selectedId) return;
+    acceptQuotationProposal(selectedId, {
+      onSuccess: () => {
+        setModalVisible(false);
+        setSuccessModalVisible(true);
+      },
+      onError: (err) => {
+        console.error("Failed to accept:", err);
+        setModalVisible(false);
+      },
+    });
+  };
+
+  const handleOnPress = (title: string, quotation: RespondedQuotation) => {
     setVisibleMenuId(null);
 
     if (title === "ACCEPT") {
       setSelectedId(quotation.id);
       setModalVisible(true);
     } else if (title === "DISCARD") {
-      deletedSingleQuotation(quotation.id);
+      deleteQuotation(quotation.id);
     } else if (title === "CHAT") {
       handleChatButtonPress(quotation);
     }
@@ -90,7 +95,7 @@ export default function RespondedQuotes() {
     });
   };
 
-  const handleChatButtonPress = async (quotation: QuotesListItem) => {
+  const handleChatButtonPress = async (quotation: RespondedQuotation) => {
     if (quotation.conversation_id) {
       redirectToChat(quotation.conversation_id);
       return;
@@ -103,8 +108,6 @@ export default function RespondedQuotes() {
       console.error(e);
     }
   };
-
-  const quotes = data || [];
 
   return (
     <View style={{ flex: 1, backgroundColor: THEMES.pageBackgroundColor }}>
@@ -131,7 +134,7 @@ export default function RespondedQuotes() {
             <ActivityIndicator animating={true} style={{ marginTop: 40 }} />
           ) : (
             <>
-              {quotes.map((item) => (
+              {quotationsData?.data.map((item) => (
                 <Pressable
                   key={item.id}
                   onPress={() => {
@@ -181,46 +184,36 @@ export default function RespondedQuotes() {
                       numeric
                       style={{ flex: 0.5, justifyContent: "center" }}
                     >
-                      {item?.status === "ACCEPTED" ? (
-                        <IconButton
-                          icon="chat"
-                          size={20}
-                          onPress={() => {
-                            redirectToChat(item.conversation_id);
-                          }}
-                        />
-                      ) : (
-                        <Menu
-                          visible={visibleMenuId === item.id}
-                          onDismiss={() => setVisibleMenuId(null)}
-                          anchor={
-                            <IconButton
-                              icon="dots-vertical"
-                              size={20}
-                              onPress={() => setVisibleMenuId(item.id)}
-                            />
-                          }
-                        >
-                          {menuItems.map((menu, index) => (
-                            <Menu.Item
-                              key={index}
-                              onPress={() => {
-                                handleOnPress(menu.title, item);
-                              }}
-                              leadingIcon={({ size }) => (
-                                <Icon
-                                  source={menu.iconName}
-                                  color={menu.color}
-                                  size={size}
-                                />
-                              )}
-                              title={menu.title}
-                              style={styles.menuItem}
-                              titleStyle={{ color: menu.color }}
-                            />
-                          ))}
-                        </Menu>
-                      )}
+                      <Menu
+                        visible={visibleMenuId === item.id}
+                        onDismiss={() => setVisibleMenuId(null)}
+                        anchor={
+                          <IconButton
+                            icon="dots-vertical"
+                            size={20}
+                            onPress={() => setVisibleMenuId(item.id)}
+                          />
+                        }
+                      >
+                        {menuItems.map((menu, index) => (
+                          <Menu.Item
+                            key={index}
+                            onPress={() => {
+                              handleOnPress(menu.title, item);
+                            }}
+                            leadingIcon={({ size }) => (
+                              <Icon
+                                source={menu.iconName}
+                                color={menu.color}
+                                size={size}
+                              />
+                            )}
+                            title={menu.title}
+                            style={styles.menuItem}
+                            titleStyle={{ color: menu.color }}
+                          />
+                        ))}
+                      </Menu>
                     </DataTable.Cell>
                   </DataTable.Row>
                 </Pressable>
@@ -238,7 +231,7 @@ export default function RespondedQuotes() {
           loading={isAccepting}
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
-          onConfirm={() => selectedId && handleAccept(selectedId)}
+          onConfirm={handleAcceptQuotationProposal}
           title="ACCEPT QUOTATION"
           description="Once you accept this quotation, the terms will be final and no changes or negotiations can be made. Please review all details carefully before confirming you acceptance"
         />

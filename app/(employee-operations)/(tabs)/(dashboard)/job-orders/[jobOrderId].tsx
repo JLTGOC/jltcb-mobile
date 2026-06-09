@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -6,13 +7,15 @@ import JobOrderNavigation from "@/components/job-order-section/JobOrderNavigatio
 import SharedLogisticsJobOrder from "@/components/screens/SharedLogisticsJobOrder";
 import SharedRegulatoryJobOrder from "@/components/screens/SharedRegulatoryJobOrder";
 
-import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
+import { jobOrderQueries } from "@/queries/job-orders";
 
 export default function JobOrder() {
   const { jobOrderId } = useLocalSearchParams<{
     jobOrderId: string;
   }>();
-  const { data, isPending } = useJobOrderQuery(Number(jobOrderId));
+  const { data, isPending } = useQuery(
+    jobOrderQueries.detail(Number(jobOrderId)),
+  );
 
   const jobType = data?.data.job_type;
   const targetId =

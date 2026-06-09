@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import {
   type FlatListProps,
@@ -14,8 +15,8 @@ import SubjectCard from "@/components/ui/SubjectCard";
 import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
-import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { jobOrderQueries } from "@/queries/job-orders";
 import type { RegulatoryJobOrder, SummaryCardData } from "@/types/job-order";
 import { buildSummaryItems } from "@/utils/summaryItems";
 
@@ -28,8 +29,8 @@ export default function SharedRegulatoryJobOrder({
     jobOrderId: string;
   }>();
 
-  const { data, isPending, refetch } = useJobOrderQuery<RegulatoryJobOrder>(
-    Number(jobOrderId),
+  const { data, isPending, refetch } = useQuery(
+    jobOrderQueries.detail<RegulatoryJobOrder>(Number(jobOrderId)),
   );
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
 

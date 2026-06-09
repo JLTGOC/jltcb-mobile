@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -16,9 +16,8 @@ import FormTextInput from "@/components/ui/FormTextInput";
 import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 import SuccesModal from "@/components/ui/SuccessModal";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
-import { createJobOrderMutationOptions } from "@/mutation-options/job-orders/createJobOrderMutationOptions";
+import { useCreateJobOrderMutation } from "@/hooks/mutations/job-orders/useCreateJobOrderMutation";
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
 import {
   type RegulatoryServiceFormSchema,
   regulatoryServiceFormSchema,
@@ -29,7 +28,6 @@ import { showToast } from "@/utils/showToast";
 
 export default function RegulatoryJobOrderForm() {
   const router = useRouter();
-  const { userData } = useAuth();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -53,17 +51,17 @@ export default function RegulatoryJobOrderForm() {
   const quotationReference = useJobOrderFormStore(
     (state) => state.quotationReference,
   );
-  const { data, isPending } = useJobOrderEnums(quotationReference ?? "");
-
-  const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
-    createJobOrderMutationOptions(String(userData?.id)),
+  const { data, isPending } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
   );
+
+  const { mutate, isPending: isCreatingJobOrder } = useCreateJobOrderMutation();
 
   const onSubmit = handleSubmit(async () => {
     setModalVisible(true);
   });
 
-  const handleCreateRegulatoryJobOrder = async (
+  const handleCreateRegulatoryJobOrder = (
     data: RegulatoryServiceFormSchema,
   ) => {
     if (!quotationReference) return;
@@ -73,17 +71,15 @@ export default function RegulatoryJobOrderForm() {
       quotationReference,
     });
 
-    try {
-      await mutateAsync(payload);
-
-      setSuccessModalVisible(true);
-    } catch (err) {
-      if (isAxiosError(err)) {
-        showToast(err.response?.data.message || "Failed to create job order");
-      }
-    } finally {
-      setModalVisible(false);
-    }
+    mutate(payload, {
+      onSuccess: () => setSuccessModalVisible(true),
+      onError: (err) => {
+        if (isAxiosError(err)) {
+          showToast(err.response?.data.message || "Failed to create job order");
+        }
+      },
+      onSettled: () => setModalVisible(false),
+    });
   };
 
   const onConfirmCreateRegulatoryJobOrder = handleSubmit(

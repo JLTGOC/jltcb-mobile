@@ -23,3 +23,8 @@ export const fetchJobOrder = <T extends JobOrder>(id: number) =>
 
 export const acceptJobOrder = (jobOrderId: number) =>
   apiPut(`job-orders/${jobOrderId}/accept`);
+
+export const fetchJobOrderFormEnums = (quotationReference?: string) =>
+  apiGet<JobOrderResponse>("job-orders/enums", {
+    params: { quotation_reference_number: quotationReference },
+  });

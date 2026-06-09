@@ -36,9 +36,8 @@ import {
 } from "@/contexts/ChatPendingIdsContext";
 import { useAuth } from "@/hooks/useAuth";
 import { pusher } from "@/lib/pusher";
-import { chatKeys } from "@/query-key-factories/chats";
-import { chatMessagesInfiniteQueryOptions } from "@/query-options/chats/chatMessagesInfiniteQueryOptions";
-import { chatQueryOptions } from "@/query-options/chats/chatQueryOptions";
+import { chatQueries } from "@/queries/chats";
+import { chatMessageQueries } from "@/queries/chats/messages";
 import { markAsRead } from "@/services/chats";
 import type {
   ChatEvent,
@@ -91,7 +90,7 @@ function SharedChatContent({ variant }: Props) {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    ...chatMessagesInfiniteQueryOptions(id),
+    ...chatMessageQueries.list(id),
     staleTime: Infinity,
   });
 
@@ -109,11 +108,11 @@ function SharedChatContent({ variant }: Props) {
 
   useFocusEffect(
     useCallback(() => {
-      queryClient.invalidateQueries({ queryKey: chatKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: chatQueries.lists() });
     }, [queryClient]),
   );
 
-  const { data: chatDetails } = useQuery(chatQueryOptions(id));
+  const { data: chatDetails } = useQuery(chatQueries.detail(id));
 
   useFocusEffect(
     useCallback(() => {
@@ -131,7 +130,7 @@ function SharedChatContent({ variant }: Props) {
             queryClient.setQueryData<{
               pages: MessagesApiResponse[];
               pageParams: unknown[];
-            }>(chatKeys.getMessages(id), (old) => {
+            }>(chatMessageQueries.list(id).queryKey, (old) => {
               if (!old) return old;
 
               // Check if the optimistic message exists in any page

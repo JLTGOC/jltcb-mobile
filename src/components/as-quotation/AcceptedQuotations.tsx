@@ -1,5 +1,5 @@
 import Download from "@material-symbols/svg-500/outlined/download.svg";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -12,10 +12,9 @@ import DataTable from "@/components/ui/DataTable";
 
 import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
+import { quotationQueries } from "@/queries/quotations";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import type { MenuOption, TableHeader } from "@/types";
 import type { BaseASQuotation } from "@/types/quotations";
@@ -62,9 +61,11 @@ export default function AcceptedQuotations() {
 
   const [visibleMenuId, setVisibleMenuId] = useState<number | null>(null);
 
-  const { data, isPending, refetch } = useQuotationsQuery<BaseASQuotation[]>({
-    filter: { status: "ACCEPTED" },
-  });
+  const { data, isPending, refetch } = useQuery(
+    quotationQueries.list<BaseASQuotation[]>({
+      filter: { status: "ACCEPTED" },
+    }),
+  );
   const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
 
@@ -76,9 +77,9 @@ export default function AcceptedQuotations() {
     }
   };
 
-  const getQuotationFile = async (quotationId: string) => {
+  const getQuotationFile = async (quotationId: number) => {
     const { data } = await queryClient.fetchQuery(
-      quotationQueryOptions(quotationId),
+      quotationQueries.detail(quotationId),
     );
 
     if (typeof data.quotation_file === "string") {
@@ -115,7 +116,7 @@ export default function AcceptedQuotations() {
     quotation: BaseASQuotation;
   }) => {
     if (title !== "MAKE JOB ORDER") {
-      const file = await getQuotationFile(quotation.id.toString());
+      const file = await getQuotationFile(quotation.id);
       if (!file) return;
 
       if (title === "DOWNLOAD") saveFile(file);

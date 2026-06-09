@@ -14,7 +14,7 @@ import TextInput from "@/components/ui/TextInput";
 
 import { container_sizes } from "@/constants/client-const";
 import { THEMES } from "@/constants/themes";
-import { clientQuoteEnumsQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
+import { quotationFormQueries } from "@/queries/quotations/form";
 import {
   type LogisticsStep2FormData,
   logisticsStep2FormSchema,
@@ -63,7 +63,7 @@ export default function LogisticsForm() {
   ]);
 
   const { data, isPending } = useQuery({
-    ...clientQuoteEnumsQueryOptions({
+    ...quotationFormQueries.enums({
       service: "LOGISTICS",
       service_type: serviceType,
     }),

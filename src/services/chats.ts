@@ -11,7 +11,7 @@ import type {
 export const fetchChats = (search: string) =>
   apiGet<Inbox[]>("conversations", { params: { search } });
 
-export const fetchConversationData = (converstationId: string) =>
+export const fetchChat = (converstationId: string) =>
   apiGet<Inbox>(`conversations/${converstationId}`);
 
 export const fetchChatMessages = (conversationId: string, cursor: string) =>

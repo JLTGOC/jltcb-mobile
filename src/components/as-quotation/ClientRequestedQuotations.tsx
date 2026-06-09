@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
@@ -9,16 +9,16 @@ import BannerHeader from "@/components/ui/BannerHeader";
 import DataTable from "@/components/ui/DataTable";
 
 import { THEMES } from "@/constants/themes";
+import { useReassignASMutation } from "@/hooks/mutations/quotations/useReassignASMutation";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { updateAsMutationOptions } from "@/mutation-options/asLead-quotations/updateAsMutationOptions";
-import { asQueryOptions } from "@/query-options/users/asQueryOptions";
+import { quotationQueries } from "@/queries/quotations";
+import { reassignmentRequestQueries } from "@/queries/reassignment-requests";
 import type { TableHeader } from "@/types";
 import type {
   ASRequestedQuotationSummary,
-  UpdateAsArgs,
+  ReassignASRequestBody,
 } from "@/types/quotations";
 import { showToast } from "@/utils/showToast";
 
@@ -48,13 +48,13 @@ export default function ClientRequestedQuotations() {
     isPending: isAsUsersPending,
     refetch: refetchAsUsers,
   } = useQuery({
-    ...asQueryOptions,
+    ...reassignmentRequestQueries.enums({ as: true }),
     select: (data) => {
       const formattedNames = data.data.account_specialists.map((user) => ({
         id: String(user.id),
         title: user.full_name.split(" ")[0],
       }));
-      return { ...data, data: formattedNames };
+      return formattedNames;
     },
     enabled: isLeadAS,
   });
@@ -63,12 +63,12 @@ export default function ClientRequestedQuotations() {
     data: quotationsData,
     isPending,
     refetch: refetchQuotations,
-  } = useQuotationsQuery<ASRequestedQuotationSummary[]>({
-    filter: {
-      status: "REQUESTED",
-    },
-    client_id: Number(clientId),
-  });
+  } = useQuery(
+    quotationQueries.list<ASRequestedQuotationSummary[]>({
+      filter: { status: "REQUESTED" },
+      client_id: Number(clientId),
+    }),
+  );
 
   const refetch = () => {
     if (isLeadAS) refetchAsUsers();
@@ -79,20 +79,22 @@ export default function ClientRequestedQuotations() {
   useRefreshOnFocus(refetch);
 
   const {
-    mutateAsync,
+    mutate,
     variables,
     isPending: isUpdatingAs,
-  } = useMutation(updateAsMutationOptions);
+  } = useReassignASMutation();
 
-  const handleChangeAs = async (data: UpdateAsArgs) => {
-    try {
-      await mutateAsync(data);
-      showToast(
-        `Changed AS to ${asUsers?.data.find((user) => Number(user.id) === data.asId)?.title}`,
-      );
-    } catch (e) {
-      console.error(e);
-    }
+  const handleChangeAs = async (data: ReassignASRequestBody) => {
+    mutate(data, {
+      onSuccess: () =>
+        showToast(
+          `Changed AS to ${asUsers?.find((user) => Number(user.id) === data.asId)?.title}`,
+        ),
+      onError: (error) => {
+        console.error(error);
+        showToast("Failed to change AS");
+      },
+    });
   };
 
   const navigateToQuotation = (quotationId: number) => {
@@ -158,7 +160,7 @@ export default function ClientRequestedQuotations() {
                     key={quotation.id}
                     quotationId={quotation.id}
                     personInChargeName={personInCharge}
-                    dataSet={asUsers?.data ?? null}
+                    dataSet={asUsers ?? null}
                     loading={
                       isAsUsersPending ||
                       (variables?.quotationId === quotation.id && isUpdatingAs)

@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -14,9 +14,9 @@ import SuccesModal from "@/components/ui/SuccessModal";
 
 import { routes } from "@/constants/routes";
 import { THEMES } from "@/constants/themes";
-import { useAuth } from "@/hooks/useAuth";
-import { useQuotationQuery } from "@/hooks/useQuotationQuery";
-import { uploadQuotationFileMutationOptions } from "@/mutation-options/asLead-quotations/uploadQuotationFileMutationOptions";
+import { useUploadQuotationFileMutation } from "@/hooks/mutations/quotations/files/useUploadQuotationFileMutation";
+import { quotationQueries } from "@/queries/quotations";
+import type { QuotationStatus } from "@/types/quotations";
 
 type Props = {
   submitButtonText: string;
@@ -29,11 +29,11 @@ export default function Upload({
   confirmModalTitle,
   confirmModalDescription,
 }: Props) {
-  const { quotationId } = useLocalSearchParams<{
+  const { quotationId, status = "requested" } = useLocalSearchParams<{
     quotationId: string;
+    status?: Lowercase<QuotationStatus>;
   }>();
-  const { data } = useQuotationQuery(quotationId);
-  const { userData } = useAuth();
+  const { data } = useQuery(quotationQueries.detail(Number(quotationId)));
   const router = useRouter();
   const [file, setFile] = useState<DocumentPicker.DocumentPickerAsset | null>(
     null,
@@ -41,15 +41,9 @@ export default function Upload({
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
 
-  const mutation = useMutation({
-    ...uploadQuotationFileMutationOptions({ userId: String(userData?.id) }),
-    onSettled: () => {
-      setModalVisible(false);
-    },
-    onSuccess: () => {
-      setSuccessModalVisible(true);
-    },
-  });
+  const mutation = useUploadQuotationFileMutation(
+    status.toUpperCase() as QuotationStatus,
+  );
 
   const handlePickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({
@@ -66,7 +60,17 @@ export default function Upload({
 
   const handleSendQuotation = () => {
     if (file && quotationId) {
-      mutation.mutate({ quotationId, file });
+      mutation.mutate(
+        { quotationId: Number(quotationId), file },
+        {
+          onSettled: () => {
+            setModalVisible(false);
+          },
+          onSuccess: () => {
+            setSuccessModalVisible(true);
+          },
+        },
+      );
     }
   };
 

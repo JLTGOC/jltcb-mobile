@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TextInput, View } from "react-native";
 import type { TextInputProps } from "react-native-paper";
 
-import { useSendMessageMutation } from "@/hooks/useSendMessageMutation";
+import { useSendMessageMutation } from "@/hooks/mutations/chats/useSendMessageMutation";
 import { type MessageForm, messageFormSchema } from "@/schemas/messageSchema";
 import ChatFilePicker from "./ChatFilePicker";
 import ChatImagePicker from "./ChatImagePicker";

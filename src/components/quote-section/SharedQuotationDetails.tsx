@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -6,10 +7,9 @@ import { ActivityIndicator } from "react-native-paper";
 import ClientCard from "@/components/details/ClientCard";
 import { DetailCard } from "@/components/details/DetailCard";
 
-import { useQuotationDetailQuery } from "@/hooks/useQuotationDetailQuery";
-import { useQuotationQuery } from "@/hooks/useQuotationQuery";
-import { userQueryOptions } from "@/query-options/users/userQueryOptions";
-import { useLocalSearchParams } from "expo-router";
+import { useQuotationDetailQuery } from "@/hooks/queries/useQuotationDetailQuery";
+import { quotationQueries } from "@/queries/quotations";
+import { userQueries } from "@/queries/users";
 
 interface SharedQuotationDetailsProps {
   footer?: ReactNode;
@@ -22,12 +22,16 @@ export default function SharedQuotationDetails({
     quotationId: string;
   }>();
 
-  const { data: quotationData, isPending } = useQuotationQuery(quotationId);
-  const { data: quotationDetailData, isPending: isQuotationDetailDataPending } =
-    useQuotationDetailQuery(quotationId);
-  const { data: clientData, isPending: isClientDataPending } = useQuery(
-    userQueryOptions(quotationData?.data.client_id),
+  const { data: quotationData, isPending } = useQuery(
+    quotationQueries.detail(Number(quotationId)),
   );
+  const { data: quotationDetailData, isPending: isQuotationDetailDataPending } =
+    useQuotationDetailQuery(Number(quotationId));
+  const userId = quotationData?.data.client_id;
+  const { data: clientData, isPending: isClientDataPending } = useQuery({
+    ...userQueries.detail(userId!),
+    enabled: !!userId,
+  });
 
   if (isPending || isQuotationDetailDataPending || isClientDataPending) {
     return <ActivityIndicator style={styles.loader} />;

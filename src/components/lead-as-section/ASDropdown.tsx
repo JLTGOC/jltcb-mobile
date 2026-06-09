@@ -3,12 +3,12 @@ import { useRef } from "react";
 import AutocompleteDropdown, {
   type AutocompleteDropdownProps,
 } from "@/components/ui/AutocompleteDropdown";
-import type { UpdateAsArgs } from "@/types/quotations";
+import type { ReassignASRequestBody } from "@/types/quotations";
 
 interface ASDropdownProps extends AutocompleteDropdownProps {
   quotationId: number;
   personInChargeName: string;
-  handleChangeAs: (data: UpdateAsArgs) => Promise<void>;
+  handleChangeAs: (data: ReassignASRequestBody) => Promise<void>;
 }
 
 export default function ASDropdown({

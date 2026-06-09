@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { RefreshControl, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -6,8 +7,8 @@ import ShipmentDetails from "@/components/shipments/ShipmentDetails";
 import TabBar from "@/components/tabs-ui/TabBar";
 import BannerHeader from "@/components/ui/BannerHeader";
 
-import { useShipmentQuery } from "@/hooks/shipments/useShipmentQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { shipmentQueries } from "@/queries/shipments";
 
 const TABS = ["details", "documents", "billing"] as const;
 type TabType = (typeof TABS)[number];
@@ -19,7 +20,9 @@ export default function Shipment() {
   }>();
   const router = useRouter();
 
-  const { data, isPending, refetch } = useShipmentQuery(Number(shipmentId));
+  const { data, isPending, refetch } = useQuery(
+    shipmentQueries.detail(Number(shipmentId)),
+  );
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
 

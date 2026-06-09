@@ -16,8 +16,8 @@ import NewsUpdates from "@/components/home-section/news-updates/NewsUpdatesConta
 import Reels from "@/components/home-section/reels/ReelsContainer";
 
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
-import { articlesQueryOptions } from "@/query-options/articles/articlesQueryOptions";
-import { reelsQueryOptions } from "@/query-options/reels/reelsQueryOptions";
+import { articleQueries } from "@/queries/articles";
+import { reelQueries } from "@/queries/reels";
 
 export default function SharedHome() {
   const [isReelsVisible, setIsReelsVisible] = useState(true);
@@ -37,7 +37,7 @@ export default function SharedHome() {
       error: articlesError,
     },
   ] = useQueries({
-    queries: [reelsQueryOptions, articlesQueryOptions],
+    queries: [reelQueries.list(), articleQueries.list()],
   });
 
   const listData = isArticlesPending

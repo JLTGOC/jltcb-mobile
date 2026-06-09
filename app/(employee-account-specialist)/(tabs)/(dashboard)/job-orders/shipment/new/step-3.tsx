@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { addDays, compareAsc, format, formatDistance } from "date-fns";
 import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
@@ -14,7 +15,7 @@ import FloatingLabelDatePicker from "@/components/ui/FloatingLabelDatePicker";
 import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
 import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 
-import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
 import {
   createStep3Schema,
   type Step3Fields,
@@ -37,7 +38,9 @@ export default function Step3Form() {
   const eta = logisticsFormData.eta;
   const minimumDeliveryDate = eta ? addDays(new Date(eta), 1) : undefined;
 
-  const { data, isPending } = useJobOrderEnums(quotationReference ?? "");
+  const { data, isPending } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
+  );
 
   const {
     control,

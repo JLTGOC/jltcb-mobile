@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 
 import { THEMES } from "@/constants/themes";
 import { useAuth } from "@/hooks/useAuth";
-import { quotationQueryOptions } from "@/query-options/asLead-quotations/quotationQueryOptions";
+import { quotationQueries } from "@/queries/quotations";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import { downloadFile, handleSaveFile } from "@/utils/handleFileDownload";
 import { print } from "@/utils/print";
@@ -27,7 +27,7 @@ export default function QuotationDocument() {
     })),
   );
 
-  const { data } = useQuery(quotationQueryOptions(quotationId));
+  const { data } = useQuery(quotationQueries.detail(Number(quotationId)));
 
   const quotationFile = data?.data.quotation_file[0];
 

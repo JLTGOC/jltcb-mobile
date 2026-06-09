@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -11,9 +12,9 @@ import DataTable from "@/components/ui/DataTable";
 import Search from "@/components/ui/Search";
 
 import { THEMES } from "@/constants/themes";
-import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { quotationQueries } from "@/queries/quotations";
 import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import type { TableHeader } from "@/types";
 import type { ASRequestedQuotationSummary } from "@/types/quotations";
@@ -36,14 +37,15 @@ export default function RequestedQuotations() {
 
   const [submittedSearch, setSubmittedSearch] = useState("");
 
-  const { data, isPending, refetch } = useQuotationsQuery<
-    ASRequestedQuotationSummary[]
-  >({
-    filter: {
-      status: "REQUESTED",
-    },
-    ...(submittedSearch && { search: submittedSearch }),
-  });
+  const { data, isPending, refetch } = useQuery(
+    quotationQueries.list<ASRequestedQuotationSummary[]>({
+      filter: {
+        status: "REQUESTED",
+      },
+      search: submittedSearch,
+    }),
+  );
+
   const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
 

@@ -1,9 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { format, parse } from "date-fns";
 import { useRouter, type Href } from "expo-router";
 import { useState } from "react";
 import {
   RefreshControl,
   ScrollView,
+  StyleSheet,
   View,
   type StyleProp,
   type ViewStyle,
@@ -14,11 +16,10 @@ import BannerHeader from "@/components/ui/BannerHeader";
 import DataTable from "@/components/ui/DataTable";
 
 import { THEMES } from "@/constants/themes";
-import { useQuotationsQuery } from "@/hooks/useQuotationsQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { quotationQueries } from "@/queries/quotations";
 import type { BaseASQuotation } from "@/types/quotations";
-import { StyleSheet } from "react-native";
 
 interface TableHeader {
   title: string;
@@ -51,9 +52,11 @@ const MENUS: {
 ];
 
 export default function RespondedQuotations() {
-  const { data, isPending, refetch } = useQuotationsQuery<BaseASQuotation[]>({
-    filter: { status: "RESPONDED" },
-  });
+  const { data, isPending, refetch } = useQuery(
+    quotationQueries.list<BaseASQuotation[]>({
+      filter: { status: "RESPONDED" },
+    }),
+  );
   const { refetchByUser, isRefetchingByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);
 

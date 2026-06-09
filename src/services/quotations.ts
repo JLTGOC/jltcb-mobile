@@ -1,10 +1,17 @@
 import type { DocumentPickerAsset } from "expo-document-picker";
 
-import { apiGet, apiPost, apiPut } from "@/services/axiosInstance";
+import { apiDelete, apiGet, apiPost, apiPut } from "@/services/axiosInstance";
+import type {
+  LogisticsQuoteEnums,
+  RegulatoryQuoteEnums,
+} from "@/types/client-quotation";
+import type { JobType } from "@/types/job-order";
 import type {
   CreateQuotationRequestBody,
+  FetchQuoteParamsByService,
   Quotation,
   QuotationFile,
+  QuotationFileType,
   QuotationListQueryParams,
 } from "@/types/quotations";
 import { jsonToFormData } from "@/utils/jsonToFormData";
@@ -20,21 +27,19 @@ export const createQuotation = (payload: CreateQuotationRequestBody) => {
   });
 };
 
-export const fetchQuotation = (quotationId: string) =>
+export const fetchQuotation = (quotationId: number) =>
   apiGet<Quotation>(`quotations/${quotationId}`);
 
-export const fetchClientQuotationDocuments = (quotationId: string) =>
+export const fetchQuotationFiles = (
+  quotationId: number,
+  type: QuotationFileType,
+) =>
   apiGet<QuotationFile[]>(`quotations/${quotationId}/files`, {
-    params: { type: "REQUESTED" },
-  });
-
-export const fetchCompanyQuotationDocuments = (quotationId: string) =>
-  apiGet<QuotationFile[]>(`quotations/${quotationId}/files`, {
-    params: { type: "PROPOSAL" },
+    params: { type },
   });
 
 export const uploadQuotationFile = (
-  quotationId: string,
+  quotationId: number,
   file: DocumentPickerAsset,
 ) => {
   const formData = new FormData();
@@ -60,12 +65,26 @@ export const updateFileName = (
   return apiPut(`/quotations/${quotationId}/files/${documentId}`, body);
 };
 
-export const updateAsQuotation = async (quotationId: number, asId: number) => {
+export const reassignAS = async (quotationId: number, asId: number) => {
   return apiPut(`quotations/${quotationId}/reassign-specialist`, {
     status: "APPROVED",
     as_id: asId,
   });
 };
 
-export const acceptQuotation = (quotationId: number) =>
+export const acceptQuotationProposal = (quotationId: number) =>
   apiPut<Quotation>(`quotations/${quotationId}/accept-proposal`);
+
+export const deleteQuotation = (quotationId: number) =>
+  apiDelete(`quotations/${quotationId}`);
+
+interface QuoteEnumsMap {
+  LOGISTICS: LogisticsQuoteEnums;
+  REGULATORY: RegulatoryQuoteEnums;
+}
+
+export async function fetchQuotationEnumOptions<T extends JobType>(
+  params: FetchQuoteParamsByService<T>,
+) {
+  return await apiGet<QuoteEnumsMap[T]>(`quotations/enum-options`, { params });
+}

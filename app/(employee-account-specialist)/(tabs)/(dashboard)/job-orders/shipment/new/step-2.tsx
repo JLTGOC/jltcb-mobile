@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -10,7 +11,7 @@ import FieldLegend from "@/components/ui/FieldLegend";
 import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
 import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 
-import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
 import {
   type Step2Fields,
   step2Schema,
@@ -28,7 +29,9 @@ export default function Step2Form() {
       })),
     );
 
-  const { data } = useJobOrderEnums(quotationReference ?? "");
+  const { data } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
+  );
 
   const containerSize = data?.autofill_details?.container_size;
   const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;

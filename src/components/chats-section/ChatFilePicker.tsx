@@ -5,7 +5,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { useSendFileMutation } from "@/hooks/useSendFileMutation";
+import { useSendFileMutation } from "@/hooks/mutations/chats/useSendFileMutation";
 import type { SendFileBody } from "@/types/chats";
 import { showToast } from "@/utils/showToast";
 

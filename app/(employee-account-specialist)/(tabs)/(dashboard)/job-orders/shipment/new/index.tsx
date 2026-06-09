@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
@@ -13,7 +14,7 @@ import FloatingLabelDatePicker from "@/components/ui/FloatingLabelDatePicker";
 import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
 import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
 
-import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
 import {
   type Step1Fields,
   step1Schema,
@@ -38,7 +39,9 @@ export default function Step1Form() {
       })),
     );
 
-  const { data, isPending } = useJobOrderEnums(quotationReference ?? "");
+  const { data, isPending } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
+  );
 
   const {
     control,

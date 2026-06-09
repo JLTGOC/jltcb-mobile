@@ -14,17 +14,15 @@ import FolderSection from "@/components/dashboard-section/FolderSection";
 import UserHeader from "@/components/dashboard-section/UserHeader";
 
 import { OPERATIONS_DB_FOLDER_SECTION } from "@/constants/user-dashboards";
-import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { dashboardQueryOptions } from "@/query-options/dashboard/dashboardQueryOptions";
+import { dashboardQueries } from "@/queries/dashboard";
 import type { OperationsDashboard } from "@/types/dashboard";
 import { mapDashboardData } from "@/utils/mapDashboardData";
 
 export default function Index() {
-  const { userData } = useAuth();
   const { data, isPending, refetch } = useQuery({
-    ...dashboardQueryOptions<OperationsDashboard>(String(userData?.id)),
+    ...dashboardQueries.detail<OperationsDashboard>(),
     select: ({ data }) => mapDashboardData(data, OPERATIONS_DB_FOLDER_SECTION),
   });
 

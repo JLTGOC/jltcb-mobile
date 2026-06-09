@@ -4,12 +4,14 @@ import { useLocalSearchParams } from "expo-router";
 import { Dimensions, ScrollView, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 
-import { articleQueryOptions } from "@/query-options/articles/articleQueryOptions";
+import { articleQueries } from "@/queries/articles";
 
 export default function SharedArticle() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data, isPending, error } = useQuery(articleQueryOptions(id));
+  const { data, isPending, error } = useQuery(
+    articleQueries.detail(Number(id)),
+  );
 
   const screenHeight = Dimensions.get("window").height;
 

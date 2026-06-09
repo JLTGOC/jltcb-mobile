@@ -16,13 +16,14 @@ import Search from "@/components/ui/Search";
 import SwitchToggle from "@/components/ui/SwitchToggle";
 
 import { THEMES } from "@/constants/themes";
-import { useAcceptJobOrderMutation } from "@/hooks/useAcceptJobOrderMutation";
+import { useAcceptJobOrderMutation } from "@/hooks/mutations/job-orders/useAcceptJobOrderMutation";
 import { useAuth } from "@/hooks/useAuth";
-import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { jobOrderQueries } from "@/queries/job-orders";
 import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
 import { showToast } from "@/utils/showToast";
+import { useQuery } from "@tanstack/react-query";
 
 type JobFilterOption = "all" | "my-jobs";
 
@@ -44,12 +45,14 @@ export default function JobOrders() {
     resolver: zodResolver(searchSchema),
   });
 
-  const { data, isPending, error, refetch, isFetching } = useJobOrdersQuery({
-    filter: {
-      completion_status: status === "created" ? "CREATED" : "PROCESSED",
-    },
-    search: submittedSearch,
-  });
+  const { data, isPending, error, refetch, isFetching } = useQuery(
+    jobOrderQueries.list({
+      filter: {
+        completion_status: status === "created" ? "CREATED" : "PROCESSED",
+      },
+      search: submittedSearch,
+    }),
+  );
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);

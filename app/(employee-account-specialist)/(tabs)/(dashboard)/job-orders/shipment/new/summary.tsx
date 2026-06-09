@@ -3,8 +3,8 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -18,9 +18,8 @@ import SubjectCard from "@/components/ui/SubjectCard";
 import SuccesModal from "@/components/ui/SuccessModal";
 import SummaryCard from "@/components/ui/SummaryCard";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useJobOrderEnums } from "@/hooks/useJobOrderEnums";
-import { createJobOrderMutationOptions } from "@/mutation-options/job-orders/createJobOrderMutationOptions";
+import { useCreateJobOrderMutation } from "@/hooks/mutations/job-orders/useCreateJobOrderMutation";
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
 import { logisticsJobOrderFormSchema } from "@/schemas/job-order/logistics-service-form-schema";
 import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
 import type { SummaryCardData } from "@/types/job-order";
@@ -35,7 +34,6 @@ const COLOR = "#4E6174";
 
 export default function Summary() {
   const router = useRouter();
-  const { userData } = useAuth();
   const { quotationReference, logisticsFormData, reset } = useJobOrderFormStore(
     useShallow((state) => ({
       quotationReference: state.quotationReference,
@@ -43,7 +41,10 @@ export default function Summary() {
       reset: state.reset,
     })),
   );
-  const { data } = useJobOrderEnums(quotationReference ?? "");
+
+  const { data } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -210,9 +211,7 @@ export default function Summary() {
     setModalVisible(true);
   };
 
-  const { mutateAsync, isPending: isCreatingJobOrder } = useMutation(
-    createJobOrderMutationOptions(String(userData?.id)),
-  );
+  const { mutate, isPending: isCreatingJobOrder } = useCreateJobOrderMutation();
 
   const handleCreateJobOrder = async () => {
     if (!quotationReference) return;
@@ -230,17 +229,18 @@ export default function Summary() {
       quotationReference,
     });
 
-    try {
-      await mutateAsync(payload);
-      reset();
-      setSuccessModalVisible(true);
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        showToast(err.response?.data.message || "Failed to create job order");
-      }
-    } finally {
-      setModalVisible(false);
-    }
+    mutate(payload, {
+      onSuccess: () => {
+        reset();
+        setSuccessModalVisible(true);
+      },
+      onError: (err) => {
+        if (isAxiosError(err)) {
+          showToast(err.response?.data.message || "Failed to create job order");
+        }
+      },
+      onSettled: () => setModalVisible(false),
+    });
   };
 
   const bannerHeaderTitle = modalVisible

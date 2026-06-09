@@ -13,7 +13,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
 import TextInput from "@/components/ui/TextInput";
 
 import { THEMES } from "@/constants/themes";
-import { clientQuoteEnumsQueryOptions } from "@/query-options/client-quotations/clientQuotesQueryOptions";
+import { quotationFormQueries } from "@/queries/quotations/form";
 import {
   type RegulatoryStep1FormData,
   regulatoryStep1FormSchema,
@@ -49,7 +49,7 @@ export default function RegulatoryForm() {
   );
 
   const { data, isPending } = useQuery(
-    clientQuoteEnumsQueryOptions({
+    quotationFormQueries.enums({
       service: "REGULATORY",
       service_type: "BUSINESS SOLUTION",
     }),

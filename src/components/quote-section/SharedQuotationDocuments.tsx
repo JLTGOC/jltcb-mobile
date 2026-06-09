@@ -1,24 +1,55 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 import QuotationRequestDocumentCard from "@/components/quote-section/QuotationRequestDocumentCard";
 
-import { useClientQuotationDocumentsQuery } from "@/hooks/useClientQuotationDocumentsQuery";
-import { useCompanyQuotationDocumentsQuery } from "@/hooks/useCompanyQuotationDocumentsQuery";
-import { useRenameQuotationDocumentMutation } from "@/hooks/useRenameQuotationDocumentMutation";
+import { useRenameQuotationDocumentMutation } from "@/hooks/mutations/quotations/useRenameQuotationDocumentMutation";
+import { quotationFileQueries } from "@/queries/quotations/files";
+import type { QuotationFileType } from "@/types/quotations";
 
 export default function SharedQuotationDocuments() {
   const { quotationId } = useLocalSearchParams<{
     quotationId: string;
   }>();
 
+  const queryClient = useQueryClient();
   const { data: clientDocumentsData, isPending: isClientDocumentsPending } =
-    useClientQuotationDocumentsQuery(quotationId);
+    useQuery(quotationFileQueries.list(Number(quotationId), "REQUESTED"));
   const { data: companyDocumentsData, isPending: isCompanyDocumentsPending } =
-    useCompanyQuotationDocumentsQuery(quotationId);
+    useQuery(quotationFileQueries.list(Number(quotationId), "PROPOSAL"));
 
-  const { mutate } = useRenameQuotationDocumentMutation(quotationId);
+  const { mutate: rename } = useRenameQuotationDocumentMutation(
+    Number(quotationId),
+  );
+
+  const handleRename = ({
+    documentId,
+    fileName,
+    quotationFileType,
+  }: {
+    documentId: number;
+    fileName: string;
+    quotationFileType: QuotationFileType;
+  }) => {
+    rename(
+      {
+        documentId,
+        fileName,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: quotationFileQueries.list(
+              Number(quotationId),
+              quotationFileType,
+            ).queryKey,
+          });
+        },
+      },
+    );
+  };
 
   if (isClientDocumentsPending || isCompanyDocumentsPending) {
     return <ActivityIndicator style={styles.loader} />;
@@ -48,15 +79,19 @@ export default function SharedQuotationDocuments() {
               <View key={item.id.toString()} style={styles.container}>
                 <QuotationRequestDocumentCard
                   document={item}
-                  onRename={(fileName) =>
-                    mutate({
+                  onRename={(fileName) => {
+                    const quotationFileType = section.title
+                      .toLocaleLowerCase()
+                      .includes("client")
+                      ? "REQUESTED"
+                      : "PROPOSAL";
+
+                    handleRename({
                       documentId: item.id,
                       fileName,
-                      type: section.title.toLocaleLowerCase().includes("client")
-                        ? "client"
-                        : "company",
-                    })
-                  }
+                      quotationFileType,
+                    });
+                  }}
                 />
               </View>
             ))

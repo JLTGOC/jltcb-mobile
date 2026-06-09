@@ -15,10 +15,11 @@ import { RecordCard } from "@/components/ui/RecordCard";
 import Search from "@/components/ui/Search";
 
 import { THEMES } from "@/constants/themes";
-import { useJobOrdersQuery } from "@/hooks/useJobOrdersQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
+import { jobOrderQueries } from "@/queries/job-orders";
 import { searchSchema, type SearchForm } from "@/schemas/searchSchema";
+import { useQuery } from "@tanstack/react-query";
 
 export default function JobOrders() {
   const router = useRouter();
@@ -32,9 +33,11 @@ export default function JobOrders() {
     setSubmittedSearch(search);
   });
 
-  const { data, isPending, refetch, error } = useJobOrdersQuery({
-    search: submittedSearch,
-  });
+  const { data, isPending, refetch, error } = useQuery(
+    jobOrderQueries.list({
+      search: submittedSearch,
+    }),
+  );
 
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
   useRefreshOnFocus(refetch);

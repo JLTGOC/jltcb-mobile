@@ -14,17 +14,15 @@ import FolderSection from "@/components/dashboard-section/FolderSection";
 import UserHeader from "@/components/dashboard-section/UserHeader";
 
 import { FINANCE_DB_FOLDER_SECTION } from "@/constants/user-dashboards";
-import { useAuth } from "@/hooks/useAuth";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { dashboardQueryOptions } from "@/query-options/dashboard/dashboardQueryOptions";
+import { dashboardQueries } from "@/queries/dashboard";
 import type { FinanceDashboard } from "@/types/dashboard";
 import { mapDashboardData } from "@/utils/mapDashboardData";
 
 export default function Index() {
-  const { userData } = useAuth();
   const { data, isPending, refetch } = useQuery({
-    ...dashboardQueryOptions<FinanceDashboard>(String(userData?.id)),
+    ...dashboardQueries.detail<FinanceDashboard>(),
     select: ({ data }) => mapDashboardData(data, FINANCE_DB_FOLDER_SECTION),
   });
 
@@ -48,7 +46,7 @@ export default function Index() {
       ListHeaderComponent={
         <View style={{ position: "relative" }}>
           <UserHeader variant="light" />
-          <Link style={styles.toolLink} href="/dashboard/tools" asChild>
+          <Link style={styles.toolLink} href="/tools" asChild>
             <Pressable
               style={({ pressed }) => [
                 {

@@ -211,7 +211,7 @@ export interface JobOrderListQueryFilter {
   completion_status?: JobOrderCompletionStatus;
 }
 
-export interface JobOrderListQueryParams {
+export type JobOrderListQueryParams = {
   search?: string;
   filter?: JobOrderListQueryFilter;
-}
+};

@@ -9,14 +9,14 @@ import { useEffect } from "react";
 import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 
-import { reelQueryOptions } from "@/query-options/reels/reelQueryOptions";
+import { reelQueries } from "@/queries/reels";
 
 export default function ReelsFullScreen() {
   const { id, placeholder } = useLocalSearchParams<{
     id: string;
     placeholder: string;
   }>();
-  const { data, isPending } = useQuery(reelQueryOptions(id));
+  const { data, isPending } = useQuery(reelQueries.detail(Number(id)));
 
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;

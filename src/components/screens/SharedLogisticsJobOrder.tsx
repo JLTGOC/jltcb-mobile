@@ -2,6 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import LineEndCircle from "@material-symbols/svg-500/outlined/line_end_circle.svg";
 import LineStartCircle from "@material-symbols/svg-500/outlined/line_start_circle.svg";
 import ServiceToolbox from "@material-symbols/svg-500/outlined/service_toolbox.svg";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useLocalSearchParams } from "expo-router";
 import {
@@ -18,8 +19,8 @@ import SubjectCard from "@/components/ui/SubjectCard";
 import SummaryCard from "@/components/ui/SummaryCard";
 
 import { THEMES } from "@/constants/themes";
-import { useJobOrderQuery } from "@/hooks/useJobOrderQuery";
 import { useRefreshByUser } from "@/hooks/useRefreshByUser";
+import { jobOrderQueries } from "@/queries/job-orders";
 import type { LogisticsJobOrder, SummaryCardData } from "@/types/job-order";
 import { formatTargetDeliveryDate } from "@/utils/jobOrderForm";
 import { buildSummaryItems } from "@/utils/summaryItems";
@@ -33,8 +34,8 @@ export default function SharedLogisticsJobOrder({
     jobOrderId: string;
   }>();
 
-  const { data, isPending, refetch } = useJobOrderQuery<LogisticsJobOrder>(
-    Number(jobOrderId),
+  const { data, isPending, refetch } = useQuery(
+    jobOrderQueries.detail<LogisticsJobOrder>(Number(jobOrderId)),
   );
   const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
 
