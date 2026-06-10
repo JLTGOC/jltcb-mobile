@@ -1,15 +1,34 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Box from "@material-symbols/svg-500/outlined/box.svg";
 import CorporateFare from "@material-symbols/svg-500/outlined/corporate_fare.svg";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { useState, type FC } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Portal, Text, type CardTitleProps } from "react-native-paper";
+import type { SvgProps } from "react-native-svg";
 
 import ClientCard, {
   type ClientCardProps,
 } from "@/components/details/ClientCard";
 import { DetailCard } from "@/components/details/DetailCard";
 
+import { ShipmentStatusColors } from "@/constants/shipments";
+import { useUpdateShipmentMutation } from "@/hooks/mutations/shipments/useUpdateShipmentMutation";
 import { shipmentQueries } from "@/queries/shipments";
+import type { ShipmentStatus, UpdateShipmentPayload } from "@/types/shipments";
+import { showToast } from "@/utils/showToast";
+import UpdateStatusDialog from "./UpdateStatusDialog";
+
+type DetailSection = {
+  title: string;
+  icon: FC<SvgProps>;
+  right?: CardTitleProps["right"];
+  content: {
+    label: string;
+    value: string | null;
+  }[];
+};
 
 export default function ShipmentDetails() {
   const { shipmentId } = useLocalSearchParams<{
@@ -17,6 +36,21 @@ export default function ShipmentDetails() {
   }>();
 
   const { data } = useQuery(shipmentQueries.detail(Number(shipmentId)));
+  const updateShipmentMutation = useUpdateShipmentMutation(Number(shipmentId));
+
+  const handleUpdateShipment = (payload: UpdateShipmentPayload) => {
+    updateShipmentMutation.mutate(payload, {
+      onSuccess: () => {
+        showToast("Shipment status updated successfully");
+        setShowUpdateStatus(false);
+      },
+      onError: () => {
+        showToast("Failed to update shipment status");
+      },
+    });
+  };
+
+  const [showUpdateStatus, setShowUpdateStatus] = useState(false);
 
   if (!data) return null;
 
@@ -28,7 +62,7 @@ export default function ShipmentDetails() {
     email: data.data.general_info.client.email,
   };
 
-  const detailSections = [
+  const detailSections: DetailSection[] = [
     {
       title: "Consigneee Details",
       icon: CorporateFare,
@@ -58,6 +92,25 @@ export default function ShipmentDetails() {
     {
       title: "Shipment Details",
       icon: Box,
+      right: () => (
+        <Pressable
+          style={styles.statusButton}
+          onPress={() => setShowUpdateStatus(true)}
+        >
+          <Text
+            numberOfLines={2}
+            style={[
+              {
+                color: ShipmentStatusColors[data.data.general_info.status],
+              },
+              styles.statusButtonText,
+            ]}
+          >
+            {data.data.general_info.status}
+          </Text>
+          <MaterialIcons name="chevron-right" size={24} color="black" />
+        </Pressable>
+      ),
       content: [
         {
           label: "Service Type",
@@ -100,23 +153,41 @@ export default function ShipmentDetails() {
   ];
 
   return (
-    <View style={styles.container}>
-      <ClientCard {...clientCardData} />
+    <>
+      <View style={styles.container}>
+        <ClientCard {...clientCardData} />
 
-      {detailSections.map((section) => (
-        <DetailCard.Root key={section.title}>
-          <DetailCard.Title title={section.title} icon={section.icon} />
-          <DetailCard.Content>
-            {section.content.map((item) => (
-              <DetailCard.Detail key={item.label + item.value}>
-                <DetailCard.Label>{item.label}</DetailCard.Label>
-                <DetailCard.Value>{item.value}</DetailCard.Value>
-              </DetailCard.Detail>
-            ))}
-          </DetailCard.Content>
-        </DetailCard.Root>
-      ))}
-    </View>
+        {detailSections.map((section) => (
+          <DetailCard.Root key={section.title}>
+            <DetailCard.Title
+              title={section.title}
+              icon={section.icon}
+              right={section.right}
+            />
+            <DetailCard.Content>
+              {section.content.map((item) => (
+                <DetailCard.Detail key={item.label + item.value}>
+                  <DetailCard.Label>{item.label}</DetailCard.Label>
+                  <DetailCard.Value>{item.value}</DetailCard.Value>
+                </DetailCard.Detail>
+              ))}
+            </DetailCard.Content>
+          </DetailCard.Root>
+        ))}
+      </View>
+
+      <Portal>
+        <UpdateStatusDialog
+          loading={updateShipmentMutation.isPending}
+          visible={showUpdateStatus}
+          onDismiss={() => setShowUpdateStatus(false)}
+          initialStatus={
+            data?.data.general_info.status.toUpperCase() as ShipmentStatus
+          }
+          onUpdate={(payload) => handleUpdateShipment(payload)}
+        />
+      </Portal>
+    </>
   );
 }
 
@@ -126,5 +197,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     flex: 1,
     gap: 12,
+  },
+  statusButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    maxWidth: 120,
+  },
+  statusButtonText: {
+    flexShrink: 1,
+    textAlign: "right",
   },
 });

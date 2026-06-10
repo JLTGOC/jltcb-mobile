@@ -143,3 +143,7 @@ interface ShipmentListQueryFilter {
 }
 
 export type ShipmentQueryStatus = "ONGOING" | "DELIVERED";
+
+export interface UpdateShipmentPayload {
+  status?: ShipmentStatus;
+}

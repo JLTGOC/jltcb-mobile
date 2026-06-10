@@ -8,6 +8,7 @@ import { StyleSheet, View } from "react-native";
 
 import { Card } from "@/components/ui/Card";
 
+import { ShipmentStatusColors } from "@/constants/shipments";
 import type { ShipmentSummary } from "@/types/shipments";
 import { Text, type TextProps } from "react-native-paper";
 import { RecordCard } from "../ui/RecordCard";
@@ -67,13 +68,7 @@ function ShipmentCardStatus() {
 
   const status = shipment.general_info.status;
 
-  let statusColor: string | null = null;
-
-  if (status === "DELIVERED") {
-    statusColor = "#0B8600";
-  } else if (status === "DISCHARGED") {
-    statusColor = "#C8CE72";
-  }
+  const statusColor = ShipmentStatusColors[status];
 
   return (
     <View style={styles.statusContainer}>
