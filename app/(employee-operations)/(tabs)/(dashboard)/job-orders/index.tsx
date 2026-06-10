@@ -38,14 +38,14 @@ export default function JobOrders() {
 
   const [submittedSearch, setSubmittedSearch] = useState("");
 
-  const { mutateAsync, variables: acceptJobOrderVariables } =
+  const { mutate: acceptJobOrder, variables: acceptJobOrderVariables } =
     useAcceptJobOrderMutation();
 
   const { control, handleSubmit } = useForm<SearchForm>({
     resolver: zodResolver(searchSchema),
   });
 
-  const { data, isPending, error, refetch, isFetching } = useQuery(
+  const { data, isPending, error, refetch } = useQuery(
     jobOrderQueries.list({
       filter: {
         completion_status: status === "created" ? "CREATED" : "PROCESSED",
@@ -61,14 +61,16 @@ export default function JobOrders() {
     setSubmittedSearch(search);
   });
 
-  const handleAcceptJobOrder = async (jobOrderId: number) => {
-    try {
-      await mutateAsync(jobOrderId);
-      showToast("Job order accepted successfully.");
-    } catch (err) {
-      showToast("Error accepting job order. Please try again.");
-      console.error("Error accepting job order:", err);
-    }
+  const handleAcceptJobOrder = (jobOrderId: number) => {
+    acceptJobOrder(jobOrderId, {
+      onSuccess: () => {
+        showToast("Job order accepted successfully.");
+      },
+      onError: (err) => {
+        showToast("Error accepting job order. Please try again.");
+        console.error("Error accepting job order:", err);
+      },
+    });
   };
 
   const jobOrders = data?.data.job_orders ?? [];
@@ -124,8 +126,7 @@ export default function JobOrders() {
       }
       contentInsetAdjustmentBehavior="automatic"
       renderItem={({ item }) => {
-        const isAcceptingJobOrder =
-          isFetching && acceptJobOrderVariables === item.id;
+        const isAcceptingJobOrder = acceptJobOrderVariables === item.id;
 
         return (
           <JobOrderCard.Provider jobOrder={item}>
