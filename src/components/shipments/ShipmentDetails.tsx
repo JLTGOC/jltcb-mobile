@@ -1,7 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Box from "@material-symbols/svg-500/outlined/box.svg";
 import CorporateFare from "@material-symbols/svg-500/outlined/corporate_fare.svg";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { useState, type FC } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -12,11 +12,11 @@ import ClientCard, {
   type ClientCardProps,
 } from "@/components/details/ClientCard";
 import { DetailCard } from "@/components/details/DetailCard";
-import UpdateStatusDialog from "./UpdateStatusDialog";
+import UpdateShipmentDialog from "./UpdateShipmentDialog";
 
 import { ShipmentStatusColors } from "@/constants/shipments";
-import { useUpdateShipmentMutation } from "@/hooks/mutations/shipments/useUpdateShipmentMutation";
 import { useAuth } from "@/hooks/useAuth";
+import { updateShipmentMutationOptions } from "@/mutation-options/shipments/updateShipmentMutationOptions";
 import { shipmentQueries } from "@/queries/shipments";
 import type { ShipmentStatus, UpdateShipmentPayload } from "@/types/shipments";
 import { showToast } from "@/utils/showToast";
@@ -38,18 +38,28 @@ export default function ShipmentDetails() {
 
   const { userData } = useAuth();
   const { data } = useQuery(shipmentQueries.detail(Number(shipmentId)));
-  const updateShipmentMutation = useUpdateShipmentMutation(Number(shipmentId));
+  const queryClient = useQueryClient();
+  const updateShipmentMutation = useMutation({
+    ...updateShipmentMutationOptions,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: shipmentQueries.detail(Number(shipmentId)).queryKey,
+      }),
+  });
 
   const handleUpdateShipment = (payload: UpdateShipmentPayload) => {
-    updateShipmentMutation.mutate(payload, {
-      onSuccess: () => {
-        showToast("Shipment status updated successfully");
-        setShowUpdateStatusDialog(false);
+    updateShipmentMutation.mutate(
+      { shipmentId: Number(shipmentId), payload },
+      {
+        onSuccess: () => {
+          showToast("Shipment status updated successfully");
+          setShowUpdateStatusDialog(false);
+        },
+        onError: () => {
+          showToast("Failed to update shipment status");
+        },
       },
-      onError: () => {
-        showToast("Failed to update shipment status");
-      },
-    });
+    );
   };
 
   const [showUpdateStatusDialog, setShowUpdateStatusDialog] = useState(false);
@@ -187,7 +197,7 @@ export default function ShipmentDetails() {
 
       {isAssignedToCurrentUser && (
         <Portal>
-          <UpdateStatusDialog
+          <UpdateShipmentDialog
             loading={updateShipmentMutation.isPending}
             visible={showUpdateStatusDialog}
             onDismiss={() => setShowUpdateStatusDialog(false)}

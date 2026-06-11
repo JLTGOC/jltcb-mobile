@@ -19,7 +19,7 @@ interface Props extends Omit<DialogProps, "children"> {
   loading?: boolean;
 }
 
-export default function UpdateStatusDialog({
+export default function UpdateShipmentDialog({
   visible,
   initialStatus,
   style,
