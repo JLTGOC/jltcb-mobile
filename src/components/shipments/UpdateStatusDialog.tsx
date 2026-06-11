@@ -1,5 +1,3 @@
-import { ShipmentStatuses } from "@/constants/shipments";
-import type { ShipmentStatus, UpdateShipmentPayload } from "@/types/shipments";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import {
@@ -9,6 +7,9 @@ import {
   Text,
   type DialogProps,
 } from "react-native-paper";
+
+import { ShipmentStatuses } from "@/constants/shipments";
+import type { ShipmentStatus, UpdateShipmentPayload } from "@/types/shipments";
 
 const BorderColor = "#D9D9D9";
 
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 0,
-    paddingHorizontal: 0,
+    paddingHorizontal: 8,
   },
   radioButtonGroup: {
     flexDirection: "row",

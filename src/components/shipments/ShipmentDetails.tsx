@@ -12,15 +12,16 @@ import ClientCard, {
   type ClientCardProps,
 } from "@/components/details/ClientCard";
 import { DetailCard } from "@/components/details/DetailCard";
+import UpdateStatusDialog from "./UpdateStatusDialog";
 
 import { ShipmentStatusColors } from "@/constants/shipments";
 import { useUpdateShipmentMutation } from "@/hooks/mutations/shipments/useUpdateShipmentMutation";
+import { useAuth } from "@/hooks/useAuth";
 import { shipmentQueries } from "@/queries/shipments";
 import type { ShipmentStatus, UpdateShipmentPayload } from "@/types/shipments";
 import { showToast } from "@/utils/showToast";
-import UpdateStatusDialog from "./UpdateStatusDialog";
 
-type DetailSection = {
+interface DetailSection {
   title: string;
   icon: FC<SvgProps>;
   right?: CardTitleProps["right"];
@@ -28,13 +29,14 @@ type DetailSection = {
     label: string;
     value: string | null;
   }[];
-};
+}
 
 export default function ShipmentDetails() {
   const { shipmentId } = useLocalSearchParams<{
     shipmentId: string;
   }>();
 
+  const { userData } = useAuth();
   const { data } = useQuery(shipmentQueries.detail(Number(shipmentId)));
   const updateShipmentMutation = useUpdateShipmentMutation(Number(shipmentId));
 
@@ -42,7 +44,7 @@ export default function ShipmentDetails() {
     updateShipmentMutation.mutate(payload, {
       onSuccess: () => {
         showToast("Shipment status updated successfully");
-        setShowUpdateStatus(false);
+        setShowUpdateStatusDialog(false);
       },
       onError: () => {
         showToast("Failed to update shipment status");
@@ -50,9 +52,12 @@ export default function ShipmentDetails() {
     });
   };
 
-  const [showUpdateStatus, setShowUpdateStatus] = useState(false);
+  const [showUpdateStatusDialog, setShowUpdateStatusDialog] = useState(false);
 
   if (!data) return null;
+
+  const opsId = data.data.general_info.person_in_charge.id;
+  const isAssignedToCurrentUser = userData?.id === opsId;
 
   const clientCardData: ClientCardProps = {
     fullName: data.data.general_info.client.full_name,
@@ -95,7 +100,9 @@ export default function ShipmentDetails() {
       right: () => (
         <Pressable
           style={styles.statusButton}
-          onPress={() => setShowUpdateStatus(true)}
+          onPress={() =>
+            isAssignedToCurrentUser && setShowUpdateStatusDialog(true)
+          }
         >
           <Text
             numberOfLines={2}
@@ -108,7 +115,9 @@ export default function ShipmentDetails() {
           >
             {data.data.general_info.status}
           </Text>
-          <MaterialIcons name="chevron-right" size={24} color="black" />
+          {isAssignedToCurrentUser && (
+            <MaterialIcons name="chevron-right" size={24} color="black" />
+          )}
         </Pressable>
       ),
       content: [
@@ -176,17 +185,19 @@ export default function ShipmentDetails() {
         ))}
       </View>
 
-      <Portal>
-        <UpdateStatusDialog
-          loading={updateShipmentMutation.isPending}
-          visible={showUpdateStatus}
-          onDismiss={() => setShowUpdateStatus(false)}
-          initialStatus={
-            data?.data.general_info.status.toUpperCase() as ShipmentStatus
-          }
-          onUpdate={(payload) => handleUpdateShipment(payload)}
-        />
-      </Portal>
+      {isAssignedToCurrentUser && (
+        <Portal>
+          <UpdateStatusDialog
+            loading={updateShipmentMutation.isPending}
+            visible={showUpdateStatusDialog}
+            onDismiss={() => setShowUpdateStatusDialog(false)}
+            initialStatus={
+              data?.data.general_info.status.toUpperCase() as ShipmentStatus
+            }
+            onUpdate={(payload) => handleUpdateShipment(payload)}
+          />
+        </Portal>
+      )}
     </>
   );
 }

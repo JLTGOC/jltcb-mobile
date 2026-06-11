@@ -19,6 +19,7 @@ export interface ShipmentSummary extends BaseShipment {
     job_order_id: number;
     client: string;
     company_name: string;
+    ops_id: number;
     person_in_charge: string;
     person_in_charge_full_name: string | null;
     person_in_charge_image: string | null;
@@ -99,6 +100,7 @@ interface Client {
 }
 
 interface PersonInChargeDetails {
+  id: number;
   username: string;
   role: string | null;
   full_name: string | null;
