@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "@/src/services/axiosInstance";
+import { apiGet, apiPost } from "@/services/axiosInstance";
 import type {
   Inbox,
   Message,
@@ -6,12 +6,12 @@ import type {
   SendFileBody,
   SendImageBody,
   SendMessageBody,
-} from "@/src/types/chats";
+} from "@/types/chats";
 
 export const fetchChats = (search: string) =>
   apiGet<Inbox[]>("conversations", { params: { search } });
 
-export const fetchConversationData = (converstationId: string) =>
+export const fetchChat = (converstationId: string) =>
   apiGet<Inbox>(`conversations/${converstationId}`);
 
 export const fetchChatMessages = (conversationId: string, cursor: string) =>

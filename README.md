@@ -10,7 +10,36 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Install EAS CLI
+
+   ```bash
+   npm install -g eas-cli
+   ```
+
+3. Login to your Expo account
+
+   ```bash
+   eas login
+   ```
+
+4. Pull environment variables
+
+   ```bash
+   eas env:pull --environment {environment}
+   ```
+
+   Replace `{environment}` with one of the following:
+   - `development`
+   - `preview`
+   - `production`
+
+   Example:
+
+   ```bash
+   eas env:pull --environment development
+   ```
+
+5. Start the app
 
    ```bash
    npx expo start
@@ -49,8 +78,6 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
----
-
 ## 📋 Commit Message Guidelines
 
 Use the following emojis to indicate the nature of your commits:
@@ -71,5 +98,3 @@ Use the following emojis to indicate the nature of your commits:
 | ⏪    | `:rewind:`                    | Reverting changes                 |
 | 📱    | `:iphone:`                    | Responsive design changes         |
 | 📌    | `:pushpin:`                   | Hotfixes                          |
-
----

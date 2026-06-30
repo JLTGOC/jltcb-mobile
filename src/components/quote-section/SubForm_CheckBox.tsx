@@ -1,18 +1,19 @@
-import { useState, Dispatch,SetStateAction } from "react";
-import { View, StyleSheet } from "react-native";
-import { Text, Button, Checkbox } from "react-native-paper";
-import { ContactFormData } from "@/src/types/get-quote";
 import * as Linking from "expo-linking";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, Checkbox, Text } from "react-native-paper";
+
+import type { ContactFormData } from "@/types/get-quote";
 
 const openLink = (url: string) => {
   Linking.openURL(url);
 };
 
 type Props = {
-  setFormData:  Dispatch<SetStateAction<ContactFormData>>
-}
+  setFormData: Dispatch<SetStateAction<ContactFormData>>;
+};
 
-export default function SubForm_CheckBox({setFormData} : Props) {
+export default function SubForm_CheckBox({ setFormData }: Props) {
   const [checked, setChecked] = useState(false);
   return (
     <View style={styles.container}>
@@ -27,8 +28,21 @@ export default function SubForm_CheckBox({setFormData} : Props) {
         />
         <Text allowFontScaling={false}>
           Yes, I agree with the{" "}
-          <Text allowFontScaling={false} onPress={() => openLink("https://jltcb.com/privacy-policy/")} style={styles.styledText}>privacy policy</Text> and{" "}
-          <Text allowFontScaling={false} onPress={() => openLink("https://jltcb.com/terms-and-conditions/")} style={styles.styledText}>terms and conditions.</Text>
+          <Text
+            allowFontScaling={false}
+            onPress={() => openLink("https://jltcb.com/privacy-policy/")}
+            style={styles.styledText}
+          >
+            privacy policy
+          </Text>{" "}
+          and{" "}
+          <Text
+            allowFontScaling={false}
+            onPress={() => openLink("https://jltcb.com/terms-and-conditions/")}
+            style={styles.styledText}
+          >
+            terms and conditions.
+          </Text>
         </Text>
       </View>
       <View style={{ alignItems: "center" }}>
@@ -41,15 +55,15 @@ export default function SubForm_CheckBox({setFormData} : Props) {
           }}
           disabled={!checked}
           buttonColor={!checked ? "#161F3C" : "#323f68ff"}
-          onPress={() => setFormData(
-            {
+          onPress={() =>
+            setFormData({
               full_name: "",
               email: "",
               contact_number: "",
               message: "",
-              imageUri: ""
-            }
-          )}
+              imageUri: "",
+            })
+          }
         >
           SUBMIT
         </Button>
@@ -60,7 +74,7 @@ export default function SubForm_CheckBox({setFormData} : Props) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center"
+    justifyContent: "center",
   },
   styledText: {
     textDecorationLine: "underline",

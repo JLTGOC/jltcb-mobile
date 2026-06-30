@@ -1,5 +1,6 @@
 import { Pusher } from "@pusher/pusher-websocket-react-native";
-import { auth } from "../services/pusher";
+
+import { auth } from "@/services/pusher";
 
 export const pusher = Pusher.getInstance();
 

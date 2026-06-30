@@ -11,15 +11,15 @@ import {
 // --- Data ---
 const logos = [
   {
-    logo: require("../../../src/assets/landing-page/customs-brokerage.png"),
+    logo: require("@/assets/landing-page/customs-brokerage.png"),
     url: "",
   },
   {
-    logo: require("../../../src/assets/landing-page/global-trade.png"),
+    logo: require("@/assets/landing-page/global-trade.png"),
     url: "",
   },
   {
-    logo: require("../../../src/assets/landing-page/world-wide-logistics.png"),
+    logo: require("@/assets/landing-page/world-wide-logistics.png"),
     url: "",
   },
 ];
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 2,
     backgroundColor: "#fff",
+<<<<<<< HEAD
     alignItems: "center",
   },
 });
@@ -74,7 +75,8 @@ const marqueeStyles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     alignItems: "center",
-    paddingVertical: 5,
   },
 });

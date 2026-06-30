@@ -1,4 +1,3 @@
-import { Field, OJTFormData, PositionsSample } from "@/src/types/careers";
 import * as Linking from "expo-linking";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -10,7 +9,10 @@ import {
   Text,
   TextInput,
 } from "react-native-paper";
-import FileUploader from "../../../src/components/career-section/SubForm_FileUploader";
+
+import FileUploader from "@/components/career-section/SubForm_FileUploader";
+
+import { type Field, type OJTFormData, PositionsSample } from "@/types/careers";
 
 const openLink = (url: string) => {
   Linking.openURL(url);

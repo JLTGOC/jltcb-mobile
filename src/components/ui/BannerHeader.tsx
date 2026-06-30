@@ -1,20 +1,24 @@
-import { BANNERS } from "@/src/constants/banners";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
+<<<<<<< HEAD
 import { PropsWithChildren } from "react";
 import { Pressable, StyleSheet, View, type TextStyle } from "react-native";
+=======
+import type { PropsWithChildren } from "react";
+import { Pressable, StyleSheet, type TextStyle, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { Text, type TextProps } from "react-native-paper";
 
-const TEXT_COLOR_DARK = "#1C213B";
-const TEXT_COLOR_LIGHT = "#FF9933";
+import { BANNERS } from "@/constants/banners";
+import { THEMES } from "@/constants/themes";
 
 interface BannerHeaderProps {
   back?: boolean;
   onBack?: () => void;
   title: string;
   variant: "light" | "dark";
-  titleProps?: Omit<TextProps<never>, "children">;
+  titleProps?: Omit<TextProps<string>, "children">;
 }
 
 export default function BannerHeader({
@@ -28,7 +32,8 @@ export default function BannerHeader({
   const router = useRouter();
 
   const textColorStyle: TextStyle = {
-    color: variant === "dark" ? TEXT_COLOR_LIGHT : TEXT_COLOR_DARK,
+    color:
+      variant === "dark" ? THEMES.lightAccentColor : THEMES.darkAccentColor,
   };
 
   const handleBack = () => {
@@ -75,12 +80,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     minHeight: 120,
+    backgroundColor: THEMES.pageBackgroundColor,
   },
   content: {
     flexDirection: "row",
     padding: 5,
     gap: 10,
-    alignItems: "center",
   },
   title: {
     flex: 1,

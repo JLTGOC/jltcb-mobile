@@ -1,8 +1,13 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
+<<<<<<< HEAD
 import { StyleSheet, Pressable, View } from "react-native";
+=======
+import { Pressable, StyleSheet, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNavigate } from "@/src/hooks/useNavigate";
+
+import { useNavigate } from "@/hooks/useNavigate";
 
 const NavIcons = [
   {

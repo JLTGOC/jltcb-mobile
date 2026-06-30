@@ -1,11 +1,18 @@
-import type { User, UserRole } from "@/src/types/auth";
 import { onlineManager, useQueryClient } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
 import { type AppStateStatus, Platform } from "react-native";
+<<<<<<< HEAD
 import { useAppState } from "../hooks/useAppState";
 import { pusher } from "../lib/pusher";
 import { login, logout } from "../services/auth";
+=======
+
+import { useAppState } from "@/hooks/useAppState";
+import { pusher } from "@/lib/pusher";
+import { login, logout } from "@/services/auth";
+import type { User, UserRole } from "@/types/auth";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type AuthContextType = {
   role: UserRole | null;
@@ -109,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedToken = await SecureStore.getItemAsync("token");
 
       if (storedToken) {
-        await logout(storedToken);
+        await logout();
       }
     } catch (err: any) {
       if (err.response?.status === 401) {

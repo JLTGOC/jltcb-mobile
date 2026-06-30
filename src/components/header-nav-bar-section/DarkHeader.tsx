@@ -1,7 +1,3 @@
-import ClientHeaderMenuLink from "@/src/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
-import type { HeaderMenu } from "@/src/constants/user-navigation";
-import { useAuth } from "@/src/hooks/useAuth";
-import { useNavigate } from "@/src/hooks/useNavigate";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -10,6 +6,12 @@ import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import ClientHeaderMenuLink from "@/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
+
+import type { HeaderMenu } from "@/constants/user-navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "@/hooks/useNavigate";
 
 type DarkHeaderProps = {
   menus: HeaderMenu[];
@@ -36,14 +38,22 @@ export default function DarkHeader({ menus: menuOptions }: DarkHeaderProps) {
     <View style={{ position: "relative", zIndex: 100 }}>
       <SafeAreaView edges={["top", "right", "left"]} style={styles.container}>
         <Image
+<<<<<<< HEAD
           source={require("../../../src/assets/white_logos/fullLogo.png")}
+=======
+          source={require("@/assets/white_logos/fullLogo.png")}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
           style={styles.logo}
           contentFit="contain"
         />
         <View style={styles.icons}>
           {/* <Pressable style={({ pressed }) => [
     {
+<<<<<<< HEAD
       opacity: pressed ? 0.7 : 1, 
+=======
+      opacity: pressed ? 0.7 : 1,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     }
   ]}>
 						<Ionicons name="notifications" size={30} color="white" />

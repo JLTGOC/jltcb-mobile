@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 import ConfirmModal from "@/src/components/ui/ConfirmModal";
@@ -5,19 +6,36 @@ import SuccesModal from "@/src/components/ui/SuccessModal";
 import { routes } from "@/src/constants/routes";
 import { useAuth } from "@/src/hooks/useAuth";
 import { uploadQuotationFileMutationOptions } from "@/src/mutation-options/asLead-quotations/uploadQuotationFileMutationOptions";
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { AntDesign } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
+<<<<<<< HEAD
 import { StyleSheet, Pressable, View } from "react-native";
+=======
+import { Pressable, StyleSheet, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { Button, HelperText, Portal, Text } from "react-native-paper";
+
+import QuotationRequestDocumentCard from "@/components/quote-section/QuotationRequestDocumentCard";
+import BannerHeader from "@/components/ui/BannerHeader";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import SuccesModal from "@/components/ui/SuccessModal";
+
+import { routes } from "@/constants/routes";
+import { THEMES } from "@/constants/themes";
+import { useUploadQuotationFileMutation } from "@/hooks/mutations/quotations/files/useUploadQuotationFileMutation";
+import { quotationQueries } from "@/queries/quotations";
+import type { QuotationStatus } from "@/types/quotations";
 
 type Props = {
   submitButtonText: string;
-  confirmModalTitle?: string;
-  confirmModalDescription?: string;
+  confirmModalTitle: string;
+  confirmModalDescription: string;
 };
 
 export default function Upload({
@@ -25,11 +43,11 @@ export default function Upload({
   confirmModalTitle,
   confirmModalDescription,
 }: Props) {
-  const { id, clientName } = useLocalSearchParams<{
-    id: string;
-    clientName: string;
+  const { quotationId, status = "requested" } = useLocalSearchParams<{
+    quotationId: string;
+    status?: Lowercase<QuotationStatus>;
   }>();
-  const { userData } = useAuth();
+  const { data } = useQuery(quotationQueries.detail(Number(quotationId)));
   const router = useRouter();
   const [file, setFile] = useState<DocumentPicker.DocumentPickerAsset | null>(
     null,
@@ -37,15 +55,9 @@ export default function Upload({
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
 
-  const mutation = useMutation({
-    ...uploadQuotationFileMutationOptions({ userId: String(userData?.id) }),
-    onSettled: () => {
-      setModalVisible(false);
-    },
-    onSuccess: () => {
-      setSuccessModalVisible(true);
-    },
-  });
+  const mutation = useUploadQuotationFileMutation(
+    status.toUpperCase() as QuotationStatus,
+  );
 
   const handlePickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({
@@ -61,14 +73,24 @@ export default function Upload({
   };
 
   const handleSendQuotation = () => {
-    if (file && id) {
-      mutation.mutate({ quotationId: id, file });
+    if (file && quotationId) {
+      mutation.mutate(
+        { quotationId: Number(quotationId), file },
+        {
+          onSettled: () => {
+            setModalVisible(false);
+          },
+          onSuccess: () => {
+            setSuccessModalVisible(true);
+          },
+        },
+      );
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <BannerHeader variant="light" title={clientName} />
+    <View style={styles.container}>
+      <BannerHeader variant="light" title={data?.data.client ?? ""} />
       <View style={styles.content}>
         {file ? (
           <QuotationRequestDocumentCard
@@ -130,13 +152,17 @@ export default function Upload({
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
           onConfirm={handleSendQuotation}
-          title={confirmModalTitle as any}
-          description={confirmModalDescription as any}
+          title={confirmModalTitle}
+          description={confirmModalDescription}
         />
         <SuccesModal
           onConfirm={() => {
             setSuccessModalVisible(false);
+<<<<<<< HEAD
             router.dismissAll();
+=======
+            router.dismissTo("/dashboard");
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
             router.navigate(routes.AS_QUOTE_RESPONDED);
           }}
           visible={successModalVisible}
@@ -149,6 +175,10 @@ export default function Upload({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: THEMES.pageBackgroundColor,
+  },
   content: {
     padding: 20,
     flex: 1,

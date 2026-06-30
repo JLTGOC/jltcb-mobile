@@ -1,18 +1,30 @@
+<<<<<<< HEAD
 import Details from "@/src/components/client-section/shipment/Details";
 import Documents from "@/src/components/client-section/shipment/Documents";
 import Billing from "@/src/components/client-section/shipment/Billing";
 import BannerHeader from "@/src/components/ui/BannerHeader";
 
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
   Dimensions,
-  FlatList,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
+<<<<<<< HEAD
   Pressable,
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   View,
 } from "react-native";
+
+import Billing from "@/components/client-section/shipment/Billing";
+import Details from "@/components/client-section/shipment/Details";
+import Documents from "@/components/client-section/shipment/Documents";
+import BannerHeader from "@/components/ui/BannerHeader";
 
 export default function ShipmentDetails() {
   const { id, reference_number } = useLocalSearchParams<{
@@ -57,13 +69,10 @@ export default function ShipmentDetails() {
   };
 
   return (
-    <FlatList
-      data={[0]}
-      keyExtractor={(item) => item.toString()}
-      renderItem={({}) => (
-        <>
-          <BannerHeader title={headerTitle} variant="dark" />
+    <ScrollView>
+      <BannerHeader title={headerTitle} variant="dark" />
 
+<<<<<<< HEAD
           <View style={styles.buttonContainer}>
             {tabs.map((t, i) => (
               <Pressable
@@ -90,11 +99,37 @@ export default function ShipmentDetails() {
               </Pressable>
             ))}
           </View>
+=======
+      <View style={styles.buttonContainer}>
+        {tabs.map((t, i) => (
+          <Pressable
+            key={i}
+            onPress={() => setActive(i)}
+            style={({ pressed }) => [
+              styles.button,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { fontSize: screenWidth * 0.03 },
+                active === i && styles.activeText,
+              ]}
+              allowFontScaling={false}
+            >
+              {t}
+            </Text>
+            {active === i && <View style={styles.underline} />}
+          </Pressable>
+        ))}
+      </View>
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
-          {renderTabContent()}
-        </>
-      )}
-    />
+      {renderTabContent()}
+    </ScrollView>
   );
 }
 

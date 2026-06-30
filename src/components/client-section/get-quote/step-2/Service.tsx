@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { Checkbox, Text } from "react-native-paper";
 
+<<<<<<< HEAD
 import { QuoteForm } from "../../../../types/client-quotation";
 
 import {
@@ -10,6 +11,10 @@ import {
   serviceType,
   transpoMode,
 } from "../../../../constants/client-const";
+=======
+import { options, serviceType, transpoMode } from "@/constants/client-const";
+import type { QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   formData: QuoteForm;

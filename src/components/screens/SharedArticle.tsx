@@ -1,14 +1,17 @@
-import { articleQueryOptions } from "@/src/query-options/articles/articleQueryOptions";
 import { useQuery } from "@tanstack/react-query";
 import { Image, ImageBackground } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
 import { Dimensions, ScrollView, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 
+import { articleQueries } from "@/queries/articles";
+
 export default function SharedArticle() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data, isPending, error } = useQuery(articleQueryOptions(id));
+  const { data, isPending, error } = useQuery(
+    articleQueries.detail(Number(id)),
+  );
 
   const screenHeight = Dimensions.get("window").height;
 
@@ -33,7 +36,7 @@ export default function SharedArticle() {
           contentFit="cover"
         />
         <ImageBackground
-          source={require("@/src/assets/banners/large.png")}
+          source={require("@/assets/banners/large.png")}
           style={{
             padding: 24,
             paddingBottom: "30%",

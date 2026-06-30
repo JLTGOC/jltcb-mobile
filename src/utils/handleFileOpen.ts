@@ -14,4 +14,7 @@ export const handleFileOpen = async (url?: string) => {
 
   await Linking.openURL(url);
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0

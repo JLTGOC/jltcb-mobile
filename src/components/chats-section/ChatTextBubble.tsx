@@ -1,8 +1,17 @@
+<<<<<<< HEAD
 import { useAuth } from "@/src/hooks/useAuth";
 import { TextMessage } from "@/src/types/chats";
 import { type StyleProp, StyleSheet, type TextStyle } from "react-native";
 import { Card, Text } from "react-native-paper";
 import type { ThemeProp } from "react-native-paper/lib/typescript/types";
+=======
+import { type StyleProp, StyleSheet, type TextStyle } from "react-native";
+import { Card, Text } from "react-native-paper";
+import type { ThemeProp } from "react-native-paper/lib/typescript/types";
+
+import { useAuth } from "@/hooks/useAuth";
+import type { TextMessage } from "@/types/chats";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   message: TextMessage;

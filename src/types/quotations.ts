@@ -1,12 +1,52 @@
-import type { ElementType } from "react";
+import type { FC } from "react";
+import type { SvgProps } from "react-native-svg";
 
-export interface ASRequestedQuotation {
-  name: string;
-  request_count: number;
-  quotations: Quotation[];
+import type { ContainerSize, options } from "@/constants/client-const";
+import type { ClientType } from "@/types/jobOrderEnums";
+
+import type { File } from ".";
+import type { CargoType, JobType } from "./job-order";
+
+export const ASSIGNMENT_STATUSES = [
+  "AVAILABLE",
+  "REASSIGNMENT REQUESTED",
+  "ASSIGNED",
+] as const;
+export type AssignmentStatus = (typeof ASSIGNMENT_STATUSES)[number];
+
+export const LOGISTICS_SERVICE_TYPES = ["IMPORT", "EXPORT"] as const;
+export type LogisticsServiceType = (typeof LOGISTICS_SERVICE_TYPES)[number];
+
+export const LOGISTICS_TRANSPORT_MODES = ["SEA", "AIR"] as const;
+export type LogisticsTransportMode = (typeof LOGISTICS_TRANSPORT_MODES)[number];
+
+export type LogisticsServiceOptions = (typeof options)[number];
+
+export interface ClientQuotationListSummary<
+  T extends "REQUESTED" | "RESPONDED",
+> {
+  id: number;
+  status: T extends "REQUESTED" ? "NEW" : T;
+  reference_number: string;
+  commodity: string;
+  date: string;
+  conversation_id: string | null;
+  reassignment_request_id: number | null;
 }
 
+<<<<<<< HEAD
 export type ServiceDetails =
+=======
+export interface ASRequestedQuotationSummary {
+  client_id: number;
+  client_full_name: string;
+  quotations_count: number;
+  date: string;
+  quotations: ASRequestedQuotation[];
+}
+
+export type BaseQuotationServiceDetails =
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   | { service: "REGULATORY"; service_type: "BUSINESS SOLUTION" }
   | { service: "LOGISTICS"; service_type: "IMPORT" | "EXPORT" };
 
@@ -14,11 +54,16 @@ export type BaseASQuotation = {
   id: number;
   client_name: string;
   reference_number: string;
+<<<<<<< HEAD
   issued_quotation_id: string | null;
+=======
+  issued_quotation_id: number | null;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   commodity: string;
   date: string;
   conversation_id: string | null;
   prepared_by: string;
+<<<<<<< HEAD
 } & ServiceDetails;
 
 export type ASRespondedQuotation = BaseASQuotation & {
@@ -30,29 +75,109 @@ export type ASAcceptedQuotation = BaseASQuotation & {
   status: "ACCEPTED";
   accepted_at: string;
 };
+=======
+  reassignment_request_id: number | null;
+} & BaseQuotationServiceDetails;
 
-export interface Quotation {
+type ReassignmentDetails =
+  | {
+      reassignment_request_id: number;
+      requested_at: string;
+    }
+  | { reassignment_request_id: null; requested_at: null };
+
+interface LogisticsServiceSummary {
+  commodity: string;
+  service_level: LogisticsServiceType;
+  transport_mode: LogisticsTransportMode;
+  origin: string;
+  destination: string;
+}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
+
+interface RegulatoryServiceSummary {
+  application_type: ClientType;
+}
+
+type RequestedQuotationAssignmentDetails =
+  | {
+      assignment_status: "AVAILABLE";
+      as_username: "Available";
+      as_full_name: null;
+      assigned_at: null;
+    }
+  | {
+      assignment_status: "ASSIGNED" | "REASSIGNMENT REQUESTED";
+      as_username: string;
+      as_full_name: string;
+      assigned_at: string;
+    };
+
+type RequestedQuotationServiceDetails =
+  | {
+      service: "REGULATORY";
+      logistics_service: null;
+      regulatory_service: RegulatoryServiceSummary;
+    }
+  | {
+      service: "LOGISTICS";
+      logistics_service: LogisticsServiceSummary;
+      regulatory_service: null;
+    };
+
+export type ASRequestedQuotation = {
   id: number;
   date: string;
-  person_in_charge: string;
-  commodity: string;
-}
+  client_full_name: string;
+  status: "REQUESTED";
+  conversation_id: string | null;
+  prepared_by: string | null;
+  issued_quotation_id: string | null;
+} & ReassignmentDetails &
+  RequestedQuotationAssignmentDetails &
+  RequestedQuotationServiceDetails;
 
-export interface QuotationDetails {
+interface BaseQuotation {
+  id: number;
   reference_number: string;
+  client_id: number;
   client: string;
-  account_specialist: string;
-  status: string;
+  account_specialist: string | null;
+  status: QuotationStatus;
   created_at: string;
   updated_at: string;
-  remarks?: string;
+  issued_quotation_id: number | null;
   company: Company;
-  service: Service;
+  quotation_file: QuotationFile[] | string;
+  documents: Document[] | string;
+  remarks: string | null;
+  conversation_id: string | null;
+  job_order: {
+    reference_number: string | null;
+    person_in_charge: string | null;
+  };
+}
+
+export interface LogisticsQuotation extends BaseQuotation {
+  service: LogisticsService;
   commodity: Commodity;
   shipment: Shipment;
+<<<<<<< HEAD
   documents: Document[] | string;
   quotation_file: QuotationFile[] | string;
+=======
+  regulatory_service: null;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
+
+export interface RegulatoryQuotation extends BaseQuotation {
+  service: null;
+  commodity: null;
+  shipment: null;
+  regulatory_service: RegulatoryService;
+}
+
+export type Quotation = LogisticsQuotation | RegulatoryQuotation;
 
 export interface Company {
   name: string;
@@ -60,18 +185,25 @@ export interface Company {
   contact_person: string;
   contact_number: string;
   email: string;
+  position: string;
+  business_type: string;
 }
 
-export interface Service {
-  type: string;
-  transport_mode: string;
-  options: string[];
+export interface LogisticsService {
+  type: LogisticsServiceType;
+  transport_mode: LogisticsTransportMode;
+  options: LogisticsServiceOptions[];
+}
+
+export interface RegulatoryService {
+  type_of_regulatory_assistance: string[];
+  service_level: ClientType;
+  message: string;
 }
 
 export interface Commodity {
   commodity: string;
   cargo_type: string;
-  cargo_volume: string;
   container_size: string;
 }
 
@@ -85,12 +217,23 @@ export interface Document {
   file_name: string;
   file_url: string;
   file_type: string;
+<<<<<<< HEAD
+=======
+  created_at: string;
+  updated_at: string;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 export interface QuotationFile {
   id: number;
   file_name: string;
   file_url: string;
+<<<<<<< HEAD
+=======
+  file_type: string;
+  created_at: string;
+  updated_at: string;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 export type QuotationStatus =
@@ -102,15 +245,98 @@ export type QuotationStatus =
 export interface QuotationFilter<T extends QuotationStatus = QuotationStatus> {
   filter: T;
   search?: string;
+  client_id?: number;
 }
 
 export interface QuotationDetailsSection {
-  icon: ElementType;
+  icon: FC<SvgProps>;
   title: string;
-  details: [string, unknown][];
+  details: string[][];
 }
 
+<<<<<<< HEAD
 export interface UpdateAsArgs {
   quotationId: number;
   asId: number;
 }
+=======
+export interface ReassignASRequestBody {
+  quotationId: number;
+  asId: number;
+}
+
+export interface CreateLogisticsQuotationRequestBody {
+  services: "LOGISTICS";
+  company: {
+    name: string;
+    address: string;
+    contact_person: string;
+    contact_number: string;
+    email: string;
+  };
+  service: {
+    type: LogisticsServiceType;
+    transport_mode: LogisticsTransportMode;
+    options: ["ALL IN"] | string[];
+  };
+  commodity: {
+    commodity: string;
+    cargo_type: CargoType;
+    container_size?: ContainerSize;
+  };
+  shipment: {
+    origin: string;
+    destination: string;
+  };
+  documents: File[];
+  remarks?: string;
+}
+
+export interface CreateRegulatoryQuotationRequestBody {
+  services: "REGULATORY";
+  full_name: string;
+  company: {
+    name: string;
+    address: string;
+    position: string;
+    contact_number: string;
+    email: string;
+    business_type: string;
+    contact_person: string;
+    cp_contact_number: string;
+  };
+  type_of_regulatory_assistance: string[];
+  service_level: ClientType;
+  message: string;
+  documents: File[];
+  remarks?: string;
+}
+
+export type CreateQuotationRequestBody =
+  | CreateLogisticsQuotationRequestBody
+  | CreateRegulatoryQuotationRequestBody;
+
+export interface QuotationListQueryFilter {
+  status?: QuotationStatus;
+}
+
+export type QuotationListQueryParams = {
+  search?: string;
+  filter?: QuotationListQueryFilter;
+  client_id?: number;
+};
+
+export type QuotationFileType = "REQUESTED" | "PROPOSAL";
+
+export type FetchQuoteParamsByService<T extends JobType> = T extends "LOGISTICS"
+  ? {
+      service: "LOGISTICS";
+      service_type?: LogisticsServiceType;
+    }
+  : T extends "REGULATORY"
+    ? {
+        service: "REGULATORY";
+        service_type: "BUSINESS SOLUTION";
+      }
+    : never;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0

@@ -15,7 +15,10 @@
     },
     "android": {
       "package": "com.jltcb.app",
+<<<<<<< HEAD
       "versionCode": 5,
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
       "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
       "blockedPermissions": [
         "android.permission.READ_MEDIA_IMAGES",
@@ -67,7 +70,19 @@
         }
       ],
       "expo-sharing",
+<<<<<<< HEAD
       "expo-sqlite"
+=======
+      "expo-sqlite",
+      [
+        "expo-file-system",
+        {
+          "supportsOpeningDocumentsInPlace": true,
+          "enableFileSharing": true
+        }
+      ],
+      "expo-image"
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     ],
     "experiments": {
       "typedRoutes": true,

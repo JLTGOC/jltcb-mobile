@@ -1,4 +1,3 @@
-import { TARIFF_SCHEDULES } from "@/src/constants/ahtn-checker";
 import { useState } from "react";
 import {
   Pressable,
@@ -9,6 +8,8 @@ import {
   View,
 } from "react-native";
 import { Button, Checkbox } from "react-native-paper";
+
+import { TARIFF_SCHEDULES } from "@/constants/ahtn-checker";
 
 export default function SharedAHTNChecker() {
   const [searchValue, setSearchValue] = useState("");

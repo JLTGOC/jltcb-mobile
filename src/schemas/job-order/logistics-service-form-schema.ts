@@ -1,12 +1,24 @@
+<<<<<<< HEAD
+=======
+import * as z from "zod";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import {
   ACCREDITED_TYPES,
   BILLING_TYPES,
   CLIENT_TYPES,
   SERVICE_LEVEL_TYPES,
+<<<<<<< HEAD
 } from "@/src/types/jobOrderEnums";
 import * as z from "zod";
 
 export const logisticsServiceFormSchema = z.object({
+=======
+} from "@/types/jobOrderEnums";
+import { fileSchema } from "../fileSchema";
+
+export const logisticsJobOrderFormSchema = z.object({
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   subject: z.string().trim().min(1, "Subject is required."),
   email_body: z.string().trim().min(1, "Message is required."),
 
@@ -38,6 +50,7 @@ export const logisticsServiceFormSchema = z.object({
   billing_date: z.date("When to bill is required.").optional(),
   // billing_date: z.string().trim(),
   shall_be_billed: z.enum(BILLING_TYPES, "Shall be billed is required."),
+<<<<<<< HEAD
 });
 export type LogisticsServiceFormSchema = z.infer<
   typeof logisticsServiceFormSchema
@@ -45,6 +58,16 @@ export type LogisticsServiceFormSchema = z.infer<
 
 export const step1Schema = z.intersection(
   logisticsServiceFormSchema.pick({
+=======
+  attached_docs: z.array(fileSchema).optional(),
+});
+export type LogisticsJobOrderFormSchema = z.infer<
+  typeof logisticsJobOrderFormSchema
+>;
+
+export const step1Schema = z.intersection(
+  logisticsJobOrderFormSchema.pick({
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     subject: true,
     email_body: true,
     client_type: true,
@@ -53,7 +76,11 @@ export const step1Schema = z.intersection(
     service_level: true,
     bl_no: true,
   }),
+<<<<<<< HEAD
   logisticsServiceFormSchema
+=======
+  logisticsJobOrderFormSchema
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     .pick({
       eta: true,
       etd: true,
@@ -78,7 +105,11 @@ export const step1Schema = z.intersection(
 );
 export type Step1Fields = z.infer<typeof step1Schema>;
 
+<<<<<<< HEAD
 export const step2Schema = logisticsServiceFormSchema.pick({
+=======
+export const step2Schema = logisticsJobOrderFormSchema.pick({
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   hs_code: true,
   rod: true,
   permits: true,
@@ -87,13 +118,21 @@ export const step2Schema = logisticsServiceFormSchema.pick({
 });
 export type Step2Fields = z.infer<typeof step2Schema>;
 
+<<<<<<< HEAD
 const step3BaseSchema = logisticsServiceFormSchema.pick({
+=======
+const step3BaseSchema = logisticsJobOrderFormSchema.pick({
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   delivery_date: true,
   completion_date: true,
   target_special_remarks: true,
   terms_of_payment: true,
   billing_date: true,
   shall_be_billed: true,
+<<<<<<< HEAD
+=======
+  attached_docs: true,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 });
 
 export const step3Schema = step3BaseSchema;
@@ -101,7 +140,11 @@ export const step3Schema = step3BaseSchema;
 const makeStep3EtaValidationSchema = (eta?: Date) =>
   z
     .object({
+<<<<<<< HEAD
       delivery_date: logisticsServiceFormSchema.shape.delivery_date.optional(),
+=======
+      delivery_date: logisticsJobOrderFormSchema.shape.delivery_date.optional(),
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     })
     .superRefine((data, ctx) => {
       if (!eta || !data.delivery_date) {

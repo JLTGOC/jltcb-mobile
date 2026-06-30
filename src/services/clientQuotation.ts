@@ -1,16 +1,29 @@
 import * as SecureStore from "expo-secure-store";
+
 import {
   appendFilesToFormData,
   appendObjectToFormData,
-} from "../helper/client-form-helper";
-import type { ApiResponse } from "../types/api";
-import {
+} from "@/helper/client-form-helper";
+import type { ApiResponse } from "@/types/api";
+import type {
   ClientQuoteResponse,
+<<<<<<< HEAD
   QuoteEnums,
   QuoteForm,
   QuotesListItem,
   QuotesParams,
 } from "../types/client-quotation";
+=======
+  LogisticsQuoteEnums,
+  QuoteForm,
+  QuotesListItem,
+  QuotesParams,
+  RegulatoryQuoteEnums,
+} from "@/types/client-quotation";
+import type { JobType } from "@/types/job-order";
+import type { LogisticsServiceType } from "@/types/quotations";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { apiDelete, apiGet, apiPost } from "./axiosInstance";
 
 const getUploadableFiles = (documents: QuoteForm["documents"] | undefined) =>
@@ -85,9 +98,34 @@ const postMultipart = async <T>(
   return parsedResponse as ApiResponse<T>;
 };
 
+<<<<<<< HEAD
 // Get Enums
 export async function fetchGetQuoteEnums(): Promise<QuoteEnums> {
   return (await apiGet<QuoteEnums>(`quotations/enum-options`)).data;
+=======
+export type FetchQuoteParamsByService<T extends JobType> = T extends "LOGISTICS"
+  ? {
+      service: "LOGISTICS";
+      service_type?: LogisticsServiceType;
+    }
+  : T extends "REGULATORY"
+    ? {
+        service: "REGULATORY";
+        service_type: "BUSINESS SOLUTION";
+      }
+    : never;
+
+interface QuoteEnumsMap {
+  LOGISTICS: LogisticsQuoteEnums;
+  REGULATORY: RegulatoryQuoteEnums;
+}
+
+// Get Enums
+export async function fetchGetQuoteEnums<T extends JobType>(
+  params: FetchQuoteParamsByService<T>,
+) {
+  return await apiGet<QuoteEnumsMap[T]>(`quotations/enum-options`, { params });
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 // Post Quote
@@ -121,9 +159,12 @@ export async function postClientQuote(formData: QuoteForm) {
   if (formData.remarks !== undefined && formData.remarks !== null) {
     data.append("remarks", formData.remarks);
   }
+<<<<<<< HEAD
   if (formData.message !== undefined && formData.message !== null) {
     data.append("message", formData.message);
   }
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
   return (await postMultipart("quotations", token, data)).data;
 }

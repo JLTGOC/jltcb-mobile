@@ -1,9 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
+<<<<<<< HEAD
 import { Dispatch, SetStateAction } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ContactFormData } from "../../../src/types/get-quote";
+=======
+import type { Dispatch, SetStateAction } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+
+import type { ContactFormData } from "@/types/get-quote";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type ImageInputBoxProps = {
   setFormData: Dispatch<SetStateAction<ContactFormData>>;

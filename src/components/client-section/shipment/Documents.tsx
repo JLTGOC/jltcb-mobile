@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { fetchShipmentDetails } from "@/src/services/shipment";
 import type { ShipmentDetails } from "@/src/types/shipment-type";
 import { useQuery } from "@tanstack/react-query";
@@ -5,6 +6,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ActivityIndicator, IconButton, Text } from "react-native-paper";
 
+=======
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
+import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, IconButton, Text } from "react-native-paper";
+
+import { fetchShipmentDetails } from "@/services/shipment";
+import type { ShipmentDetails } from "@/types/shipment-type";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 type ShipmentDocument = {
   id: number | string;
   file_name: string;
@@ -57,7 +68,14 @@ function getDisplayName(fileName: string, fileUrl: string) {
 export default function Documents({ shipment }: Props) {
   const hasValidShipmentId = Number.isFinite(shipment) && shipment > 0;
 
+<<<<<<< HEAD
   const { data, isLoading, isError } = useQuery<ShipmentDetailsWithFiles, Error>({
+=======
+  const { data, isLoading, isError } = useQuery<
+    ShipmentDetailsWithFiles,
+    Error
+  >({
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     queryKey: ["shipment-details", shipment],
     queryFn: () => fetchShipmentDetails(shipment),
     enabled: hasValidShipmentId,
@@ -124,7 +142,13 @@ export default function Documents({ shipment }: Props) {
                   {getDisplayName(item.file_name, item.file_url)}
                 </Text>
                 <Text style={styles.date}>
+<<<<<<< HEAD
                   {extension ? `${extension.toUpperCase()} file` : "Unknown file type"}
+=======
+                  {extension
+                    ? `${extension.toUpperCase()} file`
+                    : "Unknown file type"}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
                 </Text>
               </View>
             </View>
@@ -142,6 +166,7 @@ export default function Documents({ shipment }: Props) {
     />
   );
 }
+<<<<<<< HEAD
  // <MaterialIcons name="receipt-long" color="#000" size={24} />
         // <MaterialCommunityIcons name="file" color="#000" size={24} />
 
@@ -149,6 +174,15 @@ export default function Documents({ shipment }: Props) {
         // <MaterialCommunityIcons name="file-word-outline" color="#000" size={24} />
         // <MaterialCommunityIcons name="file-image-outline" color="#000" size={24} />
         // <FontAwesome name="file-excel-o" color="#000" size={24} />
+=======
+// <MaterialIcons name="receipt-long" color="#000" size={24} />
+// <MaterialCommunityIcons name="file" color="#000" size={24} />
+
+// <FontAwesome name="file-pdf-o" color="#000" size={24} />
+// <MaterialCommunityIcons name="file-word-outline" color="#000" size={24} />
+// <MaterialCommunityIcons name="file-image-outline" color="#000" size={24} />
+// <FontAwesome name="file-excel-o" color="#000" size={24} />
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 const styles = StyleSheet.create({
   listContainer: {
     gap: 10,

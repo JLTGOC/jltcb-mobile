@@ -1,7 +1,12 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { type Dispatch, type SetStateAction, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
+<<<<<<< HEAD
 import { FieldConfig, QuoteForm } from "../../../types/client-quotation";
+=======
+
+import type { FieldConfig, QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
 const COMPANY_EMAIL_REGEX =

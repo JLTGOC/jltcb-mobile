@@ -1,9 +1,24 @@
+<<<<<<< HEAD
 import { THEMES } from "@/src/constants/themes";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
 import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+=======
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Tabs } from "expo-router";
+import {
+  type Animated,
+  type StyleProp,
+  StyleSheet,
+  type ViewStyle,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { THEMES } from "@/constants/themes";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 export default function FinanceTabsLayout() {
   const insets = useSafeAreaInsets();
 

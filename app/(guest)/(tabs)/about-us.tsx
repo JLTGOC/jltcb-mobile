@@ -1,12 +1,14 @@
-import CoreValuesTemplate from "@/src/components/about-section/CoreValuesTemplate";
-import PrincipleList from "@/src/components/about-section/PrincipleList";
 import { Image } from "expo-image";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+
+import CoreValuesTemplate from "@/components/about-section/CoreValuesTemplate";
+import PrincipleList from "@/components/about-section/PrincipleList";
+
 export default function AboutUs() {
   return (
     <ScrollView style={styles.container}>
       <Image
-        source={require("@/src/assets/about_us/header.png")}
+        source={require("@/assets/about_us/header.png")}
         style={styles.imageHeader}
       />
       <Text

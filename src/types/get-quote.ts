@@ -10,4 +10,4 @@ export type ContactFormData = {
 } & {
   message?: string;
   imageUri?: string;
-}
+};

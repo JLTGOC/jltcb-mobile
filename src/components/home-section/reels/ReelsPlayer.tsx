@@ -1,4 +1,3 @@
-import type { Reel } from "@/src/types/reels";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsFocused } from "@react-navigation/native";
 import { useEvent } from "expo";
@@ -11,6 +10,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import type { Reel } from "@/types/reels";
 
 type ReelsPlayerProps = {
   reel: Reel;
@@ -72,7 +73,9 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
         } else {
           player.play();
         }
-      } catch (e) {}
+      } catch (err) {
+        console.error("Error occurred while handling app state change:", err);
+      }
     });
 
     return () => {
@@ -89,6 +92,7 @@ function ActiveVideo({ reel }: Omit<ReelsPlayerProps, "shouldPlay">) {
     if (status === "readyToPlay") {
       opacity.value = withTiming(0, { duration: 300 });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const animatedOverlayStyle = useAnimatedStyle(() => ({

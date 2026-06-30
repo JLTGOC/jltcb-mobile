@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { THEMES } from "@/src/constants/themes";
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import type { TabTriggerSlotProps } from "expo-router/ui";
 import type { PropsWithChildren, ReactNode, Ref } from "react";
 import {
@@ -10,6 +13,8 @@ import {
   type View,
   type ViewStyle,
 } from "react-native";
+
+import { THEMES } from "@/constants/themes";
 
 type HeadlessTabButtonProps = {
   label?: string;

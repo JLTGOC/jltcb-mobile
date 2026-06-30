@@ -1,4 +1,8 @@
-// Quotation Types
+import type { CargoType, JobType } from "./job-order";
+import type {
+  LogisticsServiceType,
+  LogisticsTransportMode,
+} from "./quotations";
 
 export type QuoteForm = {
   id: (string | number)[];
@@ -7,9 +11,12 @@ export type QuoteForm = {
   reference_number?: string;
   status: string;
   remarks?: string;
+<<<<<<< HEAD
   type_of_regulatory_assistance?: string[];
   message?: string;
   service_level?: string;
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   services?: string;
   company?: CompanyData;
   service?: ServiceData;
@@ -84,9 +91,13 @@ export type CompanyData = {
   company_name?: string;
   company_address?: string;
   contact_person?: string;
+<<<<<<< HEAD
   cp_contact_number?: string;
   email?: string;
   full_name?: string;
+=======
+  email?: string;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   position?: string;
   contact_number?: string;
   business_type?: string;
@@ -148,6 +159,7 @@ export type ClientQuoteResponse = {
   shipment_details: ShipmentDetails;
 };
 
+<<<<<<< HEAD
 export type QuoteEnums = {
   autofill_details?: {
     full_name?: string;
@@ -166,3 +178,44 @@ export type QuoteEnums = {
   cargo_type?: string[];
   container_size?: string[];
 };
+=======
+export interface AutofillDetails {
+  full_name: string;
+  company: {
+    name: string;
+    address: string;
+    position: string;
+    contact_number: string;
+    email: string;
+    business_type: string;
+  };
+}
+
+export interface BaseQuoteEnums<T extends JobType = JobType> {
+  service: T;
+  autofill_details: AutofillDetails;
+  business_types: string[];
+  regulatory_assistance_types: string[];
+  service_types: string[];
+  transport_modes: string[];
+  service_options: string[];
+  cargo_type: string[];
+  container_size: string[];
+}
+
+export interface LogisticsQuoteEnums extends BaseQuoteEnums<"LOGISTICS"> {
+  business_types: [];
+  regulatory_assistance_types: [];
+  service_types: LogisticsServiceType[];
+  transport_modes: LogisticsTransportMode[];
+  cargo_type: CargoType[];
+}
+
+export interface RegulatoryQuoteEnums extends BaseQuoteEnums<"REGULATORY"> {
+  service_types: ["BUSINESS SOLUTION"];
+  transport_modes: [];
+  service_options: [];
+  cargo_type: [];
+  container_size: [];
+}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0

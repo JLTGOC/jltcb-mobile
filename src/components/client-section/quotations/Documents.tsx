@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import QuotationRequestDocumentCard from "@/src/components/quote-section/QuotationRequestDocumentCard";
 import {
   fetchClientQuote,
@@ -6,11 +7,26 @@ import {
 import { updateFileName } from "@/src/services/quotations";
 import { ClientFile, QuoteForm } from "@/src/types/client-quotation";
 import { handleFileOpen } from "@/src/utils/handleFileOpen";
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, FAB, Text } from "react-native-paper";
+<<<<<<< HEAD
+=======
+
+import QuotationRequestDocumentCard from "@/components/quote-section/QuotationRequestDocumentCard";
+
+import {
+  fetchClientQuote,
+  updateClientQuote,
+} from "@/services/clientQuotation";
+import { updateFileName } from "@/services/quotations";
+import type { ClientFile, QuoteForm } from "@/types/client-quotation";
+import { handleFileOpen } from "@/utils/handleFileOpen";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   quotationId?: string;
@@ -20,7 +36,7 @@ export default function Details({ quotationId }: Props) {
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   //fetch the single quotation details
-  const { data, isLoading, error } = useQuery<QuoteForm>({
+  const { data, isLoading } = useQuery<QuoteForm>({
     queryKey: [quotationId],
     queryFn: () => fetchClientQuote(Number(quotationId)),
     enabled: !!quotationId,

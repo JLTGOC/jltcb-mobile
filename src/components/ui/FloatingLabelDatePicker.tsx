@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// eslint-disable-next-line import/no-named-as-default
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import DateTimePicker, {
   type DateTimePickerProps,
 } from "@expo/ui/datetimepicker";

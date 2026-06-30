@@ -1,7 +1,7 @@
 import { Asset } from "expo-asset";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { Dimensions, StyleSheet, Button,View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 import Animated, {
   useAnimatedStyle,
@@ -29,16 +29,16 @@ export default function StartupScreen({ onFinish }: Props) {
   // Preload all images
   useEffect(() => {
     const imagesToLoad = [
-      require("@/src/assets/black_logos/full_logo.png"),
-      require("@/src/assets/landingPage.png"),
-      require("@/src/assets/black_logos/logo.png"),
-      require("@/src/assets/black_logos/word.png"),
-      require("@/src/assets/social_logos/facebook.png"),
-      require("@/src/assets/social_logos/instagram.png"),
-      require("@/src/assets/social_logos/youtube.png"),
-      require("@/src/assets/social_logos/tiktok.png"),
-      require("@/src/assets/social_logos/twitter.png"),
-      require("@/src/assets/social_logos/linkedIn.png"),
+      require("@/assets/black_logos/full_logo.png"),
+      require("@/assets/landingPage.png"),
+      require("@/assets/black_logos/logo.png"),
+      require("@/assets/black_logos/word.png"),
+      require("@/assets/social_logos/facebook.png"),
+      require("@/assets/social_logos/instagram.png"),
+      require("@/assets/social_logos/youtube.png"),
+      require("@/assets/social_logos/tiktok.png"),
+      require("@/assets/social_logos/twitter.png"),
+      require("@/assets/social_logos/linkedIn.png"),
     ];
 
     async function loadAssets() {
@@ -105,12 +105,11 @@ export default function StartupScreen({ onFinish }: Props) {
 
       <Animated.View style={[styles.logoContainer, fadeStyle]}>
         <Image
-          source={require("@/src/assets/black_logos/full_logo.png")}
+          source={require("@/assets/black_logos/full_logo.png")}
           style={{ width: 300, height: 220 }}
           contentFit="contain"
         />
-        <View style={{ marginTop: 20 }}>
-        </View>
+        <View style={{ marginTop: 20 }}></View>
       </Animated.View>
     </Animated.View>
   );

@@ -1,6 +1,3 @@
-import ClientHeaderMenuLink from "@/src/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
-import type { HeaderMenu } from "@/src/constants/user-navigation";
-import { useAuth } from "@/src/hooks/useAuth";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -10,6 +7,11 @@ import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import ClientHeaderMenuLink from "@/components/header-nav-bar-section/client-navbar/ClientNavBarLink";
+import type { HeaderMenu } from "@/constants/user-navigation";
+
+import { useAuth } from "@/hooks/useAuth";
 
 type LightHeaderProps = {
   menus: HeaderMenu[];
@@ -36,7 +38,7 @@ export default function LightHeader({ menus: menuOptions }: LightHeaderProps) {
     <View style={{ position: "relative", zIndex: 100 }}>
       <SafeAreaView edges={["top", "right", "left"]} style={styles.container}>
         <Image
-          source={require("../../../src/assets/black_logos/full_logo.png")}
+          source={require("@/assets/black_logos/full_logo.png")}
           style={styles.logo}
           contentFit="contain"
         />

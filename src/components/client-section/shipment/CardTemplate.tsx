@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 import { routes } from "@/src/constants/routes";
 import { useNavigate } from "@/src/hooks/useNavigate";
 import { formatDate } from "@/src/utils/formatDate";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Card, Divider, Text } from "react-native-paper";
+=======
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Card, Divider, Text } from "react-native-paper";
+
+import { routes } from "@/constants/routes";
+import { useNavigate } from "@/hooks/useNavigate";
+import { formatDate } from "@/utils/formatDate";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   reference_number: string;

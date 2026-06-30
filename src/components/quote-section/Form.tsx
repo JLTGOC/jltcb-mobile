@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Surface, Text, TextInput } from "react-native-paper";
-import { ContactFormData, Field } from "../../../src/types/get-quote";
-import SubForm_ImageInput from "./SubForm_ImageInput";
+
+import type { ContactFormData, Field } from "@/types/get-quote";
+
 import SubForm_CheckBox from "./SubForm_CheckBox";
 
 export default function Form() {

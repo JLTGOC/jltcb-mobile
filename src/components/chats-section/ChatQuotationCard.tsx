@@ -1,8 +1,8 @@
-import { QuotationCardMessage } from "@/src/types/chats";
 import { format, parseISO } from "date-fns";
 import { StyleSheet, View } from "react-native";
-
 import { Avatar, Card, Text } from "react-native-paper";
+
+import type { QuotationCardMessage } from "@/types/chats";
 
 type Props = {
   quotation: QuotationCardMessage;

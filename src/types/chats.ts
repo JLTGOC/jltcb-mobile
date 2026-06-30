@@ -1,4 +1,5 @@
-import { ApiResponse } from "@/src/types/api";
+import type { ApiResponse } from "@/types/api";
+
 import type { ReactNativeFile } from "./files";
 
 export interface Inbox {

@@ -1,5 +1,5 @@
-import SharedCarrers from "@/src/components/screens/SharedCareers";
+import SharedCareers from "@/components/screens/SharedCareers";
 
-export default function Carrers() {
-  return <SharedCarrers />
+export default function Careers() {
+  return <SharedCareers />;
 }

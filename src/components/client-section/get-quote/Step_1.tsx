@@ -1,34 +1,76 @@
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useMemo,
+} from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { HelperText, Surface, Text, TextInput } from "react-native-paper";
 
 import { z } from "zod";
+<<<<<<< HEAD
 import {
   FieldConfig,
   QuoteEnums,
   QuoteForm,
 } from "../../../types/client-quotation";
+=======
+import type {
+  BaseQuoteEnums,
+  FieldConfig,
+  QuoteForm,
+} from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   formData: QuoteForm;
   setFormData: Dispatch<SetStateAction<QuoteForm>>;
   fields: FieldConfig[];
+<<<<<<< HEAD
   enums: QuoteEnums;
+=======
+  enums: BaseQuoteEnums;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 };
 
 const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
 const COMPANY_EMAIL_REGEX =
   /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/i;
 
+<<<<<<< HEAD
+=======
+const companySchema = z.object({
+  company_name: z
+    .string()
+    .min(1, "Company name is required")
+    .max(100, "Name is too long"),
+  contact_number: z
+    .string()
+    .regex(
+      CONTACT_NUMBER_REGEX,
+      "Contact number must start with 09 and be exactly 11 digits",
+    ),
+  email: z
+    .string()
+    .regex(
+      COMPANY_EMAIL_REGEX,
+      "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
+    ),
+});
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 export default function Step_1({
   setFormData,
   formData,
   fields,
   enums,
 }: Props) {
+<<<<<<< HEAD
   const isRegulatory = formData?.services === "REGULATORY";
 
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   const isPhoneField = (key: string) =>
     key === "contact_number" || key === "cp_contact_number";
 
@@ -103,7 +145,11 @@ export default function Step_1({
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={styles.contentContainer}
     >
+<<<<<<< HEAD
       {formData?.services === "REGULATORY" && (
+=======
+      {formData?.service?.transport_mode === "REGULATORY" && (
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
         <View style={{ marginBottom: 20 }}>
           <Text allowFontScaling={false} style={styles.customLabel}>
             BUSINESS TYPE
@@ -145,7 +191,11 @@ export default function Step_1({
           <View style={styles.container} key={field.key}>
             <View style={styles.fieldWrapper}>
               <Text allowFontScaling={false} style={styles.customLabel}>
+<<<<<<< HEAD
                 {field.label}
+=======
+                {field.label}{" "}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
                 {field.required && <Text style={{ color: "red" }}>*</Text>}
               </Text>
 

@@ -3,6 +3,9 @@ import { Avatar, Text } from "react-native-paper";
 import type { Inbox } from "@/src/types/chats";
 import { formatInboxItemTime } from "@/src/utils/chatTimeFormatter";
 
+import type { Inbox } from "@/types/chats";
+import { formatInboxItemTime } from "@/utils/chatTimeFormatter";
+
 export default function InboxListItem({
 	image_path,
 	time,
@@ -10,7 +13,11 @@ export default function InboxListItem({
 	title,
 	last_message,
 }: Inbox) {
+<<<<<<< HEAD
 	const formattedLastMessageTime = time ? formatInboxItemTime(time) : "";
+=======
+  const formattedLastMessageTime = time ? formatInboxItemTime(time) : "";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 	return (
 		<View style={styles.container}>

@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import type { ShipmentData, ShipmentDetails } from "../types/shipment-type";
 import { apiGet } from "./axiosInstance";
 
+=======
+import type { ShipmentData, ShipmentDetails } from "@/types/shipment-type";
+
+import { apiGet } from "./axiosInstance";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 export type ShipmentListPage = ShipmentData & {
   message?: string;
 };

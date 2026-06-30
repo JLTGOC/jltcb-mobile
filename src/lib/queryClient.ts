@@ -1,32 +1,39 @@
-import { MutationCache, QueryClient } from "@tanstack/react-query";
+import {
+  matchQuery,
+  MutationCache,
+  QueryClient,
+  type QueryKey,
+} from "@tanstack/react-query";
 
 interface Meta extends Record<string, unknown> {
-	invalidatesQuery?: readonly unknown[];
+  invalidates?: QueryKey[];
 }
 
 declare module "@tanstack/react-query" {
-	interface Register {
-		queryMeta: Meta;
-		mutationMeta: Meta;
-	}
+  interface Register {
+    mutationMeta: Meta;
+  }
 }
 
 const mutationCache = new MutationCache({
-	onSettled: (_data, _error, _variables, _context, mutation) => {
-		const keysToInvalidate = mutation.meta?.invalidatesQuery;
-
-		if (keysToInvalidate) {
-			if (Array.isArray(keysToInvalidate[0])) {
-				(keysToInvalidate as readonly (readonly unknown[])[]).forEach((key) => {
-					queryClient.invalidateQueries({ queryKey: key });
-				});
-			} else {
-				queryClient.invalidateQueries({ queryKey: keysToInvalidate });
-			}
-		}
-	},
+  onSuccess: (_data, _variables, _context, mutation) => {
+    queryClient.invalidateQueries({
+      predicate: (query) =>
+        // invalidate all matching tags at once
+        // or everything if no meta is provided
+        mutation.meta?.invalidates?.some((queryKey) =>
+          matchQuery({ queryKey }, query),
+        ) ?? true,
+    });
+  },
 });
 
 export const queryClient = new QueryClient({
-	mutationCache,
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 2,
+    },
+  },
+  mutationCache,
 });

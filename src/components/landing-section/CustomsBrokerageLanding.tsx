@@ -7,7 +7,10 @@ import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { routes } from "@/src/constants/routes";
 
+import { routes } from "@/constants/routes";
+
 export default function CustomsBrokerageLanding() {
+<<<<<<< HEAD
 	const router = useRouter();
 
 	return (
@@ -88,6 +91,88 @@ export default function CustomsBrokerageLanding() {
 			</ImageBackground>
 		</ImageBackground>
 	);
+=======
+  const router = useRouter();
+
+  return (
+    <ImageBackground
+      source={require("@/assets/landingPage.png")}
+      style={styles.image}
+    >
+      <View style={styles.whiteOverlay} />
+
+      <View style={styles.main}>
+        <Pressable
+          onPress={() => {
+            router.dismissTo(routes.LANDING_PAGE);
+          }}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+        >
+          <Image
+            source={require("@/assets/customs-brokerage/customs-brokerage.png")}
+            style={styles.logoImage}
+            contentFit="contain"
+          />
+          <Text style={styles.title} allowFontScaling={false}>
+            Customs Brokerage
+          </Text>
+        </Pressable>
+
+        <View
+          style={{
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <Link href={routes.GUEST_HOME} asChild>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <LinearGradient
+                colors={["#161F3C", "#000000"]} // BUTTON gradient fill
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.innerGradient}
+              >
+                <MaterialIcons
+                  name="person-outline"
+                  size={22}
+                  color="#EE9034"
+                />
+                <Text style={styles.buttonText} allowFontScaling={false}>
+                  Guest
+                </Text>
+              </LinearGradient>
+            </Pressable>
+          </Link>
+          <Text variant="titleMedium" allowFontScaling={false}>
+            Already have an account?{" "}
+            <Link href={routes.LOG_IN} style={{ fontWeight: "bold" }}>
+              Sign In
+            </Link>
+          </Text>
+        </View>
+      </View>
+
+      <ImageBackground
+        style={styles.bottomBanner}
+        source={require("@/assets/banners/large.png")}
+        contentFit="fill"
+      >
+        <SocialLogos />
+      </ImageBackground>
+    </ImageBackground>
+  );
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 const openLink = (url: string) => {
@@ -95,6 +180,7 @@ const openLink = (url: string) => {
 };
 
 function SocialLogos() {
+<<<<<<< HEAD
 	return (
 		<View style={styles.socialIconsContainer}>
 			<Pressable
@@ -189,6 +275,102 @@ function SocialLogos() {
 			</Pressable>
 		</View>
 	);
+=======
+  return (
+    <View style={styles.socialIconsContainer}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://www.facebook.com/jltcb.ph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/facebook.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.instagram.com/jltcustomsbrokerage")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/instagram.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.youtube.com/@jilll.tolentinocustomsbrok4791")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/youtube.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://www.tiktok.com/@jltcbph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/tiktok.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() =>
+          openLink("https://www.linkedin.com/company/jltcustomsbrokerage/")
+        }
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/linkedIn.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.socialLink,
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => openLink("https://x.com/jltcb_ph")}
+      >
+        <Image
+          style={styles.socialIcon}
+          source={require("@/assets/social_logos/twitter.png")}
+        />
+      </Pressable>
+    </View>
+  );
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 const styles = StyleSheet.create({

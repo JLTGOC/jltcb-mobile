@@ -5,37 +5,37 @@ import { Card } from "react-native-paper";
 export default function ColumnServices() {
   const data = [
     {
-      image: require("../../assets/services/column/1.png"),
+      image: require("@/assets/services/column/1.png"),
       title: "IMPORT EXPORT CUSTOMS CLEARANCE",
       description:
         "24/7 customs clearance for all shipment types, ensuring fast compliance with Philippine regulations.",
     },
     {
-      image: require("../../assets/services/column/2.png"),
+      image: require("@/assets/services/column/2.png"),
       title: "PEZA PROCESSING & COMPLIANCE",
       description:
         "Full support for PEZA-registered businesses permits, documentation, and tax incentive processing.",
     },
     {
-      image: require("../../assets/services/column/3.png"),
+      image: require("@/assets/services/column/3.png"),
       title: "PERMITS AND LICENSES",
       description:
         "End-to-end management of trade permits, accreditations, renewals, and government approvals.",
     },
     {
-      image: require("../../assets/services/column/4.png"),
+      image: require("@/assets/services/column/4.png"),
       title: "CUSTOMS DISPUTE RESOLUTION",
       description:
         "Expert handling of seizures, abandoned shipments, manifest errors, and complex customs cases.",
     },
     {
-      image: require("../../assets/services/column/5.png"),
+      image: require("@/assets/services/column/5.png"),
       title: "POST-CLEARANCE SERVICES",
       description:
         "Audit-ready support beyond release, including Post-Clearance Audit (PCA) compliance.",
     },
     {
-      image: require("../../assets/services/column/6.png"),
+      image: require("@/assets/services/column/6.png"),
       title: "CUSTOMS & TRADE CONSULTANCY",
       description:
         "Guidance on tariffs, trade rules, and logistics for cost-efficient, compliant operations.",
@@ -53,8 +53,12 @@ export default function ColumnServices() {
                 <Image source={item.image} style={styles.image} />
               </View>
               <View style={{ justifyContent: "center" }}>
-                <Text style={styles.title} allowFontScaling={false}>{item.title}</Text>
-                <Text style={styles.description} allowFontScaling={false}>{item.description}</Text>
+                <Text style={styles.title} allowFontScaling={false}>
+                  {item.title}
+                </Text>
+                <Text style={styles.description} allowFontScaling={false}>
+                  {item.description}
+                </Text>
               </View>
             </View>
           </Card>

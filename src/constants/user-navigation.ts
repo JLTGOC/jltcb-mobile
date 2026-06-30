@@ -1,4 +1,5 @@
 import type { FC } from "react";
+<<<<<<< HEAD
 import ClientTabs from "@/src/components/bottom-nav-bar-section/ClientNavBar";
 import LeadASTabs from "@/src/components/bottom-nav-bar-section/Employee/LeadASNavBar";
 import MarketingTabs from "@/src/components/bottom-nav-bar-section/Employee/MarketingNavBar";
@@ -6,6 +7,18 @@ import OperationsTabs from "@/src/components/bottom-nav-bar-section/Employee/Ope
 import DarkHeader from "@/src/components/header-nav-bar-section/DarkHeader";
 import LightHeader from "@/src/components/header-nav-bar-section/LightHeader";
 import type { UserRole } from "../types/auth";
+=======
+
+import ClientTabs from "@/components/bottom-nav-bar-section/ClientNavBar";
+import LeadASTabs from "@/components/bottom-nav-bar-section/Employee/LeadASNavBar";
+import MarketingTabs from "@/components/bottom-nav-bar-section/Employee/MarketingNavBar";
+import OperationsTabs from "@/components/bottom-nav-bar-section/Employee/OperationsNavBar";
+import DarkHeader from "@/components/header-nav-bar-section/DarkHeader";
+import LightHeader from "@/components/header-nav-bar-section/LightHeader";
+
+import type { UserRole } from "@/types/auth";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { routes } from "./routes";
 
 export type NavLink = { name: string; title: string };
@@ -27,6 +40,7 @@ type UserNavigation = {
 };
 
 export const CLIENT_HEADER_MENUS: HeaderMenu[] = [
+<<<<<<< HEAD
 	// {
 	// 	text: "Calculator",
 	// 	link: routes.CLIENT_DB,
@@ -145,4 +159,139 @@ export const userNavigation: UserNavigation[] = [
 			},
 		],
 	},
+=======
+  // {
+  // 	text: "Calculator",
+  // 	link: routes.CLIENT_DB,
+  // },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  // {
+  // 	text: "Account Settings",
+  // 	link: routes.CLIENT_DB,
+  // },
+];
+
+export const AS_HEADER_MENUS: HeaderMenu[] = [
+  {
+    text: "Calculator",
+    link: routes.UNDERCONSTRUCTION,
+  },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  {
+    text: "Account Settings",
+    link: routes.ACCOUNT_SETTINGS,
+  },
+];
+
+export const OPS_HEADER_MENUS: HeaderMenu[] = [
+  {
+    text: "Calculator",
+    link: routes.UNDERCONSTRUCTION,
+  },
+  {
+    text: "AHTN Checker",
+    link: routes.AHTN_CHECKER,
+  },
+  {
+    text: "Account Settings",
+    link: routes.ACCOUNT_SETTINGS,
+  },
+];
+
+export const userNavigation: UserNavigation[] = [
+  {
+    role: "Client",
+    headerComponent: DarkHeader,
+    tabsComponent: ClientTabs,
+    headerMenus: CLIENT_HEADER_MENUS,
+  },
+  {
+    role: "Account Specialist",
+    headerComponent: LightHeader,
+    tabsComponent: LeadASTabs,
+    headerMenus: AS_HEADER_MENUS,
+  },
+  {
+    role: "Marketing",
+    headerComponent: LightHeader,
+    tabsComponent: MarketingTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.CLIENT_DB,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.CLIENT_DB,
+      },
+    ],
+  },
+  {
+    role: "Operations",
+    headerComponent: LightHeader,
+    tabsComponent: OperationsTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.UNDERCONSTRUCTION,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.ACCOUNT_SETTINGS,
+      },
+    ],
+  },
+  {
+    role: "Finance",
+    headerComponent: LightHeader,
+    tabsComponent: OperationsTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.UNDERCONSTRUCTION,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.ACCOUNT_SETTINGS,
+      },
+    ],
+  },
+  {
+    role: "Human Resource",
+    headerComponent: LightHeader,
+    tabsComponent: ClientTabs,
+    headerMenus: [
+      {
+        text: "Calculator",
+        link: routes.CLIENT_DB,
+      },
+      {
+        text: "AHTN Checker",
+        link: routes.AHTN_CHECKER,
+      },
+      {
+        text: "Account Settings",
+        link: routes.CLIENT_DB,
+      },
+    ],
+  },
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 ];

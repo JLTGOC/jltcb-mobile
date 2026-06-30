@@ -1,11 +1,16 @@
-import { useAuth } from "@/src/hooks/useAuth";
 import { Image, ImageBackground } from "expo-image";
+<<<<<<< HEAD
 import { Dimensions, StyleSheet, View, type TextStyle } from "react-native";
+=======
+import { Dimensions, StyleSheet, type TextStyle, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { Text } from "react-native-paper";
 
+import { useAuth } from "@/hooks/useAuth";
+
 const BANNERS = {
-  dark: require("../../../src/assets/banners/small.png"),
-  light: require("../../../src/assets/banners/light-small.svg"),
+  dark: require("@/assets/banners/small.png"),
+  light: require("@/assets/banners/light.png"),
 } as const;
 
 type UserHeaderProps = {
@@ -32,7 +37,11 @@ export default function UserHeader({ variant = "dark" }: UserHeaderProps) {
         {/* <Link href="/account-settings" asChild> */}
         {/* <Pressable style={({ pressed }) => [
     {
+<<<<<<< HEAD
       opacity: pressed ? 0.7 : 1, 
+=======
+      opacity: pressed ? 0.7 : 1,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     }
   ]}> */}
         <Image

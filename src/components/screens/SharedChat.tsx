@@ -1,4 +1,5 @@
 import type {
+<<<<<<< HEAD
 	PusherChannel,
 	PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
@@ -6,10 +7,20 @@ import {
 	useInfiniteQuery,
 	useQuery,
 	useQueryClient,
+=======
+  PusherChannel,
+  PusherEvent,
+} from "@pusher/pusher-websocket-react-native";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 } from "@tanstack/react-query";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { type ReactElement, useCallback, useRef } from "react";
 import {
+<<<<<<< HEAD
 	Dimensions,
 	FlatList,
 	KeyboardAvoidingView,
@@ -43,6 +54,46 @@ import { parseEventData, subscribeToChat } from "@/src/utils/pusher";
 import ChatFileCard from "../chats-section/ChatFileCard";
 import ChatImageCard from "../chats-section/ChatImageCard";
 import ChatShipmentCard from "../chats-section/ChatShipmentCard";
+=======
+  BackHandler,
+  Dimensions,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  type ViewToken,
+} from "react-native";
+import { ActivityIndicator, Avatar, Text } from "react-native-paper";
+
+import ChatFileCard from "@/components/chats-section/ChatFileCard";
+import ChatImageCard from "@/components/chats-section/ChatImageCard";
+import ChatMessageInput from "@/components/chats-section/ChatMessageInput";
+import ChatQuotationCard from "@/components/chats-section/ChatQuotationCard";
+import ChatShipmentCard from "@/components/chats-section/ChatShipmentCard";
+import ChatTextBubble from "@/components/chats-section/ChatTextBubble";
+import BannerHeader from "@/components/ui/BannerHeader";
+
+import { THEMES } from "@/constants/themes";
+import {
+  ChatPendingIdsProvider,
+  useChatPendingIdsContext,
+} from "@/contexts/ChatPendingIdsContext";
+import { useAuth } from "@/hooks/useAuth";
+import { pusher } from "@/lib/pusher";
+import { chatQueries } from "@/queries/chats";
+import { chatMessageQueries } from "@/queries/chats/messages";
+import { markAsRead } from "@/services/chats";
+import type {
+  ChatEvent,
+  Message,
+  MessageSentEvent,
+  MessagesApiResponse,
+} from "@/types/chats";
+import { parseEventData, subscribeToChat } from "@/utils/pusher";
+
+const MAX_WIDTH = Dimensions.get("window").width * 0.65;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 const MAX_WIDTH = Dimensions.get("window").width * 0.65;
 
@@ -51,6 +102,7 @@ type Props = {
 };
 
 export default function SharedChat({ variant }: Props) {
+<<<<<<< HEAD
 	return (
 		<ChatPendingIdsProvider>
 			<SharedChatContent variant={variant} />
@@ -78,10 +130,55 @@ function SharedChatContent({ variant }: Props) {
 		...chatMessagesInfiniteQueryOptions(id),
 		staleTime: Infinity,
 	});
+=======
+  return (
+    <ChatPendingIdsProvider>
+      <SharedChatContent variant={variant} />
+    </ChatPendingIdsProvider>
+  );
+}
+
+function SharedChatContent({ variant }: Props) {
+  const { id, group } = useLocalSearchParams<{ id: string; group?: string }>();
+  const { userData } = useAuth();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const flatListRef = useRef<FlatList>(null);
+  const hasMarkedRead = useRef(false);
+  const { pendingClientIds } = useChatPendingIdsContext();
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBack = () => {
+        router.dismissTo("/messages");
+        return true;
+      };
+
+      const sub = BackHandler.addEventListener("hardwareBackPress", onBack);
+      return () => sub.remove();
+    }, [router]),
+  );
+
+  const {
+    data,
+    isPending: isMessagesPending,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    ...chatMessageQueries.list(id),
+    staleTime: Infinity,
+  });
+
+  // Flatten all pages into a single messages array
+  const messages = data?.pages.flatMap((page) => page.data.messages) ?? [];
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 	// Flatten all pages into a single messages array
 	const messages = data?.pages.flatMap((page) => page.data.messages) ?? [];
 
+<<<<<<< HEAD
 	useFocusEffect(
 		useCallback(() => {
 			refetch().then(() => {
@@ -96,21 +193,45 @@ function SharedChatContent({ variant }: Props) {
 			queryClient.invalidateQueries({ queryKey: chatKeys.lists() });
 		}, [queryClient]),
 	);
+=======
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({ queryKey: chatQueries.lists() });
+    }, [queryClient]),
+  );
+
+  const { data: chatDetails } = useQuery(chatQueries.detail(id));
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 	const { data: chatDetails } = useQuery(chatQueryOptions(id));
 
+<<<<<<< HEAD
 	useFocusEffect(
 		useCallback(() => {
 			const onEvent = (e: PusherEvent) => {
 				const { eventName, data } = e;
 				const chatEventName = eventName as ChatEvent;
+=======
+        switch (chatEventName) {
+          case "message.sent": {
+            const chatData = parseEventData<MessageSentEvent>(data);
+            if (!chatData) return;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 				switch (chatEventName) {
 					case "message.sent": {
 						const chatData = parseEventData<MessageSentEvent>(data);
 						if (!chatData) return;
 
+<<<<<<< HEAD
 						const { message, client_id } = chatData;
+=======
+            queryClient.setQueryData<{
+              pages: MessagesApiResponse[];
+              pageParams: unknown[];
+            }>(chatMessageQueries.list(id).queryKey, (old) => {
+              if (!old) return old;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 						queryClient.setQueryData<{
 							pages: MessagesApiResponse[];
@@ -123,8 +244,12 @@ function SharedChatContent({ variant }: Props) {
 								page.data.messages.some((m) => m.client_id === client_id),
 							);
 
+<<<<<<< HEAD
 							const updatedPages = old.pages.map((page, pageIndex) => {
 								if (pageIndex !== 0) return page; // Only modify the first (latest) page
+=======
+                let updatedMessages: Message[];
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 								let updatedMessages: Message[];
 
@@ -139,6 +264,7 @@ function SharedChatContent({ variant }: Props) {
 									hasMarkedRead.current = false;
 								}
 
+<<<<<<< HEAD
 								return {
 									...page,
 									data: {
@@ -147,6 +273,14 @@ function SharedChatContent({ variant }: Props) {
 									},
 								};
 							});
+=======
+              return { ...old, pages: updatedPages };
+            });
+            break;
+          }
+        }
+      };
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 							return { ...old, pages: updatedPages };
 						});
@@ -185,6 +319,7 @@ function SharedChatContent({ variant }: Props) {
 		[id],
 	);
 
+<<<<<<< HEAD
 	const viewabilityConfig = useRef({
 		itemVisiblePercentThreshold: 90,
 	});
@@ -196,6 +331,85 @@ function SharedChatContent({ variant }: Props) {
 		const isAttachment = item.type === "FILE" || item.type === "IMAGE";
 
 		let message: ReactElement;
+=======
+  const renderItem = ({ item }: { item: Message }) => {
+    const isCurrentUser = item.sender.id === userData?.id;
+    const isGroup = group === "true";
+    const showSenderInfo = isGroup && !isCurrentUser && item.sender.id;
+    const isAttachment = item.type === "FILE" || item.type === "IMAGE";
+    const isSending = !!item.client_id && pendingClientIds.has(item.client_id);
+
+    let message: ReactElement;
+
+    switch (item.type) {
+      case "TEXT":
+        message = <ChatTextBubble message={item} />;
+        break;
+      case "QUOTATION_CARD":
+        message = <ChatQuotationCard quotation={item} />;
+        break;
+      case "SHIPMENT_CARD":
+        message = <ChatShipmentCard shipment={item} />;
+        break;
+      case "FILE":
+        message = <ChatFileCard file={item} />;
+        break;
+      case "IMAGE":
+        message = <ChatImageCard sending={isSending} image={item} />;
+        break;
+      default:
+        return null;
+    }
+
+    return (
+      <View
+        style={{
+          flexDirection: isCurrentUser ? "row-reverse" : "row",
+          alignItems: "flex-end",
+          gap: 8,
+        }}
+      >
+        {showSenderInfo && (
+          <Avatar.Image
+            source={{ uri: item.sender.image_path || undefined }}
+            size={32}
+            style={{ marginBottom: 4 }}
+          />
+        )}
+        <View
+          style={[
+            {
+              flex: 1,
+            },
+            isAttachment && { maxWidth: MAX_WIDTH },
+          ]}
+        >
+          {showSenderInfo && (
+            <Text
+              variant="labelSmall"
+              style={{
+                marginBottom: 4,
+                color: "gray",
+                marginLeft: 4,
+              }}
+            >
+              {item.sender.full_name}
+            </Text>
+          )}
+          {message}
+          {isSending && (
+            <Text
+              variant="bodySmall"
+              style={{ alignSelf: "flex-end", marginTop: 2 }}
+            >
+              Sending...
+            </Text>
+          )}
+        </View>
+      </View>
+    );
+  };
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 		switch (item.type) {
 			case "TEXT":
@@ -217,6 +431,7 @@ function SharedChatContent({ variant }: Props) {
 				return null;
 		}
 
+<<<<<<< HEAD
 		return (
 			<View
 				style={{
@@ -265,6 +480,27 @@ function SharedChatContent({ variant }: Props) {
 			</View>
 		);
 	};
+=======
+  return (
+    <View style={{ flex: 1, backgroundColor: THEMES.pageBackgroundColor }}>
+      <View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
+        <BannerHeader
+          onBack={() => router.dismissTo("/messages")}
+          title={chatDetails?.data.title ?? ""}
+          titleProps={{ numberOfLines: 1 }}
+          variant={variant}
+        >
+          {chatDetails?.data.type === "GROUP" ? (
+            <Avatar.Text label="GC" size={36} />
+          ) : (
+            <Avatar.Image
+              source={{ uri: chatDetails?.data.image_path ?? undefined }}
+              size={36}
+            />
+          )}
+        </BannerHeader>
+      </View>
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 	const renderFooter = () => {
 		if (!isFetchingNextPage) return null;
@@ -275,6 +511,7 @@ function SharedChatContent({ variant }: Props) {
 		);
 	};
 
+<<<<<<< HEAD
 	return (
 		<View style={{ flex: 1 }}>
 			<View style={{ position: "absolute", zIndex: 10, left: 0, right: 0 }}>
@@ -331,6 +568,12 @@ function SharedChatContent({ variant }: Props) {
 			</KeyboardAvoidingView>
 		</View>
 	);
+=======
+        <ChatMessageInput />
+      </KeyboardAvoidingView>
+    </View>
+  );
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 }
 
 const styles = StyleSheet.create({

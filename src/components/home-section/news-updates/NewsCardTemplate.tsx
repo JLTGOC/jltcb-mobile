@@ -3,6 +3,11 @@ import { ImageBackground } from "expo-image";
 import { Link } from "expo-router";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import { Card } from "react-native-paper";
+<<<<<<< HEAD
+=======
+
+import type { Article } from "@/types/articles";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type NewsCardTemplateProps = {
   article: Article;

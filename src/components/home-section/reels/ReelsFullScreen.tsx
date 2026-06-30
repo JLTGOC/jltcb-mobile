@@ -1,4 +1,3 @@
-import { reelQueryOptions } from "@/src/query-options/reels/reelQueryOptions";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -9,13 +8,18 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { useEffect } from "react";
 import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
+<<<<<<< HEAD
+=======
+
+import { reelQueries } from "@/queries/reels";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 export default function ReelsFullScreen() {
   const { id, placeholder } = useLocalSearchParams<{
     id: string;
     placeholder: string;
   }>();
-  const { data, isPending } = useQuery(reelQueryOptions(id));
+  const { data, isPending } = useQuery(reelQueries.detail(Number(id)));
 
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
@@ -33,7 +37,7 @@ export default function ReelsFullScreen() {
   const { isPlaying } = useEvent(player, "playingChange", {
     isPlaying: player.playing,
   });
-  const { status, error } = useEvent(player, "statusChange", {
+  const { status } = useEvent(player, "statusChange", {
     status: player.status,
   });
 

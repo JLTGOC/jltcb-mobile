@@ -6,24 +6,25 @@ import { Card } from "react-native-paper";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const CARD_WIDTH = SCREEN_WIDTH * 0.8;
 const GAP = 20;
+
 export default function CoreValuesTemplate() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const data = [
     {
-      image: require("../../../src/assets/about_us/mission.png"),
+      image: require("@/assets/about_us/mission.png"),
       title: "Mission",
       description:
         "To deliver world-class, compliant and value-driven customs brokerage and logistics solutions that empower businesses, elevate professionals, and advance a secure, transparent and globally competitive trade industry.",
     },
     {
-      image: require("../../../src/assets/about_us/vision.png"),
+      image: require("@/assets/about_us/vision.png"),
       title: "Vision",
       description:
         "To be the world’s leading customs brokerage firm, trusted for client satisfaction, operational excellence, and integrity, while fostering a culture of growth, innovation, and partnership that advances both the profession and global trade.",
     },
     {
-      image: require("../../../src/assets/about_us/coreValues.png"),
+      image: require("@/assets/about_us/coreValues.png"),
       title: "Core Values",
       description:
         "• Deliver Excellence Always\n• Lead with Integrity\n• Innovate with Purpose\n• Empower our People\n• Commit to Compliance\n• Put our Clients First\n• Serve Beyond Business",
@@ -106,12 +107,12 @@ export default function CoreValuesTemplate() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "space-between",
-	backgroundColor:"red"
+    backgroundColor: "red",
   },
   card: {
     width: 300,
     padding: 10,
-	elevation: 200,
+    elevation: 200,
   },
   indicatorContainer: {
     flexDirection: "row",

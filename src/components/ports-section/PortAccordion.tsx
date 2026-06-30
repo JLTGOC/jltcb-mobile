@@ -16,7 +16,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import type { PortData } from "@/src/types/ports";
+
+import type { PortData } from "@/types/ports";
 
 type PortAccordionProps = {
   icon?: ReactElement;

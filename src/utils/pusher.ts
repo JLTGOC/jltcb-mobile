@@ -1,5 +1,5 @@
-import { PusherEvent } from "@pusher/pusher-websocket-react-native";
-import { pusher } from "../lib/pusher";
+import type { PusherEvent } from "@pusher/pusher-websocket-react-native";
+import { pusher } from "@/lib/pusher";
 
 export const parseEventData = <T>(jsonData: string) => {
   try {

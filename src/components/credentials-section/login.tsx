@@ -1,16 +1,20 @@
-import { useAuth } from "@/src/hooks/useAuth";
-import {
-  loginFormSchema,
-  LoginFormSchema,
-} from "@/src/schemas/loginFormSchema";
-import { ApiLoginResponse } from "@/src/types/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { ImageBackground } from "expo-image";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { Button, HelperText } from "react-native-paper";
+import { StyleSheet, Text, View } from "react-native";
+import { HelperText } from "react-native-paper";
+
+import Button from "@/components/ui/Button";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
+import TextInput from "@/components/ui/TextInput";
+
+import { useAuth } from "@/hooks/useAuth";
+import {
+  type LoginFormSchema,
+  loginFormSchema,
+} from "@/schemas/loginFormSchema";
 
 export default function Login() {
   const { loginContext } = useAuth();
@@ -31,12 +35,19 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: loginContext,
-    onError: (err: AxiosError<ApiLoginResponse>) => {
-      if (err.response?.data.code === 401) {
-        setError("root", {
-          type: "manual",
-          message: err.response.data.message,
-        });
+    onError: (err) => {
+      if (isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setError("root", {
+            type: "manual",
+            message: err.response.data.message,
+          });
+        } else if (!err.response) {
+          setError("root", {
+            type: "manual",
+            message: "Network error. Please try again.",
+          });
+        }
       }
     },
   });
@@ -46,12 +57,9 @@ export default function Login() {
   });
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.view}
-      keyboardShouldPersistTaps="handled"
-    >
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
       <ImageBackground
-        source={require("@/src/assets/banners/large.png")}
+        source={require("@/assets/banners/large.png")}
         style={styles.imageBackground}
         contentFit="cover"
       >
@@ -70,15 +78,7 @@ export default function Login() {
             name="email"
             render={({ field: { onChange, onBlur, value }, fieldState }) => (
               <TextInput
-                testID="email_input"
-                accessibilityLabel="email_input"
-                style={[
-                  styles.input,
-                  styles.boxShadow,
-                  fieldState.invalid && {
-                    borderColor: "#EF4444",
-                  },
-                ]}
+                invalid={fieldState.invalid}
                 value={value}
                 onChangeText={(text) => {
                   clearErrors("root");
@@ -86,9 +86,12 @@ export default function Login() {
                 }}
                 onBlur={onBlur}
                 placeholder="Username or email"
+<<<<<<< HEAD
                 placeholderTextColor="black"
                 allowFontScaling={false}
                 autoCapitalize="none"
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
               />
             )}
           />
@@ -103,15 +106,7 @@ export default function Login() {
             name="password"
             render={({ field: { onChange, onBlur, value }, fieldState }) => (
               <TextInput
-                testID="password_input"
-                accessibilityLabel="password_input"
-                style={[
-                  styles.input,
-                  styles.boxShadow,
-                  fieldState.invalid && {
-                    borderColor: "#EF4444",
-                  },
-                ]}
+                invalid={fieldState.invalid}
                 value={value}
                 onChangeText={(text) => {
                   clearErrors("root");
@@ -120,9 +115,6 @@ export default function Login() {
                 onBlur={onBlur}
                 placeholder="Password"
                 secureTextEntry
-                placeholderTextColor="black"
-                allowFontScaling={false}
-                autoCapitalize="none"
                 onSubmitEditing={onSubmit}
               />
             )}
@@ -147,17 +139,14 @@ export default function Login() {
 
         <Button
           mode="contained"
-          style={[styles.button, styles.boxShadow]}
-          labelStyle={styles.buttonLabel}
           onPress={onSubmit}
           loading={loginMutation.isPending}
           disabled={loginMutation.isPending}
-          theme={{ colors: { onSurfaceDisabled: "#c2c2c2" } }}
         >
-          {loginMutation.isPending ? "Signing in..." : "Sign In"}
+          Sign In
         </Button>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -167,9 +156,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     aspectRatio: 2.25,
     gap: 12,
-  },
-  view: {
-    flex: 1,
   },
   main: {
     paddingHorizontal: 30,
@@ -192,24 +178,5 @@ const styles = StyleSheet.create({
   field: {},
   fieldError: {
     minHeight: 28,
-  },
-  input: {
-    borderRadius: 6,
-    padding: 10,
-    color: "black",
-    borderWidth: 1,
-    borderColor: "transparent",
-  },
-  button: {
-    backgroundColor: "#1D274E",
-    borderRadius: 6,
-    paddingVertical: 4,
-  },
-  buttonLabel: {
-    fontSize: 16,
-    textTransform: "uppercase",
-  },
-  boxShadow: {
-    boxShadow: "0 4px 4px #BEBEBE",
   },
 });

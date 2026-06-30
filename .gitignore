@@ -42,5 +42,8 @@ app-example
 /ios
 /android
 
+<<<<<<< HEAD
 .env.local
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 credentials.json

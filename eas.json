@@ -1,15 +1,17 @@
 {
   "cli": {
-    "version": ">= 0.0.0",
-    "appVersionSource": "local"
+    "version": ">= 18.11.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "environment": "development"
     },
     "preview": {
       "distribution": "internal",
+<<<<<<< HEAD
       "android": {
         "buildType": "app-bundle"
       },
@@ -29,13 +31,14 @@
         "EXPO_PUBLIC_PUSHER_CLUSTER": "ap1",
         "SENTRY_ALLOW_FAILURE": "true"
       }
+=======
+      "environment": "preview"
+    },
+    "production": {
+      "autoIncrement": true,
+      "environment": "production"
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     }
-    // "ios-simulator": {
-    //   "extends": "development",
-    //   "ios": {
-    //     "simulator": true
-    //   }
-    // }
   },
   "submit": {
     "production": {}

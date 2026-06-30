@@ -1,10 +1,15 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Card, Checkbox, Text, TextInput } from "react-native-paper";
 
+<<<<<<< HEAD
 import { QuoteForm } from "../../../../types/client-quotation";
 
 import { cargo_type, container_size } from "../../../../constants/client-const";
+=======
+import { cargo_type, container_sizes } from "@/constants/client-const";
+import type { QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   formData: QuoteForm;
@@ -76,7 +81,7 @@ export default function Commodity({ formData, setFormData }: Props) {
       {formData.commodity?.commodity !== "" &&
         formData.commodity?.cargo_type === "CONTAINERIZED" && (
           <FlatList
-            data={container_size}
+            data={container_sizes}
             horizontal
             scrollEnabled={false}
             contentContainerStyle={{

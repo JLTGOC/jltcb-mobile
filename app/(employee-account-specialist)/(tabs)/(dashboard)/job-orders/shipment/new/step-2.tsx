@@ -1,0 +1,191 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, View } from "react-native";
+import { Button, HelperText } from "react-native-paper";
+import { useShallow } from "zustand/react/shallow";
+
+import BannerHeader from "@/components/ui/BannerHeader";
+import FieldLegend from "@/components/ui/FieldLegend";
+import FloatingLabelInput from "@/components/ui/FloatingLabelTextInput";
+import KeyboardAwareScrollView from "@/components/ui/KeyboardAwareScrollView";
+
+import { jobOrderFormQueries } from "@/queries/job-orders/form";
+import {
+  type Step2Fields,
+  step2Schema,
+} from "@/schemas/job-order/logistics-service-form-schema";
+import { useJobOrderFormStore } from "@/stores/useJobOrderFormStore";
+
+export default function Step2Form() {
+  const router = useRouter();
+  const { quotationReference, logisticsFormData, setLogisticsFormData } =
+    useJobOrderFormStore(
+      useShallow((state) => ({
+        quotationReference: state.quotationReference,
+        logisticsFormData: state.logisticsFormData,
+        setLogisticsFormData: state.setLogisticsFormData,
+      })),
+    );
+
+  const { data } = useQuery(
+    jobOrderFormQueries.enums(quotationReference ?? undefined),
+  );
+
+  const containerSize = data?.autofill_details?.container_size;
+  const volumeDimension = `${data?.autofill_details?.cargo_type} ${containerSize ? ` - ${containerSize}` : ""}`;
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Step2Fields>({
+    resolver: zodResolver(step2Schema),
+    defaultValues: {
+      hs_code: logisticsFormData.hs_code ?? "",
+      rod: logisticsFormData.rod ?? "",
+      permits: logisticsFormData.permits ?? "",
+      if_coordinated: logisticsFormData.if_coordinated ?? "",
+      shipment_special_remarks:
+        logisticsFormData.shipment_special_remarks ?? "",
+    },
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    setLogisticsFormData(data);
+    router.push("/job-orders/shipment/new/step-3");
+  });
+
+  return (
+    <KeyboardAwareScrollView stickyHeaderIndices={[0]}>
+      <BannerHeader title="Logistics Services" variant="light" />
+
+      <View style={styles.content}>
+        <FieldLegend>SHIPMENT INFORMATION</FieldLegend>
+
+        <FloatingLabelInput
+          label="COMMODITY"
+          editable={false}
+          value={data?.autofill_details?.commodity ?? ""}
+          style={styles.bold}
+        />
+        <FloatingLabelInput
+          label="VOLUME / DIMENSION"
+          editable={false}
+          value={volumeDimension}
+          style={styles.bold}
+        />
+
+        <View>
+          <Controller
+            control={control}
+            name="hs_code"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="HS CODE/CLASSIFICATION"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.hs_code && (
+            <HelperText type="error">{errors.hs_code.message}</HelperText>
+          )}
+        </View>
+
+        <View>
+          <Controller
+            control={control}
+            name="rod"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="ROD"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.rod && (
+            <HelperText type="error">{errors.rod.message}</HelperText>
+          )}
+        </View>
+
+        <View>
+          <Controller
+            control={control}
+            name="if_coordinated"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="IF COORDINATED: "
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                multiline
+                numberOfLines={2}
+                style={{ minHeight: 55 }}
+              />
+            )}
+          />
+          {errors.if_coordinated && (
+            <HelperText type="error">
+              {errors.if_coordinated.message}
+            </HelperText>
+          )}
+        </View>
+
+        <View>
+          <Controller
+            control={control}
+            name="shipment_special_remarks"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <FloatingLabelInput
+                label="SPECIAL REMARKS"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                multiline
+                numberOfLines={2}
+                style={{ minHeight: 55 }}
+              />
+            )}
+          />
+          {errors.shipment_special_remarks && (
+            <HelperText type="error">
+              {errors.shipment_special_remarks.message}
+            </HelperText>
+          )}
+        </View>
+
+        <Button
+          theme={{ colors: { primary: "#1C213B" } }}
+          mode="contained"
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          onPress={onSubmit}
+        >
+          NEXT
+        </Button>
+      </View>
+    </KeyboardAwareScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  content: {
+    paddingHorizontal: 24,
+    paddingBottom: 20,
+    gap: 12,
+  },
+  bold: {
+    fontWeight: "bold",
+  },
+  button: {
+    borderRadius: 6,
+  },
+  buttonLabel: {
+    paddingVertical: 4,
+  },
+});

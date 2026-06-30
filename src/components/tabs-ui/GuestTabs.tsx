@@ -5,12 +5,21 @@ import { TabTrigger } from "expo-router/ui";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import {
+<<<<<<< HEAD
 	type SafeAreaViewProps,
 	useSafeAreaInsets,
+=======
+  type SafeAreaViewProps,
+  useSafeAreaInsets,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 } from "react-native-safe-area-context";
 import HeadlessTabButton from "@/src/components/tabs-ui/HeadlessTabButton";
 import TabsBackground from "@/src/components/tabs-ui/TabsBackground";
 import type { NavLink } from "@/src/constants/user-navigation";
+
+import HeadlessTabButton from "@/components/tabs-ui/HeadlessTabButton";
+import TabsBackground from "@/components/tabs-ui/TabsBackground";
+import type { NavLink } from "@/constants/user-navigation";
 
 const leftMenuLinks: NavLink[] = [
 	{ name: "about-us", title: "About Us" },
@@ -60,6 +69,7 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
 		menuActions[side]();
 	};
 
+<<<<<<< HEAD
 	return (
 		<TabsBackground style={[styles.tabsBackground, style]} {...props}>
 			<HeadlessTabButton
@@ -103,6 +113,42 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
 					)}
 				/>
 			</TabTrigger>
+=======
+  return (
+    <TabsBackground style={[styles.tabsBackground, style]} {...props}>
+      <HeadlessTabButton
+        onPress={() => openSideMenu("left")}
+        isFocused={leftActive}
+        tabBarIcon={(props) => (
+          <View>
+            <View
+              style={{
+                backgroundColor: "white",
+                zIndex: 10,
+                position: "absolute",
+                right: 10,
+                bottom: 2,
+              }}
+            >
+              <MaterialCommunityIcons
+                style={[styles.tabButton, { marginBottom: 0 }]}
+                name="calculator-variant-outline"
+                {...props}
+              />
+            </View>
+            <MaterialCommunityIcons
+              style={[styles.tabButton, { bottom: 4, left: 6 }]}
+              name="file-search-outline"
+              {...props}
+            />
+          </View>
+        )}
+        onLayout={(e) => {
+          const { height } = e.nativeEvent.layout;
+          setTabButtonHeight(height);
+        }}
+      />
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 			<HeadlessTabButton
 				onPress={() => openSideMenu("right")}
@@ -164,6 +210,7 @@ export default function GuestTabs({ style, ...props }: SafeAreaViewProps) {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 	tabsBackground: {},
 	tabButton: {
 		marginHorizontal: "auto",
@@ -211,4 +258,53 @@ const styles = StyleSheet.create({
 		flex: 0,
 		justifyContent: "flex-end",
 	},
+=======
+  tabsBackground: {},
+  tabButton: {
+    marginHorizontal: "auto",
+    marginBottom: 4,
+  },
+  menu: {
+    position: "absolute",
+    width: "60%",
+    minHeight: 217,
+    paddingTop: 17,
+  },
+  leftMenu: {
+    left: 0,
+    borderTopRightRadius: 360,
+  },
+  rightMenu: {
+    right: 0,
+    borderTopLeftRadius: 360,
+  },
+  menuContent: {
+    marginTop: "auto",
+    backgroundColor: "white",
+    minHeight: 200,
+    paddingVertical: 20,
+    justifyContent: "center",
+  },
+  leftMenuContent: {
+    borderTopRightRadius: 300,
+  },
+  rightMenuContent: {
+    borderTopLeftRadius: 300,
+    alignItems: "flex-end",
+  },
+  tabLink: {
+    textTransform: "uppercase",
+  },
+  leftTabLink: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    flex: 0,
+  },
+  rightTabLink: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    flex: 0,
+    justifyContent: "flex-end",
+  },
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 });

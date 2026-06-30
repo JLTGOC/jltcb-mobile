@@ -18,12 +18,22 @@ export type Pagination = {
   next_page_url: string | null;
 };
 
+interface PersonInCharge {
+  username: string;
+  role: string; // TODO: Apply proper role type if available
+  full_name: string;
+  image_path: string;
+  email: string;
+  contact_number: string;
+}
+
 export type GeneralInformation = {
   reference_number: string;
   id: number;
   status: string;
   commodity: string;
   date: string;
+  person_in_charge: PersonInCharge;
 };
 
 export type CommodityInformation = {

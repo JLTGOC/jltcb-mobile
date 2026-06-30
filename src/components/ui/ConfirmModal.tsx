@@ -1,4 +1,3 @@
-
 import type { ReactElement } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Modal, type ModalProps } from "react-native-paper";

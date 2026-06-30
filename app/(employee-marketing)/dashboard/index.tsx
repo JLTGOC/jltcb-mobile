@@ -1,9 +1,5 @@
-import {Text} from "react-native-paper"
+import { Text } from "react-native-paper";
 
-export default function index(){
-    return (
-        <>
-        <Text>Marketing Dashboard</Text>
-        </>
-    )
+export default function index() {
+  return <Text>Marketing Dashboard</Text>;
 }

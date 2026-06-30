@@ -1,9 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 import { MoveLeft } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-
-import { useRouter } from "expo-router";
 
 export default function Index() {
   const router = useRouter();

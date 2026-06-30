@@ -1,5 +1,6 @@
 import type { DashbordFolderItem } from "@/src/types/dashboard";
 import { Image, ImageBackground } from "expo-image";
+<<<<<<< HEAD
 import {
     Pressable,
     StyleSheet,
@@ -15,6 +16,19 @@ const FOLDER_BACKGROUNDS = {
 
 type FolderButtonProps = {
   folder: DashbordFolderItem;
+=======
+import { Pressable, type PressableProps, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
+import type { BaseFolderItem } from "@/types/dashboard";
+
+const FOLDER_BACKGROUNDS = {
+  dark: require("@/assets/folders/dark.png"),
+  light: require("@/assets/folders/light.png"),
+} as const;
+
+type FolderButtonProps = {
+  folder: BaseFolderItem;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   variant: "light" | "dark";
 };
 

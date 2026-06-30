@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import { routes } from "@/src/constants/routes";
 import { Href, usePathname, useRouter } from "expo-router";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+=======
+import { type Href, usePathname, useRouter } from "expo-router";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { routes } from "@/constants/routes";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Tab = { title: string; route: Href };
 
@@ -20,8 +27,6 @@ export default function NewsTabButtons() {
       : pathname === route;
 
   const screenWidth = Dimensions.get("screen").width;
-
-  const isActive = (href: Href) => pathname === href;
 
   return (
     <View style={styles.buttonContainer}>

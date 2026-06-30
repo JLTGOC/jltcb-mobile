@@ -1,12 +1,13 @@
-import Form from "@/src/components/career-section/Form";
 import { ImageBackground } from "expo-image";
 import { ScrollView, Text, View } from "react-native";
+
+import Form from "@/components/career-section/Form";
 
 export default function SharedCarrers() {
   return (
     <ScrollView>
       <ImageBackground
-        source={require("@/src/assets/banners/large.png")}
+        source={require("@/assets/banners/large.png")}
         style={{
           padding: 10,
           aspectRatio: 2,

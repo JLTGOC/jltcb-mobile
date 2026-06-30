@@ -1,13 +1,25 @@
+<<<<<<< HEAD
 import { LogisticsServiceFormSchema } from "@/src/schemas/job-order/logistics-service-form-schema";
 import type { CreateJobOrderRequestBody } from "@/src/types/job-order";
 import { format, formatDistance, isSameDay } from "date-fns";
 import { RegulatoryServiceFormSchema } from "../schemas/job-order/regulatory-service-form-schema";
+=======
+import { format, formatDistance, isSameDay } from "date-fns";
+
+import type { LogisticsJobOrderFormSchema } from "@/schemas/job-order/logistics-service-form-schema";
+import type { RegulatoryServiceFormSchema } from "@/schemas/job-order/regulatory-service-form-schema";
+import type { CreateJobOrderRequestBody } from "@/types/job-order";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 export const transformToLogisticsJobOrderPayload = ({
   data,
   quotationReference,
 }: {
+<<<<<<< HEAD
   data: LogisticsServiceFormSchema;
+=======
+  data: LogisticsJobOrderFormSchema;
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   quotationReference: string;
 }): CreateJobOrderRequestBody => {
   const formatDate = (date?: Date) =>
@@ -35,6 +47,10 @@ export const transformToLogisticsJobOrderPayload = ({
       hs_code: data.hs_code,
       rod: data.rod,
       permits: data.permits,
+<<<<<<< HEAD
+=======
+      if_coordinated: data.if_coordinated,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
       special_remarks: data.shipment_special_remarks,
     },
     target: {
@@ -46,6 +62,10 @@ export const transformToLogisticsJobOrderPayload = ({
       terms_of_payment: data.terms_of_payment,
       billing_date: formatDate(data.billing_date),
       shall_be_billed: data.shall_be_billed,
+<<<<<<< HEAD
+=======
+      attached_docs: data.attached_docs,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     },
   };
 };
@@ -68,9 +88,13 @@ export const transformToRegulatoryJobOrderPayload = ({
       client_type: data.client_type,
       accredited: data.accredited,
       remarks: data.remarks,
+<<<<<<< HEAD
     },
     service: {
       service: data.service,
+=======
+      service_type: data.service,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
     },
   };
 };

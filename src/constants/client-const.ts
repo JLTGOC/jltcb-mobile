@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 import Container20 from "../assets/get_quote/container20.png";
 import Container40 from "../assets/get_quote/container40.png";
 import { FieldConfig, QuoteForm } from "../types/client-quotation";
+=======
+import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+
+import Container20 from "@/assets/get_quote/container20.png";
+import Container40 from "@/assets/get_quote/container40.png";
+import type { FieldConfig, QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 // Initial Form - used for populating the form
 export const initialQuoteForm: QuoteForm = {
@@ -10,9 +18,13 @@ export const initialQuoteForm: QuoteForm = {
   reference_number: "",
   status: "",
   remarks: "",
+<<<<<<< HEAD
   type_of_regulatory_assistance: [],
   message: "",
   service_level: "",
+=======
+  services: "",
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   company: {
     company_name: "",
     company_address: "",
@@ -73,7 +85,11 @@ const logisticsCompanyFields: FieldConfig[] = [
 export const getStepConfigs = (
   formData: QuoteForm,
 ): Record<number, StepConfig> => {
+<<<<<<< HEAD
   const isRegulatory = formData.services === "REGULATORY";
+=======
+  const isRegulatory = formData.service?.transport_mode === "REGULATORY";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
   return {
     0: {
@@ -105,10 +121,17 @@ export const options = [
   "DOMESTIC FREIGHT FORWARDING",
   "TRUCKINGS SERVICES",
   "PROJECT CARGO",
-];
+] as const;
 export const commodities = ["CASTABLE 16 REFRACTOR"];
 export const cargo_type = ["CONTAINERIZED", "LCL"];
-export const container_size = [
-  { image: Container20, size: "1x20" },
-  { image: Container40, size: "1x40" },
-];
+
+export type ContainerSize = "1x20" | "1x40";
+export interface ContainerSizeOption {
+  image: ImageSourcePropType;
+  size: ContainerSize;
+  style?: StyleProp<ViewStyle>;
+}
+export const container_sizes: ContainerSizeOption[] = [
+  { image: Container20, size: "1x20", style: { width: 48, height: 48 } },
+  { image: Container40, size: "1x40", style: { width: 72, height: 53 } },
+] as const;

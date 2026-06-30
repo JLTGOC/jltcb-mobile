@@ -1,14 +1,15 @@
-import ColumnServices from "@/src/components/services-section/ColumnServices";
-import RowServices from "@/src/components/services-section/RowServices";
 import { ImageBackground } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
+
+import ColumnServices from "@/components/services-section/ColumnServices";
+import RowServices from "@/components/services-section/RowServices";
 
 export default function Index() {
   return (
     <>
       <ImageBackground
-        source={require("@/src/assets/banners/small.png")}
+        source={require("@/assets/banners/small.png")}
         style={{
           aspectRatio: 3,
           paddingVertical: 30,

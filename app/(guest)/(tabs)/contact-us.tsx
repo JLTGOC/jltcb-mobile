@@ -1,13 +1,14 @@
-import ContactDetails from "@/src/components/contact-section/ContactDetails";
 import { ImageBackground } from "expo-image";
 import { Text, View } from "react-native";
+
+import ContactDetails from "@/components/contact-section/ContactDetails";
 
 export default function Index() {
   return (
     <>
       {/* banner */}
       <ImageBackground
-        source={require("@/src/assets/banners/large.png")}
+        source={require("@/assets/banners/large.png")}
         style={{
           padding: 20,
           aspectRatio: 2,

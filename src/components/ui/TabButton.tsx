@@ -1,7 +1,8 @@
-import { THEMES } from "@/src/constants/themes";
 import type { TabTriggerSlotProps } from "expo-router/ui";
 import type { ReactNode } from "react";
 import { Pressable, Text } from "react-native";
+
+import { THEMES } from "@/constants/themes";
 
 type Props = {
   icon?: (props: {

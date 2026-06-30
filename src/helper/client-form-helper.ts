@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { QuoteForm } from "../types/client-quotation";
+=======
+import type { QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 export function appendObjectToFormData(
   data: FormData,

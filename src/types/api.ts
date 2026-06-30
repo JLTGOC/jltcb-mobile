@@ -3,6 +3,6 @@ export interface ApiResponse<TData> {
   data: TData;
   error: boolean;
   message: string;
-};
+}
 
-export type ApiLoginResponse = ApiResponse<string>
+export type ApiLoginResponse = ApiResponse<string>;

@@ -42,7 +42,8 @@ export default function ContactDetails() {
               },
             ]}
             onPress={() => {
-              (setActive(i), setTab(t));
+              setActive(i);
+              setTab(t);
             }}
           >
             <Text
@@ -79,7 +80,11 @@ export default function ContactDetails() {
       </View>
       {tab === "MAIN" && (
         <Image
+<<<<<<< HEAD
           source={require("../../../src/assets/contact_us/location.png")}
+=======
+          source={require("@/assets/contact_us/location.png")}
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
           style={{ height: 300, width: "100%" }}
         />
       )}

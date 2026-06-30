@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Dispatch, SetStateAction } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -5,6 +6,13 @@ import { Checkbox, Text, TextInput } from "react-native-paper";
 
 import Service from "@/src/components/client-section/get-quote/step-2/Service";
 import { QuoteEnums, QuoteForm } from "../../../types/client-quotation";
+=======
+import type { Dispatch, SetStateAction } from "react";
+import { ScrollView } from "react-native";
+
+import Service from "@/components/client-section/get-quote/step-2/Service";
+import type { QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import Commodity from "./step-2/Commodity";
 import Shipment from "./step-2/Shipment";
 
@@ -81,6 +89,7 @@ export default function Step_2({ formData, setFormData, enums }: Props) {
       renderItem={() => null}
       contentContainerStyle={{ gap: 10, padding: 10 }}
       automaticallyAdjustKeyboardInsets={true}
+<<<<<<< HEAD
       ListHeaderComponent={
         formData?.services === "REGULATORY" ? (
           <View style={{ gap: 2 }}>
@@ -188,6 +197,19 @@ export default function Step_2({ formData, setFormData, enums }: Props) {
         )
       }
     />
+=======
+    >
+      <Service formData={formData} setFormData={setFormData} />
+      {formData.service?.type !== "BUSINESS SOLUTION" ? (
+        <>
+          <Commodity formData={formData} setFormData={setFormData} />
+          <Shipment formData={formData} setFormData={setFormData} />
+        </>
+      ) : (
+        ""
+      )}
+    </ScrollView>
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   );
 }
 

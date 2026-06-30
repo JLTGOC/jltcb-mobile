@@ -1,8 +1,12 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 
+<<<<<<< HEAD
 import { QuoteForm } from "@/src/types/client-quotation";
+=======
+import type { QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   formData: QuoteForm;

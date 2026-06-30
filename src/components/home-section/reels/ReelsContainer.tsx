@@ -1,5 +1,3 @@
-import type { ApiResponse } from "@/src/types/api";
-import type { Reel } from "@/src/types/reels";
 import type {
   QueryObserverResult,
   RefetchOptions,
@@ -17,6 +15,10 @@ import {
   type ViewToken,
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+
+import type { ApiResponse } from "@/types/api";
+import type { Reel } from "@/types/reels";
+
 import ReelsPlayer from "./ReelsPlayer";
 
 type ReelsContainerProps = {

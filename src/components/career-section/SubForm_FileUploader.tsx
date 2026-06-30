@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 import { OJTFormData } from "@/src/types/careers";
 import { Image } from "expo-image";
 import { Dispatch, SetStateAction } from "react";
 import { StyleSheet, Pressable, View } from "react-native";
 import { Surface, Text } from "react-native-paper";
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import * as DocumentPicker from "expo-document-picker";
+import { Image } from "expo-image";
 import { X } from "lucide-react-native";
+import type { Dispatch, SetStateAction } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Surface, Text } from "react-native-paper";
+
+import type { OJTFormData } from "@/types/careers";
 
 type Props = {
   setFormData: Dispatch<SetStateAction<OJTFormData>>;
@@ -86,7 +95,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
               {cvCoverArray[0] ? "Change CV" : "Upload CV"}
             </Text>
             <Image
-              source={require("../../../src/assets/careers/upload_icon.png")}
+              source={require("@/assets/careers/upload_icon.png")}
               style={styles.uploadImg}
             />
           </View>
@@ -113,7 +122,7 @@ export default function SubForm_FileUploader({ setFormData, formData }: Props) {
               {cvCoverArray[1] ? "Change Cover Letter" : "Upload Cover Letter"}
             </Text>
             <Image
-              source={require("../../../src/assets/careers/upload_icon.png")}
+              source={require("@/assets/careers/upload_icon.png")}
               style={styles.uploadImg}
             />
           </View>

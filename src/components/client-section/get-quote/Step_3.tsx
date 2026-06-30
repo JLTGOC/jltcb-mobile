@@ -1,10 +1,17 @@
-import { useNavigate } from "@/src/hooks/useNavigate";
 import * as DocumentPicker from "expo-document-picker";
 import { FileUp, X } from "lucide-react-native";
+<<<<<<< HEAD
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { ClientFile, QuoteForm } from "../../../types/client-quotation";
+=======
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { TextInput } from "react-native-paper";
+
+import type { ClientFile, QuoteForm } from "@/types/client-quotation";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 
 type Props = {
   formData: QuoteForm;
@@ -12,12 +19,14 @@ type Props = {
 };
 
 export default function Step_3({ formData, setFormData }: Props) {
-  const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
 
+<<<<<<< HEAD
 
   console.log("khate", formData)
 
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   const uploadedDocuments = Array.isArray(formData.documents)
     ? formData.documents.filter(
         (document): document is ClientFile =>

@@ -1,12 +1,18 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
+<<<<<<< HEAD
 import { StyleSheet, View, Pressable } from "react-native";
+=======
+import { Pressable, StyleSheet, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ButtonIcon from "@/src/components/nav-bar-section/ButtonIcon";
-import MenuItem from "@/src/components/nav-bar-section/MenuItem";
-import { leftMenu, rightMenu } from "@/src/constants/bottom-navigation-bar";
-import { routes } from "../../constants/routes";
+
+import ButtonIcon from "@/components/nav-bar-section/ButtonIcon";
+import MenuItem from "@/components/nav-bar-section/MenuItem";
+
+import { leftMenu, rightMenu } from "@/constants/bottom-navigation-bar";
+import { routes } from "@/constants/routes";
 
 export default function NavigationBar() {
   const pathname = usePathname();

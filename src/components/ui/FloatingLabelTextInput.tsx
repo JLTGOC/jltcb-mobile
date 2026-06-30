@@ -4,7 +4,11 @@ import {
   StyleSheet,
   TextInput,
   type TextInputProps,
+<<<<<<< HEAD
   TextStyle,
+=======
+  type TextStyle,
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   View,
   type ViewStyle,
 } from "react-native";

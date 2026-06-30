@@ -1,9 +1,16 @@
-import { routes } from "@/src/constants/routes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+<<<<<<< HEAD
 import { Href, useRouter, useSegments } from "expo-router";
 import { ComponentProps } from "react";
 import { StyleSheet, Pressable, View } from "react-native";
+=======
+import { type Href, useRouter, useSegments } from "expo-router";
+import type { ComponentProps } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { routes } from "@/constants/routes";
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
 

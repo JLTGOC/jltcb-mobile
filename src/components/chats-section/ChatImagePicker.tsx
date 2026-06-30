@@ -1,11 +1,20 @@
+<<<<<<< HEAD
 import { useSendImageMutation } from "@/src/hooks/useSendImageMutation";
 import type { SendImageBody } from "@/src/types/chats";
+=======
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Crypto from "expo-crypto";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Pressable } from "react-native";
 
+<<<<<<< HEAD
+=======
+import { useSendImageMutation } from "@/hooks/mutations/chats/useSendImageMutation";
+import type { SendImageBody } from "@/types/chats";
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
 export default function ChatImagePicker() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const sendImageMutation = useSendImageMutation(id);

@@ -1,16 +1,17 @@
-import { routes } from "@/src/constants/routes";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { routes } from "@/constants/routes";
+
 export default function GuestHeader() {
   return (
     <>
       <SafeAreaView edges={["top", "right", "left"]} style={styles.container}>
         <Image
-          source={require("../../../src/assets/white_logos/fullLogo.png")}
+          source={require("@/assets/white_logos/fullLogo.png")}
           style={styles.logo}
           contentFit="contain"
         />
@@ -23,7 +24,7 @@ export default function GuestHeader() {
             ]}
           >
             <Image
-              source={require("../../../src/assets/images/profile.png")}
+              source={require("@/assets/images/profile.png")}
               style={styles.profileImage}
               contentFit="contain"
             />

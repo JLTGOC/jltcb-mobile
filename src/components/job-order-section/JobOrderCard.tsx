@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { JobOrder } from "@/src/types/job-order";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { StyleSheet, View } from "react-native";
@@ -140,10 +141,126 @@ export default function JobOrderCard({
         ))}
       </View>
     </View>
+=======
+import { createContext, type PropsWithChildren, use } from "react";
+import { StyleSheet } from "react-native";
+import { Text, type TextProps } from "react-native-paper";
+
+import Badge from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { RecordCard } from "@/components/ui/RecordCard";
+
+import type { JobOrderSummary, JobTypeSummary } from "@/types/job-order";
+
+interface JobOrderState {
+  jobOrder: JobOrderSummary;
+}
+
+interface JobOrderCardContextValue {
+  state: JobOrderState;
+}
+
+const JobOrderCardContext = createContext<JobOrderCardContextValue | null>(
+  null,
+);
+
+function useJobOrderCardContext() {
+  const context = use(JobOrderCardContext);
+  if (!context) {
+    throw new Error(
+      "JobOrderCard compound components cannot be rendered outside the JobOrderCard component",
+    );
+  }
+  return context;
+}
+
+function JobOrderCardProvider({
+  children,
+  jobOrder,
+}: PropsWithChildren<JobOrderState>) {
+  return (
+    <JobOrderCardContext value={{ state: { jobOrder } }}>
+      {children}
+    </JobOrderCardContext>
+  );
+}
+
+function JobOrderCardTitle() {
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
+
+  return (
+    <Card.Title>
+      <Text style={[styles.cardTitleHeader, styles.uppercase]}>
+        Reference No
+      </Text>
+      <Text style={[styles.cardTitle, styles.uppercase]}>
+        {jobOrder.reference_number}
+      </Text>
+    </Card.Title>
+  );
+}
+
+const BADGE_COLORS: Record<JobTypeSummary, string> = {
+  "Regulatory Services": "#767676",
+  "Logistics Services": "#4E6174",
+} as const;
+
+function JobOrderCardBadge() {
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
+  const jobOrderService = jobOrder.service;
+
+  return (
+    <Badge style={{ backgroundColor: BADGE_COLORS[jobOrderService] }}>
+      <Text style={styles.cardBadgeText}>{jobOrderService}</Text>
+    </Badge>
+  );
+}
+
+function JobOrderCardContentTitle({
+  style,
+  ...props
+}: Omit<TextProps<never>, "children">) {
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
+
+  return (
+    <Text style={[styles.cardContentTitle, styles.uppercase, style]} {...props}>
+      {jobOrder.client}
+    </Text>
+  );
+}
+
+interface JobOrderCardDetailValueProps extends Omit<
+  TextProps<never>,
+  "children"
+> {
+  valueKey: keyof JobOrderSummary;
+}
+
+function JobOrderCardDetailValue({
+  valueKey,
+  style,
+  ...props
+}: JobOrderCardDetailValueProps) {
+  const {
+    state: { jobOrder },
+  } = useJobOrderCardContext();
+
+  return (
+    <RecordCard.DetailText {...props}>
+      {jobOrder[valueKey]}
+    </RecordCard.DetailText>
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   );
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   card: {
     shadowColor: "black",
     shadowRadius: 7,
@@ -166,11 +283,21 @@ const styles = StyleSheet.create({
   cardTitleContainer: {
     flex: 1,
   },
+=======
+  column: {
+    flex: 2,
+  },
+  uppercase: {
+    textTransform: "uppercase",
+  },
+
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   cardTitleHeader: {
     color: "#666666",
     fontSize: 12,
   },
   cardTitle: {},
+<<<<<<< HEAD
   cardBadge: {
     backgroundColor: "#E0E0E0",
     paddingHorizontal: 18,
@@ -196,11 +323,18 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 4,
   },
+=======
+  cardBadgeText: {
+    color: "white",
+    fontSize: 12,
+  },
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
   cardContentTitle: {},
   cardContentDesc: {
     fontSize: 12,
     color: "#9D9D9D",
   },
+<<<<<<< HEAD
   cardFooter: {
     flexDirection: "row",
     borderTopWidth: 2,
@@ -223,3 +357,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
   },
 });
+=======
+});
+
+export const JobOrderCard = {
+  Provider: JobOrderCardProvider,
+  Title: JobOrderCardTitle,
+  Badge: JobOrderCardBadge,
+  ContentTitle: JobOrderCardContentTitle,
+  DetailValue: JobOrderCardDetailValue,
+};
+>>>>>>> debe4b59798b3afe392bfc7cd7307455f160aaf0
