@@ -21,7 +21,7 @@ export default function ListOfCreatedJO() {
     createdJobOrdersQueryOptions({ status: "created" }),
   );
 
-  console.log("khate", data);
+  console.log("khate-ops", data);
 
   const handleSearch = () => {
     setSubmittedSearch(search.trim());
@@ -78,7 +78,7 @@ export default function ListOfCreatedJO() {
       {jobFilter === "all" ? (
         <FlatList
           style={{ flex: 1 }}
-          data={data ?? []}
+          data={data.job_orders}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <Pressable onPress={() => router.push(
@@ -92,12 +92,12 @@ export default function ListOfCreatedJO() {
                 quotationSource={String(item.quotation_id)}
                 assignedTo={item.assigned_to}
                 assignedColor={
-                  item.assigned_to.toLowerCase() === "available"
+                  item.assigned_to === "Available"
                     ? "#16A34A"
                     : "#1F6FFF"
                 }
                 rightActionLabel={
-                  item.assigned_to.toLowerCase() === "available"
+                  item.assigned_to === "Available"
                     ? "ACCEPT"
                     : "REASSIGN"
                 }

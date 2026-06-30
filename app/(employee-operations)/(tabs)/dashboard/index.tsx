@@ -23,7 +23,7 @@ export default function Index() {
     ...dashboardQueryOptions<OperationsDashboard>(String(userData?.id)),
     select: ({ data }) => mapDashboardData(data, OPERATIONS_DB_FOLDER_SECTION),
   });
-   console.log("khate",data)
+   console.log("khate-ops",data)
 
   return (
     <FlatList

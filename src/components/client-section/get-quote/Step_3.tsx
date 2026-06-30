@@ -15,6 +15,9 @@ export default function Step_3({ formData, setFormData }: Props) {
   const { navigate } = useNavigate();
   const [error, setError] = useState<string | null>("");
 
+
+  console.log("khate", formData)
+
   const uploadedDocuments = Array.isArray(formData.documents)
     ? formData.documents.filter(
         (document): document is ClientFile =>

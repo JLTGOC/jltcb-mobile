@@ -44,10 +44,10 @@ export default function Details({ quotationId }: Props) {
     {
       title: "CONSIGNEE DETAILS",
       details: [
-        { label: "COMPANY NAME", info: data?.company?.name },
+        { label: "COMPANY NAME", info: data?.company?.company_name },
         {
           label: "COMPANY ADDRESS",
-          info: data?.company?.address,
+          info: data?.company?.company_address,
         },
         {
           label: "CONTACT PERSON",

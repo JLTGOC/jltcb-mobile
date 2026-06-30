@@ -21,37 +21,58 @@ const CONTACT_NUMBER_REGEX = /^09\d{9}$/;
 const COMPANY_EMAIL_REGEX =
   /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/i;
 
-const companySchema = z.object({
-  company_name: z
-    .string()
-    .min(1, "Company name is required")
-    .max(100, "Name is too long"),
-  contact_number: z
-    .string()
-    .regex(
-      CONTACT_NUMBER_REGEX,
-      "Contact number must start with 09 and be exactly 11 digits",
-    ),
-  email: z
-    .string()
-    .regex(
-      COMPANY_EMAIL_REGEX,
-      "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
-    ),
-});
-
 export default function Step_1({
   setFormData,
   formData,
   fields,
   enums,
 }: Props) {
+  const isRegulatory = formData?.services === "REGULATORY";
+
   const isPhoneField = (key: string) =>
     key === "contact_number" || key === "cp_contact_number";
 
   const validationResult = useMemo(() => {
-    return companySchema.safeParse(formData.company);
-  }, [formData.company]);
+    const schema = isRegulatory
+      ? z.object({
+          company_name: z
+            .string()
+            .min(1, "Company name is required")
+            .max(100, "Name is too long"),
+          contact_number: z
+            .string()
+            .regex(
+              CONTACT_NUMBER_REGEX,
+              "Contact number must start with 09 and be exactly 11 digits",
+            ),
+          email: z
+            .string()
+            .regex(
+              COMPANY_EMAIL_REGEX,
+              "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
+            ),
+        })
+      : z.object({
+          company_name: z
+            .string()
+            .min(1, "Company name is required")
+            .max(100, "Name is too long"),
+          cp_contact_number: z
+            .string()
+            .regex(
+              CONTACT_NUMBER_REGEX,
+              "Contact number must start with 09 and be exactly 11 digits",
+            ),
+          email: z
+            .string()
+            .regex(
+              COMPANY_EMAIL_REGEX,
+              "Email must be valid and include a domain ending (e.g. .com, .ph, .org)",
+            ),
+        });
+
+    return schema.safeParse(formData.company);
+  }, [formData.company, isRegulatory]);
 
   const getFieldError = (key: string) => {
     if (validationResult.success) return null;
@@ -82,7 +103,7 @@ export default function Step_1({
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={styles.contentContainer}
     >
-      {formData?.service?.transport_mode === "REGULATORY" && (
+      {formData?.services === "REGULATORY" && (
         <View style={{ marginBottom: 20 }}>
           <Text allowFontScaling={false} style={styles.customLabel}>
             BUSINESS TYPE
@@ -124,7 +145,7 @@ export default function Step_1({
           <View style={styles.container} key={field.key}>
             <View style={styles.fieldWrapper}>
               <Text allowFontScaling={false} style={styles.customLabel}>
-                {field.label}{" "}
+                {field.label}
                 {field.required && <Text style={{ color: "red" }}>*</Text>}
               </Text>
 

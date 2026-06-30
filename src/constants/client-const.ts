@@ -10,7 +10,9 @@ export const initialQuoteForm: QuoteForm = {
   reference_number: "",
   status: "",
   remarks: "",
-  services: "",
+  type_of_regulatory_assistance: [],
+  message: "",
+  service_level: "",
   company: {
     company_name: "",
     company_address: "",
@@ -71,7 +73,7 @@ const logisticsCompanyFields: FieldConfig[] = [
 export const getStepConfigs = (
   formData: QuoteForm,
 ): Record<number, StepConfig> => {
-  const isRegulatory = formData.service?.transport_mode === "REGULATORY";
+  const isRegulatory = formData.services === "REGULATORY";
 
   return {
     0: {

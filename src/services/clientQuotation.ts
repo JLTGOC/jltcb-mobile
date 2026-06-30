@@ -106,6 +106,7 @@ export async function postClientQuote(formData: QuoteForm) {
         commodity: formData.commodity,
         shipment: formData.shipment,
         remarks: formData.remarks || "",
+        message: formData.message || ""
       })
     ).data;
   }
@@ -119,6 +120,9 @@ export async function postClientQuote(formData: QuoteForm) {
   appendObjectToFormData(data, formData.shipment, "shipment");
   if (formData.remarks !== undefined && formData.remarks !== null) {
     data.append("remarks", formData.remarks);
+  }
+  if (formData.message !== undefined && formData.message !== null) {
+    data.append("message", formData.message);
   }
 
   return (await postMultipart("quotations", token, data)).data;

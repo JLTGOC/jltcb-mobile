@@ -7,6 +7,9 @@ export type QuoteForm = {
   reference_number?: string;
   status: string;
   remarks?: string;
+  type_of_regulatory_assistance?: string[];
+  message?: string;
+  service_level?: string;
   services?: string;
   company?: CompanyData;
   service?: ServiceData;

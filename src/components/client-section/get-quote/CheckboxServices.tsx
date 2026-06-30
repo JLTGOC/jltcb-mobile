@@ -16,7 +16,7 @@ export default function CheckboxServices({ formData, setFormData }: Props) {
     if (!formData.service?.transport_mode) {
       setFormData((prev) => ({
         ...prev,
-        service: { ...prev.service, transport_mode: "LOGISTICS" },
+        services: "LOGISTICS",
       }));
     }
   }, [formData.service?.transport_mode, setFormData]);
@@ -39,14 +39,14 @@ export default function CheckboxServices({ formData, setFormData }: Props) {
                 key={item}
                 color="#00960A"
                 status={
-                  formData.service?.transport_mode === item
+                  formData.services === item
                     ? "checked"
                     : "unchecked"
                 }
                 onPress={() => {
                   setFormData((prev) => ({
                     ...prev,
-                    service: { ...prev.service, transport_mode: item },
+                    services: item ,
                   }));
                 }}
               />

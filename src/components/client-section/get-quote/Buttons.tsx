@@ -43,9 +43,13 @@ export default function Buttons({
     if (hasEmptyRequiredFields) return true;
 
     if (currentPosition === 0) {
+      const isRegulatory = formData.services === "REGULATORY";
       const company = formData.company;
+      const contactValue = isRegulatory
+        ? company?.contact_number
+        : company?.cp_contact_number;
       const isContactNumberValid = CONTACT_NUMBER_REGEX.test(
-        (company?.contact_number || "").trim(),
+        (contactValue || "").trim(),
       );
       const isEmailValid = COMPANY_EMAIL_REGEX.test(
         (company?.email || "").trim(),
@@ -58,15 +62,20 @@ export default function Buttons({
       const service = formData.service;
       const commodity = formData.commodity;
       const shipment = formData.shipment;
+      const isRegulatory = formData.services === "REGULATORY";
+      const serviceLevel = (formData.service_level ?? "").trim();
+
+      if (isRegulatory) {
+        return !serviceLevel;
+      }
 
       return (
         !service?.type ||
+        (service?.options?.length ?? 0) === 0 ||
         !commodity?.commodity ||
         !shipment?.origin ||
         !shipment?.destination ||
-        (commodity?.commodity === "containerized" &&
-          !commodity?.container_size) ||
-        (service.options?.length ?? 0) === 0
+        (commodity?.commodity === "containerized" && !commodity?.container_size)
       );
     }
 

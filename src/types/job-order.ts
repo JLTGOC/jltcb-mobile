@@ -26,8 +26,10 @@ export interface IndexJobOrders {
 }
 
 export type JobOrderResponse = {
-  message: string;
-  data: JobOrder[];
+  message?: string;
+  data?: JobOrder[];
+  job_orders?: JobOrder[];
+  my_job_orders?: JobOrder[];
 };
 
 interface CreateJobOrderBaseRequestBody<T extends JobType = JobType> {

@@ -119,7 +119,7 @@ export default function CreateQuote() {
               <View style={{ flex: 1, marginTop: 20 }}>
                 {currentPosition === 0 && (
                   <>
-                    {formData?.service?.transport_mode === "REGULATORY" && (
+                    {formData?.services === "REGULATORY" && (
                       <View
                         style={{
                           alignItems: "center",
@@ -145,7 +145,7 @@ export default function CreateQuote() {
                   </>
                 )}
                 {currentPosition === 1 && (
-                  <Step_2 formData={formData} setFormData={setFormData} />
+                  <Step_2 formData={formData} setFormData={setFormData} enums={quoteEnums}/>
                 )}
                 {currentPosition === 2 && (
                   <Step_3 formData={formData} setFormData={setFormData} />
